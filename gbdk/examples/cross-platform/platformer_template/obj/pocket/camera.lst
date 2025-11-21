@@ -1,0 +1,231 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module camera
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl b_UpdateCamera
+                                     11 	.globl _UpdateCamera
+                                     12 	.globl _SetCurrentLevelSubmap
+                                     13 	.globl _set_bkg_submap
+                                     14 	.globl _redraw
+                                     15 	.globl _old_map_pos_x
+                                     16 	.globl _map_pos_x
+                                     17 	.globl _old_camera_x
+                                     18 	.globl _camera_x
+                                     19 ;--------------------------------------------------------
+                                     20 ; special function registers
+                                     21 ;--------------------------------------------------------
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area _DATA
+    00000000                         26 _camera_x::
+    00000000                         27 	.ds 2
+    00000002                         28 _old_camera_x::
+    00000002                         29 	.ds 2
+    00000004                         30 _map_pos_x::
+    00000004                         31 	.ds 1
+    00000005                         32 _old_map_pos_x::
+    00000005                         33 	.ds 1
+    00000006                         34 _redraw::
+    00000006                         35 	.ds 1
+                                     36 ;--------------------------------------------------------
+                                     37 ; ram data
+                                     38 ;--------------------------------------------------------
+                                     39 	.area _INITIALIZED
+                                     40 ;--------------------------------------------------------
+                                     41 ; absolute external ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _DABS (ABS)
+                                     44 ;--------------------------------------------------------
+                                     45 ; global & static initialisations
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _HOME
+                                     48 	.area _GSINIT
+                                     49 	.area _GSFINAL
+                                     50 	.area _GSINIT
+                                     51 ;--------------------------------------------------------
+                                     52 ; Home
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _HOME
+                                     55 ;src/camera.c:30: void SetCurrentLevelSubmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h) NONBANKED{
+                                     56 ;	---------------------------------
+                                     57 ; Function SetCurrentLevelSubmap
+                                     58 ; ---------------------------------
+    00000000                         59 _SetCurrentLevelSubmap::
+    00000000 47               [ 4]   60 	ld	b, a
+                                     61 ;src/camera.c:32: uint8_t _previous_bank = CURRENT_BANK;
+    00000001 F0r00            [12]   62 	ldh	a, (__current_bank + 0)
+    00000003 4F               [ 4]   63 	ld	c, a
+                                     64 ;src/camera.c:34: SWITCH_ROM(currentAreaBank);
+    00000004 FAr00r00         [16]   65 	ld	a, (_currentAreaBank)
+    00000007 E0r00            [12]   66 	ldh	(__current_bank + 0), a
+    00000009 EAr00r00         [16]   67 	ld	(#_rROMB0),a
+                                     68 ;src/camera.c:36: set_bkg_submap(x,y,w, h, currentLevelMap, currentLevelWidthInTiles);
+    0000000C FAr00r00         [16]   69 	ld	a, (_currentLevelWidthInTiles)
+    0000000F C5               [16]   70 	push	bc
+    00000010 F5               [16]   71 	push	af
+    00000011 33               [ 8]   72 	inc	sp
+    00000012 FAr00r00         [16]   73 	ld	a, (_currentLevelMap)
+    00000015 6F               [ 4]   74 	ld	l, a
+    00000016 FAr01r00         [16]   75 	ld	a, (_currentLevelMap + 1)
+    00000019 67               [ 4]   76 	ld	h, a
+    0000001A E5               [16]   77 	push	hl
+    0000001B F8 08            [12]   78 	ldhl	sp,	#8
+    0000001D 3A               [ 8]   79 	ld	a, (hl-)
+    0000001E F5               [16]   80 	push	af
+    0000001F 33               [ 8]   81 	inc	sp
+    00000020 56               [ 8]   82 	ld	d, (hl)
+    00000021 D5               [16]   83 	push	de
+    00000022 C5               [16]   84 	push	bc
+    00000023 33               [ 8]   85 	inc	sp
+    00000024 CDr00r00         [24]   86 	call	_set_bkg_submap
+    00000027 E8 07            [16]   87 	add	sp, #7
+    00000029 C1               [12]   88 	pop	bc
+                                     89 ;src/camera.c:38: SWITCH_ROM(_previous_bank);
+    0000002A 79               [ 4]   90 	ld	a, c
+    0000002B E0r00            [12]   91 	ldh	(__current_bank + 0), a
+    0000002D 21r00r00         [12]   92 	ld	hl, #_rROMB0
+    00000030 71               [ 8]   93 	ld	(hl), c
+                                     94 ;src/camera.c:40: }
+    00000031 E1               [12]   95 	pop	hl
+    00000032 F1               [12]   96 	pop	af
+    00000033 E9               [ 4]   97 	jp	(hl)
+                                     98 	.area _HOME
+                                     99 ;--------------------------------------------------------
+                                    100 ; code
+                                    101 ;--------------------------------------------------------
+                                    102 	.area _CODE_255
+                                    103 ;src/camera.c:56: void UpdateCamera(void) BANKED {
+                                    104 ;	---------------------------------
+                                    105 ; Function UpdateCamera
+                                    106 ; ---------------------------------
+                         000000FF   107 	b_UpdateCamera	= 255
+    00000000                        108 _UpdateCamera::
+    00000000 3B               [ 8]  109 	dec	sp
+                                    110 ;src/camera.c:59: move_bkg(camera_x, 0);
+    00000001 21r00r00         [12]  111 	ld	hl, #_camera_x
+    00000004 7E               [ 8]  112 	ld	a, (hl)
+    00000005 E0r00            [12]  113 	ldh	(_SCX_REG + 0), a
+                                    114 ;../../../include/gb/gb.h:1461: SCX_REG=x, SCY_REG=y;
+    00000007 AF               [ 4]  115 	xor	a, a
+                                    116 ;src/camera.c:62: map_pos_x = (uint8_t)(camera_x >> 3u);
+    00000008 E0r00            [12]  117 	ldh	(_SCY_REG + 0), a
+    0000000A 2A               [ 8]  118 	ld	a, (hl+)
+    0000000B 4F               [ 4]  119 	ld	c, a
+    0000000C 46               [ 8]  120 	ld	b, (hl)
+    0000000D CB 38            [ 8]  121 	srl	b
+    0000000F CB 19            [ 8]  122 	rr	c
+    00000011 CB 38            [ 8]  123 	srl	b
+    00000013 CB 19            [ 8]  124 	rr	c
+    00000015 CB 38            [ 8]  125 	srl	b
+    00000017 CB 19            [ 8]  126 	rr	c
+    00000019 21r04r00         [12]  127 	ld	hl, #_map_pos_x
+    0000001C 71               [ 8]  128 	ld	(hl), c
+                                    129 ;src/camera.c:63: if (map_pos_x != old_map_pos_x) {
+    0000001D 7E               [ 8]  130 	ld	a, (hl)
+    0000001E 21r05r00         [12]  131 	ld	hl, #_old_map_pos_x
+    00000021 96               [ 8]  132 	sub	a, (hl)
+    00000022 28 7C            [12]  133 	jr	Z, 00107$
+                                    134 ;src/camera.c:69: MIN(DEVICE_SCREEN_HEIGHT, currentLevelHeightInTiles ));     
+    00000024 21r00r00         [12]  135 	ld	hl, #_currentLevelHeightInTiles
+    00000027 3E 12            [ 8]  136 	ld	a, #0x12
+    00000029 96               [ 8]  137 	sub	a, (hl)
+    0000002A 23               [ 8]  138 	inc	hl
+    0000002B 3E 00            [ 8]  139 	ld	a, #0x00
+    0000002D 9E               [ 8]  140 	sbc	a, (hl)
+    0000002E 3E 00            [ 8]  141 	ld	a, #0x00
+    00000030 17               [ 4]  142 	rla
+    00000031 F8 00            [12]  143 	ldhl	sp,	#0
+    00000033 77               [ 8]  144 	ld	(hl), a
+    00000034 FAr00r00         [16]  145 	ld	a, (_currentLevelHeightInTiles)
+    00000037 5F               [ 4]  146 	ld	e, a
+    00000038 21r01r00         [12]  147 	ld	hl, #_currentLevelHeightInTiles + 1
+    0000003B 56               [ 8]  148 	ld	d, (hl)
+                                    149 ;src/camera.c:64: if (camera_x < old_camera_x) {
+    0000003C D5               [16]  150 	push	de
+    0000003D 11r00r00         [12]  151 	ld	de, #_camera_x
+    00000040 21r02r00         [12]  152 	ld	hl, #_old_camera_x
+    00000043 1A               [ 8]  153 	ld	a, (de)
+    00000044 13               [ 8]  154 	inc	de
+    00000045 96               [ 8]  155 	sub	a, (hl)
+    00000046 23               [ 8]  156 	inc	hl
+    00000047 1A               [ 8]  157 	ld	a, (de)
+    00000048 9E               [ 8]  158 	sbc	a, (hl)
+    00000049 D1               [12]  159 	pop	de
+    0000004A 30 1A            [12]  160 	jr	NC, 00104$
+                                    161 ;src/camera.c:69: MIN(DEVICE_SCREEN_HEIGHT, currentLevelHeightInTiles ));     
+    0000004C F8 00            [12]  162 	ldhl	sp,	#0
+    0000004E 7E               [ 8]  163 	ld	a, (hl)
+    0000004F B7               [ 4]  164 	or	a, a
+    00000050 28 03            [12]  165 	jr	Z, 00113$
+    00000052 11 12 00         [12]  166 	ld	de, #0x0012
+    00000055                        167 00113$:
+    00000055 43               [ 4]  168 	ld	b, e
+                                    169 ;src/camera.c:66: update_column_left(map_pos_x), 
+    00000056 FAr04r00         [16]  170 	ld	a, (_map_pos_x)
+    00000059 C5               [16]  171 	push	bc
+    0000005A 33               [ 8]  172 	inc	sp
+    0000005B 26 01            [ 8]  173 	ld	h, #0x01
+    0000005D E5               [16]  174 	push	hl
+    0000005E 33               [ 8]  175 	inc	sp
+    0000005F 1E 00            [ 8]  176 	ld	e, #0x00
+    00000061 CDr00r00         [24]  177 	call	_SetCurrentLevelSubmap
+    00000064 18 34            [12]  178 	jr	00105$
+    00000066                        179 00104$:
+                                    180 ;src/camera.c:71: if ((currentLevelWidthInTiles - DEVICE_SCREEN_WIDTH) > map_pos_x) {
+    00000066 FAr00r00         [16]  181 	ld	a, (_currentLevelWidthInTiles)
+    00000069 21r01r00         [12]  182 	ld	hl, #_currentLevelWidthInTiles + 1
+    0000006C 4E               [ 8]  183 	ld	c, (hl)
+    0000006D C6 EC            [ 8]  184 	add	a, #0xec
+    0000006F 47               [ 4]  185 	ld	b, a
+    00000070 79               [ 4]  186 	ld	a, c
+    00000071 CE FF            [ 8]  187 	adc	a, #0xff
+    00000073 4F               [ 4]  188 	ld	c, a
+    00000074 FAr04r00         [16]  189 	ld	a, (_map_pos_x)
+    00000077 6F               [ 4]  190 	ld	l, a
+    00000078 26 00            [ 8]  191 	ld	h, #0x00
+    0000007A 7D               [ 4]  192 	ld	a, l
+    0000007B 90               [ 4]  193 	sub	a, b
+    0000007C 7C               [ 4]  194 	ld	a, h
+    0000007D 99               [ 4]  195 	sbc	a, c
+    0000007E 30 1A            [12]  196 	jr	NC, 00105$
+                                    197 ;src/camera.c:76: MIN(DEVICE_SCREEN_HEIGHT, currentLevelHeightInTiles));   
+    00000080 F8 00            [12]  198 	ldhl	sp,	#0
+    00000082 7E               [ 8]  199 	ld	a, (hl)
+    00000083 B7               [ 4]  200 	or	a, a
+    00000084 28 03            [12]  201 	jr	Z, 00115$
+    00000086 11 12 00         [12]  202 	ld	de, #0x0012
+    00000089                        203 00115$:
+    00000089 43               [ 4]  204 	ld	b, e
+                                    205 ;src/camera.c:53: return map_pos_x + DEVICE_SCREEN_WIDTH;
+    0000008A FAr04r00         [16]  206 	ld	a, (_map_pos_x)
+    0000008D C6 14            [ 8]  207 	add	a, #0x14
+                                    208 ;src/camera.c:73: update_column_right(map_pos_x), 
+    0000008F C5               [16]  209 	push	bc
+    00000090 33               [ 8]  210 	inc	sp
+    00000091 26 01            [ 8]  211 	ld	h, #0x01
+    00000093 E5               [16]  212 	push	hl
+    00000094 33               [ 8]  213 	inc	sp
+    00000095 1E 00            [ 8]  214 	ld	e, #0x00
+    00000097 CDr00r00         [24]  215 	call	_SetCurrentLevelSubmap
+    0000009A                        216 00105$:
+                                    217 ;src/camera.c:79: old_map_pos_x = map_pos_x;
+    0000009A FAr04r00         [16]  218 	ld	a, (#_map_pos_x)
+    0000009D EAr05r00         [16]  219 	ld	(#_old_map_pos_x),a
+    000000A0                        220 00107$:
+                                    221 ;src/camera.c:82: old_camera_x = camera_x;
+    000000A0 FAr00r00         [16]  222 	ld	a, (#_camera_x)
+    000000A3 EAr02r00         [16]  223 	ld	(#_old_camera_x),a
+    000000A6 FAr01r00         [16]  224 	ld	a, (#_camera_x + 1)
+    000000A9 EAr03r00         [16]  225 	ld	(#_old_camera_x + 1),a
+                                    226 ;src/camera.c:83: }
+    000000AC 33               [ 8]  227 	inc	sp
+    000000AD C9               [16]  228 	ret
+                                    229 	.area _CODE_255
+                                    230 	.area _INITIALIZER
+                                    231 	.area _CABS (ABS)

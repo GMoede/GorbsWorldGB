@@ -1,0 +1,364 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module fonts
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _font_color
+                                     23 	.globl _font_set
+                                     24 	.globl _font_load
+                                     25 	.globl _font_init
+                                     26 	.globl _get_mode
+                                     27 	.globl _mode
+                                     28 	.globl _printf
+                                     29 	.globl _OAMDMA
+                                     30 	.globl _PPUDATA
+                                     31 	.globl _PPUADDR
+                                     32 	.globl _PPUSCROLL
+                                     33 	.globl _OAMDATA
+                                     34 	.globl _OAMADDR
+                                     35 	.globl _PPUSTATUS
+                                     36 	.globl _PPUMASK
+                                     37 	.globl _PPUCTRL
+                                     38 ;--------------------------------------------------------
+                                     39 ; ZP ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _ZP      (PAG)
+    00000000                         42 _main_sloc0_1_0:
+    00000000                         43 	.ds 2
+                                     44 ;--------------------------------------------------------
+                                     45 ; overlayable items in ram
+                                     46 ;--------------------------------------------------------
+                                     47 ;--------------------------------------------------------
+                                     48 ; uninitialized external ram data
+                                     49 ;--------------------------------------------------------
+                                     50 	.area _BSS
+                         00002000    51 _PPUCTRL	=	0x2000
+                         00002001    52 _PPUMASK	=	0x2001
+                         00002002    53 _PPUSTATUS	=	0x2002
+                         00002003    54 _OAMADDR	=	0x2003
+                         00002004    55 _OAMDATA	=	0x2004
+                         00002005    56 _PPUSCROLL	=	0x2005
+                         00002006    57 _PPUADDR	=	0x2006
+                         00002007    58 _PPUDATA	=	0x2007
+                         00004014    59 _OAMDMA	=	0x4014
+    00000000                         60 _main_ibm_font_10000_115:
+    00000000                         61 	.ds 2
+    00000002                         62 _main_italic_font_10000_115:
+    00000002                         63 	.ds 2
+    00000004                         64 _main_min_font_10000_115:
+    00000004                         65 	.ds 2
+                                     66 ;--------------------------------------------------------
+                                     67 ; absolute external ram data
+                                     68 ;--------------------------------------------------------
+                                     69 	.area _DABS    (ABS)
+                                     70 ;--------------------------------------------------------
+                                     71 ; initialized external ram data
+                                     72 ;--------------------------------------------------------
+                                     73 	.area _DATA
+                                     74 ;--------------------------------------------------------
+                                     75 ; global & static initialisations
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _HOME
+                                     78 	.area _GSINIT
+                                     79 	.area _GSFINAL
+                                     80 	.area _GSINIT
+                                     81 ;--------------------------------------------------------
+                                     82 ; Home
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _HOME
+                                     85 	.area _HOME
+                                     86 ;--------------------------------------------------------
+                                     87 ; code
+                                     88 ;--------------------------------------------------------
+                                     89 	.area _CODE
+                                     90 ;------------------------------------------------------------
+                                     91 ;Allocation info for local variables in function 'main'
+                                     92 ;------------------------------------------------------------
+                                     93 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                     94 ;ibm_font      Allocated with name '_main_ibm_font_10000_115'
+                                     95 ;italic_font   Allocated with name '_main_italic_font_10000_115'
+                                     96 ;min_font      Allocated with name '_main_min_font_10000_115'
+                                     97 ;i             Allocated to registers 
+                                     98 ;------------------------------------------------------------
+                                     99 ;	src/fonts.c: 17: void main(void)
+                                    100 ;	genLabel
+                                    101 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    102 ;	-----------------------------------------
+                                    103 ;	 function main
+                                    104 ;	-----------------------------------------
+                                    105 ;	Register assignment is optimal.
+                                    106 ;	Stack space usage: 0 bytes.
+    00000000                        107 _main:
+                                    108 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    109 ;	src/fonts.c: 28: font_init();
+                                    110 ;	genCall
+    00000000 20r00r00         [ 6]  111 	jsr	_font_init
+                                    112 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                    113 ;	src/fonts.c: 31: ibm_font = font_load(font_ibm);  /* 96 tiles */
+                                    114 ;	skipping iCode since result will be rematerialized
+                                    115 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    116 ;	skipping iCode since result will be rematerialized
+                                    117 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    118 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    119 ;	genCall
+                                    120 ;	genSend
+    00000003 A2s00            [ 2]  121 	ldx	#>_font_ibm
+    00000005 A9r00            [ 2]  122 	lda	#_font_ibm
+    00000007 20r00r00         [ 6]  123 	jsr	_font_load
+                                    124 ;	assignResultValue
+    0000000A 8Dr00r00         [ 4]  125 	sta	_main_ibm_font_10000_115
+    0000000D 8Er01r00         [ 4]  126 	stx	(_main_ibm_font_10000_115 + 1)
+                                    127 ;	Raw cost for generated ic 6 : (13, 18.000000) count=1.000000
+                                    128 ;	src/fonts.c: 32: italic_font = font_load(font_italic);   /* 93 tiles */
+                                    129 ;	skipping iCode since result will be rematerialized
+                                    130 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    131 ;	skipping iCode since result will be rematerialized
+                                    132 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    133 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    134 ;	genCall
+                                    135 ;	genSend
+    00000010 A2s00            [ 2]  136 	ldx	#>_font_italic
+    00000012 A9r00            [ 2]  137 	lda	#_font_italic
+    00000014 20r00r00         [ 6]  138 	jsr	_font_load
+                                    139 ;	assignResultValue
+    00000017 8Dr02r00         [ 4]  140 	sta	_main_italic_font_10000_115
+    0000001A 8Er03r00         [ 4]  141 	stx	(_main_italic_font_10000_115 + 1)
+                                    142 ;	Raw cost for generated ic 11 : (13, 18.000000) count=1.000000
+                                    143 ;	src/fonts.c: 35: font_color(WHITE, DKGREY);
+                                    144 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    145 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    146 ;	genCall
+                                    147 ;	genSend
+    0000001D A9 03            [ 2]  148 	lda	#0x03
+    0000001F A2 01            [ 2]  149 	ldx	#0x01
+    00000021 20r00r00         [ 6]  150 	jsr	_font_color
+                                    151 ;	Raw cost for generated ic 15 : (7, 10.000000) count=1.000000
+                                    152 ;	src/fonts.c: 37: min_font = font_load(font_min);
+                                    153 ;	skipping iCode since result will be rematerialized
+                                    154 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    155 ;	skipping iCode since result will be rematerialized
+                                    156 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    157 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    158 ;	genCall
+                                    159 ;	genSend
+    00000024 A2s00            [ 2]  160 	ldx	#>_font_min
+    00000026 A9r00            [ 2]  161 	lda	#_font_min
+    00000028 20r00r00         [ 6]  162 	jsr	_font_load
+                                    163 ;	assignResultValue
+    0000002B 8Dr04r00         [ 4]  164 	sta	_main_min_font_10000_115
+    0000002E 8Er05r00         [ 4]  165 	stx	(_main_min_font_10000_115 + 1)
+                                    166 ;	Raw cost for generated ic 19 : (13, 18.000000) count=1.000000
+                                    167 ;	src/fonts.c: 40: mode(get_mode() | M_NO_SCROLL);
+                                    168 ;	genCall
+    00000031 20r00r00         [ 6]  169 	jsr	_get_mode
+                                    170 ;	assignResultValue
+                                    171 ;	Raw cost for generated ic 21 : (3, 6.000000) count=1.000000
+                                    172 ;	genOr
+    00000034 09 04            [ 2]  173 	ora	#0x04
+                                    174 ;	Raw cost for generated ic 22 : (2, 2.000000) count=1.000000
+                                    175 ;	Raw cost for generated ic 23 : (0, 0.000000) count=1.000000
+                                    176 ;	genCall
+                                    177 ;	genSend
+    00000036 20r00r00         [ 6]  178 	jsr	_mode
+                                    179 ;	Raw cost for generated ic 24 : (3, 6.000000) count=1.000000
+                                    180 ;	src/fonts.c: 45: font_set(ibm_font);
+                                    181 ;	Raw cost for generated ic 25 : (0, 0.000000) count=1.000000
+                                    182 ;	genCall
+                                    183 ;	genSend
+    00000039 AEr01r00         [ 4]  184 	ldx	(_main_ibm_font_10000_115 + 1)
+    0000003C ADr00r00         [ 4]  185 	lda	_main_ibm_font_10000_115
+    0000003F 20r00r00         [ 6]  186 	jsr	_font_set
+                                    187 ;	Raw cost for generated ic 26 : (9, 14.000000) count=1.000000
+                                    188 ;	src/fonts.c: 46: printf("Font demo.\n\n");
+                                    189 ;	skipping iCode since result will be rematerialized
+                                    190 ;	Raw cost for generated ic 27 : (0, 0.000000) count=1.000000
+                                    191 ;	skipping iCode since result will be rematerialized
+                                    192 ;	Raw cost for generated ic 28 : (0, 0.000000) count=1.000000
+                                    193 ;	genIpush
+    00000042 A9s00            [ 2]  194 	lda	#>___str_0
+    00000044 48               [ 3]  195 	pha
+    00000045 A9rB4            [ 2]  196 	lda	#___str_0
+    00000047 48               [ 3]  197 	pha
+                                    198 ;	Raw cost for generated ic 29 : (6, 10.000000) count=1.000000
+                                    199 ;	genCall
+    00000048 20r00r00         [ 6]  200 	jsr	_printf
+    0000004B 68               [ 4]  201 	pla
+    0000004C 68               [ 4]  202 	pla
+                                    203 ;	Raw cost for generated ic 30 : (5, 14.000000) count=1.000000
+                                    204 ;	src/fonts.c: 48: printf("IBM Font #!?123\n");
+                                    205 ;	skipping iCode since result will be rematerialized
+                                    206 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                    207 ;	skipping iCode since result will be rematerialized
+                                    208 ;	Raw cost for generated ic 32 : (0, 0.000000) count=1.000000
+                                    209 ;	genIpush
+    0000004D A9s00            [ 2]  210 	lda	#>___str_1
+    0000004F 48               [ 3]  211 	pha
+    00000050 A9rC1            [ 2]  212 	lda	#___str_1
+    00000052 48               [ 3]  213 	pha
+                                    214 ;	Raw cost for generated ic 33 : (6, 10.000000) count=1.000000
+                                    215 ;	genCall
+    00000053 20r00r00         [ 6]  216 	jsr	_printf
+    00000056 68               [ 4]  217 	pla
+    00000057 68               [ 4]  218 	pla
+                                    219 ;	Raw cost for generated ic 34 : (5, 14.000000) count=1.000000
+                                    220 ;	src/fonts.c: 51: font_set(italic_font);
+                                    221 ;	Raw cost for generated ic 35 : (0, 0.000000) count=1.000000
+                                    222 ;	genCall
+                                    223 ;	genSend
+    00000058 AEr03r00         [ 4]  224 	ldx	(_main_italic_font_10000_115 + 1)
+    0000005B ADr02r00         [ 4]  225 	lda	_main_italic_font_10000_115
+    0000005E 20r00r00         [ 6]  226 	jsr	_font_set
+                                    227 ;	Raw cost for generated ic 36 : (9, 14.000000) count=1.000000
+                                    228 ;	src/fonts.c: 52: for (i=1; i!=5; i++) {
+                                    229 ;	skipping iCode since result will be rematerialized
+                                    230 ;	Raw cost for generated ic 39 : (0, 0.000000) count=1.000000
+                                    231 ;	genAssign
+                                    232 ;	genAssignLit
+    00000061 A2 01            [ 2]  233 	ldx	#0x01
+    00000063 86*00            [ 3]  234 	stx	*_main_sloc0_1_0
+    00000065 CA               [ 2]  235 	dex
+    00000066 86*01            [ 3]  236 	stx	*(_main_sloc0_1_0 + 1)
+                                    237 ;	Raw cost for generated ic 67 : (7, 10.000000) count=1.000000
+                                    238 ;	genLabel
+    00000068                        239 00102$:
+                                    240 ;	Raw cost for generated ic 38 : (0, 0.000000) count=3.999999
+                                    241 ;	src/fonts.c: 53: printf("In italics, line %u\n", i);
+                                    242 ;	skipping iCode since result will be rematerialized
+                                    243 ;	Raw cost for generated ic 40 : (0, 0.000000) count=3.999999
+                                    244 ;	genIpush
+    00000068 A5*01            [ 3]  245 	lda	*(_main_sloc0_1_0 + 1)
+    0000006A 48               [ 3]  246 	pha
+    0000006B A5*00            [ 3]  247 	lda	*_main_sloc0_1_0
+    0000006D 48               [ 3]  248 	pha
+                                    249 ;	Raw cost for generated ic 41 : (6, 12.000000) count=3.999999
+                                    250 ;	genIpush
+    0000006E A9s00            [ 2]  251 	lda	#>___str_2
+    00000070 48               [ 3]  252 	pha
+    00000071 A9rD2            [ 2]  253 	lda	#___str_2
+    00000073 48               [ 3]  254 	pha
+                                    255 ;	Raw cost for generated ic 42 : (6, 10.000000) count=3.999999
+                                    256 ;	genCall
+    00000074 20r00r00         [ 6]  257 	jsr	_printf
+    00000077 68               [ 4]  258 	pla
+    00000078 68               [ 4]  259 	pla
+    00000079 68               [ 4]  260 	pla
+    0000007A 68               [ 4]  261 	pla
+                                    262 ;	Raw cost for generated ic 43 : (7, 22.000000) count=3.999999
+                                    263 ;	src/fonts.c: 52: for (i=1; i!=5; i++) {
+                                    264 ;	genPlus
+                                    265 ;	genPlusIncr
+    0000007B E6*00            [ 5]  266 	inc	*_main_sloc0_1_0
+    0000007D D0 02            [ 4]  267 	bne	00119$
+    0000007F E6*01            [ 5]  268 	inc	*(_main_sloc0_1_0 + 1)
+    00000081                        269 00119$:
+                                    270 ;	Raw cost for generated ic 46 : (6, 12.600000) count=3.999999
+                                    271 ;	genCmpEQorNE
+    00000081 A5*00            [ 3]  272 	lda	*_main_sloc0_1_0
+    00000083 C9 05            [ 2]  273 	cmp	#0x05
+    00000085 D0 E1            [ 4]  274 	bne	00102$
+    00000087 A5*01            [ 3]  275 	lda	*(_main_sloc0_1_0 + 1)
+    00000089 D0 DD            [ 4]  276 	bne	00102$
+                                    277 ;	Raw cost for generated ic 48 : (16, 19.200001) count=3.999999
+                                    278 ;	skipping generated iCode
+                                    279 ;	Raw cost for generated ic 49 : (0, 0.000000) count=3.999999
+                                    280 ;	src/fonts.c: 57: font_set(min_font);
+                                    281 ;	Raw cost for generated ic 52 : (0, 0.000000) count=1.000000
+                                    282 ;	genCall
+                                    283 ;	genSend
+    0000008B AEr05r00         [ 4]  284 	ldx	(_main_min_font_10000_115 + 1)
+    0000008E ADr04r00         [ 4]  285 	lda	_main_min_font_10000_115
+    00000091 20r00r00         [ 6]  286 	jsr	_font_set
+                                    287 ;	Raw cost for generated ic 53 : (9, 14.000000) count=1.000000
+                                    288 ;	src/fonts.c: 58: printf("Minimal 36 tile font\n");
+                                    289 ;	skipping iCode since result will be rematerialized
+                                    290 ;	Raw cost for generated ic 54 : (0, 0.000000) count=1.000000
+                                    291 ;	skipping iCode since result will be rematerialized
+                                    292 ;	Raw cost for generated ic 55 : (0, 0.000000) count=1.000000
+                                    293 ;	genIpush
+    00000094 A9s00            [ 2]  294 	lda	#>___str_3
+    00000096 48               [ 3]  295 	pha
+    00000097 A9rE7            [ 2]  296 	lda	#___str_3
+    00000099 48               [ 3]  297 	pha
+                                    298 ;	Raw cost for generated ic 56 : (6, 10.000000) count=1.000000
+                                    299 ;	genCall
+    0000009A 20r00r00         [ 6]  300 	jsr	_printf
+    0000009D 68               [ 4]  301 	pla
+    0000009E 68               [ 4]  302 	pla
+                                    303 ;	Raw cost for generated ic 57 : (5, 14.000000) count=1.000000
+                                    304 ;	src/fonts.c: 61: font_set(ibm_font);
+                                    305 ;	Raw cost for generated ic 58 : (0, 0.000000) count=1.000000
+                                    306 ;	genCall
+                                    307 ;	genSend
+    0000009F AEr01r00         [ 4]  308 	ldx	(_main_ibm_font_10000_115 + 1)
+    000000A2 ADr00r00         [ 4]  309 	lda	_main_ibm_font_10000_115
+    000000A5 20r00r00         [ 6]  310 	jsr	_font_set
+                                    311 ;	Raw cost for generated ic 59 : (9, 14.000000) count=1.000000
+                                    312 ;	src/fonts.c: 62: printf("\nDone!");
+                                    313 ;	skipping iCode since result will be rematerialized
+                                    314 ;	Raw cost for generated ic 60 : (0, 0.000000) count=1.000000
+                                    315 ;	skipping iCode since result will be rematerialized
+                                    316 ;	Raw cost for generated ic 61 : (0, 0.000000) count=1.000000
+                                    317 ;	genIpush
+    000000A8 A9s00            [ 2]  318 	lda	#>___str_4
+    000000AA 48               [ 3]  319 	pha
+    000000AB A9rFD            [ 2]  320 	lda	#___str_4
+    000000AD 48               [ 3]  321 	pha
+                                    322 ;	Raw cost for generated ic 62 : (6, 10.000000) count=1.000000
+                                    323 ;	genCall
+    000000AE 20r00r00         [ 6]  324 	jsr	_printf
+    000000B1 68               [ 4]  325 	pla
+    000000B2 68               [ 4]  326 	pla
+                                    327 ;	Raw cost for generated ic 63 : (5, 14.000000) count=1.000000
+                                    328 ;	genLabel
+                                    329 ;	Raw cost for generated ic 64 : (0, 0.000000) count=1.000000
+                                    330 ;	src/fonts.c: 63: }
+                                    331 ;	genEndFunction
+    000000B3 60               [ 6]  332 	rts
+                                    333 ;	Raw cost for generated ic 65 : (1, 6.000000) count=1.000000
+                                    334 	.area _CODE
+    000000B4                        335 ___str_0:
+    000000B4 46 6F 6E 74 20 64 65   336 	.ascii "Font demo."
+             6D 6F 2E
+    000000BE 0A                     337 	.db 0x0a
+    000000BF 0A                     338 	.db 0x0a
+    000000C0 00                     339 	.db 0x00
+    000000C1                        340 ___str_1:
+    000000C1 49 42 4D 20 46 6F 6E   341 	.ascii "IBM Font #!?123"
+             74 20 23 21 3F 31 32
+             33
+    000000D0 0A                     342 	.db 0x0a
+    000000D1 00                     343 	.db 0x00
+    000000D2                        344 ___str_2:
+    000000D2 49 6E 20 69 74 61 6C   345 	.ascii "In italics, line %u"
+             69 63 73 2C 20 6C 69
+             6E 65 20 25 75
+    000000E5 0A                     346 	.db 0x0a
+    000000E6 00                     347 	.db 0x00
+    000000E7                        348 ___str_3:
+    000000E7 4D 69 6E 69 6D 61 6C   349 	.ascii "Minimal 36 tile font"
+             20 33 36 20 74 69 6C
+             65 20 66 6F 6E 74
+    000000FB 0A                     350 	.db 0x0a
+    000000FC 00                     351 	.db 0x00
+    000000FD                        352 ___str_4:
+    000000FD 0A                     353 	.db 0x0a
+    000000FE 44 6F 6E 65 21         354 	.ascii "Done!"
+    00000103 00                     355 	.db 0x00
+                                    356 	.area _XINIT
+                                    357 	.area _CABS    (ABS)

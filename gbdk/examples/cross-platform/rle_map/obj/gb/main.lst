@@ -1,0 +1,277 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl b___func_map_compressed
+                                     12 	.globl ___func_map_compressed
+                                     13 	.globl b___func_map_tiles
+                                     14 	.globl ___func_map_tiles
+                                     15 	.globl _rle_decompress
+                                     16 	.globl _rle_init
+                                     17 	.globl _set_bkg_tiles
+                                     18 	.globl _set_bkg_data
+                                     19 	.globl _vsync
+                                     20 	.globl _datapos
+                                     21 	.globl _scrollpos
+                                     22 	.globl _data
+                                     23 ;--------------------------------------------------------
+                                     24 ; special function registers
+                                     25 ;--------------------------------------------------------
+                                     26 ;--------------------------------------------------------
+                                     27 ; ram data
+                                     28 ;--------------------------------------------------------
+                                     29 	.area _DATA
+    00000000                         30 _data::
+    00000000                         31 	.ds 18
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _INITIALIZED
+    00000000                         36 _scrollpos::
+    00000000                         37 	.ds 2
+    00000002                         38 _datapos::
+    00000002                         39 	.ds 1
+                                     40 ;--------------------------------------------------------
+                                     41 ; absolute external ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _DABS (ABS)
+                                     44 ;--------------------------------------------------------
+                                     45 ; global & static initialisations
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _HOME
+                                     48 	.area _GSINIT
+                                     49 	.area _GSFINAL
+                                     50 	.area _GSINIT
+                                     51 ;--------------------------------------------------------
+                                     52 ; Home
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _HOME
+                                     55 	.area _HOME
+                                     56 ;--------------------------------------------------------
+                                     57 ; code
+                                     58 ;--------------------------------------------------------
+                                     59 	.area _CODE
+                                     60 ;src/main.c:8: INCBIN(map_tiles, "res/map_tiles.bin")
+                                     61 ;	---------------------------------
+                                     62 ; Function __func_map_tiles
+                                     63 ; ---------------------------------
+                         00000000    64 	b___func_map_tiles	= 0
+    00000000                         65 ___func_map_tiles::
+    00000000                         66 _map_tiles::
+    00000000                         67 1$:
+    00000000 FF 00 FF 00 FF 00 FF    68 	.incbin "res/map_tiles.bin" 
+             00 FF 00 FF 00 DF 20
+             FF 00 FF 00 FF 00 FF
+             00 FF 00 3F C0 BF 00
+             FF 00 FF 00 FF 00 FF
+             00 FF 00 FF 00 FF 00
+             FF 00 FF 00 FF 00 FF
+             00 EF 10 F8 00 F0 00
+             F0 00 E1 00 C5 22 F3
+             0C FD 03 F8 07 78 07
+             5A 25 BC 43 7C 83 FC
+             03 E0 07 FF FF FF FF
+             FF FF FF FF FF FF FF
+             FF FF FF FF FF FF FF
+             FF FF FF FF FF FF FF
+             FF FF FF DF FF FF FF
+             FF FF FF FF FF FF FF
+             FF 3F FF BF FF FF FF
+             FF FF
+    00000780                         69 2$:
+                         00000780    70 	___size_map_tiles = (2$-1$) 
+                                     71 	.globl ___size_map_tiles 
+                                     72 	.local b___func_map_tiles 
+                         00000000    73 	___bank_map_tiles = b___func_map_tiles 
+                                     74 	.globl ___bank_map_tiles 
+                                     75 ;src/main.c:15: INCBIN(map_compressed, "res/map.bin.rle")
+                                     76 ;	---------------------------------
+                                     77 ; Function __func_map_compressed
+                                     78 ; ---------------------------------
+                         00000000    79 	b___func_map_compressed	= 0
+    00000780                         80 ___func_map_compressed::
+    00000780                         81 _map_compressed::
+    00000780                         82 1$:
+    00000780 08 00 0D 03 0F 02 02    83 	.incbin "res/map.bin.rle" 
+             26 38 FC 05 0E 06 11
+             05 05 1E 0D 01 0E 0C
+             23 02 02 0B 16 FC 05
+             78 07 12 05 05 1F 0E
+             02 02 00 0D 26 2A 00
+             19 08 13 06 11 4A 5D
+             62 41 35 42 02 02 01
+             0E 0B 2B 01 1A 09 14
+             07 12 1F 0E 0C 1C 37
+             23 03 0F 00 0D 02 02
+             00 39 06 11 05 05 1E
+             02 26 38 1E 02 04 10
+             1D 0E 02 02 01 3A 07
+             12 05 05 20 24 63 6A
+             1F 02 05 05 1E 02 00
+             0D 02 3B 06 11 4A 53
+             4A 5E 64 02 03 0F 05
+             05 1F
+    00000E45                         84 2$:
+                         000006C5    85 	___size_map_compressed = (2$-1$) 
+                                     86 	.globl ___size_map_compressed 
+                                     87 	.local b___func_map_compressed 
+                         00000000    88 	___bank_map_compressed = b___func_map_compressed 
+                                     89 	.globl ___bank_map_compressed 
+                                     90 ;src/main.c:22: void main(void) {
+                                     91 ;	---------------------------------
+                                     92 ; Function main
+                                     93 ; ---------------------------------
+    00000E45                         94 _main::
+    00000E45 3B               [ 8]   95 	dec	sp
+                                     96 ;src/main.c:30: SHOW_BKG;
+    00000E46 F0r00            [12]   97 	ldh	a, (_LCDC_REG + 0)
+    00000E48 F6 01            [ 8]   98 	or	a, #0x01
+    00000E4A E0r00            [12]   99 	ldh	(_LCDC_REG + 0), a
+                                    100 ;src/main.c:33: set_bkg_data(0, INCBIN_SIZE(map_tiles) >> 4, map_tiles);
+    00000E4C 01r00r00         [12]  101 	ld	bc, #_map_tiles+0
+    00000E4F 21r00r00         [12]  102 	ld	hl, #___size_map_tiles
+    00000E52 29               [ 8]  103 	add	hl, hl
+    00000E53 29               [ 8]  104 	add	hl, hl
+    00000E54 29               [ 8]  105 	add	hl, hl
+    00000E55 29               [ 8]  106 	add	hl, hl
+    00000E56 C5               [16]  107 	push	bc
+    00000E57 E5               [16]  108 	push	hl
+    00000E58 33               [ 8]  109 	inc	sp
+    00000E59 AF               [ 4]  110 	xor	a, a
+    00000E5A F5               [16]  111 	push	af
+    00000E5B 33               [ 8]  112 	inc	sp
+    00000E5C CDr00r00         [24]  113 	call	_set_bkg_data
+    00000E5F E8 04            [16]  114 	add	sp, #4
+                                    115 ;src/main.c:36: rle_init(map_compressed);
+    00000E61 11r80r07         [12]  116 	ld	de, #_map_compressed
+    00000E64 CDr00r00         [24]  117 	call	_rle_init
+                                    118 ;src/main.c:41: for (uint8_t i = 0; (i != DEVICE_SCREEN_WIDTH + 1); i++) {
+    00000E67 0E 00            [ 8]  119 	ld	c, #0x00
+    00000E69                        120 00111$:
+    00000E69 79               [ 4]  121 	ld	a, c
+    00000E6A D6 15            [ 8]  122 	sub	a, #0x15
+    00000E6C 28 27            [12]  123 	jr	Z, 00101$
+                                    124 ;src/main.c:42: rle_decompress(data, MAP_DATA_HEIGHT);
+    00000E6E C5               [16]  125 	push	bc
+    00000E6F 3E 12            [ 8]  126 	ld	a, #0x12
+    00000E71 11r00r00         [12]  127 	ld	de, #_data
+    00000E74 CDr00r00         [24]  128 	call	_rle_decompress
+    00000E77 C1               [12]  129 	pop	bc
+                                    130 ;src/main.c:47: set_bkg_tiles(i & (DEVICE_SCREEN_BUFFER_WIDTH-1), 0, 1, MAP_DATA_HEIGHT, data);
+    00000E78 79               [ 4]  131 	ld	a, c
+    00000E79 E6 1F            [ 8]  132 	and	a, #0x1f
+    00000E7B 11r00r00         [12]  133 	ld	de, #_data
+    00000E7E D5               [16]  134 	push	de
+    00000E7F 26 12            [ 8]  135 	ld	h, #0x12
+    00000E81 E5               [16]  136 	push	hl
+    00000E82 33               [ 8]  137 	inc	sp
+    00000E83 26 01            [ 8]  138 	ld	h, #0x01
+    00000E85 E5               [16]  139 	push	hl
+    00000E86 33               [ 8]  140 	inc	sp
+    00000E87 26 00            [ 8]  141 	ld	h, #0x00
+    00000E89 E5               [16]  142 	push	hl
+    00000E8A 33               [ 8]  143 	inc	sp
+    00000E8B F5               [16]  144 	push	af
+    00000E8C 33               [ 8]  145 	inc	sp
+    00000E8D CDr00r00         [24]  146 	call	_set_bkg_tiles
+    00000E90 E8 06            [16]  147 	add	sp, #6
+                                    148 ;src/main.c:41: for (uint8_t i = 0; (i != DEVICE_SCREEN_WIDTH + 1); i++) {
+    00000E92 0C               [ 4]  149 	inc	c
+    00000E93 18 D4            [12]  150 	jr	00111$
+    00000E95                        151 00101$:
+                                    152 ;src/main.c:51: datapos = 0;
+    00000E95 AF               [ 4]  153 	xor	a, a
+    00000E96 EAr02r00         [16]  154 	ld	(#_datapos),a
+                                    155 ;src/main.c:52: scrollpos = 1;
+    00000E99 21r00r00         [12]  156 	ld	hl, #_scrollpos
+    00000E9C 3E 01            [ 8]  157 	ld	a, #0x01
+    00000E9E 22               [ 8]  158 	ld	(hl+), a
+    00000E9F AF               [ 4]  159 	xor	a, a
+    00000EA0 77               [ 8]  160 	ld	(hl), a
+                                    161 ;src/main.c:53: while(TRUE) {
+    00000EA1                        162 00107$:
+                                    163 ;src/main.c:55: vsync();
+    00000EA1 CDr00r00         [24]  164 	call	_vsync
+                                    165 ;src/main.c:60: scrollpos++;
+    00000EA4 21r00r00         [12]  166 	ld	hl, #_scrollpos
+    00000EA7 34               [12]  167 	inc	(hl)
+    00000EA8 20 02            [12]  168 	jr	NZ, 00152$
+    00000EAA 23               [ 8]  169 	inc	hl
+    00000EAB 34               [12]  170 	inc	(hl)
+    00000EAC                        171 00152$:
+                                    172 ;src/main.c:61: move_bkg(scrollpos, 0);
+    00000EAC 21r00r00         [12]  173 	ld	hl, #_scrollpos
+    00000EAF 7E               [ 8]  174 	ld	a, (hl)
+    00000EB0 E0r00            [12]  175 	ldh	(_SCX_REG + 0), a
+                                    176 ;../../../include/gb/gb.h:1461: SCX_REG=x, SCY_REG=y;
+    00000EB2 AF               [ 4]  177 	xor	a, a
+    00000EB3 E0r00            [12]  178 	ldh	(_SCY_REG + 0), a
+                                    179 ;src/main.c:65: if ((scrollpos & 0x07u) == 0) {
+    00000EB5 2A               [ 8]  180 	ld	a, (hl+)
+    00000EB6 4E               [ 8]  181 	ld	c, (hl)
+    00000EB7 E6 07            [ 8]  182 	and	a, #0x07
+    00000EB9 20 E6            [12]  183 	jr	NZ, 00107$
+                                    184 ;src/main.c:69: datapos = (scrollpos >> 3);
+    00000EBB 21r00r00         [12]  185 	ld	hl, #_scrollpos
+    00000EBE 2A               [ 8]  186 	ld	a, (hl+)
+    00000EBF 4F               [ 4]  187 	ld	c, a
+    00000EC0 46               [ 8]  188 	ld	b, (hl)
+    00000EC1 CB 38            [ 8]  189 	srl	b
+    00000EC3 CB 19            [ 8]  190 	rr	c
+    00000EC5 CB 38            [ 8]  191 	srl	b
+    00000EC7 CB 19            [ 8]  192 	rr	c
+    00000EC9 CB 38            [ 8]  193 	srl	b
+    00000ECB CB 19            [ 8]  194 	rr	c
+    00000ECD 21r02r00         [12]  195 	ld	hl, #_datapos
+    00000ED0 71               [ 8]  196 	ld	(hl), c
+                                    197 ;src/main.c:70: uint8_t map_x_column = (datapos + DEVICE_SCREEN_WIDTH) & (DEVICE_SCREEN_BUFFER_WIDTH-1);
+    00000ED1 7E               [ 8]  198 	ld	a, (hl)
+    00000ED2 C6 14            [ 8]  199 	add	a, #0x14
+    00000ED4 E6 1F            [ 8]  200 	and	a, #0x1f
+    00000ED6 F8 00            [12]  201 	ldhl	sp,	#0
+    00000ED8 77               [ 8]  202 	ld	(hl), a
+                                    203 ;src/main.c:75: if (!rle_decompress(data, MAP_DATA_HEIGHT)) {
+    00000ED9 3E 12            [ 8]  204 	ld	a, #0x12
+    00000EDB 11r00r00         [12]  205 	ld	de, #_data
+    00000EDE CDr00r00         [24]  206 	call	_rle_decompress
+    00000EE1 B7               [ 4]  207 	or	a, a
+    00000EE2 20 0E            [12]  208 	jr	NZ, 00103$
+                                    209 ;src/main.c:76: rle_init(map_compressed);
+    00000EE4 11r80r07         [12]  210 	ld	de, #_map_compressed
+    00000EE7 CDr00r00         [24]  211 	call	_rle_init
+                                    212 ;src/main.c:77: rle_decompress(data, MAP_DATA_HEIGHT);
+    00000EEA 3E 12            [ 8]  213 	ld	a, #0x12
+    00000EEC 11r00r00         [12]  214 	ld	de, #_data
+    00000EEF CDr00r00         [24]  215 	call	_rle_decompress
+    00000EF2                        216 00103$:
+                                    217 ;src/main.c:83: set_bkg_tiles(map_x_column, 0, 1, MAP_DATA_HEIGHT, data);
+    00000EF2 11r00r00         [12]  218 	ld	de, #_data
+    00000EF5 D5               [16]  219 	push	de
+    00000EF6 21 01 12         [12]  220 	ld	hl, #0x1201
+    00000EF9 E5               [16]  221 	push	hl
+    00000EFA AF               [ 4]  222 	xor	a, a
+    00000EFB F5               [16]  223 	push	af
+    00000EFC 33               [ 8]  224 	inc	sp
+    00000EFD F8 05            [12]  225 	ldhl	sp,	#5
+    00000EFF 7E               [ 8]  226 	ld	a, (hl)
+    00000F00 F5               [16]  227 	push	af
+    00000F01 33               [ 8]  228 	inc	sp
+    00000F02 CDr00r00         [24]  229 	call	_set_bkg_tiles
+    00000F05 E8 06            [16]  230 	add	sp, #6
+    00000F07 18 98            [12]  231 	jr	00107$
+                                    232 ;src/main.c:86: }
+    00000F09 33               [ 8]  233 	inc	sp
+    00000F0A C9               [16]  234 	ret
+                                    235 	.area _CODE
+                                    236 	.area _INITIALIZER
+    00000000                        237 __xinit__scrollpos:
+    00000000 00 00                  238 	.dw #0x0000
+    00000002                        239 __xinit__datapos:
+    00000002 00                     240 	.db #0x00	; 0
+                                    241 	.area _CABS (ABS)

@@ -1,0 +1,407 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _hicolor_start
+                                     12 	.globl _cpu_fast
+                                     13 	.globl _fill_bkg_rect
+                                     14 	.globl _set_bkg_data
+                                     15 	.globl _display_off
+                                     16 	.globl _vsync
+                                     17 	.globl _joypad
+                                     18 	.globl _buttons_prev
+                                     19 	.globl _buttons
+                                     20 	.globl _hicolors
+                                     21 	.globl _blank_tile
+                                     22 ;--------------------------------------------------------
+                                     23 ; special function registers
+                                     24 ;--------------------------------------------------------
+                                     25 ;--------------------------------------------------------
+                                     26 ; ram data
+                                     27 ;--------------------------------------------------------
+                                     28 	.area _DATA
+    00000000                         29 _buttons::
+    00000000                         30 	.ds 1
+    00000001                         31 _buttons_prev::
+    00000001                         32 	.ds 1
+                                     33 ;--------------------------------------------------------
+                                     34 ; ram data
+                                     35 ;--------------------------------------------------------
+                                     36 	.area _INITIALIZED
+                                     37 ;--------------------------------------------------------
+                                     38 ; absolute external ram data
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _DABS (ABS)
+                                     41 ;--------------------------------------------------------
+                                     42 ; global & static initialisations
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _HOME
+                                     45 	.area _GSINIT
+                                     46 	.area _GSFINAL
+                                     47 	.area _GSINIT
+                                     48 ;--------------------------------------------------------
+                                     49 ; Home
+                                     50 ;--------------------------------------------------------
+                                     51 	.area _HOME
+                                     52 	.area _HOME
+                                     53 ;--------------------------------------------------------
+                                     54 ; code
+                                     55 ;--------------------------------------------------------
+                                     56 	.area _CODE
+                                     57 ;src/main.c:36: void main(void) {
+                                     58 ;	---------------------------------
+                                     59 ; Function main
+                                     60 ; ---------------------------------
+    00000000                         61 _main::
+    00000000 E8 F6            [16]   62 	add	sp, #-10
+                                     63 ;src/main.c:38: uint8_t  img_select = 0;
+    00000002 F8 09            [12]   64 	ldhl	sp,	#9
+    00000004 36 00            [12]   65 	ld	(hl), #0x00
+                                     66 ;src/main.c:39: bool     first_pass = true;
+    00000006 F8 01            [12]   67 	ldhl	sp,	#1
+    00000008 36 01            [12]   68 	ld	(hl), #0x01
+                                     69 ;src/main.c:40: uint8_t  scroll_limit = 0;
+    0000000A F8 06            [12]   70 	ldhl	sp,	#6
+    0000000C 36 00            [12]   71 	ld	(hl), #0x00
+                                     72 ;src/main.c:44: SHOW_BKG;
+    0000000E F0r00            [12]   73 	ldh	a, (_LCDC_REG + 0)
+    00000010 F6 01            [ 8]   74 	or	a, #0x01
+    00000012 E0r00            [12]   75 	ldh	(_LCDC_REG + 0), a
+                                     76 ;src/main.c:47: if (_cpu == CGB_TYPE) {
+    00000014 FAr00r00         [16]   77 	ld	a, (#__cpu)
+    00000017 D6 11            [ 8]   78 	sub	a, #0x11
+    00000019 C2rA8r01         [16]   79 	jp	NZ, 00128$
+                                     80 ;src/main.c:49: cpu_fast();
+    0000001C CDr00r00         [24]   81 	call	_cpu_fast
+                                     82 ;src/main.c:51: while(true) {
+    0000001F                         83 00124$:
+                                     84 ;src/main.c:53: vsync();
+    0000001F CDr00r00         [24]   85 	call	_vsync
+                                     86 ;src/main.c:54: UPDATE_BUTTONS();
+    00000022 FAr00r00         [16]   87 	ld	a, (#_buttons)
+    00000025 EAr01r00         [16]   88 	ld	(#_buttons_prev),a
+    00000028 CDr00r00         [24]   89 	call	_joypad
+    0000002B F8 08            [12]   90 	ldhl	sp,#8
+    0000002D 77               [ 8]   91 	ld	(hl), a
+    0000002E 7E               [ 8]   92 	ld	a, (hl)
+    0000002F EAr00r00         [16]   93 	ld	(#_buttons),a
+                                     94 ;src/main.c:57: if (BUTTON_TOGGLED(J_A | J_B) || first_pass) {
+    00000032 FAr01r00         [16]   95 	ld	a, (#_buttons_prev)
+    00000035 F8 07            [12]   96 	ldhl	sp,	#7
+    00000037 22               [ 8]   97 	ld	(hl+), a
+    00000038 AF               [ 4]   98 	xor	a, a
+    00000039 32               [ 8]   99 	ld	(hl-), a
+    0000003A 7E               [ 8]  100 	ld	a, (hl)
+    0000003B 2F               [ 4]  101 	cpl
+    0000003C F8 02            [12]  102 	ldhl	sp,	#2
+    0000003E 22               [ 8]  103 	ld	(hl+), a
+    0000003F AF               [ 4]  104 	xor	a, a
+    00000040 2F               [ 4]  105 	cpl
+    00000041 77               [ 8]  106 	ld	(hl), a
+    00000042 FAr00r00         [16]  107 	ld	a, (#_buttons)
+    00000045 F8 04            [12]  108 	ldhl	sp,	#4
+    00000047 22               [ 8]  109 	ld	(hl+), a
+    00000048 AF               [ 4]  110 	xor	a, a
+    00000049 32               [ 8]  111 	ld	(hl-), a
+    0000004A 3A               [ 8]  112 	ld	a, (hl-)
+    0000004B 2B               [ 8]  113 	dec	hl
+    0000004C A6               [ 8]  114 	and	a, (hl)
+    0000004D F8 07            [12]  115 	ldhl	sp,	#7
+    0000004F 22               [ 8]  116 	ld	(hl+), a
+    00000050 AF               [ 4]  117 	xor	a, a
+    00000051 32               [ 8]  118 	ld	(hl-), a
+    00000052 7E               [ 8]  119 	ld	a, (hl)
+    00000053 E6 30            [ 8]  120 	and	a, #0x30
+    00000055 20 07            [12]  121 	jr	NZ, 00119$
+    00000057 F8 01            [12]  122 	ldhl	sp,	#1
+    00000059 CB 46            [12]  123 	bit	0, (hl)
+    0000005B CAr7Dr01         [16]  124 	jp	Z, 00120$
+    0000005E                        125 00119$:
+                                    126 ;src/main.c:59: vsync();
+    0000005E CDr00r00         [24]  127 	call	_vsync
+                                    128 ;src/main.c:60: DISPLAY_OFF;
+    00000061 CDr00r00         [24]  129 	call	_display_off
+                                    130 ;src/main.c:63: hicolor_bank = hicolors[img_select].bank;
+    00000064 F8 09            [12]  131 	ldhl	sp,	#9
+    00000066 4E               [ 8]  132 	ld	c, (hl)
+    00000067 06 00            [ 8]  133 	ld	b, #0x00
+    00000069 69               [ 4]  134 	ld	l, c
+    0000006A 60               [ 4]  135 	ld	h, b
+    0000006B 29               [ 8]  136 	add	hl, hl
+    0000006C 09               [ 8]  137 	add	hl, bc
+    0000006D 4D               [ 4]  138 	ld	c, l
+    0000006E 44               [ 4]  139 	ld	b, h
+    0000006F 21rBBr01         [12]  140 	ld	hl, #_hicolors
+    00000072 09               [ 8]  141 	add	hl, bc
+    00000073 E5               [16]  142 	push	hl
+    00000074 7D               [ 4]  143 	ld	a, l
+    00000075 F8 07            [12]  144 	ldhl	sp,	#7
+    00000077 77               [ 8]  145 	ld	(hl), a
+    00000078 E1               [12]  146 	pop	hl
+    00000079 7C               [ 4]  147 	ld	a, h
+    0000007A F8 06            [12]  148 	ldhl	sp,	#6
+    0000007C 32               [ 8]  149 	ld	(hl-), a
+    0000007D 2A               [ 8]  150 	ld	a, (hl+)
+    0000007E 5F               [ 4]  151 	ld	e, a
+    0000007F 56               [ 8]  152 	ld	d, (hl)
+    00000080 1A               [ 8]  153 	ld	a, (de)
+    00000081 F8 00            [12]  154 	ldhl	sp,	#0
+    00000083 77               [ 8]  155 	ld	(hl), a
+                                    156 ;src/main.c:64: p_hicolor = (const hicolor_data *)hicolors[img_select].ptr;
+    00000084 F8 05            [12]  157 	ldhl	sp,#5
+    00000086 2A               [ 8]  158 	ld	a, (hl+)
+    00000087 5F               [ 4]  159 	ld	e, a
+    00000088 56               [ 8]  160 	ld	d, (hl)
+    00000089 6B               [ 4]  161 	ld	l, e
+    0000008A 62               [ 4]  162 	ld	h, d
+    0000008B 23               [ 8]  163 	inc	hl
+    0000008C E5               [16]  164 	push	hl
+    0000008D 7D               [ 4]  165 	ld	a, l
+    0000008E F8 09            [12]  166 	ldhl	sp,	#9
+    00000090 77               [ 8]  167 	ld	(hl), a
+    00000091 E1               [12]  168 	pop	hl
+    00000092 7C               [ 4]  169 	ld	a, h
+    00000093 F8 08            [12]  170 	ldhl	sp,	#8
+    00000095 32               [ 8]  171 	ld	(hl-), a
+    00000096 2A               [ 8]  172 	ld	a, (hl+)
+    00000097 5F               [ 4]  173 	ld	e, a
+    00000098 3A               [ 8]  174 	ld	a, (hl-)
+    00000099 57               [ 4]  175 	ld	d, a
+    0000009A 1A               [ 8]  176 	ld	a, (de)
+    0000009B 22               [ 8]  177 	ld	(hl+), a
+    0000009C 13               [ 8]  178 	inc	de
+    0000009D 1A               [ 8]  179 	ld	a, (de)
+    0000009E 32               [ 8]  180 	ld	(hl-), a
+    0000009F 7E               [ 8]  181 	ld	a, (hl)
+    000000A0 F8 01            [12]  182 	ldhl	sp,	#1
+    000000A2 77               [ 8]  183 	ld	(hl), a
+    000000A3 F8 08            [12]  184 	ldhl	sp,	#8
+    000000A5 7E               [ 8]  185 	ld	a, (hl)
+    000000A6 F8 02            [12]  186 	ldhl	sp,	#2
+                                    187 ;src/main.c:66: uint8_t bank_save = CURRENT_BANK;
+    000000A8 22               [ 8]  188 	ld	(hl+), a
+    000000A9 F0r00            [12]  189 	ldh	a, (__current_bank + 0)
+    000000AB 77               [ 8]  190 	ld	(hl), a
+                                    191 ;src/main.c:67: if (hicolor_bank) SWITCH_ROM(hicolor_bank);
+    000000AC F8 00            [12]  192 	ldhl	sp,	#0
+    000000AE 7E               [ 8]  193 	ld	a, (hl)
+    000000AF B7               [ 4]  194 	or	a, a
+    000000B0 28 07            [12]  195 	jr	Z, 00102$
+    000000B2 7E               [ 8]  196 	ld	a, (hl)
+    000000B3 E0r00            [12]  197 	ldh	(__current_bank + 0), a
+    000000B5 7E               [ 8]  198 	ld	a, (hl)
+    000000B6 EAr00r00         [16]  199 	ld	(#_rROMB0),a
+    000000B9                        200 00102$:
+                                    201 ;src/main.c:70: SCY_REG = 0u;
+    000000B9 AF               [ 4]  202 	xor	a, a
+    000000BA E0r00            [12]  203 	ldh	(_SCY_REG + 0), a
+                                    204 ;src/main.c:71: if ((p_hicolor->height_in_tiles * 8u) > DEVICE_SCREEN_PX_HEIGHT)
+    000000BC F8 01            [12]  205 	ldhl	sp,#1
+    000000BE 2A               [ 8]  206 	ld	a, (hl+)
+    000000BF 5F               [ 4]  207 	ld	e, a
+    000000C0 56               [ 8]  208 	ld	d, (hl)
+    000000C1 21 02 00         [12]  209 	ld	hl, #0x0002
+    000000C4 19               [ 8]  210 	add	hl, de
+    000000C5 E5               [16]  211 	push	hl
+    000000C6 7D               [ 4]  212 	ld	a, l
+    000000C7 F8 06            [12]  213 	ldhl	sp,	#6
+    000000C9 77               [ 8]  214 	ld	(hl), a
+    000000CA E1               [12]  215 	pop	hl
+    000000CB 7C               [ 4]  216 	ld	a, h
+    000000CC F8 05            [12]  217 	ldhl	sp,	#5
+                                    218 ;src/main.c:81: if ((p_hicolor->height_in_tiles * 8u) < DEVICE_SCREEN_PX_HEIGHT) {
+    000000CE 32               [ 8]  219 	ld	(hl-), a
+    000000CF 2A               [ 8]  220 	ld	a, (hl+)
+    000000D0 5F               [ 4]  221 	ld	e, a
+    000000D1 2A               [ 8]  222 	ld	a, (hl+)
+    000000D2 57               [ 4]  223 	ld	d, a
+    000000D3 1A               [ 8]  224 	ld	a, (de)
+    000000D4 77               [ 8]  225 	ld	(hl), a
+                                    226 ;src/main.c:71: if ((p_hicolor->height_in_tiles * 8u) > DEVICE_SCREEN_PX_HEIGHT)
+    000000D5 2A               [ 8]  227 	ld	a, (hl+)
+    000000D6 22               [ 8]  228 	ld	(hl+), a
+    000000D7 36 00            [12]  229 	ld	(hl), #0x00
+    000000D9 3E 03            [ 8]  230 	ld	a, #0x03
+    000000DB                        231 00211$:
+    000000DB F8 07            [12]  232 	ldhl	sp,	#7
+    000000DD CB 26            [16]  233 	sla	(hl)
+    000000DF 23               [ 8]  234 	inc	hl
+    000000E0 CB 16            [16]  235 	rl	(hl)
+    000000E2 3D               [ 4]  236 	dec	a
+    000000E3 20 F6            [12]  237 	jr	NZ, 00211$
+    000000E5 2B               [ 8]  238 	dec	hl
+    000000E6 3E 90            [ 8]  239 	ld	a, #0x90
+    000000E8 96               [ 8]  240 	sub	a, (hl)
+    000000E9 23               [ 8]  241 	inc	hl
+    000000EA 3E 00            [ 8]  242 	ld	a, #0x00
+    000000EC 9E               [ 8]  243 	sbc	a, (hl)
+    000000ED 30 0B            [12]  244 	jr	NC, 00104$
+                                    245 ;src/main.c:72: scroll_limit = ((p_hicolor->height_in_tiles * 8u) - DEVICE_SCREEN_PX_HEIGHT);
+    000000EF F8 06            [12]  246 	ldhl	sp,	#6
+    000000F1 7E               [ 8]  247 	ld	a, (hl)
+    000000F2 87               [ 4]  248 	add	a, a
+    000000F3 87               [ 4]  249 	add	a, a
+    000000F4 87               [ 4]  250 	add	a, a
+    000000F5 C6 70            [ 8]  251 	add	a, #0x70
+    000000F7 77               [ 8]  252 	ld	(hl), a
+    000000F8 18 04            [12]  253 	jr	00105$
+    000000FA                        254 00104$:
+                                    255 ;src/main.c:73: else scroll_limit = 0;
+    000000FA F8 06            [12]  256 	ldhl	sp,	#6
+    000000FC 36 00            [12]  257 	ld	(hl), #0x00
+    000000FE                        258 00105$:
+                                    259 ;src/main.c:81: if ((p_hicolor->height_in_tiles * 8u) < DEVICE_SCREEN_PX_HEIGHT) {
+    000000FE F8 07            [12]  260 	ldhl	sp,	#7
+    00000100 2A               [ 8]  261 	ld	a, (hl+)
+    00000101 D6 90            [ 8]  262 	sub	a, #0x90
+    00000103 7E               [ 8]  263 	ld	a, (hl)
+    00000104 DE 00            [ 8]  264 	sbc	a, #0x00
+    00000106 30 4A            [12]  265 	jr	NC, 00107$
+                                    266 ;src/main.c:82: VBK_REG = VBK_BANK_1;
+    00000108 3E 01            [ 8]  267 	ld	a, #0x01
+    0000010A E0r00            [12]  268 	ldh	(_VBK_REG + 0), a
+                                    269 ;src/main.c:83: set_bkg_data(BG_LAST_TILE, 1u, blank_tile);
+    0000010C 11rABr01         [12]  270 	ld	de, #_blank_tile
+    0000010F D5               [16]  271 	push	de
+    00000110 21 FF 01         [12]  272 	ld	hl, #0x1ff
+    00000113 E5               [16]  273 	push	hl
+    00000114 CDr00r00         [24]  274 	call	_set_bkg_data
+    00000117 E8 04            [16]  275 	add	sp, #4
+                                    276 ;src/main.c:84: fill_bkg_rect(0u, (p_hicolor->height_in_tiles), DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, BKGF_BANK1);
+    00000119 F8 04            [12]  277 	ldhl	sp,#4
+    0000011B 2A               [ 8]  278 	ld	a, (hl+)
+    0000011C 5F               [ 4]  279 	ld	e, a
+    0000011D 56               [ 8]  280 	ld	d, (hl)
+    0000011E 1A               [ 8]  281 	ld	a, (de)
+    0000011F 26 08            [ 8]  282 	ld	h, #0x08
+    00000121 E5               [16]  283 	push	hl
+    00000122 33               [ 8]  284 	inc	sp
+    00000123 26 12            [ 8]  285 	ld	h, #0x12
+    00000125 E5               [16]  286 	push	hl
+    00000126 33               [ 8]  287 	inc	sp
+    00000127 26 14            [ 8]  288 	ld	h, #0x14
+    00000129 E5               [16]  289 	push	hl
+    0000012A 33               [ 8]  290 	inc	sp
+    0000012B 67               [ 4]  291 	ld	h, a
+    0000012C 2E 00            [ 8]  292 	ld	l, #0x00
+    0000012E E5               [16]  293 	push	hl
+    0000012F CDr00r00         [24]  294 	call	_fill_bkg_rect
+    00000132 E8 05            [16]  295 	add	sp, #5
+                                    296 ;src/main.c:85: VBK_REG = VBK_BANK_0;
+    00000134 AF               [ 4]  297 	xor	a, a
+    00000135 E0r00            [12]  298 	ldh	(_VBK_REG + 0), a
+                                    299 ;src/main.c:86: fill_bkg_rect(0u, (p_hicolor->height_in_tiles), DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, BG_LAST_TILE);
+    00000137 F8 04            [12]  300 	ldhl	sp,#4
+    00000139 2A               [ 8]  301 	ld	a, (hl+)
+    0000013A 5F               [ 4]  302 	ld	e, a
+    0000013B 56               [ 8]  303 	ld	d, (hl)
+    0000013C 1A               [ 8]  304 	ld	a, (de)
+    0000013D 26 FF            [ 8]  305 	ld	h, #0xff
+    0000013F E5               [16]  306 	push	hl
+    00000140 33               [ 8]  307 	inc	sp
+    00000141 26 12            [ 8]  308 	ld	h, #0x12
+    00000143 E5               [16]  309 	push	hl
+    00000144 33               [ 8]  310 	inc	sp
+    00000145 26 14            [ 8]  311 	ld	h, #0x14
+    00000147 E5               [16]  312 	push	hl
+    00000148 33               [ 8]  313 	inc	sp
+    00000149 67               [ 4]  314 	ld	h, a
+    0000014A 2E 00            [ 8]  315 	ld	l, #0x00
+    0000014C E5               [16]  316 	push	hl
+    0000014D CDr00r00         [24]  317 	call	_fill_bkg_rect
+    00000150 E8 05            [16]  318 	add	sp, #5
+    00000152                        319 00107$:
+                                    320 ;src/main.c:89: SWITCH_ROM(bank_save);
+    00000152 F8 03            [12]  321 	ldhl	sp,	#3
+    00000154 7E               [ 8]  322 	ld	a, (hl)
+    00000155 E0r00            [12]  323 	ldh	(__current_bank + 0), a
+    00000157 7E               [ 8]  324 	ld	a, (hl)
+    00000158 EAr00r00         [16]  325 	ld	(#_rROMB0),a
+                                    326 ;src/main.c:92: hicolor_start(p_hicolor, hicolor_bank);
+    0000015B F8 00            [12]  327 	ldhl	sp,	#0
+    0000015D 2A               [ 8]  328 	ld	a, (hl+)
+    0000015E 5E               [ 8]  329 	ld	e, (hl)
+    0000015F 23               [ 8]  330 	inc	hl
+    00000160 56               [ 8]  331 	ld	d, (hl)
+    00000161 CDr00r00         [24]  332 	call	_hicolor_start
+                                    333 ;src/main.c:94: DISPLAY_ON;
+    00000164 F0r00            [12]  334 	ldh	a, (_LCDC_REG + 0)
+    00000166 F6 80            [ 8]  335 	or	a, #0x80
+    00000168 E0r00            [12]  336 	ldh	(_LCDC_REG + 0), a
+                                    337 ;src/main.c:97: img_select++;
+    0000016A F8 09            [12]  338 	ldhl	sp,	#9
+    0000016C 34               [12]  339 	inc	(hl)
+                                    340 ;src/main.c:98: if (img_select == ARRAY_LEN(hicolors)) img_select = 0;
+    0000016D 7E               [ 8]  341 	ld	a, (hl)
+    0000016E D6 03            [ 8]  342 	sub	a, #0x03
+    00000170 20 04            [12]  343 	jr	NZ, 00109$
+    00000172 F8 09            [12]  344 	ldhl	sp,	#9
+    00000174 36 00            [12]  345 	ld	(hl), #0x00
+    00000176                        346 00109$:
+                                    347 ;src/main.c:100: first_pass = false;
+    00000176 F8 01            [12]  348 	ldhl	sp,	#1
+    00000178 36 00            [12]  349 	ld	(hl), #0x00
+    0000017A C3r1Fr00         [16]  350 	jp	00124$
+    0000017D                        351 00120$:
+                                    352 ;src/main.c:103: else if (BUTTON_PRESSED(J_UP)) {
+    0000017D FAr00r00         [16]  353 	ld	a, (_buttons)
+    00000180 CB 57            [ 8]  354 	bit	2, a
+    00000182 28 0F            [12]  355 	jr	Z, 00117$
+                                    356 ;src/main.c:104: if (SCY_REG) SCY_REG--;
+    00000184 FAr00r00         [16]  357 	ld	a, (#_SCY_REG)
+    00000187 B7               [ 4]  358 	or	a, a
+    00000188 CAr1Fr00         [16]  359 	jp	Z, 00124$
+    0000018B F0r00            [12]  360 	ldh	a, (_SCY_REG + 0)
+    0000018D 3D               [ 4]  361 	dec	a
+    0000018E E0r00            [12]  362 	ldh	(_SCY_REG + 0), a
+    00000190 C3r1Fr00         [16]  363 	jp	00124$
+    00000193                        364 00117$:
+                                    365 ;src/main.c:105: } else if (BUTTON_PRESSED(J_DOWN)) {
+    00000193 CB 5F            [ 8]  366 	bit	3, a
+    00000195 CAr1Fr00         [16]  367 	jp	Z, 00124$
+                                    368 ;src/main.c:106: if (SCY_REG < scroll_limit) SCY_REG++;
+    00000198 F0r00            [12]  369 	ldh	a, (_SCY_REG + 0)
+    0000019A F8 06            [12]  370 	ldhl	sp,	#6
+    0000019C 96               [ 8]  371 	sub	a, (hl)
+    0000019D D2r1Fr00         [16]  372 	jp	NC, 00124$
+    000001A0 F0r00            [12]  373 	ldh	a, (_SCY_REG + 0)
+    000001A2 3C               [ 4]  374 	inc	a
+    000001A3 E0r00            [12]  375 	ldh	(_SCY_REG + 0), a
+    000001A5 C3r1Fr00         [16]  376 	jp	00124$
+    000001A8                        377 00128$:
+                                    378 ;src/main.c:110: }
+    000001A8 E8 0A            [16]  379 	add	sp, #10
+    000001AA C9               [16]  380 	ret
+    000001AB                        381 _blank_tile:
+    000001AB 00                     382 	.db #0x00	; 0
+    000001AC 00                     383 	.db #0x00	; 0
+    000001AD 00                     384 	.db #0x00	; 0
+    000001AE 00                     385 	.db #0x00	; 0
+    000001AF 00                     386 	.db #0x00	; 0
+    000001B0 00                     387 	.db #0x00	; 0
+    000001B1 00                     388 	.db #0x00	; 0
+    000001B2 00                     389 	.db #0x00	; 0
+    000001B3 00                     390 	.db #0x00	; 0
+    000001B4 00                     391 	.db #0x00	; 0
+    000001B5 00                     392 	.db #0x00	; 0
+    000001B6 00                     393 	.db #0x00	; 0
+    000001B7 00                     394 	.db #0x00	; 0
+    000001B8 00                     395 	.db #0x00	; 0
+    000001B9 00                     396 	.db #0x00	; 0
+    000001BA 00                     397 	.db #0x00	; 0
+    000001BB                        398 _hicolors:
+    000001BBr00                     399 	.byte ___bank_test_pattern_tall
+    000001BCr00r00                  400 	.dw _test_pattern_tall_data
+    000001BEr00                     401 	.byte ___bank_example_image
+    000001BFr00r00                  402 	.dw _example_image_data
+    000001C1r00                     403 	.byte ___bank_test_pattern_short
+    000001C2r00r00                  404 	.dw _test_pattern_short_data
+                                    405 	.area _CODE
+                                    406 	.area _INITIALIZER
+                                    407 	.area _CABS (ABS)

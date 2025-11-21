@@ -1,0 +1,447 @@
+;--------------------------------------------------------
+; File Created by SDCC : free open source ISO C Compiler
+; Version 4.5.1 #15267 (Mac OS X ppc)
+;--------------------------------------------------------
+	.module srcfile_3
+	
+;; Ordering of segments for the linker.
+	.area _ZP      (PAG)
+	.area _OSEG    (PAG, OVR)
+	.area _HOME
+	.area _GSINIT
+	.area _GSFINAL
+	.area _CODE
+	.area _XINIT
+	.area _DATA
+	.area _DATA
+	.area _BSS
+;--------------------------------------------------------
+; Public variables in this module
+;--------------------------------------------------------
+	.globl _some_const_var_3
+	.globl b_func_3
+	.globl _func_3
+	.globl b___func_func_3
+	.globl ___func_func_3
+	.globl b___func_some_const_var_3
+	.globl ___func_some_const_var_3
+	.globl _printf
+	.globl _OAMDMA
+	.globl _PPUDATA
+	.globl _PPUADDR
+	.globl _PPUSCROLL
+	.globl _OAMDATA
+	.globl _OAMADDR
+	.globl _PPUSTATUS
+	.globl _PPUMASK
+	.globl _PPUCTRL
+;--------------------------------------------------------
+; ZP ram data
+;--------------------------------------------------------
+	.area _ZP      (PAG)
+;--------------------------------------------------------
+; overlayable items in ram
+;--------------------------------------------------------
+;--------------------------------------------------------
+; uninitialized external ram data
+;--------------------------------------------------------
+	.area _BSS
+_PPUCTRL	=	0x2000
+_PPUMASK	=	0x2001
+_PPUSTATUS	=	0x2002
+_OAMADDR	=	0x2003
+_OAMDATA	=	0x2004
+_PPUSCROLL	=	0x2005
+_PPUADDR	=	0x2006
+_PPUDATA	=	0x2007
+_OAMDMA	=	0x4014
+;--------------------------------------------------------
+; absolute external ram data
+;--------------------------------------------------------
+	.area _DABS    (ABS)
+;--------------------------------------------------------
+; initialized external ram data
+;--------------------------------------------------------
+	.area _DATA
+;--------------------------------------------------------
+; global & static initialisations
+;--------------------------------------------------------
+	.area _HOME
+	.area _GSINIT
+	.area _GSFINAL
+	.area _GSINIT
+;--------------------------------------------------------
+; Home
+;--------------------------------------------------------
+	.area _HOME
+	.area _HOME
+;--------------------------------------------------------
+; code
+;--------------------------------------------------------
+	.area _CODE_255
+;------------------------------------------------------------
+;Allocation info for local variables in function '__func_some_const_var_3'
+;------------------------------------------------------------
+;	src/srcfile_3.c: 8: BANKREF(some_const_var_3)
+;	genLabel
+;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+;	-----------------------------------------
+;	 function __func_some_const_var_3
+;	-----------------------------------------
+;	Register assignment is optimal.
+;	Stack space usage: 0 bytes.
+	b___func_some_const_var_3	= 255
+___func_some_const_var_3:
+;	naked function: no prologue.
+;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+;	m6502_genInline
+		.local b___func_some_const_var_3 
+	 ___bank_some_const_var_3 = b___func_some_const_var_3 
+	 .globl ___bank_some_const_var_3 
+;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+;	genLabel
+;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+;	genEndFunction
+;	naked function: no epilogue.
+;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+;------------------------------------------------------------
+;Allocation info for local variables in function '__func_func_3'
+;------------------------------------------------------------
+;	src/srcfile_3.c: 12: BANKREF(func_3)
+;	genLabel
+;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+;	-----------------------------------------
+;	 function __func_func_3
+;	-----------------------------------------
+;	Register assignment is optimal.
+;	Stack space usage: 0 bytes.
+	b___func_func_3	= 255
+___func_func_3:
+;	naked function: no prologue.
+;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+;	m6502_genInline
+		.local b___func_func_3 
+	 ___bank_func_3 = b___func_func_3 
+	 .globl ___bank_func_3 
+;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+;	genLabel
+;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+;	genEndFunction
+;	naked function: no epilogue.
+;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+;------------------------------------------------------------
+;Allocation info for local variables in function 'func_3'
+;------------------------------------------------------------
+;	src/srcfile_3.c: 13: void func_3(void) BANKED
+;	genLabel
+;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+;	-----------------------------------------
+;	 function func_3
+;	-----------------------------------------
+;	Register assignment is optimal.
+;	Stack space usage: 0 bytes.
+	b_func_3	= 255
+_func_3:
+;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+;	src/srcfile_3.c: 15: printf("Func3 in ROM bank %u\n", CURRENT_BANK);
+;	genCast
+;	genCopy
+	ldx	#0x00
+	lda	__current_bank
+;	Raw cost for generated ic 2 : (5, 6.000000) count=1.000000
+;	skipping iCode since result will be rematerialized
+;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+;	skipping iCode since result will be rematerialized
+;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+;	genIpush
+	sta	*(REGTEMP+0)
+	txa
+	pha
+	lda	*(REGTEMP+0)
+	pha
+;	Raw cost for generated ic 5 : (7, 14.000000) count=1.000000
+;	genIpush
+	lda	#>___str_0
+	pha
+	lda	#___str_0
+	pha
+;	Raw cost for generated ic 6 : (6, 10.000000) count=1.000000
+;	genCall
+	jsr	_printf
+	pla
+	pla
+	pla
+	pla
+;	Raw cost for generated ic 7 : (7, 22.000000) count=1.000000
+;	genLabel
+;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+;	src/srcfile_3.c: 16: }
+;	genEndFunction
+	rts
+;	Raw cost for generated ic 9 : (1, 6.000000) count=1.000000
+	.area _CODE_255
+_some_const_var_3:
+	.db #0x03	; 3
+___str_0:
+	.ascii "Func3 in ROM bank %u"
+	.db 0x0a
+	.db 0x00
+_local_const_3:
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.area _XINIT
+	.area _CABS    (ABS)

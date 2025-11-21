@@ -1,0 +1,327 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module multiplayer
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _set_sprite_data
+                                     12 	.globl _vsync
+                                     13 	.globl _joypad_ex
+                                     14 	.globl _joypad_init
+                                     15 	.globl _joypads
+                                     16 	.globl _sprite_data
+                                     17 ;--------------------------------------------------------
+                                     18 ; special function registers
+                                     19 ;--------------------------------------------------------
+                                     20 ;--------------------------------------------------------
+                                     21 ; ram data
+                                     22 ;--------------------------------------------------------
+                                     23 	.area _DATA
+    00000000                         24 _joypads::
+    00000000                         25 	.ds 5
+                                     26 ;--------------------------------------------------------
+                                     27 ; ram data
+                                     28 ;--------------------------------------------------------
+                                     29 	.area _INITIALIZED
+                                     30 ;--------------------------------------------------------
+                                     31 ; absolute external ram data
+                                     32 ;--------------------------------------------------------
+                                     33 	.area _DABS (ABS)
+                                     34 ;--------------------------------------------------------
+                                     35 ; global & static initialisations
+                                     36 ;--------------------------------------------------------
+                                     37 	.area _HOME
+                                     38 	.area _GSINIT
+                                     39 	.area _GSFINAL
+                                     40 	.area _GSINIT
+                                     41 ;--------------------------------------------------------
+                                     42 ; Home
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _HOME
+                                     45 	.area _HOME
+                                     46 ;--------------------------------------------------------
+                                     47 ; code
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _CODE
+                                     50 ;src/multiplayer.c:14: void main(void) {
+                                     51 ;	---------------------------------
+                                     52 ; Function main
+                                     53 ; ---------------------------------
+    00000000                         54 _main::
+                                     55 ;src/multiplayer.c:15: set_sprite_data(0, 4, sprite_data);
+    00000000 11rE6r00         [12]   56 	ld	de, #_sprite_data
+    00000003 D5               [16]   57 	push	de
+    00000004 21 00 04         [12]   58 	ld	hl, #0x400
+    00000007 E5               [16]   59 	push	hl
+    00000008 CDr00r00         [24]   60 	call	_set_sprite_data
+    0000000B E8 04            [16]   61 	add	sp, #4
+                                     62 ;src/multiplayer.c:16: for (uint8_t i = 0; i < 4; i++) {
+    0000000D 0E 00            [ 8]   63 	ld	c, #0x00
+    0000000F                         64 00126$:
+    0000000F 79               [ 4]   65 	ld	a, c
+    00000010 D6 04            [ 8]   66 	sub	a, #0x04
+    00000012 30 1F            [12]   67 	jr	NC, 00101$
+                                     68 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000014 69               [ 4]   69 	ld	l, c
+    00000015 26 00            [ 8]   70 	ld	h, #0x00
+    00000017 29               [ 8]   71 	add	hl, hl
+    00000018 29               [ 8]   72 	add	hl, hl
+    00000019 5D               [ 4]   73 	ld	e, l
+    0000001A 54               [ 4]   74 	ld	d, h
+    0000001B 21r01r00         [12]   75 	ld	hl,#_shadow_OAM + 1
+    0000001E 19               [ 8]   76 	add	hl,de
+    0000001F 23               [ 8]   77 	inc	hl
+    00000020 71               [ 8]   78 	ld	(hl), c
+                                     79 ;src/multiplayer.c:19: DEVICE_SPRITE_PX_OFFSET_X + (i << 3) + ((DEVICE_SCREEN_PX_WIDTH - (4 * 8)) / 2), 
+    00000021 79               [ 4]   80 	ld	a, c
+    00000022 87               [ 4]   81 	add	a, a
+    00000023 87               [ 4]   82 	add	a, a
+    00000024 87               [ 4]   83 	add	a, a
+    00000025 C6 48            [ 8]   84 	add	a, #0x48
+    00000027 47               [ 4]   85 	ld	b, a
+                                     86 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000028 21r00r00         [12]   87 	ld	hl, #_shadow_OAM
+    0000002B 19               [ 8]   88 	add	hl, de
+                                     89 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000002C 3E 54            [ 8]   90 	ld	a, #0x54
+    0000002E 22               [ 8]   91 	ld	(hl+), a
+    0000002F 70               [ 8]   92 	ld	(hl), b
+                                     93 ;src/multiplayer.c:16: for (uint8_t i = 0; i < 4; i++) {
+    00000030 0C               [ 4]   94 	inc	c
+    00000031 18 DC            [12]   95 	jr	00126$
+    00000033                         96 00101$:
+                                     97 ;src/multiplayer.c:22: SHOW_SPRITES;
+    00000033 F0r00            [12]   98 	ldh	a, (_LCDC_REG + 0)
+    00000035 F6 01            [ 8]   99 	or	a, #0x01
+    00000037 E0r00            [12]  100 	ldh	(_LCDC_REG + 0), a
+                                    101 ;src/multiplayer.c:26: for (uint8_t i = 4; i != 0; i--) vsync();
+    00000039 0E 04            [ 8]  102 	ld	c, #0x04
+    0000003B                        103 00129$:
+    0000003B 79               [ 4]  104 	ld	a, c
+    0000003C B7               [ 4]  105 	or	a, a
+    0000003D 28 06            [12]  106 	jr	Z, 00102$
+    0000003F CDr00r00         [24]  107 	call	_vsync
+    00000042 0D               [ 4]  108 	dec	c
+    00000043 18 F6            [12]  109 	jr	00129$
+    00000045                        110 00102$:
+                                    111 ;src/multiplayer.c:29: joypad_init(4, &joypads);
+    00000045 11r00r00         [12]  112 	ld	de, #_joypads
+    00000048 D5               [16]  113 	push	de
+    00000049 3E 04            [ 8]  114 	ld	a, #0x04
+    0000004B F5               [16]  115 	push	af
+    0000004C 33               [ 8]  116 	inc	sp
+    0000004D CDr00r00         [24]  117 	call	_joypad_init
+    00000050 E8 03            [16]  118 	add	sp, #3
+                                    119 ;src/multiplayer.c:31: while(1) {
+    00000052                        120 00116$:
+                                    121 ;src/multiplayer.c:33: joypad_ex(&joypads);
+    00000052 11r00r00         [12]  122 	ld	de, #_joypads
+    00000055 CDr00r00         [24]  123 	call	_joypad_ex
+                                    124 ;src/multiplayer.c:35: for (uint8_t i = 0; i < joypads.npads; i++) {
+    00000058 0E 00            [ 8]  125 	ld	c, #0x00
+    0000005A                        126 00132$:
+    0000005A 21r00r00         [12]  127 	ld	hl, #_joypads
+    0000005D 79               [ 4]  128 	ld	a, c
+    0000005E 96               [ 8]  129 	sub	a, (hl)
+    0000005F 30 5C            [12]  130 	jr	NC, 00111$
+                                    131 ;src/multiplayer.c:36: uint8_t joy = joypads.joypads[i];
+    00000061 21r01r00         [12]  132 	ld	hl, #(_joypads + 1)
+    00000064 06 00            [ 8]  133 	ld	b, #0x00
+    00000066 09               [ 8]  134 	add	hl, bc
+    00000067 46               [ 8]  135 	ld	b, (hl)
+                                    136 ;src/multiplayer.c:37: if (joy & J_LEFT) scroll_sprite(i, -1, 0);
+    00000068 CB 48            [ 8]  137 	bit	1, b
+    0000006A 28 10            [12]  138 	jr	Z, 00104$
+                                    139 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    0000006C 11r00r00         [12]  140 	ld	de, #_shadow_OAM+0
+    0000006F 69               [ 4]  141 	ld	l, c
+    00000070 AF               [ 4]  142 	xor	a, a
+    00000071 67               [ 4]  143 	ld	h, a
+    00000072 29               [ 8]  144 	add	hl, hl
+    00000073 29               [ 8]  145 	add	hl, hl
+    00000074 19               [ 8]  146 	add	hl, de
+                                    147 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    00000075 5D               [ 4]  148 	ld	e, l
+    00000076 54               [ 4]  149 	ld	d, h
+    00000077 23               [ 8]  150 	inc	hl
+    00000078 1A               [ 8]  151 	ld	a, (de)
+    00000079 12               [ 8]  152 	ld	(de), a
+    0000007A 35               [12]  153 	dec	(hl)
+    0000007B 7E               [ 8]  154 	ld	a, (hl)
+                                    155 ;src/multiplayer.c:37: if (joy & J_LEFT) scroll_sprite(i, -1, 0);
+    0000007C                        156 00104$:
+                                    157 ;src/multiplayer.c:38: if (joy & J_RIGHT) scroll_sprite(i, 1, 0);
+    0000007C CB 40            [ 8]  158 	bit	0, b
+    0000007E 28 10            [12]  159 	jr	Z, 00106$
+                                    160 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    00000080 11r00r00         [12]  161 	ld	de, #_shadow_OAM+0
+    00000083 69               [ 4]  162 	ld	l, c
+    00000084 AF               [ 4]  163 	xor	a, a
+    00000085 67               [ 4]  164 	ld	h, a
+    00000086 29               [ 8]  165 	add	hl, hl
+    00000087 29               [ 8]  166 	add	hl, hl
+    00000088 19               [ 8]  167 	add	hl, de
+                                    168 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    00000089 5D               [ 4]  169 	ld	e, l
+    0000008A 54               [ 4]  170 	ld	d, h
+    0000008B 23               [ 8]  171 	inc	hl
+    0000008C 1A               [ 8]  172 	ld	a, (de)
+    0000008D 12               [ 8]  173 	ld	(de), a
+    0000008E 34               [12]  174 	inc	(hl)
+    0000008F 7E               [ 8]  175 	ld	a, (hl)
+                                    176 ;src/multiplayer.c:38: if (joy & J_RIGHT) scroll_sprite(i, 1, 0);
+    00000090                        177 00106$:
+                                    178 ;src/multiplayer.c:39: if (joy & J_UP) scroll_sprite(i, 0, -1);
+    00000090 CB 50            [ 8]  179 	bit	2, b
+    00000092 28 11            [12]  180 	jr	Z, 00108$
+                                    181 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    00000094 11r00r00         [12]  182 	ld	de, #_shadow_OAM+0
+    00000097 69               [ 4]  183 	ld	l, c
+    00000098 AF               [ 4]  184 	xor	a, a
+    00000099 67               [ 4]  185 	ld	h, a
+    0000009A 29               [ 8]  186 	add	hl, hl
+    0000009B 29               [ 8]  187 	add	hl, hl
+    0000009C 19               [ 8]  188 	add	hl, de
+                                    189 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    0000009D 5D               [ 4]  190 	ld	e, l
+    0000009E 54               [ 4]  191 	ld	d, h
+    0000009F 23               [ 8]  192 	inc	hl
+    000000A0 1A               [ 8]  193 	ld	a, (de)
+    000000A1 3D               [ 4]  194 	dec	a
+    000000A2 12               [ 8]  195 	ld	(de), a
+    000000A3 7E               [ 8]  196 	ld	a, (hl)
+    000000A4 77               [ 8]  197 	ld	(hl), a
+                                    198 ;src/multiplayer.c:39: if (joy & J_UP) scroll_sprite(i, 0, -1);
+    000000A5                        199 00108$:
+                                    200 ;src/multiplayer.c:40: if (joy & J_DOWN) scroll_sprite(i, 0, 1);
+    000000A5 CB 58            [ 8]  201 	bit	3, b
+    000000A7 28 11            [12]  202 	jr	Z, 00133$
+                                    203 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    000000A9 11r00r00         [12]  204 	ld	de, #_shadow_OAM+0
+    000000AC 69               [ 4]  205 	ld	l, c
+    000000AD AF               [ 4]  206 	xor	a, a
+    000000AE 67               [ 4]  207 	ld	h, a
+    000000AF 29               [ 8]  208 	add	hl, hl
+    000000B0 29               [ 8]  209 	add	hl, hl
+    000000B1 19               [ 8]  210 	add	hl, de
+                                    211 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    000000B2 5D               [ 4]  212 	ld	e, l
+    000000B3 54               [ 4]  213 	ld	d, h
+    000000B4 23               [ 8]  214 	inc	hl
+    000000B5 1A               [ 8]  215 	ld	a, (de)
+    000000B6 3C               [ 4]  216 	inc	a
+    000000B7 12               [ 8]  217 	ld	(de), a
+    000000B8 7E               [ 8]  218 	ld	a, (hl)
+    000000B9 77               [ 8]  219 	ld	(hl), a
+                                    220 ;src/multiplayer.c:40: if (joy & J_DOWN) scroll_sprite(i, 0, 1);
+    000000BA                        221 00133$:
+                                    222 ;src/multiplayer.c:35: for (uint8_t i = 0; i < joypads.npads; i++) {
+    000000BA 0C               [ 4]  223 	inc	c
+    000000BB 18 9D            [12]  224 	jr	00132$
+    000000BD                        225 00111$:
+                                    226 ;src/multiplayer.c:43: if (joypads.joy0 & J_START) {
+    000000BD FAr01r00         [16]  227 	ld	a, (#(_joypads + 1) + 0)
+    000000C0 07               [ 4]  228 	rlca
+    000000C1 30 1D            [12]  229 	jr	NC, 00114$
+                                    230 ;src/multiplayer.c:44: for (uint8_t i = 0; i < 4; i++) move_sprite(i, (i << 3) + 64, 64);
+    000000C3 0E 00            [ 8]  231 	ld	c, #0x00
+    000000C5                        232 00135$:
+    000000C5 79               [ 4]  233 	ld	a,c
+    000000C6 FE 04            [ 8]  234 	cp	a,#0x04
+    000000C8 30 16            [12]  235 	jr	NC, 00114$
+    000000CA 87               [ 4]  236 	add	a, a
+    000000CB 87               [ 4]  237 	add	a, a
+    000000CC 87               [ 4]  238 	add	a, a
+    000000CD C6 40            [ 8]  239 	add	a, #0x40
+    000000CF 47               [ 4]  240 	ld	b, a
+                                    241 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000D0 11r00r00         [12]  242 	ld	de, #_shadow_OAM+0
+    000000D3 69               [ 4]  243 	ld	l, c
+    000000D4 26 00            [ 8]  244 	ld	h, #0x00
+    000000D6 29               [ 8]  245 	add	hl, hl
+    000000D7 29               [ 8]  246 	add	hl, hl
+    000000D8 19               [ 8]  247 	add	hl, de
+                                    248 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000D9 3E 40            [ 8]  249 	ld	a, #0x40
+    000000DB 22               [ 8]  250 	ld	(hl+), a
+    000000DC 70               [ 8]  251 	ld	(hl), b
+                                    252 ;src/multiplayer.c:44: for (uint8_t i = 0; i < 4; i++) move_sprite(i, (i << 3) + 64, 64);
+    000000DD 0C               [ 4]  253 	inc	c
+    000000DE 18 E5            [12]  254 	jr	00135$
+    000000E0                        255 00114$:
+                                    256 ;src/multiplayer.c:46: vsync();
+    000000E0 CDr00r00         [24]  257 	call	_vsync
+                                    258 ;src/multiplayer.c:48: }
+    000000E3 C3r52r00         [16]  259 	jp	00116$
+    000000E6                        260 _sprite_data:
+    000000E6 3C                     261 	.db #0x3c	; 60
+    000000E7 3C                     262 	.db #0x3c	; 60
+    000000E8 42                     263 	.db #0x42	; 66	'B'
+    000000E9 7E                     264 	.db #0x7e	; 126
+    000000EA 99                     265 	.db #0x99	; 153
+    000000EB FF                     266 	.db #0xff	; 255
+    000000EC A9                     267 	.db #0xa9	; 169
+    000000ED FF                     268 	.db #0xff	; 255
+    000000EE 89                     269 	.db #0x89	; 137
+    000000EF FF                     270 	.db #0xff	; 255
+    000000F0 89                     271 	.db #0x89	; 137
+    000000F1 FF                     272 	.db #0xff	; 255
+    000000F2 42                     273 	.db #0x42	; 66	'B'
+    000000F3 7E                     274 	.db #0x7e	; 126
+    000000F4 3C                     275 	.db #0x3c	; 60
+    000000F5 3C                     276 	.db #0x3c	; 60
+    000000F6 3C                     277 	.db #0x3c	; 60
+    000000F7 3C                     278 	.db #0x3c	; 60
+    000000F8 42                     279 	.db #0x42	; 66	'B'
+    000000F9 7E                     280 	.db #0x7e	; 126
+    000000FA B9                     281 	.db #0xb9	; 185
+    000000FB FF                     282 	.db #0xff	; 255
+    000000FC 89                     283 	.db #0x89	; 137
+    000000FD FF                     284 	.db #0xff	; 255
+    000000FE 91                     285 	.db #0x91	; 145
+    000000FF FF                     286 	.db #0xff	; 255
+    00000100 B9                     287 	.db #0xb9	; 185
+    00000101 FF                     288 	.db #0xff	; 255
+    00000102 42                     289 	.db #0x42	; 66	'B'
+    00000103 7E                     290 	.db #0x7e	; 126
+    00000104 3C                     291 	.db #0x3c	; 60
+    00000105 3C                     292 	.db #0x3c	; 60
+    00000106 3C                     293 	.db #0x3c	; 60
+    00000107 3C                     294 	.db #0x3c	; 60
+    00000108 42                     295 	.db #0x42	; 66	'B'
+    00000109 7E                     296 	.db #0x7e	; 126
+    0000010A 99                     297 	.db #0x99	; 153
+    0000010B FF                     298 	.db #0xff	; 255
+    0000010C 89                     299 	.db #0x89	; 137
+    0000010D FF                     300 	.db #0xff	; 255
+    0000010E 99                     301 	.db #0x99	; 153
+    0000010F FF                     302 	.db #0xff	; 255
+    00000110 89                     303 	.db #0x89	; 137
+    00000111 FF                     304 	.db #0xff	; 255
+    00000112 5A                     305 	.db #0x5a	; 90	'Z'
+    00000113 7E                     306 	.db #0x7e	; 126
+    00000114 3C                     307 	.db #0x3c	; 60
+    00000115 3C                     308 	.db #0x3c	; 60
+    00000116 3C                     309 	.db #0x3c	; 60
+    00000117 3C                     310 	.db #0x3c	; 60
+    00000118 42                     311 	.db #0x42	; 66	'B'
+    00000119 7E                     312 	.db #0x7e	; 126
+    0000011A A9                     313 	.db #0xa9	; 169
+    0000011B FF                     314 	.db #0xff	; 255
+    0000011C A9                     315 	.db #0xa9	; 169
+    0000011D FF                     316 	.db #0xff	; 255
+    0000011E B9                     317 	.db #0xb9	; 185
+    0000011F FF                     318 	.db #0xff	; 255
+    00000120 89                     319 	.db #0x89	; 137
+    00000121 FF                     320 	.db #0xff	; 255
+    00000122 42                     321 	.db #0x42	; 66	'B'
+    00000123 7E                     322 	.db #0x7e	; 126
+    00000124 3C                     323 	.db #0x3c	; 60
+    00000125 3C                     324 	.db #0x3c	; 60
+                                    325 	.area _CODE
+                                    326 	.area _INITIALIZER
+                                    327 	.area _CABS (ABS)

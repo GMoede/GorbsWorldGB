@@ -1,0 +1,42 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =   00002710 L
+    .__.ABS.                                                    =   00000000 G
+    .__.CPU.                                                    =   00000000 L
+    .__.H$L.                                                    =   00000000 L
+  7 __xinit__key_pressed                                            00000002 R
+  7 __xinit__key_previous                                           00000004 R
+  7 __xinit__key_repeat_allowed                                     00000000 R
+  7 __xinit__key_repeat_previous                                    00000003 R
+  7 __xinit__key_repeat_timeout                                     00000001 R
+  0 _duck_io_poll_keyboard                                          00000000 GR
+  0 _duck_io_process_key_data                                       0000002A GR
+    _duck_io_rx_buf                                                 ******** GX
+    _duck_io_rx_buf_len                                             ******** GX
+    _duck_io_scancode_to_ascii                                      ******** GX
+    _duck_io_send_cmd_and_receive_buffer                            ******** GX
+  2 _key_pressed                                                    00000002 GR
+  2 _key_previous                                                   00000004 GR
+  2 _key_repeat_allowed                                             00000000 GR
+  2 _key_repeat_previous                                            00000003 GR
+  2 _key_repeat_timeout                                             00000001 GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Area Table
+
+   0 _CODE                                      size       DC   flags    0
+   1 _DATA                                      size        0   flags    0
+   2 _INITIALIZED                               size        5   flags    0
+   3 _DABS                                      size        0   flags    8
+   4 _HOME                                      size        0   flags    0
+   5 _GSINIT                                    size        0   flags    0
+   6 _GSFINAL                                   size        0   flags    0
+   7 _INITIALIZER                               size        5   flags    0
+   8 _CABS                                      size        0   flags    8
+

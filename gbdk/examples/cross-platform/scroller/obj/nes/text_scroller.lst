@@ -1,0 +1,699 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module text_scroller
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _scroller_text
+                                     22 	.globl _scanline_offsets_tbl
+                                     23 	.globl _shake_tbl
+                                     24 	.globl _main
+                                     25 	.globl _scanline_isr
+                                     26 	.globl _printf
+                                     27 	.globl _font_set
+                                     28 	.globl _font_load
+                                     29 	.globl _font_init
+                                     30 	.globl _fill_bkg_rect
+                                     31 	.globl _get_bkg_xy_addr
+                                     32 	.globl _set_vram_byte
+                                     33 	.globl _display_off
+                                     34 	.globl _display_on
+                                     35 	.globl _vsync
+                                     36 	.globl _set_interrupts
+                                     37 	.globl _add_LCD
+                                     38 	.globl _scroller_next_char
+                                     39 	.globl _scroller_x
+                                     40 	.globl _scanline_offsets
+                                     41 	.globl _limit
+                                     42 	.globl _base
+                                     43 	.globl _scroller_vram_addr
+                                     44 	.globl _OAMDMA
+                                     45 	.globl _PPUDATA
+                                     46 	.globl _PPUADDR
+                                     47 	.globl _PPUSCROLL
+                                     48 	.globl _OAMDATA
+                                     49 	.globl _OAMADDR
+                                     50 	.globl _PPUSTATUS
+                                     51 	.globl _PPUMASK
+                                     52 	.globl _PPUCTRL
+                                     53 ;--------------------------------------------------------
+                                     54 ; ZP ram data
+                                     55 ;--------------------------------------------------------
+                                     56 	.area _ZP      (PAG)
+    00000000                         57 _main_sloc0_1_0:
+    00000000                         58 	.ds 2
+                                     59 ;--------------------------------------------------------
+                                     60 ; overlayable items in ram
+                                     61 ;--------------------------------------------------------
+                                     62 ;--------------------------------------------------------
+                                     63 ; uninitialized external ram data
+                                     64 ;--------------------------------------------------------
+                                     65 	.area _BSS
+                         00002000    66 _PPUCTRL	=	0x2000
+                         00002001    67 _PPUMASK	=	0x2001
+                         00002002    68 _PPUSTATUS	=	0x2002
+                         00002003    69 _OAMADDR	=	0x2003
+                         00002004    70 _OAMDATA	=	0x2004
+                         00002005    71 _PPUSCROLL	=	0x2005
+                         00002006    72 _PPUADDR	=	0x2006
+                         00002007    73 _PPUDATA	=	0x2007
+                         00004014    74 _OAMDMA	=	0x4014
+    00000000                         75 _scroller_vram_addr::
+    00000000                         76 	.ds 2
+    00000002                         77 _base::
+    00000002                         78 	.ds 2
+    00000004                         79 _limit::
+    00000004                         80 	.ds 2
+                                     81 ;--------------------------------------------------------
+                                     82 ; absolute external ram data
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _DABS    (ABS)
+                                     85 ;--------------------------------------------------------
+                                     86 ; initialized external ram data
+                                     87 ;--------------------------------------------------------
+                                     88 	.area _DATA
+    00000000                         89 _scanline_offsets::
+    00000000                         90 	.ds 2
+    00000002                         91 _scroller_x::
+    00000002                         92 	.ds 1
+    00000003                         93 _scroller_next_char::
+    00000003                         94 	.ds 2
+                                     95 ;--------------------------------------------------------
+                                     96 ; global & static initialisations
+                                     97 ;--------------------------------------------------------
+                                     98 	.area _HOME
+                                     99 	.area _GSINIT
+                                    100 	.area _GSFINAL
+                                    101 	.area _GSINIT
+                                    102 ;--------------------------------------------------------
+                                    103 ; Home
+                                    104 ;--------------------------------------------------------
+                                    105 	.area _HOME
+                                    106 	.area _HOME
+                                    107 ;--------------------------------------------------------
+                                    108 ; code
+                                    109 ;--------------------------------------------------------
+                                    110 	.area _CODE
+                                    111 ;------------------------------------------------------------
+                                    112 ;Allocation info for local variables in function 'scanline_isr'
+                                    113 ;------------------------------------------------------------
+                                    114 ;	src/text_scroller.c: 20: void scanline_isr(void) {
+                                    115 ;	genLabel
+                                    116 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    117 ;	-----------------------------------------
+                                    118 ;	 function scanline_isr
+                                    119 ;	-----------------------------------------
+                                    120 ;	Register assignment is optimal.
+                                    121 ;	Stack space usage: 0 bytes.
+    00000000                        122 _scanline_isr:
+                                    123 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    124 ;	src/text_scroller.c: 23: switch (LYC_REG) {
+                                    125 ;	genAssign
+                                    126 ;	genAssignLit
+                                    127 ;	genCopy
+    00000000 ADr00r00         [ 4]  128 	lda	__lcd_scanline
+                                    129 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    130 ;	genCmpEQorNE
+    00000003 F0 09            [ 4]  131 	beq	00101$
+                                    132 ;	Raw cost for generated ic 3 : (5, 5.600000) count=1.000000
+                                    133 ;	skipping generated iCode
+                                    134 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    135 ;	genCmpEQorNE
+    00000005 C9 76            [ 2]  136 	cmp	#0x76
+    00000007 F0 13            [ 4]  137 	beq	00102$
+                                    138 ;	Raw cost for generated ic 5 : (7, 7.600000) count=0.750000
+                                    139 ;	skipping generated iCode
+                                    140 ;	Raw cost for generated ic 6 : (0, 0.000000) count=0.750000
+                                    141 ;	genCmpEQorNE
+    00000009 C9 7F            [ 2]  142 	cmp	#0x7f
+    0000000B F0 2A            [ 4]  143 	beq	00103$
+                                    144 ;	Raw cost for generated ic 7 : (7, 7.600000) count=0.562500
+                                    145 ;	skipping generated iCode
+                                    146 ;	Raw cost for generated ic 8 : (0, 0.000000) count=0.562500
+                                    147 ;	genGoto
+    0000000D 60               [ 6]  148 	rts
+                                    149 ;	Raw cost for generated ic 9 : (3, 3.000000) count=0.421875
+                                    150 ;	src/text_scroller.c: 24: case 0: 
+                                    151 ;	genLabel
+    0000000E                        152 00101$:
+                                    153 ;	Raw cost for generated ic 10 : (0, 0.000000) count=0.250000
+                                    154 ;	src/text_scroller.c: 25: SCX_REG = 0;
+                                    155 ;	genAssign
+                                    156 ;	genAssignLit
+                                    157 ;	genCopy
+    0000000E A2 00            [ 2]  158 	ldx	#0x00
+    00000010 8Er00r00         [ 4]  159 	stx	_bkg_scroll_x
+                                    160 ;	Raw cost for generated ic 11 : (5, 7.000000) count=0.250000
+                                    161 ;	src/text_scroller.c: 26: SCY_REG = 0;
+                                    162 ;	genAssign
+                                    163 ;	genAssignLit
+                                    164 ;	genCopy
+    00000013 8Er00r00         [ 4]  165 	stx	_bkg_scroll_y
+                                    166 ;	Raw cost for generated ic 12 : (3, 5.000000) count=0.250000
+                                    167 ;	src/text_scroller.c: 27: LYC_REG = SCROLL_POS_PIX_START;
+                                    168 ;	genAssign
+                                    169 ;	genAssignLit
+                                    170 ;	genCopy
+    00000016 A2 76            [ 2]  171 	ldx	#0x76
+    00000018 8Er00r00         [ 4]  172 	stx	__lcd_scanline
+                                    173 ;	Raw cost for generated ic 13 : (5, 6.000000) count=0.250000
+                                    174 ;	src/text_scroller.c: 28: break;
+                                    175 ;	genGoto
+    0000001B 60               [ 6]  176 	rts
+                                    177 ;	Raw cost for generated ic 14 : (3, 3.000000) count=0.250000
+                                    178 ;	src/text_scroller.c: 29: case SCROLL_POS_PIX_START:
+                                    179 ;	genLabel
+    0000001C                        180 00102$:
+                                    181 ;	Raw cost for generated ic 15 : (0, 0.000000) count=0.187500
+                                    182 ;	src/text_scroller.c: 30: SCX_REG = scroller_x;
+                                    183 ;	genAssign
+                                    184 ;	genAssignLit
+                                    185 ;	genCopy
+    0000001C ADr02r00         [ 4]  186 	lda	_scroller_x
+    0000001F 8Dr00r00         [ 4]  187 	sta	_bkg_scroll_x
+                                    188 ;	Raw cost for generated ic 16 : (6, 9.000000) count=0.187500
+                                    189 ;	src/text_scroller.c: 31: SCY_REG = shake_tbl[(scroller_x >> 1) & 7];
+                                    190 ;	skipping iCode since result will be rematerialized
+                                    191 ;	Raw cost for generated ic 17 : (0, 0.000000) count=0.187500
+                                    192 ;	genRightShift
+                                    193 ;	genRightShiftLiteral
+                                    194 ;	genrshOne
+    00000022 ADr02r00         [ 4]  195 	lda	_scroller_x
+    00000025 4A               [ 2]  196 	lsr	a
+                                    197 ;	Raw cost for generated ic 18 : (4, 6.000000) count=0.187500
+                                    198 ;	genCast
+                                    199 ;	genCopy
+                                    200 ;	Raw cost for generated ic 19 : (0, 0.000000) count=0.187500
+                                    201 ;	genAnd
+    00000026 29 07            [ 2]  202 	and	#0x07
+                                    203 ;	Raw cost for generated ic 20 : (2, 2.000000) count=0.187500
+                                    204 ;	genAssign
+                                    205 ;	genAssignLit
+                                    206 ;	genCopy
+    00000028 A2 00            [ 2]  207 	ldx	#0x00
+                                    208 ;	Raw cost for generated ic 21 : (2, 2.000000) count=0.187500
+                                    209 ;	genPointerGet
+    0000002A A8               [ 2]  210 	tay
+    0000002B B9r67r01         [ 5]  211 	lda	(_shake_tbl+0+0x0000),y
+    0000002E 8Dr00r00         [ 4]  212 	sta	_bkg_scroll_y
+                                    213 ;	Raw cost for generated ic 22 : (7, 11.000000) count=0.187500
+                                    214 ;	src/text_scroller.c: 32: LYC_REG = SCROLL_POS_PIX_END;
+                                    215 ;	genAssign
+                                    216 ;	genAssignLit
+                                    217 ;	genCopy
+    00000031 A2 7F            [ 2]  218 	ldx	#0x7f
+    00000033 8Er00r00         [ 4]  219 	stx	__lcd_scanline
+                                    220 ;	Raw cost for generated ic 24 : (5, 6.000000) count=0.187500
+                                    221 ;	src/text_scroller.c: 33: break;
+                                    222 ;	genGoto
+    00000036 60               [ 6]  223 	rts
+                                    224 ;	Raw cost for generated ic 25 : (3, 3.000000) count=0.187500
+                                    225 ;	src/text_scroller.c: 34: case SCROLL_POS_PIX_END:
+                                    226 ;	genLabel
+    00000037                        227 00103$:
+                                    228 ;	Raw cost for generated ic 26 : (0, 0.000000) count=0.140625
+                                    229 ;	src/text_scroller.c: 35: SCX_REG = SCY_REG = LYC_REG = 0;
+                                    230 ;	genAssign
+                                    231 ;	genAssignLit
+                                    232 ;	genCopy
+    00000037 A2 00            [ 2]  233 	ldx	#0x00
+    00000039 8Er00r00         [ 4]  234 	stx	__lcd_scanline
+                                    235 ;	Raw cost for generated ic 27 : (5, 6.000000) count=0.140625
+                                    236 ;	genAssign
+                                    237 ;	genAssignLit
+                                    238 ;	genCopy
+    0000003C 8Er00r00         [ 4]  239 	stx	_bkg_scroll_y
+                                    240 ;	Raw cost for generated ic 28 : (3, 5.000000) count=0.140625
+                                    241 ;	genAssign
+                                    242 ;	genAssignLit
+                                    243 ;	genCopy
+    0000003F 8Er00r00         [ 4]  244 	stx	_bkg_scroll_x
+                                    245 ;	Raw cost for generated ic 29 : (3, 5.000000) count=0.140625
+                                    246 ;	src/text_scroller.c: 37: }
+                                    247 ;	genLabel
+                                    248 ;	Raw cost for generated ic 32 : (0, 0.000000) count=1.000000
+                                    249 ;	src/text_scroller.c: 47: }
+                                    250 ;	genEndFunction
+    00000042 60               [ 6]  251 	rts
+                                    252 ;	Raw cost for generated ic 33 : (1, 6.000000) count=1.000000
+                                    253 ;------------------------------------------------------------
+                                    254 ;Allocation info for local variables in function 'main'
+                                    255 ;------------------------------------------------------------
+                                    256 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                    257 ;------------------------------------------------------------
+                                    258 ;	src/text_scroller.c: 58: void main(void) {
+                                    259 ;	genLabel
+                                    260 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    261 ;	-----------------------------------------
+                                    262 ;	 function main
+                                    263 ;	-----------------------------------------
+                                    264 ;	Register assignment is optimal.
+                                    265 ;	Stack space usage: 0 bytes.
+    00000043                        266 _main:
+                                    267 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    268 ;	src/text_scroller.c: 59: DISPLAY_OFF;
+                                    269 ;	genCall
+    00000043 20r00r00         [ 6]  270 	jsr	_display_off
+                                    271 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                    272 ;	src/text_scroller.c: 61: font_init();
+                                    273 ;	genCall
+    00000046 20r00r00         [ 6]  274 	jsr	_font_init
+                                    275 ;	Raw cost for generated ic 3 : (3, 6.000000) count=1.000000
+                                    276 ;	src/text_scroller.c: 62: font_set(font_load(font_ibm));
+                                    277 ;	skipping iCode since result will be rematerialized
+                                    278 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    279 ;	skipping iCode since result will be rematerialized
+                                    280 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    281 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    282 ;	genCall
+                                    283 ;	genSend
+    00000049 A2s00            [ 2]  284 	ldx	#>_font_ibm
+    0000004B A9r00            [ 2]  285 	lda	#_font_ibm
+    0000004D 20r00r00         [ 6]  286 	jsr	_font_load
+                                    287 ;	assignResultValue
+                                    288 ;	Raw cost for generated ic 7 : (7, 10.000000) count=1.000000
+                                    289 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    290 ;	genCall
+                                    291 ;	genSend
+    00000050 20r00r00         [ 6]  292 	jsr	_font_set
+                                    293 ;	Raw cost for generated ic 9 : (3, 6.000000) count=1.000000
+                                    294 ;	src/text_scroller.c: 64: fill_bkg_rect(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, '*' - ' ');
+                                    295 ;	genAssign
+                                    296 ;	genAssignLit
+    00000053 A2 20            [ 2]  297 	ldx	#0x20
+    00000055 8Er00r00         [ 4]  298 	stx	_fill_bkg_rect_PARM_3
+                                    299 ;	Raw cost for generated ic 12 : (5, 6.000000) count=1.000000
+                                    300 ;	genAssign
+                                    301 ;	genAssignLit
+    00000058 A2 1E            [ 2]  302 	ldx	#0x1e
+    0000005A 8Er00r00         [ 4]  303 	stx	_fill_bkg_rect_PARM_4
+                                    304 ;	Raw cost for generated ic 13 : (5, 6.000000) count=1.000000
+                                    305 ;	genAssign
+                                    306 ;	genAssignLit
+    0000005D A2 0A            [ 2]  307 	ldx	#0x0a
+    0000005F 8Er00r00         [ 4]  308 	stx	_fill_bkg_rect_PARM_5
+                                    309 ;	Raw cost for generated ic 14 : (5, 6.000000) count=1.000000
+                                    310 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    311 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    312 ;	genCall
+                                    313 ;	genSend
+    00000062 A9 00            [ 2]  314 	lda	#0x00
+    00000064 AA               [ 2]  315 	tax
+    00000065 20r00r00         [ 6]  316 	jsr	_fill_bkg_rect
+                                    317 ;	Raw cost for generated ic 15 : (6, 10.000000) count=1.000000
+                                    318 ;	src/text_scroller.c: 65: DISPLAY_ON;
+                                    319 ;	genCall
+    00000068 20r00r00         [ 6]  320 	jsr	_display_on
+                                    321 ;	Raw cost for generated ic 16 : (3, 6.000000) count=1.000000
+                                    322 ;	src/text_scroller.c: 67: printf(" Scrolling %d chars", sizeof(scroller_text) - 1);
+                                    323 ;	skipping iCode since result will be rematerialized
+                                    324 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    325 ;	skipping iCode since result will be rematerialized
+                                    326 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    327 ;	genIpush
+    0000006B A9 01            [ 2]  328 	lda	#0x01
+    0000006D 48               [ 3]  329 	pha
+    0000006E A9 68            [ 2]  330 	lda	#0x68
+    00000070 48               [ 3]  331 	pha
+                                    332 ;	Raw cost for generated ic 19 : (6, 10.000000) count=1.000000
+                                    333 ;	genIpush
+    00000071 A9s02            [ 2]  334 	lda	#>___str_0
+    00000073 48               [ 3]  335 	pha
+    00000074 A9rE8            [ 2]  336 	lda	#___str_0
+    00000076 48               [ 3]  337 	pha
+                                    338 ;	Raw cost for generated ic 20 : (6, 10.000000) count=1.000000
+                                    339 ;	genCall
+    00000077 20r00r00         [ 6]  340 	jsr	_printf
+    0000007A 68               [ 4]  341 	pla
+    0000007B 68               [ 4]  342 	pla
+    0000007C 68               [ 4]  343 	pla
+    0000007D 68               [ 4]  344 	pla
+                                    345 ;	Raw cost for generated ic 21 : (7, 22.000000) count=1.000000
+                                    346 ;	src/text_scroller.c: 74: }
+                                    347 ;	genCritical
+    0000007E 08               [ 3]  348 	php
+    0000007F 78               [ 2]  349 	sei
+                                    350 ;	Raw cost for generated ic 22 : (2, 5.000000) count=1.000000
+                                    351 ;	src/text_scroller.c: 70: add_LCD(scanline_isr);
+                                    352 ;	Raw cost for generated ic 23 : (0, 0.000000) count=1.000000
+                                    353 ;	genCall
+                                    354 ;	genSend
+    00000080 A2s00            [ 2]  355 	ldx	#>(_scanline_isr)
+    00000082 A9r00            [ 2]  356 	lda	#(_scanline_isr)
+    00000084 20r00r00         [ 6]  357 	jsr	_add_LCD
+                                    358 ;	Raw cost for generated ic 24 : (7, 10.000000) count=1.000000
+                                    359 ;	genEndCritical
+    00000087 28               [ 4]  360 	plp
+                                    361 ;	Raw cost for generated ic 25 : (1, 4.000000) count=1.000000
+                                    362 ;	src/text_scroller.c: 79: set_interrupts(VBL_IFLAG | LCD_IFLAG);
+                                    363 ;	Raw cost for generated ic 26 : (0, 0.000000) count=1.000000
+                                    364 ;	genCall
+                                    365 ;	genSend
+    00000088 A9 03            [ 2]  366 	lda	#0x03
+    0000008A 20r00r00         [ 6]  367 	jsr	_set_interrupts
+                                    368 ;	Raw cost for generated ic 27 : (5, 8.000000) count=1.000000
+                                    369 ;	src/text_scroller.c: 81: HIDE_LEFT_COLUMN;    
+                                    370 ;	genAnd
+    0000008D ADr00r00         [ 4]  371 	lda	_shadow_PPUMASK
+    00000090 29 F9            [ 2]  372 	and	#0xf9
+    00000092 8Dr00r00         [ 4]  373 	sta	_shadow_PPUMASK
+                                    374 ;	Raw cost for generated ic 28 : (8, 10.000000) count=1.000000
+                                    375 ;	src/text_scroller.c: 82: base = (uint8_t *)((uint16_t)get_bkg_xy_addr(0, SCROLL_POS) & (DEVICE_SCREEN_MAP_ENTRY_SIZE==1?0xffe0:0xffc0));
+                                    376 ;	Raw cost for generated ic 30 : (0, 0.000000) count=1.000000
+                                    377 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                    378 ;	genCall
+                                    379 ;	genSend
+    00000095 A9 00            [ 2]  380 	lda	#0x00
+    00000097 A2 0F            [ 2]  381 	ldx	#0x0f
+    00000099 20r00r00         [ 6]  382 	jsr	_get_bkg_xy_addr
+                                    383 ;	assignResultValue
+                                    384 ;	Raw cost for generated ic 32 : (7, 10.000000) count=1.000000
+                                    385 ;	genCast
+                                    386 ;	genCopy
+                                    387 ;	Raw cost for generated ic 33 : (0, 0.000000) count=1.000000
+                                    388 ;	genCast
+                                    389 ;	genCopy
+                                    390 ;	Raw cost for generated ic 34 : (0, 0.000000) count=1.000000
+                                    391 ;	genAnd
+    0000009C 29 E0            [ 2]  392 	and	#0xe0
+                                    393 ;	Raw cost for generated ic 35 : (2, 2.000000) count=1.000000
+                                    394 ;	genCast
+                                    395 ;	genCopy
+                                    396 ;	Raw cost for generated ic 36 : (4, 6.000000) count=1.000000
+                                    397 ;	genAssign
+                                    398 ;	genAssignLit
+                                    399 ;	genCopy
+    0000009E 85*00            [ 3]  400 	sta	*_main_sloc0_1_0
+    000000A0 86*01            [ 3]  401 	stx	*(_main_sloc0_1_0 + 1)
+    000000A2 8Dr02r00         [ 4]  402 	sta	_base
+    000000A5 8Er03r00         [ 4]  403 	stx	(_base + 1)
+                                    404 ;	Raw cost for generated ic 38 : (10, 14.000000) count=1.000000
+                                    405 ;	src/text_scroller.c: 83: limit = base + (DEVICE_SCREEN_BUFFER_WIDTH * DEVICE_SCREEN_MAP_ENTRY_SIZE);
+                                    406 ;	genPlus
+                                    407 ;	genPlusIncr
+    000000A8 A6*01            [ 3]  408 	ldx	*(_main_sloc0_1_0 + 1)
+    000000AA A5*00            [ 3]  409 	lda	*_main_sloc0_1_0
+    000000AC 18               [ 2]  410 	clc
+    000000AD 69 20            [ 2]  411 	adc	#0x20
+    000000AF 90 01            [ 4]  412 	bcc	00144$
+    000000B1 E8               [ 2]  413 	inx
+    000000B2                        414 00144$:
+                                    415 ;	Raw cost for generated ic 39 : (10, 14.600000) count=1.000000
+                                    416 ;	genAssign
+                                    417 ;	genAssignLit
+                                    418 ;	genCopy
+    000000B2 8Dr04r00         [ 4]  419 	sta	_limit
+    000000B5 8Er05r00         [ 4]  420 	stx	(_limit + 1)
+                                    421 ;	Raw cost for generated ic 41 : (6, 8.000000) count=1.000000
+                                    422 ;	src/text_scroller.c: 85: scroller_vram_addr = base + ((DEVICE_SCREEN_X_OFFSET + DEVICE_SCREEN_WIDTH) * DEVICE_SCREEN_MAP_ENTRY_SIZE);
+                                    423 ;	genAssign
+                                    424 ;	genAssignLit
+                                    425 ;	genCopy
+    000000B8 8Dr00r00         [ 4]  426 	sta	_scroller_vram_addr
+    000000BB 8Er01r00         [ 4]  427 	stx	(_scroller_vram_addr + 1)
+                                    428 ;	Raw cost for generated ic 44 : (6, 8.000000) count=1.000000
+                                    429 ;	src/text_scroller.c: 86: if (scroller_vram_addr >= limit) scroller_vram_addr = base;
+                                    430 ;	genCmp
+    000000BE ADr00r00         [ 4]  431 	lda	_scroller_vram_addr
+    000000C1 38               [ 2]  432 	sec
+    000000C2 EDr04r00         [ 4]  433 	sbc	_limit
+    000000C5 ADr01r00         [ 4]  434 	lda	(_scroller_vram_addr + 1)
+    000000C8 EDr05r00         [ 4]  435 	sbc	(_limit + 1)
+    000000CB 90 0A            [ 4]  436 	bcc	00102$
+                                    437 ;	Raw cost for generated ic 45 : (18, 23.600000) count=1.000000
+                                    438 ;	skipping generated iCode
+                                    439 ;	Raw cost for generated ic 46 : (0, 0.000000) count=1.000000
+                                    440 ;	genAssign
+                                    441 ;	genAssignLit
+                                    442 ;	genCopy
+    000000CD A5*01            [ 3]  443 	lda	*(_main_sloc0_1_0 + 1)
+    000000CF 8Dr01r00         [ 4]  444 	sta	(_scroller_vram_addr + 1)
+    000000D2 A5*00            [ 3]  445 	lda	*_main_sloc0_1_0
+    000000D4 8Dr00r00         [ 4]  446 	sta	_scroller_vram_addr
+                                    447 ;	Raw cost for generated ic 49 : (10, 14.000000) count=0.750000
+                                    448 ;	genLabel
+    000000D7                        449 00102$:
+                                    450 ;	Raw cost for generated ic 51 : (0, 0.000000) count=1.000000
+                                    451 ;	src/text_scroller.c: 88: set_vram_byte(scroller_vram_addr, *scroller_next_char - 0x20);
+                                    452 ;	genPointerGet
+                                    453 ;	setupDPTR
+    000000D7 ADr03r00         [ 4]  454 	lda	_scroller_next_char
+    000000DA 85*00            [ 3]  455 	sta	*(DPTR+0)
+    000000DC ADr04r00         [ 4]  456 	lda	(_scroller_next_char + 1)
+    000000DF 85*01            [ 3]  457 	sta	*(DPTR+1)
+    000000E1 A0 00            [ 2]  458 	ldy	#0x00
+    000000E3 B1*00            [ 6]  459 	lda	[DPTR],y
+                                    460 ;	Raw cost for generated ic 53 : (14, 21.000000) count=1.000000
+                                    461 ;	genCast
+                                    462 ;	genCopy
+                                    463 ;	Raw cost for generated ic 54 : (0, 0.000000) count=1.000000
+                                    464 ;	genMinus
+                                    465 ;	genMinusDec
+    000000E5 38               [ 2]  466 	sec
+    000000E6 E9 20            [ 2]  467 	sbc	#0x20
+    000000E8 8Dr00r00         [ 4]  468 	sta	_set_vram_byte_PARM_2
+                                    469 ;	Raw cost for generated ic 55 : (6, 8.000000) count=1.000000
+                                    470 ;	Raw cost for generated ic 56 : (0, 0.000000) count=1.000000
+                                    471 ;	genCall
+                                    472 ;	genSend
+    000000EB AEr01r00         [ 4]  473 	ldx	(_scroller_vram_addr + 1)
+    000000EE ADr00r00         [ 4]  474 	lda	_scroller_vram_addr
+    000000F1 20r00r00         [ 6]  475 	jsr	_set_vram_byte
+                                    476 ;	Raw cost for generated ic 58 : (9, 14.000000) count=1.000000
+                                    477 ;	src/text_scroller.c: 90: while (1) {
+                                    478 ;	genLabel
+    000000F4                        479 00110$:
+                                    480 ;	Raw cost for generated ic 61 : (0, 0.000000) count=72.000000
+                                    481 ;	src/text_scroller.c: 91: scroller_x++;
+                                    482 ;	genPlus
+                                    483 ;	genPlusIncr
+    000000F4 EEr02r00         [ 6]  484 	inc	_scroller_x
+                                    485 ;	Raw cost for generated ic 63 : (3, 7.000000) count=72.000000
+                                    486 ;	src/text_scroller.c: 92: if ((scroller_x & 0x07) == 0) {
+                                    487 ;	genCast
+                                    488 ;	genCopy
+    000000F7 ADr02r00         [ 4]  489 	lda	_scroller_x
+                                    490 ;	Raw cost for generated ic 66 : (3, 4.000000) count=72.000000
+                                    491 ;	genAnd
+    000000FA 29 07            [ 2]  492 	and	#0x07
+                                    493 ;	genIfxJump : z
+    000000FC D0 62            [ 4]  494 	bne	00108$
+                                    495 ;	Raw cost for generated ic 67 : (7, 7.600000) count=72.000000
+                                    496 ;	skipping generated iCode
+                                    497 ;	Raw cost for generated ic 68 : (0, 0.000000) count=72.000000
+                                    498 ;	src/text_scroller.c: 94: scroller_next_char++;
+                                    499 ;	genPlus
+                                    500 ;	genPlusIncr
+    000000FE EEr03r00         [ 6]  501 	inc	_scroller_next_char
+    00000101 D0 03            [ 4]  502 	bne	00147$
+    00000103 EEr04r00         [ 6]  503 	inc	(_scroller_next_char + 1)
+    00000106                        504 00147$:
+                                    505 ;	Raw cost for generated ic 72 : (8, 14.600000) count=54.000000
+                                    506 ;	src/text_scroller.c: 95: if (*scroller_next_char == 0) scroller_next_char = scroller_text;
+                                    507 ;	genPointerGet
+                                    508 ;	setupDPTR
+    00000106 ADr03r00         [ 4]  509 	lda	_scroller_next_char
+    00000109 85*00            [ 3]  510 	sta	*(DPTR+0)
+    0000010B ADr04r00         [ 4]  511 	lda	(_scroller_next_char + 1)
+    0000010E 85*01            [ 3]  512 	sta	*(DPTR+1)
+    00000110 A0 00            [ 2]  513 	ldy	#0x00
+    00000112 B1*00            [ 6]  514 	lda	[DPTR],y
+                                    515 ;	Raw cost for generated ic 76 : (14, 21.000000) count=54.000000
+                                    516 ;	genIfx
+                                    517 ;	genIfxJump : z
+    00000114 D0 0A            [ 4]  518 	bne	00104$
+                                    519 ;	Raw cost for generated ic 77 : (5, 5.600000) count=54.000000
+                                    520 ;	skipping iCode since result will be rematerialized
+                                    521 ;	Raw cost for generated ic 80 : (0, 0.000000) count=40.500000
+                                    522 ;	genCast
+                                    523 ;	genCopy
+    00000116 A9s01            [ 2]  524 	lda	#>_scroller_text
+    00000118 8Dr04r00         [ 4]  525 	sta	(_scroller_next_char + 1)
+    0000011B A9r7F            [ 2]  526 	lda	#_scroller_text
+    0000011D 8Dr03r00         [ 4]  527 	sta	_scroller_next_char
+                                    528 ;	Raw cost for generated ic 81 : (10, 12.000000) count=40.500000
+                                    529 ;	genLabel
+    00000120                        530 00104$:
+                                    531 ;	Raw cost for generated ic 84 : (0, 0.000000) count=54.000000
+                                    532 ;	src/text_scroller.c: 98: scroller_vram_addr += DEVICE_SCREEN_MAP_ENTRY_SIZE;
+                                    533 ;	genPlus
+                                    534 ;	genPlusIncr
+    00000120 EEr00r00         [ 6]  535 	inc	_scroller_vram_addr
+    00000123 D0 03            [ 4]  536 	bne	00150$
+    00000125 EEr01r00         [ 6]  537 	inc	(_scroller_vram_addr + 1)
+    00000128                        538 00150$:
+                                    539 ;	Raw cost for generated ic 85 : (8, 14.600000) count=54.000000
+                                    540 ;	src/text_scroller.c: 99: if (scroller_vram_addr >= limit) scroller_vram_addr = base;
+                                    541 ;	genCmp
+    00000128 ADr00r00         [ 4]  542 	lda	_scroller_vram_addr
+    0000012B 38               [ 2]  543 	sec
+    0000012C EDr04r00         [ 4]  544 	sbc	_limit
+    0000012F ADr01r00         [ 4]  545 	lda	(_scroller_vram_addr + 1)
+    00000132 EDr05r00         [ 4]  546 	sbc	(_limit + 1)
+    00000135 90 0C            [ 4]  547 	bcc	00106$
+                                    548 ;	Raw cost for generated ic 88 : (18, 23.600000) count=54.000000
+                                    549 ;	skipping generated iCode
+                                    550 ;	Raw cost for generated ic 89 : (0, 0.000000) count=54.000000
+                                    551 ;	genAssign
+                                    552 ;	genAssignLit
+                                    553 ;	genCopy
+    00000137 ADr03r00         [ 4]  554 	lda	(_base + 1)
+    0000013A 8Dr01r00         [ 4]  555 	sta	(_scroller_vram_addr + 1)
+    0000013D ADr02r00         [ 4]  556 	lda	_base
+    00000140 8Dr00r00         [ 4]  557 	sta	_scroller_vram_addr
+                                    558 ;	Raw cost for generated ic 92 : (12, 16.000000) count=40.500000
+                                    559 ;	genLabel
+    00000143                        560 00106$:
+                                    561 ;	Raw cost for generated ic 94 : (0, 0.000000) count=54.000000
+                                    562 ;	src/text_scroller.c: 102: set_vram_byte(scroller_vram_addr, *scroller_next_char - 0x20);
+                                    563 ;	genPointerGet
+                                    564 ;	setupDPTR
+    00000143 ADr03r00         [ 4]  565 	lda	_scroller_next_char
+    00000146 85*00            [ 3]  566 	sta	*(DPTR+0)
+    00000148 ADr04r00         [ 4]  567 	lda	(_scroller_next_char + 1)
+    0000014B 85*01            [ 3]  568 	sta	*(DPTR+1)
+    0000014D A0 00            [ 2]  569 	ldy	#0x00
+    0000014F B1*00            [ 6]  570 	lda	[DPTR],y
+                                    571 ;	Raw cost for generated ic 96 : (14, 21.000000) count=54.000000
+                                    572 ;	genCast
+                                    573 ;	genCopy
+                                    574 ;	Raw cost for generated ic 97 : (0, 0.000000) count=54.000000
+                                    575 ;	genMinus
+                                    576 ;	genMinusDec
+    00000151 38               [ 2]  577 	sec
+    00000152 E9 20            [ 2]  578 	sbc	#0x20
+    00000154 8Dr00r00         [ 4]  579 	sta	_set_vram_byte_PARM_2
+                                    580 ;	Raw cost for generated ic 98 : (6, 8.000000) count=54.000000
+                                    581 ;	Raw cost for generated ic 99 : (0, 0.000000) count=54.000000
+                                    582 ;	genCall
+                                    583 ;	genSend
+    00000157 AEr01r00         [ 4]  584 	ldx	(_scroller_vram_addr + 1)
+    0000015A ADr00r00         [ 4]  585 	lda	_scroller_vram_addr
+    0000015D 20r00r00         [ 6]  586 	jsr	_set_vram_byte
+                                    587 ;	Raw cost for generated ic 101 : (9, 14.000000) count=54.000000
+                                    588 ;	genLabel
+    00000160                        589 00108$:
+                                    590 ;	Raw cost for generated ic 102 : (0, 0.000000) count=72.000000
+                                    591 ;	src/text_scroller.c: 104: vsync();        
+                                    592 ;	genCall
+    00000160 20r00r00         [ 6]  593 	jsr	_vsync
+                                    594 ;	Raw cost for generated ic 103 : (3, 6.000000) count=72.000000
+                                    595 ;	genGoto
+    00000163 4CrF4r00         [ 3]  596 	jmp	00110$
+                                    597 ;	Raw cost for generated ic 104 : (3, 3.000000) count=72.000000
+                                    598 ;	genLabel
+                                    599 ;	Raw cost for generated ic 106 : (0, 0.000000) count=0.000000
+                                    600 ;	src/text_scroller.c: 106: }
+                                    601 ;	genEndFunction
+    00000166 60               [ 6]  602 	rts
+                                    603 ;	Raw cost for generated ic 107 : (1, 6.000000) count=0.000000
+                                    604 	.area _CODE
+    00000167                        605 _shake_tbl:
+    00000167 00                     606 	.db #0x00	; 0
+    00000168 01                     607 	.db #0x01	; 1
+    00000169 01                     608 	.db #0x01	; 1
+    0000016A 01                     609 	.db #0x01	; 1
+    0000016B 00                     610 	.db #0x00	; 0
+    0000016C EF                     611 	.db #0xef	; 239
+    0000016D EF                     612 	.db #0xef	; 239
+    0000016E EF                     613 	.db #0xef	; 239
+    0000016F                        614 _scanline_offsets_tbl:
+    0000016F 00                     615 	.db #0x00	; 0
+    00000170 01                     616 	.db #0x01	; 1
+    00000171 02                     617 	.db #0x02	; 2
+    00000172 03                     618 	.db #0x03	; 3
+    00000173 03                     619 	.db #0x03	; 3
+    00000174 02                     620 	.db #0x02	; 2
+    00000175 01                     621 	.db #0x01	; 1
+    00000176 00                     622 	.db #0x00	; 0
+    00000177 00                     623 	.db #0x00	; 0
+    00000178 01                     624 	.db #0x01	; 1
+    00000179 02                     625 	.db #0x02	; 2
+    0000017A 03                     626 	.db #0x03	; 3
+    0000017B 03                     627 	.db #0x03	; 3
+    0000017C 02                     628 	.db #0x02	; 2
+    0000017D 01                     629 	.db #0x01	; 1
+    0000017E 00                     630 	.db #0x00	; 0
+    0000017F                        631 _scroller_text:
+    0000017F 54 68 69 73 20 69 73   632 	.ascii "This is a text scroller demo for GBDK-2020. You can use idea"
+             20 61 20 74 65 78 74
+             20 73 63 72 6F 6C 6C
+             65 72 20 64 65 6D 6F
+             20 66 6F 72 20 47 42
+             44 4B 2D 32 30 32 30
+             2E 20 59 6F 75 20 63
+             61 6E 20 75 73 65 20
+             69 64 65 61
+    000001BB 73 2C 20 74 68 61 74   633 	.ascii "s, that are shown in this demo, to make different parallax e"
+             20 61 72 65 20 73 68
+             6F 77 6E 20 69 6E 20
+             74 68 69 73 20 64 65
+             6D 6F 2C 20 74 6F 20
+             6D 61 6B 65 20 64 69
+             66 66 65 72 65 6E 74
+             20 70 61 72 61 6C 6C
+             61 78 20 65
+    000001F7 66 66 65 63 74 73 2C   634 	.ascii "ffects, scrolling of tilemaps which are larger than 32x32 ti"
+             20 73 63 72 6F 6C 6C
+             69 6E 67 20 6F 66 20
+             74 69 6C 65 6D 61 70
+             73 20 77 68 69 63 68
+             20 61 72 65 20 6C 61
+             72 67 65 72 20 74 68
+             61 6E 20 33 32 78 33
+             32 20 74 69
+    00000233 6C 65 73 20 61 6E 64   635 	.ascii "les and TEXT SCROLLERS, of course! Need to write something e"
+             20 54 45 58 54 20 53
+             43 52 4F 4C 4C 45 52
+             53 2C 20 6F 66 20 63
+             6F 75 72 73 65 21 20
+             4E 65 65 64 20 74 6F
+             20 77 72 69 74 65 20
+             73 6F 6D 65 74 68 69
+             6E 67 20 65
+    0000026F 6C 73 65 20 74 6F 20   636 	.ascii "lse to make this text longer than 256 characters. The quick "
+             6D 61 6B 65 20 74 68
+             69 73 20 74 65 78 74
+             20 6C 6F 6E 67 65 72
+             20 74 68 61 6E 20 32
+             35 36 20 63 68 61 72
+             61 63 74 65 72 73 2E
+             20 54 68 65 20 71 75
+             69 63 6B 20
+    000002AB 72 65 64 20 66 6F 78   637 	.ascii "red fox jumps over the lazy brown dog. 0123456789.          "
+             20 6A 75 6D 70 73 20
+             6F 76 65 72 20 74 68
+             65 20 6C 61 7A 79 20
+             62 72 6F 77 6E 20 64
+             6F 67 2E 20 30 31 32
+             33 34 35 36 37 38 39
+             2E 20 20 20 20 20 20
+             20 20 20 20
+    000002E7 00                     638 	.db 0x00
+    000002E8                        639 ___str_0:
+    000002E8 20 53 63 72 6F 6C 6C   640 	.ascii " Scrolling %d chars"
+             69 6E 67 20 25 64 20
+             63 68 61 72 73
+    000002FB 00                     641 	.db 0x00
+                                    642 	.area _XINIT
+    00000000                        643 __xinit__scanline_offsets:
+    00000000r6Fr01                  644 	.dw _scanline_offsets_tbl
+    00000002                        645 __xinit__scroller_x:
+    00000002 00                     646 	.db #0x00	; 0
+    00000003                        647 __xinit__scroller_next_char:
+    00000003r7Fr01                  648 	.dw _scroller_text
+                                    649 	.area _CABS    (ABS)

@@ -1,0 +1,326 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module libc_string
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _font_set
+                                     12 	.globl _font_load
+                                     13 	.globl _font_init
+                                     14 	.globl _strncpy
+                                     15 	.globl _strncmp
+                                     16 	.globl _strncat
+                                     17 	.globl _strlen
+                                     18 	.globl _strcat
+                                     19 	.globl _strcmp
+                                     20 	.globl _strcpy
+                                     21 	.globl _printf
+                                     22 ;--------------------------------------------------------
+                                     23 ; special function registers
+                                     24 ;--------------------------------------------------------
+                         00000000    25 _GG_STATE	=	0x0000
+                         00000001    26 _GG_EXT_7BIT	=	0x0001
+                         00000002    27 _GG_EXT_CTL	=	0x0002
+                         00000003    28 _GG_SIO_SEND	=	0x0003
+                         00000004    29 _GG_SIO_RECV	=	0x0004
+                         00000005    30 _GG_SIO_CTL	=	0x0005
+                         00000006    31 _GG_SOUND_PAN	=	0x0006
+                         0000003E    32 _MEMORY_CTL	=	0x003e
+                         0000003F    33 _JOY_CTL	=	0x003f
+                         0000007E    34 _VCOUNTER	=	0x007e
+                         0000007F    35 _PSG	=	0x007f
+                         0000007F    36 _HCOUNTER	=	0x007f
+                         000000BE    37 _VDP_DATA	=	0x00be
+                         000000BF    38 _VDP_CMD	=	0x00bf
+                         000000BF    39 _VDP_STATUS	=	0x00bf
+                         000000DC    40 _JOY_PORT1	=	0x00dc
+                         000000DD    41 _JOY_PORT2	=	0x00dd
+                         000000F0    42 _FMADDRESS	=	0x00f0
+                         000000F1    43 _FMDATA	=	0x00f1
+                         000000F2    44 _AUDIOCTRL	=	0x00f2
+                                     45 ;--------------------------------------------------------
+                                     46 ; ram data
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _DATA
+                         0000FFFC    49 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    50 _GLASSES_3D	=	0xfff8
+                         0000FFFD    51 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    52 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    53 _MAP_FRAME2	=	0xffff
+                                     54 ;--------------------------------------------------------
+                                     55 ; ram data
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _INITIALIZED
+                                     58 ;--------------------------------------------------------
+                                     59 ; absolute external ram data
+                                     60 ;--------------------------------------------------------
+                                     61 	.area _DABS (ABS)
+                                     62 ;--------------------------------------------------------
+                                     63 ; global & static initialisations
+                                     64 ;--------------------------------------------------------
+                                     65 	.area _HOME
+                                     66 	.area _GSINIT
+                                     67 	.area _GSFINAL
+                                     68 	.area _GSINIT
+                                     69 ;--------------------------------------------------------
+                                     70 ; Home
+                                     71 ;--------------------------------------------------------
+                                     72 	.area _HOME
+                                     73 	.area _HOME
+                                     74 ;--------------------------------------------------------
+                                     75 ; code
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _CODE
+                                     78 ;src/libc_string.c:12: void main(void)
+                                     79 ;	---------------------------------
+                                     80 ; Function main
+                                     81 ; ---------------------------------
+    00000000                         82 _main::
+    00000000 DD E5            [15]   83 	push	ix
+    00000002 DD 21 00 00      [14]   84 	ld	ix,#0
+    00000006 DD 39            [15]   85 	add	ix,sp
+    00000008 21 EE FF         [10]   86 	ld	hl, #-18
+    0000000B 39               [11]   87 	add	hl, sp
+    0000000C F9               [ 6]   88 	ld	sp, hl
+                                     89 ;src/libc_string.c:17: font_init();
+    0000000D CDr00r00         [17]   90 	call	_font_init
+                                     91 ;src/libc_string.c:18: ibm_font = font_load(font_ibm);
+    00000010 21r00r00         [10]   92 	ld	hl, #_font_ibm
+    00000013 E5               [11]   93 	push	hl
+    00000014 CDr00r00         [17]   94 	call	_font_load
+                                     95 ;src/libc_string.c:19: font_set(ibm_font);
+    00000017 E3               [19]   96 	ex	(sp),hl
+    00000018 CDr00r00         [17]   97 	call	_font_set
+                                     98 ;src/libc_string.c:22: printf("strlen(gbdk) -> %d\n", strlen("gbdk"));
+    0000001B 21r56r01         [10]   99 	ld	hl, #___str_6
+    0000001E E3               [19]  100 	ex	(sp),hl
+    0000001F CDr00r00         [17]  101 	call	_strlen
+    00000022 F1               [10]  102 	pop	af
+    00000023 01r42r01         [10]  103 	ld	bc, #___str_5+0
+    00000026 E5               [11]  104 	push	hl
+    00000027 C5               [11]  105 	push	bc
+    00000028 CDr00r00         [17]  106 	call	_printf
+    0000002B F1               [10]  107 	pop	af
+    0000002C F1               [10]  108 	pop	af
+                                    109 ;src/libc_string.c:24: printf("strcmp(gbdk,gbdk)\n-> %d\n", strcmp("gbdk", "gbdk"));
+    0000002D 11r56r01         [10]  110 	ld	de, #___str_6
+    00000030 21r56r01         [10]  111 	ld	hl, #___str_6
+    00000033 CDr00r00         [17]  112 	call	_strcmp
+    00000036 D5               [11]  113 	push	de
+    00000037 21r5Br01         [10]  114 	ld	hl, #___str_7
+    0000003A E5               [11]  115 	push	hl
+    0000003B CDr00r00         [17]  116 	call	_printf
+    0000003E F1               [10]  117 	pop	af
+    0000003F F1               [10]  118 	pop	af
+                                    119 ;src/libc_string.c:25: printf("strcmp(gbdk,ggdk)\n-> %d\n", strcmp("gbdk", "ggdk"));
+    00000040 11r8Dr01         [10]  120 	ld	de, #___str_9
+    00000043 21r56r01         [10]  121 	ld	hl, #___str_6
+    00000046 CDr00r00         [17]  122 	call	_strcmp
+    00000049 D5               [11]  123 	push	de
+    0000004A 21r74r01         [10]  124 	ld	hl, #___str_8
+    0000004D E5               [11]  125 	push	hl
+    0000004E CDr00r00         [17]  126 	call	_printf
+    00000051 F1               [10]  127 	pop	af
+    00000052 F1               [10]  128 	pop	af
+                                    129 ;src/libc_string.c:26: printf("strcmp(ggdk,gbdk)\n-> %d\n", strcmp("ggdk", "gbdk"));
+    00000053 11r56r01         [10]  130 	ld	de, #___str_6
+    00000056 21r8Dr01         [10]  131 	ld	hl, #___str_9
+    00000059 CDr00r00         [17]  132 	call	_strcmp
+    0000005C D5               [11]  133 	push	de
+    0000005D 21r92r01         [10]  134 	ld	hl, #___str_10
+    00000060 E5               [11]  135 	push	hl
+    00000061 CDr00r00         [17]  136 	call	_printf
+    00000064 F1               [10]  137 	pop	af
+                                    138 ;src/libc_string.c:27: printf("strncmp(gbdk,gbc,2)\n-> %d\n", strncmp("gbdk", "gbc", 2));
+    00000065 21 02 00         [10]  139 	ld	hl, #0x0002
+    00000068 E3               [19]  140 	ex	(sp),hl
+    00000069 11rC6r01         [10]  141 	ld	de, #___str_12
+    0000006C 21r56r01         [10]  142 	ld	hl, #___str_6
+    0000006F CDr00r00         [17]  143 	call	_strncmp
+    00000072 D5               [11]  144 	push	de
+    00000073 21rABr01         [10]  145 	ld	hl, #___str_11
+    00000076 E5               [11]  146 	push	hl
+    00000077 CDr00r00         [17]  147 	call	_printf
+    0000007A F1               [10]  148 	pop	af
+    0000007B F1               [10]  149 	pop	af
+                                    150 ;src/libc_string.c:30: char dst[4] = "dst";
+    0000007C 21 0E 00         [10]  151 	ld	hl, #14
+    0000007F 39               [11]  152 	add	hl, sp
+    00000080 36 64            [10]  153 	ld	(hl), #0x64
+    00000082 DD 36 FD 73      [19]  154 	ld	-3 (ix), #0x73
+    00000086 DD 36 FE 74      [19]  155 	ld	-2 (ix), #0x74
+    0000008A DD 36 FF 00      [19]  156 	ld	-1 (ix), #0x00
+                                    157 ;src/libc_string.c:31: const char* src = "src";
+    0000008E 01r3Er01         [10]  158 	ld	bc, #___str_1
+                                    159 ;src/libc_string.c:32: strcpy(dst, src);
+    00000091 E5               [11]  160 	push	hl
+    00000092 C5               [11]  161 	push	bc
+    00000093 E5               [11]  162 	push	hl
+    00000094 CDr00r00         [17]  163 	call	_strcpy
+    00000097 F1               [10]  164 	pop	af
+    00000098 F1               [10]  165 	pop	af
+                                    166 ;src/libc_string.c:33: printf("strcpy(dst,src)\n-> %s\n", dst);
+    00000099 01rCAr01         [10]  167 	ld	bc, #___str_13+0
+    0000009C C5               [11]  168 	push	bc
+    0000009D CDr00r00         [17]  169 	call	_printf
+    000000A0 F1               [10]  170 	pop	af
+    000000A1 F1               [10]  171 	pop	af
+                                    172 ;src/libc_string.c:37: char dst[4] = "dst";
+    000000A2 21 0E 00         [10]  173 	ld	hl, #14
+    000000A5 39               [11]  174 	add	hl, sp
+    000000A6 36 64            [10]  175 	ld	(hl), #0x64
+    000000A8 DD 36 FD 73      [19]  176 	ld	-3 (ix), #0x73
+    000000AC DD 36 FE 74      [19]  177 	ld	-2 (ix), #0x74
+    000000B0 DD 36 FF 00      [19]  178 	ld	-1 (ix), #0x00
+                                    179 ;src/libc_string.c:39: strncpy(dst, src, 2);
+    000000B4 E5               [11]  180 	push	hl
+    000000B5 11 02 00         [10]  181 	ld	de, #0x0002
+    000000B8 D5               [11]  182 	push	de
+    000000B9 11r3Er01         [10]  183 	ld	de, #___str_1
+    000000BC CDr00r00         [17]  184 	call	_strncpy
+                                    185 ;src/libc_string.c:40: printf("strncpy(dst,src,2)\n-> %s\n", dst);
+    000000BF 01rE1r01         [10]  186 	ld	bc, #___str_14+0
+    000000C2 C5               [11]  187 	push	bc
+    000000C3 CDr00r00         [17]  188 	call	_printf
+    000000C6 F1               [10]  189 	pop	af
+    000000C7 F1               [10]  190 	pop	af
+                                    191 ;src/libc_string.c:44: char dst[9] = "gbdk";
+    000000C8 DD 36 EE 67      [19]  192 	ld	-18 (ix), #0x67
+    000000CC DD 36 EF 62      [19]  193 	ld	-17 (ix), #0x62
+    000000D0 DD 36 F0 64      [19]  194 	ld	-16 (ix), #0x64
+    000000D4 DD 36 F1 6B      [19]  195 	ld	-15 (ix), #0x6b
+    000000D8 DD 36 F2 00      [19]  196 	ld	-14 (ix), #0x00
+    000000DC DD 36 F3 00      [19]  197 	ld	-13 (ix), #0x00
+    000000E0 DD 36 F4 00      [19]  198 	ld	-12 (ix), #0x00
+    000000E4 DD 36 F5 00      [19]  199 	ld	-11 (ix), #0x00
+    000000E8 DD 36 F6 00      [19]  200 	ld	-10 (ix), #0x00
+                                    201 ;src/libc_string.c:45: char dst2[9] = "gbdk";
+    000000EC DD 36 F7 67      [19]  202 	ld	-9 (ix), #0x67
+    000000F0 DD 36 F8 62      [19]  203 	ld	-8 (ix), #0x62
+    000000F4 DD 36 F9 64      [19]  204 	ld	-7 (ix), #0x64
+    000000F8 DD 36 FA 6B      [19]  205 	ld	-6 (ix), #0x6b
+    000000FC DD 36 FB 00      [19]  206 	ld	-5 (ix), #0x00
+    00000100 DD 36 FC 00      [19]  207 	ld	-4 (ix), #0x00
+    00000104 DD 36 FD 00      [19]  208 	ld	-3 (ix), #0x00
+    00000108 DD 36 FE 00      [19]  209 	ld	-2 (ix), #0x00
+    0000010C DD 36 FF 00      [19]  210 	ld	-1 (ix), #0x00
+                                    211 ;src/libc_string.c:46: printf("strcat(gbdk,2020)\n-> %s\n", strcat(dst, "2020"));
+    00000110 11r14r02         [10]  212 	ld	de, #___str_16
+    00000113 21 00 00         [10]  213 	ld	hl, #0
+    00000116 39               [11]  214 	add	hl, sp
+    00000117 CDr00r00         [17]  215 	call	_strcat
+    0000011A D5               [11]  216 	push	de
+    0000011B 21rFBr01         [10]  217 	ld	hl, #___str_15
+    0000011E E5               [11]  218 	push	hl
+    0000011F CDr00r00         [17]  219 	call	_printf
+    00000122 F1               [10]  220 	pop	af
+                                    221 ;src/libc_string.c:47: printf("strncat(gbdk,lib,2)\n-> %s\n", strncat(dst2, "lib",2));
+    00000123 21 02 00         [10]  222 	ld	hl, #0x0002
+    00000126 E3               [19]  223 	ex	(sp),hl
+    00000127 11r34r02         [10]  224 	ld	de, #___str_18
+    0000012A 21 0B 00         [10]  225 	ld	hl, #11
+    0000012D 39               [11]  226 	add	hl, sp
+    0000012E CDr00r00         [17]  227 	call	_strncat
+    00000131 D5               [11]  228 	push	de
+    00000132 21r19r02         [10]  229 	ld	hl, #___str_17
+    00000135 E5               [11]  230 	push	hl
+    00000136 CDr00r00         [17]  231 	call	_printf
+                                    232 ;src/libc_string.c:49: }
+    00000139 DD F9            [10]  233 	ld	sp,ix
+    0000013B DD E1            [14]  234 	pop	ix
+    0000013D C9               [10]  235 	ret
+    0000013E                        236 ___str_1:
+    0000013E 73 72 63               237 	.ascii "src"
+    00000141 00                     238 	.db 0x00
+    00000142                        239 ___str_5:
+    00000142 73 74 72 6C 65 6E 28   240 	.ascii "strlen(gbdk) -> %d"
+             67 62 64 6B 29 20 2D
+             3E 20 25 64
+    00000154 0A                     241 	.db 0x0a
+    00000155 00                     242 	.db 0x00
+    00000156                        243 ___str_6:
+    00000156 67 62 64 6B            244 	.ascii "gbdk"
+    0000015A 00                     245 	.db 0x00
+    0000015B                        246 ___str_7:
+    0000015B 73 74 72 63 6D 70 28   247 	.ascii "strcmp(gbdk,gbdk)"
+             67 62 64 6B 2C 67 62
+             64 6B 29
+    0000016C 0A                     248 	.db 0x0a
+    0000016D 2D 3E 20 25 64         249 	.ascii "-> %d"
+    00000172 0A                     250 	.db 0x0a
+    00000173 00                     251 	.db 0x00
+    00000174                        252 ___str_8:
+    00000174 73 74 72 63 6D 70 28   253 	.ascii "strcmp(gbdk,ggdk)"
+             67 62 64 6B 2C 67 67
+             64 6B 29
+    00000185 0A                     254 	.db 0x0a
+    00000186 2D 3E 20 25 64         255 	.ascii "-> %d"
+    0000018B 0A                     256 	.db 0x0a
+    0000018C 00                     257 	.db 0x00
+    0000018D                        258 ___str_9:
+    0000018D 67 67 64 6B            259 	.ascii "ggdk"
+    00000191 00                     260 	.db 0x00
+    00000192                        261 ___str_10:
+    00000192 73 74 72 63 6D 70 28   262 	.ascii "strcmp(ggdk,gbdk)"
+             67 67 64 6B 2C 67 62
+             64 6B 29
+    000001A3 0A                     263 	.db 0x0a
+    000001A4 2D 3E 20 25 64         264 	.ascii "-> %d"
+    000001A9 0A                     265 	.db 0x0a
+    000001AA 00                     266 	.db 0x00
+    000001AB                        267 ___str_11:
+    000001AB 73 74 72 6E 63 6D 70   268 	.ascii "strncmp(gbdk,gbc,2)"
+             28 67 62 64 6B 2C 67
+             62 63 2C 32 29
+    000001BE 0A                     269 	.db 0x0a
+    000001BF 2D 3E 20 25 64         270 	.ascii "-> %d"
+    000001C4 0A                     271 	.db 0x0a
+    000001C5 00                     272 	.db 0x00
+    000001C6                        273 ___str_12:
+    000001C6 67 62 63               274 	.ascii "gbc"
+    000001C9 00                     275 	.db 0x00
+    000001CA                        276 ___str_13:
+    000001CA 73 74 72 63 70 79 28   277 	.ascii "strcpy(dst,src)"
+             64 73 74 2C 73 72 63
+             29
+    000001D9 0A                     278 	.db 0x0a
+    000001DA 2D 3E 20 25 73         279 	.ascii "-> %s"
+    000001DF 0A                     280 	.db 0x0a
+    000001E0 00                     281 	.db 0x00
+    000001E1                        282 ___str_14:
+    000001E1 73 74 72 6E 63 70 79   283 	.ascii "strncpy(dst,src,2)"
+             28 64 73 74 2C 73 72
+             63 2C 32 29
+    000001F3 0A                     284 	.db 0x0a
+    000001F4 2D 3E 20 25 73         285 	.ascii "-> %s"
+    000001F9 0A                     286 	.db 0x0a
+    000001FA 00                     287 	.db 0x00
+    000001FB                        288 ___str_15:
+    000001FB 73 74 72 63 61 74 28   289 	.ascii "strcat(gbdk,2020)"
+             67 62 64 6B 2C 32 30
+             32 30 29
+    0000020C 0A                     290 	.db 0x0a
+    0000020D 2D 3E 20 25 73         291 	.ascii "-> %s"
+    00000212 0A                     292 	.db 0x0a
+    00000213 00                     293 	.db 0x00
+    00000214                        294 ___str_16:
+    00000214 32 30 32 30            295 	.ascii "2020"
+    00000218 00                     296 	.db 0x00
+    00000219                        297 ___str_17:
+    00000219 73 74 72 6E 63 61 74   298 	.ascii "strncat(gbdk,lib,2)"
+             28 67 62 64 6B 2C 6C
+             69 62 2C 32 29
+    0000022C 0A                     299 	.db 0x0a
+    0000022D 2D 3E 20 25 73         300 	.ascii "-> %s"
+    00000232 0A                     301 	.db 0x0a
+    00000233 00                     302 	.db 0x00
+    00000234                        303 ___str_18:
+    00000234 6C 69 62               304 	.ascii "lib"
+    00000237 00                     305 	.db 0x00
+                                    306 	.area _CODE
+                                    307 	.area _INITIALIZER
+                                    308 	.area _CABS (ABS)

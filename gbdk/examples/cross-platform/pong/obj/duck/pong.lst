@@ -1,0 +1,645 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module pong
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _init_pad
+                                     12 	.globl _printf
+                                     13 	.globl _gotoxy
+                                     14 	.globl _set_sprite_data
+                                     15 	.globl _vsync
+                                     16 	.globl _joypad_ex
+                                     17 	.globl _joypad_init
+                                     18 	.globl _sprite_data
+                                     19 	.globl _spd_ballY
+                                     20 	.globl _spd_ballX
+                                     21 	.globl _ballY
+                                     22 	.globl _ballX
+                                     23 	.globl _player2_score
+                                     24 	.globl _player1_score
+                                     25 	.globl _player2
+                                     26 	.globl _player1
+                                     27 	.globl _joypads
+                                     28 	.globl _HUD
+                                     29 ;--------------------------------------------------------
+                                     30 ; special function registers
+                                     31 ;--------------------------------------------------------
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _DATA
+    00000000                         36 _joypads::
+    00000000                         37 	.ds 5
+    00000005                         38 _player1::
+    00000005                         39 	.ds 1
+    00000006                         40 _player2::
+    00000006                         41 	.ds 1
+    00000007                         42 _player1_score::
+    00000007                         43 	.ds 2
+    00000009                         44 _player2_score::
+    00000009                         45 	.ds 2
+    0000000B                         46 _ballX::
+    0000000B                         47 	.ds 1
+    0000000C                         48 _ballY::
+    0000000C                         49 	.ds 1
+    0000000D                         50 _spd_ballX::
+    0000000D                         51 	.ds 1
+    0000000E                         52 _spd_ballY::
+    0000000E                         53 	.ds 1
+                                     54 ;--------------------------------------------------------
+                                     55 ; ram data
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _INITIALIZED
+    00000000                         58 _sprite_data::
+    00000000                         59 	.ds 64
+                                     60 ;--------------------------------------------------------
+                                     61 ; absolute external ram data
+                                     62 ;--------------------------------------------------------
+                                     63 	.area _DABS (ABS)
+                                     64 ;--------------------------------------------------------
+                                     65 ; global & static initialisations
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _HOME
+                                     68 	.area _GSINIT
+                                     69 	.area _GSFINAL
+                                     70 	.area _GSINIT
+                                     71 ;--------------------------------------------------------
+                                     72 ; Home
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _HOME
+                                     75 	.area _HOME
+                                     76 ;--------------------------------------------------------
+                                     77 ; code
+                                     78 ;--------------------------------------------------------
+                                     79 	.area _CODE
+                                     80 ;src/pong.c:16: void init_pad(uint8_t n) {
+                                     81 ;	---------------------------------
+                                     82 ; Function init_pad
+                                     83 ; ---------------------------------
+    00000000                         84 _init_pad::
+                                     85 ;src/pong.c:17: set_sprite_tile(n << 2, n);
+    00000000 4F               [ 4]   86 	ld	c, a
+    00000001 87               [ 4]   87 	add	a, a
+    00000002 87               [ 4]   88 	add	a, a
+    00000003 47               [ 4]   89 	ld	b, a
+                                     90 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000004 68               [ 4]   91 	ld	l, b
+    00000005 26 00            [ 8]   92 	ld	h, #0x00
+    00000007 29               [ 8]   93 	add	hl, hl
+    00000008 29               [ 8]   94 	add	hl, hl
+    00000009 11r00r00         [12]   95 	ld	de, #_shadow_OAM
+    0000000C 19               [ 8]   96 	add	hl, de
+    0000000D 23               [ 8]   97 	inc	hl
+    0000000E 23               [ 8]   98 	inc	hl
+    0000000F 71               [ 8]   99 	ld	(hl), c
+                                    100 ;src/pong.c:18: set_sprite_tile((n << 2) + 1, n);
+    00000010 58               [ 4]  101 	ld	e, b
+    00000011 1C               [ 4]  102 	inc	e
+                                    103 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000012 6B               [ 4]  104 	ld	l, e
+    00000013 26 00            [ 8]  105 	ld	h, #0x00
+    00000015 29               [ 8]  106 	add	hl, hl
+    00000016 29               [ 8]  107 	add	hl, hl
+    00000017 11r00r00         [12]  108 	ld	de, #_shadow_OAM
+    0000001A 19               [ 8]  109 	add	hl, de
+    0000001B 23               [ 8]  110 	inc	hl
+    0000001C 23               [ 8]  111 	inc	hl
+    0000001D 71               [ 8]  112 	ld	(hl), c
+                                    113 ;src/pong.c:19: set_sprite_tile((n << 2) + 2, n);
+    0000001E 04               [ 4]  114 	inc	b
+    0000001F 04               [ 4]  115 	inc	b
+                                    116 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000020 11r00r00         [12]  117 	ld	de, #_shadow_OAM+0
+    00000023 68               [ 4]  118 	ld	l, b
+    00000024 26 00            [ 8]  119 	ld	h, #0x00
+    00000026 29               [ 8]  120 	add	hl, hl
+    00000027 29               [ 8]  121 	add	hl, hl
+    00000028 19               [ 8]  122 	add	hl, de
+    00000029 23               [ 8]  123 	inc	hl
+    0000002A 23               [ 8]  124 	inc	hl
+    0000002B 71               [ 8]  125 	ld	(hl), c
+                                    126 ;src/pong.c:19: set_sprite_tile((n << 2) + 2, n);
+                                    127 ;src/pong.c:20: }
+    0000002C C9               [16]  128 	ret
+                                    129 ;src/pong.c:51: void main(void) {
+                                    130 ;	---------------------------------
+                                    131 ; Function main
+                                    132 ; ---------------------------------
+    0000002D                        133 _main::
+    0000002D E8 FD            [16]  134 	add	sp, #-3
+                                    135 ;src/pong.c:56: set_sprite_data(0, 4, sprite_data);
+    0000002F 11r00r00         [12]  136 	ld	de, #_sprite_data
+    00000032 D5               [16]  137 	push	de
+    00000033 21 00 04         [12]  138 	ld	hl, #0x400
+    00000036 E5               [16]  139 	push	hl
+    00000037 CDr00r00         [24]  140 	call	_set_sprite_data
+    0000003A E8 04            [16]  141 	add	sp, #4
+                                    142 ;src/pong.c:59: init_pad(0);
+    0000003C AF               [ 4]  143 	xor	a, a
+    0000003D CDr00r00         [24]  144 	call	_init_pad
+                                    145 ;src/pong.c:60: init_pad(1);
+    00000040 3E 01            [ 8]  146 	ld	a, #0x01
+    00000042 CDr00r00         [24]  147 	call	_init_pad
+                                    148 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000045 21r0Er00         [12]  149 	ld	hl, #(_shadow_OAM + 14)
+    00000048 36 02            [12]  150 	ld	(hl), #0x02
+                                    151 ;src/pong.c:66: SHOW_BKG; SHOW_SPRITES;
+    0000004A F0r00            [12]  152 	ldh	a, (_LCDC_REG + 0)
+    0000004C F6 40            [ 8]  153 	or	a, #0x40
+    0000004E E0r00            [12]  154 	ldh	(_LCDC_REG + 0), a
+    00000050 F0r00            [12]  155 	ldh	a, (_LCDC_REG + 0)
+    00000052 F6 01            [ 8]  156 	or	a, #0x01
+    00000054 E0r00            [12]  157 	ldh	(_LCDC_REG + 0), a
+                                    158 ;src/pong.c:69: if (joypad_init(2, &joypads) != 2) {
+    00000056 11r00r00         [12]  159 	ld	de, #_joypads
+    00000059 D5               [16]  160 	push	de
+    0000005A 3E 02            [ 8]  161 	ld	a, #0x02
+    0000005C F5               [16]  162 	push	af
+    0000005D 33               [ 8]  163 	inc	sp
+    0000005E CDr00r00         [24]  164 	call	_joypad_init
+    00000061 E8 03            [16]  165 	add	sp, #3
+    00000063 7B               [ 4]  166 	ld	a, e
+    00000064 D6 02            [ 8]  167 	sub	a, #0x02
+    00000066 28 0B            [12]  168 	jr	Z, 00102$
+                                    169 ;src/pong.c:70: printf("Device must support\nat least two joypads");
+    00000068 11rB4r02         [12]  170 	ld	de, #___str_0
+    0000006B D5               [16]  171 	push	de
+    0000006C CDr00r00         [24]  172 	call	_printf
+    0000006F E1               [12]  173 	pop	hl
+                                    174 ;src/pong.c:71: return;
+    00000070 C3rA0r02         [16]  175 	jp	00155$
+    00000073                        176 00102$:
+                                    177 ;src/pong.c:75: player1 = 64, player2 = 64;
+    00000073 21r05r00         [12]  178 	ld	hl, #_player1
+    00000076 36 40            [12]  179 	ld	(hl), #0x40
+    00000078 21r06r00         [12]  180 	ld	hl, #_player2
+    0000007B 36 40            [12]  181 	ld	(hl), #0x40
+                                    182 ;src/pong.c:76: player1_score = player2_score = 0;
+    0000007D AF               [ 4]  183 	xor	a, a
+    0000007E 21r09r00         [12]  184 	ld	hl, #_player2_score
+    00000081 22               [ 8]  185 	ld	(hl+), a
+    00000082 77               [ 8]  186 	ld	(hl), a
+    00000083 AF               [ 4]  187 	xor	a, a
+    00000084 21r07r00         [12]  188 	ld	hl, #_player1_score
+    00000087 22               [ 8]  189 	ld	(hl+), a
+    00000088 77               [ 8]  190 	ld	(hl), a
+                                    191 ;src/pong.c:79: printf(HUD, player1_score, player2_score);
+    00000089 11 00 00         [12]  192 	ld	de, #0x0000
+    0000008C D5               [16]  193 	push	de
+    0000008D D5               [16]  194 	push	de
+    0000008E 11rA3r02         [12]  195 	ld	de, #_HUD
+    00000091 D5               [16]  196 	push	de
+    00000092 CDr00r00         [24]  197 	call	_printf
+    00000095 E8 06            [16]  198 	add	sp, #6
+                                    199 ;src/pong.c:82: ballX = INITBALLX, ballY = INITBALLY;
+    00000097 21r0Br00         [12]  200 	ld	hl, #_ballX
+    0000009A 36 54            [12]  201 	ld	(hl), #0x54
+    0000009C 21r0Cr00         [12]  202 	ld	hl, #_ballY
+    0000009F 36 48            [12]  203 	ld	(hl), #0x48
+                                    204 ;src/pong.c:83: spd_ballX = 1, spd_ballY = 1;
+    000000A1 21r0Dr00         [12]  205 	ld	hl, #_spd_ballX
+    000000A4 36 01            [12]  206 	ld	(hl), #0x01
+    000000A6 21r0Er00         [12]  207 	ld	hl, #_spd_ballY
+    000000A9 36 01            [12]  208 	ld	(hl), #0x01
+                                    209 ;src/pong.c:85: while(1) {
+    000000AB                        210 00143$:
+                                    211 ;src/pong.c:87: joypad_ex(&joypads);
+    000000AB 11r00r00         [12]  212 	ld	de, #_joypads
+    000000AE CDr00r00         [24]  213 	call	_joypad_ex
+                                    214 ;src/pong.c:90: if (joypads.joy0 & J_UP) {
+    000000B1 21r01r00         [12]  215 	ld	hl, #_joypads + 1
+    000000B4 4E               [ 8]  216 	ld	c, (hl)
+                                    217 ;src/pong.c:91: player1 -= 2;
+    000000B5 FAr05r00         [16]  218 	ld	a, (_player1)
+                                    219 ;src/pong.c:90: if (joypads.joy0 & J_UP) {
+    000000B8 CB 51            [ 8]  220 	bit	2, c
+    000000BA 28 0F            [12]  221 	jr	Z, 00110$
+                                    222 ;src/pong.c:91: player1 -= 2;
+    000000BC C6 FE            [ 8]  223 	add	a, #0xfe
+    000000BE 21r05r00         [12]  224 	ld	hl, #_player1
+    000000C1 77               [ 8]  225 	ld	(hl), a
+                                    226 ;src/pong.c:92: if (player1 < YMIN) player1 = YMIN;
+    000000C2 7E               [ 8]  227 	ld	a, (hl)
+    000000C3 D6 1C            [ 8]  228 	sub	a, #0x1c
+    000000C5 30 15            [12]  229 	jr	NC, 00111$
+    000000C7 36 1C            [12]  230 	ld	(hl), #0x1c
+    000000C9 18 11            [12]  231 	jr	00111$
+    000000CB                        232 00110$:
+                                    233 ;src/pong.c:93: } else if (joypads.joy0 & J_DOWN) {
+    000000CB CB 59            [ 8]  234 	bit	3, c
+    000000CD 28 0D            [12]  235 	jr	Z, 00111$
+                                    236 ;src/pong.c:94: player1 += 2;
+    000000CF C6 02            [ 8]  237 	add	a, #0x02
+    000000D1 21r05r00         [12]  238 	ld	hl, #_player1
+    000000D4 77               [ 8]  239 	ld	(hl), a
+                                    240 ;src/pong.c:95: if (player1 > YMAX) player1 = YMAX;            
+    000000D5 3E 64            [ 8]  241 	ld	a, #0x64
+    000000D7 96               [ 8]  242 	sub	a, (hl)
+    000000D8 30 02            [12]  243 	jr	NC, 00111$
+    000000DA 36 64            [12]  244 	ld	(hl), #0x64
+    000000DC                        245 00111$:
+                                    246 ;src/pong.c:97: draw_pad(0, PLAYER1_X, player1);
+    000000DC FAr05r00         [16]  247 	ld	a, (#_player1)
+    000000DF F8 01            [12]  248 	ldhl	sp,	#1
+    000000E1 77               [ 8]  249 	ld	(hl), a
+    000000E2 2A               [ 8]  250 	ld	a, (hl+)
+                                    251 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+                                    252 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000E3 32               [ 8]  253 	ld	(hl-), a
+    000000E4 11r00r00         [12]  254 	ld	de, #_shadow_OAM
+    000000E7 7E               [ 8]  255 	ld	a, (hl)
+    000000E8 12               [ 8]  256 	ld	(de), a
+    000000E9 21r01r00         [12]  257 	ld	hl, #_shadow_OAM + 1
+    000000EC 36 08            [12]  258 	ld	(hl), #0x08
+                                    259 ;src/pong.c:25: move_sprite((n << 2) + 1, x, y + 8);
+    000000EE F8 02            [12]  260 	ldhl	sp,	#2
+    000000F0 3A               [ 8]  261 	ld	a, (hl-)
+    000000F1 C6 08            [ 8]  262 	add	a, #0x08
+    000000F3 77               [ 8]  263 	ld	(hl), a
+                                    264 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+                                    265 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    000000F4 11r04r00         [12]  266 	ld	de, #(_shadow_OAM + 4)
+    000000F7 7E               [ 8]  267 	ld	a, (hl)
+    000000F8 12               [ 8]  268 	ld	(de), a
+    000000F9 21r05r00         [12]  269 	ld	hl, #(_shadow_OAM + 4) + 1
+    000000FC 36 08            [12]  270 	ld	(hl), #0x08
+                                    271 ;src/pong.c:26: move_sprite((n << 2) + 2, x, y + 16);
+    000000FE F8 02            [12]  272 	ldhl	sp,	#2
+    00000100 7E               [ 8]  273 	ld	a, (hl)
+    00000101 C6 10            [ 8]  274 	add	a, #0x10
+    00000103 77               [ 8]  275 	ld	(hl), a
+                                    276 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+                                    277 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000104 11r08r00         [12]  278 	ld	de, #(_shadow_OAM + 8)
+    00000107 7E               [ 8]  279 	ld	a, (hl)
+    00000108 12               [ 8]  280 	ld	(de), a
+    00000109 21r09r00         [12]  281 	ld	hl, #(_shadow_OAM + 8) + 1
+    0000010C 36 08            [12]  282 	ld	(hl), #0x08
+                                    283 ;src/pong.c:100: if (joypads.joy1 & J_UP) {
+    0000010E 21r02r00         [12]  284 	ld	hl, #_joypads + 2
+    00000111 4E               [ 8]  285 	ld	c, (hl)
+                                    286 ;src/pong.c:101: player2 -= 2;
+    00000112 FAr06r00         [16]  287 	ld	a, (_player2)
+                                    288 ;src/pong.c:100: if (joypads.joy1 & J_UP) {
+    00000115 CB 51            [ 8]  289 	bit	2, c
+    00000117 28 0F            [12]  290 	jr	Z, 00119$
+                                    291 ;src/pong.c:101: player2 -= 2;
+    00000119 C6 FE            [ 8]  292 	add	a, #0xfe
+    0000011B 21r06r00         [12]  293 	ld	hl, #_player2
+    0000011E 77               [ 8]  294 	ld	(hl), a
+                                    295 ;src/pong.c:102: if (player2 < YMIN) player2 = YMIN;
+    0000011F 7E               [ 8]  296 	ld	a, (hl)
+    00000120 D6 1C            [ 8]  297 	sub	a, #0x1c
+    00000122 30 15            [12]  298 	jr	NC, 00120$
+    00000124 36 1C            [12]  299 	ld	(hl), #0x1c
+    00000126 18 11            [12]  300 	jr	00120$
+    00000128                        301 00119$:
+                                    302 ;src/pong.c:103: } else if (joypads.joy1 & J_DOWN) {
+    00000128 CB 59            [ 8]  303 	bit	3, c
+    0000012A 28 0D            [12]  304 	jr	Z, 00120$
+                                    305 ;src/pong.c:104: player2 += 2;
+    0000012C C6 02            [ 8]  306 	add	a, #0x02
+    0000012E 21r06r00         [12]  307 	ld	hl, #_player2
+    00000131 77               [ 8]  308 	ld	(hl), a
+                                    309 ;src/pong.c:105: if (player2 > YMAX) player2 = YMAX;            
+    00000132 3E 64            [ 8]  310 	ld	a, #0x64
+    00000134 96               [ 8]  311 	sub	a, (hl)
+    00000135 30 02            [12]  312 	jr	NC, 00120$
+    00000137 36 64            [12]  313 	ld	(hl), #0x64
+    00000139                        314 00120$:
+                                    315 ;src/pong.c:107: draw_pad(1, PLAYER2_X, player2);
+    00000139 FAr06r00         [16]  316 	ld	a, (_player2)
+    0000013C 47               [ 4]  317 	ld	b, a
+    0000013D 48               [ 4]  318 	ld	c, b
+                                    319 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000013E 21r10r00         [12]  320 	ld	hl, #(_shadow_OAM + 16)
+                                    321 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000141 70               [ 8]  322 	ld	(hl), b
+    00000142 23               [ 8]  323 	inc	hl
+    00000143 36 A0            [12]  324 	ld	(hl), #0xa0
+                                    325 ;src/pong.c:25: move_sprite((n << 2) + 1, x, y + 8);
+    00000145 F8 02            [12]  326 	ldhl	sp,	#2
+    00000147 71               [ 8]  327 	ld	(hl), c
+    00000148 7E               [ 8]  328 	ld	a, (hl)
+    00000149 C6 08            [ 8]  329 	add	a, #0x08
+    0000014B 4F               [ 4]  330 	ld	c, a
+                                    331 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000014C 21r14r00         [12]  332 	ld	hl, #(_shadow_OAM + 20)
+                                    333 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000014F 71               [ 8]  334 	ld	(hl), c
+    00000150 23               [ 8]  335 	inc	hl
+    00000151 36 A0            [12]  336 	ld	(hl), #0xa0
+                                    337 ;src/pong.c:26: move_sprite((n << 2) + 2, x, y + 16);
+    00000153 F8 02            [12]  338 	ldhl	sp,	#2
+    00000155 7E               [ 8]  339 	ld	a, (hl)
+    00000156 C6 10            [ 8]  340 	add	a, #0x10
+    00000158 4F               [ 4]  341 	ld	c, a
+                                    342 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000159 21r18r00         [12]  343 	ld	hl, #(_shadow_OAM + 24)
+                                    344 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000015C 71               [ 8]  345 	ld	(hl), c
+    0000015D 23               [ 8]  346 	inc	hl
+    0000015E 36 A0            [12]  347 	ld	(hl), #0xa0
+                                    348 ;src/pong.c:110: ballX += spd_ballX, ballY += spd_ballY;
+    00000160 FAr0Br00         [16]  349 	ld	a, (_ballX)
+    00000163 21r0Dr00         [12]  350 	ld	hl, #_spd_ballX
+    00000166 86               [ 8]  351 	add	a, (hl)
+    00000167 EAr0Br00         [16]  352 	ld	(#_ballX),a
+    0000016A FAr0Cr00         [16]  353 	ld	a, (_ballY)
+    0000016D 21r0Er00         [12]  354 	ld	hl, #_spd_ballY
+    00000170 86               [ 8]  355 	add	a, (hl)
+    00000171 21r0Cr00         [12]  356 	ld	hl, #_ballY
+    00000174 77               [ 8]  357 	ld	(hl), a
+                                    358 ;src/pong.c:112: if ((ballY < YMIN) || (ballY > (YMAX + 24))) {
+    00000175 7E               [ 8]  359 	ld	a, (hl)
+    00000176 D6 1C            [ 8]  360 	sub	a, #0x1c
+    00000178 38 05            [12]  361 	jr	C, 00121$
+    0000017A 3E 7C            [ 8]  362 	ld	a, #0x7c
+    0000017C 96               [ 8]  363 	sub	a, (hl)
+    0000017D 30 06            [12]  364 	jr	NC, 00122$
+    0000017F                        365 00121$:
+                                    366 ;src/pong.c:113: spd_ballY = -spd_ballY; 
+    0000017F AF               [ 4]  367 	xor	a, a
+    00000180 21r0Er00         [12]  368 	ld	hl, #_spd_ballY
+    00000183 96               [ 8]  369 	sub	a, (hl)
+    00000184 77               [ 8]  370 	ld	(hl), a
+    00000185                        371 00122$:
+                                    372 ;src/pong.c:117: if ((ballY > player1) && (ballY < (player1 + 24)) && (spd_ballX < 0)) 
+    00000185 FAr0Cr00         [16]  373 	ld	a, (#_ballY)
+    00000188 F8 00            [12]  374 	ldhl	sp,	#0
+    0000018A 22               [ 8]  375 	ld	(hl+), a
+    0000018B 36 00            [12]  376 	ld	(hl), #0x00
+                                    377 ;src/pong.c:118: spd_ballX = -spd_ballX;
+    0000018D AF               [ 4]  378 	xor	a, a
+    0000018E 21r0Dr00         [12]  379 	ld	hl, #_spd_ballX
+    00000191 96               [ 8]  380 	sub	a, (hl)
+    00000192 F8 02            [12]  381 	ldhl	sp,	#2
+    00000194 77               [ 8]  382 	ld	(hl), a
+                                    383 ;src/pong.c:116: if (ballX < (PLAYER1_X + 8)) {
+    00000195 FAr0Br00         [16]  384 	ld	a, (#_ballX)
+    00000198 D6 10            [ 8]  385 	sub	a, #0x10
+    0000019A 30 2B            [12]  386 	jr	NC, 00135$
+                                    387 ;src/pong.c:117: if ((ballY > player1) && (ballY < (player1 + 24)) && (spd_ballX < 0)) 
+    0000019C FAr05r00         [16]  388 	ld	a, (#_player1)
+    0000019F 21r0Cr00         [12]  389 	ld	hl, #_ballY
+    000001A2 96               [ 8]  390 	sub	a, (hl)
+    000001A3 30 65            [12]  391 	jr	NC, 00136$
+    000001A5 FAr05r00         [16]  392 	ld	a, (_player1)
+    000001A8 06 00            [ 8]  393 	ld	b, #0x00
+    000001AA C6 18            [ 8]  394 	add	a, #0x18
+    000001AC 4F               [ 4]  395 	ld	c, a
+    000001AD 30 01            [12]  396 	jr	NC, 00309$
+    000001AF 04               [ 4]  397 	inc	b
+    000001B0                        398 00309$:
+    000001B0 F8 00            [12]  399 	ldhl	sp,	#0
+    000001B2 2A               [ 8]  400 	ld	a, (hl+)
+    000001B3 91               [ 4]  401 	sub	a, c
+    000001B4 7E               [ 8]  402 	ld	a, (hl)
+    000001B5 98               [ 4]  403 	sbc	a, b
+    000001B6 30 52            [12]  404 	jr	NC, 00136$
+    000001B8 FAr0Dr00         [16]  405 	ld	a, (#_spd_ballX)
+    000001BB CB 7F            [ 8]  406 	bit	7, a
+    000001BD 28 4B            [12]  407 	jr	Z, 00136$
+                                    408 ;src/pong.c:118: spd_ballX = -spd_ballX;
+    000001BF F8 02            [12]  409 	ldhl	sp,	#2
+    000001C1 7E               [ 8]  410 	ld	a, (hl)
+    000001C2 EAr0Dr00         [16]  411 	ld	(#_spd_ballX),a
+    000001C5 18 43            [12]  412 	jr	00136$
+    000001C7                        413 00135$:
+                                    414 ;src/pong.c:119: } else if (ballX > (PLAYER2_X - 8)) {
+    000001C7 3E 98            [ 8]  415 	ld	a, #0x98
+    000001C9 21r0Br00         [12]  416 	ld	hl, #_ballX
+    000001CC 96               [ 8]  417 	sub	a, (hl)
+    000001CD 30 3B            [12]  418 	jr	NC, 00136$
+                                    419 ;src/pong.c:120: if ((ballY > player2) && (ballY < (player2 + 24)) && (spd_ballX > 0)) 
+    000001CF FAr06r00         [16]  420 	ld	a, (#_player2)
+    000001D2 21r0Cr00         [12]  421 	ld	hl, #_ballY
+    000001D5 96               [ 8]  422 	sub	a, (hl)
+    000001D6 30 32            [12]  423 	jr	NC, 00136$
+    000001D8 FAr06r00         [16]  424 	ld	a, (_player2)
+    000001DB 06 00            [ 8]  425 	ld	b, #0x00
+    000001DD C6 18            [ 8]  426 	add	a, #0x18
+    000001DF 4F               [ 4]  427 	ld	c, a
+    000001E0 30 01            [12]  428 	jr	NC, 00310$
+    000001E2 04               [ 4]  429 	inc	b
+    000001E3                        430 00310$:
+    000001E3 F8 00            [12]  431 	ldhl	sp,	#0
+    000001E5 2A               [ 8]  432 	ld	a, (hl+)
+    000001E6 91               [ 4]  433 	sub	a, c
+    000001E7 7E               [ 8]  434 	ld	a, (hl)
+    000001E8 98               [ 4]  435 	sbc	a, b
+    000001E9 30 1F            [12]  436 	jr	NC, 00136$
+    000001EB 21r0Dr00         [12]  437 	ld	hl, #_spd_ballX
+    000001EE 5E               [ 8]  438 	ld	e, (hl)
+    000001EF AF               [ 4]  439 	xor	a, a
+    000001F0 57               [ 4]  440 	ld	d, a
+    000001F1 96               [ 8]  441 	sub	a, (hl)
+    000001F2 CB 7B            [ 8]  442 	bit	7, e
+    000001F4 28 07            [12]  443 	jr	Z, 00311$
+    000001F6 CB 7A            [ 8]  444 	bit	7, d
+    000001F8 20 08            [12]  445 	jr	NZ, 00312$
+    000001FA BF               [ 4]  446 	cp	a, a
+    000001FB 18 05            [12]  447 	jr	00312$
+    000001FD                        448 00311$:
+    000001FD CB 7A            [ 8]  449 	bit	7, d
+    000001FF 28 01            [12]  450 	jr	Z, 00312$
+    00000201 37               [ 4]  451 	scf
+    00000202                        452 00312$:
+    00000202 30 06            [12]  453 	jr	NC, 00136$
+                                    454 ;src/pong.c:121: spd_ballX = -spd_ballX;
+    00000204 F8 02            [12]  455 	ldhl	sp,	#2
+    00000206 7E               [ 8]  456 	ld	a, (hl)
+    00000207 EAr0Dr00         [16]  457 	ld	(#_spd_ballX),a
+    0000020A                        458 00136$:
+                                    459 ;src/pong.c:79: printf(HUD, player1_score, player2_score);
+                                    460 ;src/pong.c:118: spd_ballX = -spd_ballX;
+    0000020A AF               [ 4]  461 	xor	a, a
+    0000020B 21r0Dr00         [12]  462 	ld	hl, #_spd_ballX
+    0000020E 96               [ 8]  463 	sub	a, (hl)
+    0000020F 4F               [ 4]  464 	ld	c, a
+                                    465 ;src/pong.c:124: if (ballX <= PLAYER1_X) {
+    00000210 3E 08            [ 8]  466 	ld	a, #0x08
+    00000212 21r0Br00         [12]  467 	ld	hl, #_ballX
+    00000215 96               [ 8]  468 	sub	a, (hl)
+    00000216 38 37            [12]  469 	jr	C, 00140$
+                                    470 ;src/pong.c:126: ballX = INITBALLX, ballY = INITBALLY;
+    00000218 36 54            [12]  471 	ld	(hl), #0x54
+    0000021A 21r0Cr00         [12]  472 	ld	hl, #_ballY
+    0000021D 36 48            [12]  473 	ld	(hl), #0x48
+                                    474 ;src/pong.c:127: spd_ballX = -spd_ballX;
+    0000021F 21r0Dr00         [12]  475 	ld	hl, #_spd_ballX
+    00000222 71               [ 8]  476 	ld	(hl), c
+                                    477 ;src/pong.c:128: player2_score++;
+    00000223 21r09r00         [12]  478 	ld	hl, #_player2_score
+    00000226 34               [12]  479 	inc	(hl)
+    00000227 20 02            [12]  480 	jr	NZ, 00313$
+    00000229 23               [ 8]  481 	inc	hl
+    0000022A 34               [12]  482 	inc	(hl)
+    0000022B                        483 00313$:
+                                    484 ;src/pong.c:129: gotoxy(0, 0); printf(HUD, player1_score, player2_score);
+    0000022B AF               [ 4]  485 	xor	a, a
+    0000022C 0F               [ 4]  486 	rrca
+    0000022D F5               [16]  487 	push	af
+    0000022E CDr00r00         [24]  488 	call	_gotoxy
+    00000231 E1               [12]  489 	pop	hl
+    00000232 FAr09r00         [16]  490 	ld	a, (_player2_score)
+    00000235 5F               [ 4]  491 	ld	e, a
+    00000236 21r0Ar00         [12]  492 	ld	hl, #_player2_score + 1
+    00000239 56               [ 8]  493 	ld	d, (hl)
+    0000023A D5               [16]  494 	push	de
+    0000023B FAr07r00         [16]  495 	ld	a, (_player1_score)
+    0000023E 5F               [ 4]  496 	ld	e, a
+    0000023F 21r08r00         [12]  497 	ld	hl, #_player1_score + 1
+    00000242 56               [ 8]  498 	ld	d, (hl)
+    00000243 D5               [16]  499 	push	de
+    00000244 11rA3r02         [12]  500 	ld	de, #_HUD
+    00000247 D5               [16]  501 	push	de
+    00000248 CDr00r00         [24]  502 	call	_printf
+    0000024B E8 06            [16]  503 	add	sp, #6
+    0000024D 18 3D            [12]  504 	jr	00141$
+    0000024F                        505 00140$:
+                                    506 ;src/pong.c:130: } else if (ballX > PLAYER2_X) {
+    0000024F 3E A0            [ 8]  507 	ld	a, #0xa0
+    00000251 21r0Br00         [12]  508 	ld	hl, #_ballX
+    00000254 96               [ 8]  509 	sub	a, (hl)
+    00000255 30 35            [12]  510 	jr	NC, 00141$
+                                    511 ;src/pong.c:132: ballX = INITBALLX, ballY = INITBALLY;
+    00000257 36 54            [12]  512 	ld	(hl), #0x54
+    00000259 21r0Cr00         [12]  513 	ld	hl, #_ballY
+    0000025C 36 48            [12]  514 	ld	(hl), #0x48
+                                    515 ;src/pong.c:133: spd_ballX = -spd_ballX;
+    0000025E 21r0Dr00         [12]  516 	ld	hl, #_spd_ballX
+    00000261 71               [ 8]  517 	ld	(hl), c
+                                    518 ;src/pong.c:134: player1_score++;
+    00000262 21r07r00         [12]  519 	ld	hl, #_player1_score
+    00000265 34               [12]  520 	inc	(hl)
+    00000266 20 02            [12]  521 	jr	NZ, 00314$
+    00000268 23               [ 8]  522 	inc	hl
+    00000269 34               [12]  523 	inc	(hl)
+    0000026A                        524 00314$:
+                                    525 ;src/pong.c:135: gotoxy(0, 0); printf(HUD, player1_score, player2_score);
+    0000026A AF               [ 4]  526 	xor	a, a
+    0000026B 0F               [ 4]  527 	rrca
+    0000026C F5               [16]  528 	push	af
+    0000026D CDr00r00         [24]  529 	call	_gotoxy
+    00000270 E1               [12]  530 	pop	hl
+    00000271 FAr09r00         [16]  531 	ld	a, (_player2_score)
+    00000274 5F               [ 4]  532 	ld	e, a
+    00000275 21r0Ar00         [12]  533 	ld	hl, #_player2_score + 1
+    00000278 56               [ 8]  534 	ld	d, (hl)
+    00000279 D5               [16]  535 	push	de
+    0000027A FAr07r00         [16]  536 	ld	a, (_player1_score)
+    0000027D 5F               [ 4]  537 	ld	e, a
+    0000027E 21r08r00         [12]  538 	ld	hl, #_player1_score + 1
+    00000281 56               [ 8]  539 	ld	d, (hl)
+    00000282 D5               [16]  540 	push	de
+    00000283 11rA3r02         [12]  541 	ld	de, #_HUD
+    00000286 D5               [16]  542 	push	de
+    00000287 CDr00r00         [24]  543 	call	_printf
+    0000028A E8 06            [16]  544 	add	sp, #6
+    0000028C                        545 00141$:
+                                    546 ;src/pong.c:138: move_sprite(3, ballX, ballY);
+    0000028C FAr0Cr00         [16]  547 	ld	a, (_ballY)
+    0000028F 4F               [ 4]  548 	ld	c, a
+    00000290 FAr0Br00         [16]  549 	ld	a, (_ballX)
+    00000293 47               [ 4]  550 	ld	b, a
+                                    551 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+                                    552 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000294 21r0Cr00         [12]  553 	ld	hl, #(_shadow_OAM + 12)
+    00000297 79               [ 4]  554 	ld	a, c
+    00000298 22               [ 8]  555 	ld	(hl+), a
+    00000299 70               [ 8]  556 	ld	(hl), b
+                                    557 ;src/pong.c:141: vsync();
+    0000029A CDr00r00         [24]  558 	call	_vsync
+    0000029D C3rABr00         [16]  559 	jp	00143$
+    000002A0                        560 00155$:
+                                    561 ;src/pong.c:143: }
+    000002A0 E8 03            [16]  562 	add	sp, #3
+    000002A2 C9               [16]  563 	ret
+    000002A3                        564 _HUD:
+    000002A3 20 70 31 3A 20 25 64   565 	.ascii " p1: %d   p2: %d"
+             20 20 20 70 32 3A 20
+             25 64
+    000002B3 00                     566 	.db 0x00
+    000002B4                        567 ___str_0:
+    000002B4 44 65 76 69 63 65 20   568 	.ascii "Device must support"
+             6D 75 73 74 20 73 75
+             70 70 6F 72 74
+    000002C7 0A                     569 	.db 0x0a
+    000002C8 61 74 20 6C 65 61 73   570 	.ascii "at least two joypads"
+             74 20 74 77 6F 20 6A
+             6F 79 70 61 64 73
+    000002DC 00                     571 	.db 0x00
+                                    572 	.area _CODE
+                                    573 	.area _INITIALIZER
+    00000000                        574 __xinit__sprite_data:
+    00000000 3C                     575 	.db #0x3c	; 60
+    00000001 3C                     576 	.db #0x3c	; 60
+    00000002 42                     577 	.db #0x42	; 66	'B'
+    00000003 7E                     578 	.db #0x7e	; 126
+    00000004 99                     579 	.db #0x99	; 153
+    00000005 FF                     580 	.db #0xff	; 255
+    00000006 A9                     581 	.db #0xa9	; 169
+    00000007 FF                     582 	.db #0xff	; 255
+    00000008 89                     583 	.db #0x89	; 137
+    00000009 FF                     584 	.db #0xff	; 255
+    0000000A 89                     585 	.db #0x89	; 137
+    0000000B FF                     586 	.db #0xff	; 255
+    0000000C 42                     587 	.db #0x42	; 66	'B'
+    0000000D 7E                     588 	.db #0x7e	; 126
+    0000000E 3C                     589 	.db #0x3c	; 60
+    0000000F 3C                     590 	.db #0x3c	; 60
+    00000010 3C                     591 	.db #0x3c	; 60
+    00000011 3C                     592 	.db #0x3c	; 60
+    00000012 42                     593 	.db #0x42	; 66	'B'
+    00000013 7E                     594 	.db #0x7e	; 126
+    00000014 B9                     595 	.db #0xb9	; 185
+    00000015 FF                     596 	.db #0xff	; 255
+    00000016 89                     597 	.db #0x89	; 137
+    00000017 FF                     598 	.db #0xff	; 255
+    00000018 91                     599 	.db #0x91	; 145
+    00000019 FF                     600 	.db #0xff	; 255
+    0000001A B9                     601 	.db #0xb9	; 185
+    0000001B FF                     602 	.db #0xff	; 255
+    0000001C 42                     603 	.db #0x42	; 66	'B'
+    0000001D 7E                     604 	.db #0x7e	; 126
+    0000001E 3C                     605 	.db #0x3c	; 60
+    0000001F 3C                     606 	.db #0x3c	; 60
+    00000020 3C                     607 	.db #0x3c	; 60
+    00000021 3C                     608 	.db #0x3c	; 60
+    00000022 42                     609 	.db #0x42	; 66	'B'
+    00000023 7E                     610 	.db #0x7e	; 126
+    00000024 99                     611 	.db #0x99	; 153
+    00000025 FF                     612 	.db #0xff	; 255
+    00000026 89                     613 	.db #0x89	; 137
+    00000027 FF                     614 	.db #0xff	; 255
+    00000028 99                     615 	.db #0x99	; 153
+    00000029 FF                     616 	.db #0xff	; 255
+    0000002A 89                     617 	.db #0x89	; 137
+    0000002B FF                     618 	.db #0xff	; 255
+    0000002C 5A                     619 	.db #0x5a	; 90	'Z'
+    0000002D 7E                     620 	.db #0x7e	; 126
+    0000002E 3C                     621 	.db #0x3c	; 60
+    0000002F 3C                     622 	.db #0x3c	; 60
+    00000030 3C                     623 	.db #0x3c	; 60
+    00000031 3C                     624 	.db #0x3c	; 60
+    00000032 42                     625 	.db #0x42	; 66	'B'
+    00000033 7E                     626 	.db #0x7e	; 126
+    00000034 A9                     627 	.db #0xa9	; 169
+    00000035 FF                     628 	.db #0xff	; 255
+    00000036 A9                     629 	.db #0xa9	; 169
+    00000037 FF                     630 	.db #0xff	; 255
+    00000038 B9                     631 	.db #0xb9	; 185
+    00000039 FF                     632 	.db #0xff	; 255
+    0000003A 89                     633 	.db #0x89	; 137
+    0000003B FF                     634 	.db #0xff	; 255
+    0000003C 42                     635 	.db #0x42	; 66	'B'
+    0000003D 7E                     636 	.db #0x7e	; 126
+    0000003E 3C                     637 	.db #0x3c	; 60
+    0000003F 3C                     638 	.db #0x3c	; 60
+                                    639 	.area _CABS (ABS)

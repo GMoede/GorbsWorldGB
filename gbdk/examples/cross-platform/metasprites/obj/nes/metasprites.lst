@@ -1,0 +1,2568 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module metasprites
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _green_pal
+                                     22 	.globl _cyan_pal
+                                     23 	.globl _pink_pal
+                                     24 	.globl _gray_pal
+                                     25 	.globl _reverse_bits
+                                     26 	.globl _pattern
+                                     27 	.globl _main
+                                     28 	.globl _load_and_duplicate_sprite_tile_data
+                                     29 	.globl _get_tile_offset
+                                     30 	.globl _set_tile
+                                     31 	.globl _hide_sprites_range
+                                     32 	.globl _fill_bkg_rect
+                                     33 	.globl _set_sprite_data
+                                     34 	.globl _set_bkg_data
+                                     35 	.globl _display_off
+                                     36 	.globl _display_on
+                                     37 	.globl _vsync
+                                     38 	.globl _joypad
+                                     39 	.globl _set_sprite_palette
+                                     40 	.globl _old_joyp
+                                     41 	.globl _joyp
+                                     42 	.globl _set_tile_PARM_4
+                                     43 	.globl _set_tile_PARM_3
+                                     44 	.globl _set_tile_PARM_2
+                                     45 	.globl _num_tiles
+                                     46 	.globl _flipped_data
+                                     47 	.globl _rot
+                                     48 	.globl _idx
+                                     49 	.globl _PosF
+                                     50 	.globl _SpdY
+                                     51 	.globl _SpdX
+                                     52 	.globl _PosY
+                                     53 	.globl _PosX
+                                     54 	.globl _OAMDMA
+                                     55 	.globl _PPUDATA
+                                     56 	.globl _PPUADDR
+                                     57 	.globl _PPUSCROLL
+                                     58 	.globl _OAMDATA
+                                     59 	.globl _OAMADDR
+                                     60 	.globl _PPUSTATUS
+                                     61 	.globl _PPUMASK
+                                     62 	.globl _PPUCTRL
+                                     63 ;--------------------------------------------------------
+                                     64 ; ZP ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _ZP      (PAG)
+    00000000                         67 _load_and_duplicate_sprite_tile_data_sloc0_1_0:
+    00000000                         68 	.ds 2
+    00000002                         69 _load_and_duplicate_sprite_tile_data_sloc1_1_0:
+    00000002                         70 	.ds 1
+    00000003                         71 _main_sloc0_1_0:
+    00000003                         72 	.ds 2
+    00000005                         73 _main_sloc1_1_0:
+    00000005                         74 	.ds 2
+                                     75 ;--------------------------------------------------------
+                                     76 ; overlayable items in ram
+                                     77 ;--------------------------------------------------------
+                                     78 	.area	OSEG    (PAG, OVR)
+    00000000                         79 _set_tile_sloc0_1_0:
+    00000000                         80 	.ds 2
+    00000002                         81 _set_tile_sloc1_1_0:
+    00000002                         82 	.ds 2
+    00000004                         83 _set_tile_sloc2_1_0:
+    00000004                         84 	.ds 2
+                                     85 ;--------------------------------------------------------
+                                     86 ; uninitialized external ram data
+                                     87 ;--------------------------------------------------------
+                                     88 	.area _BSS
+                         00002000    89 _PPUCTRL	=	0x2000
+                         00002001    90 _PPUMASK	=	0x2001
+                         00002002    91 _PPUSTATUS	=	0x2002
+                         00002003    92 _OAMADDR	=	0x2003
+                         00002004    93 _OAMDATA	=	0x2004
+                         00002005    94 _PPUSCROLL	=	0x2005
+                         00002006    95 _PPUADDR	=	0x2006
+                         00002007    96 _PPUDATA	=	0x2007
+                         00004014    97 _OAMDMA	=	0x4014
+    00000000                         98 _PosX::
+    00000000                         99 	.ds 2
+    00000002                        100 _PosY::
+    00000002                        101 	.ds 2
+    00000004                        102 _SpdX::
+    00000004                        103 	.ds 2
+    00000006                        104 _SpdY::
+    00000006                        105 	.ds 2
+    00000008                        106 _PosF::
+    00000008                        107 	.ds 1
+    00000009                        108 _idx::
+    00000009                        109 	.ds 1
+    0000000A                        110 _rot::
+    0000000A                        111 	.ds 1
+    0000000B                        112 _flipped_data::
+    0000000B                        113 	.ds 16
+    0000001B                        114 _num_tiles::
+    0000001B                        115 	.ds 2
+    0000001D                        116 _set_tile_PARM_2:
+    0000001D                        117 	.ds 2
+    0000001F                        118 _set_tile_PARM_3:
+    0000001F                        119 	.ds 1
+    00000020                        120 _set_tile_PARM_4:
+    00000020                        121 	.ds 1
+    00000021                        122 _set_tile_tile_idx_10000_126:
+    00000021                        123 	.ds 1
+    00000022                        124 _set_tile_y_30000_129:
+    00000022                        125 	.ds 2
+    00000024                        126 _main___500010012_50001_170:
+    00000024                        127 	.ds 1
+    00000025                        128 _main_x_60001_171:
+    00000025                        129 	.ds 2
+    00000027                        130 _main_y_60001_171:
+    00000027                        131 	.ds 2
+    00000029                        132 _main___500010020_50001_173:
+    00000029                        133 	.ds 1
+    0000002A                        134 _main___500010022_50001_173:
+    0000002A                        135 	.ds 2
+    0000002C                        136 _main_y_60001_174:
+    0000002C                        137 	.ds 2
+    0000002E                        138 _main___500010028_50001_176:
+    0000002E                        139 	.ds 1
+    0000002F                        140 _main___500010030_50001_176:
+    0000002F                        141 	.ds 2
+    00000031                        142 _main___500010031_50001_176:
+    00000031                        143 	.ds 2
+    00000033                        144 _main___500010036_50001_179:
+    00000033                        145 	.ds 1
+    00000034                        146 _main___500010038_50001_179:
+    00000034                        147 	.ds 2
+    00000036                        148 _main___500010039_50001_179:
+    00000036                        149 	.ds 2
+                                    150 ;--------------------------------------------------------
+                                    151 ; absolute external ram data
+                                    152 ;--------------------------------------------------------
+                                    153 	.area _DABS    (ABS)
+                                    154 ;--------------------------------------------------------
+                                    155 ; initialized external ram data
+                                    156 ;--------------------------------------------------------
+                                    157 	.area _DATA
+    00000000                        158 _joyp::
+    00000000                        159 	.ds 1
+    00000001                        160 _old_joyp::
+    00000001                        161 	.ds 1
+                                    162 ;--------------------------------------------------------
+                                    163 ; global & static initialisations
+                                    164 ;--------------------------------------------------------
+                                    165 	.area _HOME
+                                    166 	.area _GSINIT
+                                    167 	.area _GSFINAL
+                                    168 	.area _GSINIT
+                                    169 ;--------------------------------------------------------
+                                    170 ; Home
+                                    171 ;--------------------------------------------------------
+                                    172 	.area _HOME
+                                    173 	.area _HOME
+                                    174 ;--------------------------------------------------------
+                                    175 ; code
+                                    176 ;--------------------------------------------------------
+                                    177 	.area _CODE
+                                    178 ;------------------------------------------------------------
+                                    179 ;Allocation info for local variables in function 'set_tile'
+                                    180 ;------------------------------------------------------------
+                                    181 ;data          Allocated with name '_set_tile_PARM_2'
+                                    182 ;flip_x        Allocated with name '_set_tile_PARM_3'
+                                    183 ;flip_y        Allocated with name '_set_tile_PARM_4'
+                                    184 ;tile_idx      Allocated with name '_set_tile_tile_idx_10000_126'
+                                    185 ;i             Allocated to registers 
+                                    186 ;y             Allocated with name '_set_tile_y_30000_129'
+                                    187 ;sloc0         Allocated with name '_set_tile_sloc0_1_0'
+                                    188 ;sloc1         Allocated with name '_set_tile_sloc1_1_0'
+                                    189 ;sloc2         Allocated with name '_set_tile_sloc2_1_0'
+                                    190 ;------------------------------------------------------------
+                                    191 ;	src/metasprites.c: 94: void set_tile(uint8_t tile_idx, uint8_t* data, uint8_t flip_x, uint8_t flip_y)
+                                    192 ;	genLabel
+                                    193 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    194 ;	-----------------------------------------
+                                    195 ;	 function set_tile
+                                    196 ;	-----------------------------------------
+                                    197 ;	Register assignment is optimal.
+                                    198 ;	Stack space usage: 0 bytes.
+    00000000                        199 _set_tile:
+                                    200 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    201 ;	genReceive
+    00000000 8Dr21r00         [ 4]  202 	sta	_set_tile_tile_idx_10000_126
+                                    203 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    204 ;	src/metasprites.c: 97: for(i = 0; i < TILE_HEIGHT; i++)
+                                    205 ;	skipping iCode since result will be rematerialized
+                                    206 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    207 ;	skipping iCode since result will be rematerialized
+                                    208 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    209 ;	skipping iCode since result will be rematerialized
+                                    210 ;	Raw cost for generated ic 41 : (0, 0.000000) count=1.000000
+                                    211 ;	genAssign
+                                    212 ;	genAssignLit
+    00000003 A2 00            [ 2]  213 	ldx	#0x00
+    00000005 86*00            [ 3]  214 	stx	*_set_tile_sloc0_1_0
+    00000007 86*01            [ 3]  215 	stx	*(_set_tile_sloc0_1_0 + 1)
+                                    216 ;	Raw cost for generated ic 75 : (6, 8.000000) count=1.000000
+                                    217 ;	genLabel
+    00000009                        218 00102$:
+                                    219 ;	Raw cost for generated ic 4 : (0, 0.000000) count=3.999932
+                                    220 ;	src/metasprites.c: 99: size_t y = flip_y ? (TILE_HEIGHT-1-i) : i; 
+                                    221 ;	genIfx
+    00000009 ADr20r00         [ 4]  222 	lda	_set_tile_PARM_4
+                                    223 ;	genIfxJump : z
+    0000000C F0 0F            [ 4]  224 	beq	00106$
+                                    225 ;	Raw cost for generated ic 5 : (8, 9.600000) count=3.999932
+                                    226 ;	genMinus
+                                    227 ;	genMinusDec
+    0000000E A9 07            [ 2]  228 	lda	#0x07
+    00000010 38               [ 2]  229 	sec
+    00000011 E5*00            [ 3]  230 	sbc	*_set_tile_sloc0_1_0
+    00000013 48               [ 3]  231 	pha
+    00000014 A9 00            [ 2]  232 	lda	#0x00
+    00000016 E5*01            [ 3]  233 	sbc	*(_set_tile_sloc0_1_0 + 1)
+    00000018 AA               [ 2]  234 	tax
+    00000019 68               [ 4]  235 	pla
+                                    236 ;	Raw cost for generated ic 6 : (12, 21.000000) count=2.999943
+                                    237 ;	genGoto
+    0000001A 4Cr21r00         [ 3]  238 	jmp	00107$
+                                    239 ;	Raw cost for generated ic 8 : (3, 3.000000) count=2.999943
+                                    240 ;	genLabel
+    0000001D                        241 00106$:
+                                    242 ;	Raw cost for generated ic 9 : (0, 0.000000) count=0.999983
+                                    243 ;	genAssign
+                                    244 ;	genAssignLit
+                                    245 ;	genCopy
+    0000001D A6*01            [ 3]  246 	ldx	*(_set_tile_sloc0_1_0 + 1)
+    0000001F A5*00            [ 3]  247 	lda	*_set_tile_sloc0_1_0
+                                    248 ;	Raw cost for generated ic 10 : (4, 6.000000) count=0.999983
+                                    249 ;	genLabel
+    00000021                        250 00107$:
+                                    251 ;	Raw cost for generated ic 11 : (0, 0.000000) count=3.999926
+                                    252 ;	genAssign
+                                    253 ;	genAssignLit
+                                    254 ;	genCopy
+    00000021 8Dr22r00         [ 4]  255 	sta	_set_tile_y_30000_129
+    00000024 8Er23r00         [ 4]  256 	stx	(_set_tile_y_30000_129 + 1)
+                                    257 ;	Raw cost for generated ic 12 : (6, 8.000000) count=3.999926
+                                    258 ;	src/metasprites.c: 100: flipped_data[2*i] = flip_x ? reverse_bits[data[2*y]] : data[2*y];
+                                    259 ;	genCast
+                                    260 ;	genCopy
+    00000027 A5*00            [ 3]  261 	lda	*_set_tile_sloc0_1_0
+                                    262 ;	Raw cost for generated ic 14 : (2, 3.000000) count=3.999926
+                                    263 ;	genLeftShift
+                                    264 ;	genLeftShiftLiteral
+                                    265 ;	genlshOne
+    00000029 0A               [ 2]  266 	asl	a
+                                    267 ;	Raw cost for generated ic 15 : (1, 2.000000) count=3.999926
+                                    268 ;	genCast
+                                    269 ;	genCopy
+                                    270 ;	Raw cost for generated ic 16 : (0, 0.000000) count=3.999926
+                                    271 ;	genAssign
+                                    272 ;	genAssignLit
+                                    273 ;	genCopy
+    0000002A A2 00            [ 2]  274 	ldx	#0x00
+    0000002C 86*03            [ 3]  275 	stx	*(_set_tile_sloc1_1_0 + 1)
+    0000002E 85*02            [ 3]  276 	sta	*_set_tile_sloc1_1_0
+                                    277 ;	Raw cost for generated ic 17 : (6, 8.000000) count=3.999926
+                                    278 ;	genIfx
+    00000030 ADr1Fr00         [ 4]  279 	lda	_set_tile_PARM_3
+                                    280 ;	genIfxJump : z
+    00000033 F0 26            [ 4]  281 	beq	00108$
+                                    282 ;	Raw cost for generated ic 18 : (8, 9.600000) count=3.999926
+                                    283 ;	genLeftShift
+                                    284 ;	genLeftShiftLiteral
+                                    285 ;	genlshTwo
+    00000035 AEr23r00         [ 4]  286 	ldx	(_set_tile_y_30000_129 + 1)
+    00000038 ADr22r00         [ 4]  287 	lda	_set_tile_y_30000_129
+    0000003B 86*00            [ 3]  288 	stx	*(REGTEMP+0)
+    0000003D 0A               [ 2]  289 	asl	a
+    0000003E 26*00            [ 5]  290 	rol	*(REGTEMP+0)
+    00000040 A6*00            [ 3]  291 	ldx	*(REGTEMP+0)
+                                    292 ;	Raw cost for generated ic 20 : (13, 21.000000) count=2.999938
+                                    293 ;	genPlus
+                                    294 ;	genPlusIncr
+    00000042 18               [ 2]  295 	clc
+    00000043 6Dr1Dr00         [ 4]  296 	adc	_set_tile_PARM_2
+    00000046 85*04            [ 3]  297 	sta	*_set_tile_sloc2_1_0
+    00000048 8A               [ 2]  298 	txa
+    00000049 6Dr1Er00         [ 4]  299 	adc	(_set_tile_PARM_2 + 1)
+    0000004C 85*05            [ 3]  300 	sta	*(_set_tile_sloc2_1_0 + 1)
+                                    301 ;	Raw cost for generated ic 21 : (12, 18.000000) count=2.999938
+                                    302 ;	genPointerGet
+    0000004E A0 00            [ 2]  303 	ldy	#0x00
+    00000050 B1*04            [ 6]  304 	lda	[*_set_tile_sloc2_1_0],y
+                                    305 ;	Raw cost for generated ic 22 : (4, 7.000000) count=2.999938
+                                    306 ;	genAssign
+                                    307 ;	genAssignLit
+                                    308 ;	genCopy
+    00000052 A2 00            [ 2]  309 	ldx	#0x00
+                                    310 ;	Raw cost for generated ic 23 : (2, 2.000000) count=2.999938
+                                    311 ;	genPointerGet
+    00000054 A8               [ 2]  312 	tay
+    00000055 B9r54r07         [ 5]  313 	lda	(_reverse_bits+0+0x0000),y
+                                    314 ;	Raw cost for generated ic 24 : (4, 6.000000) count=2.999938
+                                    315 ;	genGoto
+    00000058 4Cr78r00         [ 3]  316 	jmp	00109$
+                                    317 ;	Raw cost for generated ic 26 : (3, 3.000000) count=2.999938
+                                    318 ;	genLabel
+    0000005B                        319 00108$:
+                                    320 ;	Raw cost for generated ic 27 : (0, 0.000000) count=0.999975
+                                    321 ;	genLeftShift
+                                    322 ;	genLeftShiftLiteral
+                                    323 ;	genlshTwo
+    0000005B AEr23r00         [ 4]  324 	ldx	(_set_tile_y_30000_129 + 1)
+    0000005E ADr22r00         [ 4]  325 	lda	_set_tile_y_30000_129
+    00000061 86*00            [ 3]  326 	stx	*(REGTEMP+0)
+    00000063 0A               [ 2]  327 	asl	a
+    00000064 26*00            [ 5]  328 	rol	*(REGTEMP+0)
+    00000066 A6*00            [ 3]  329 	ldx	*(REGTEMP+0)
+                                    330 ;	Raw cost for generated ic 28 : (13, 21.000000) count=0.999975
+                                    331 ;	genPlus
+                                    332 ;	genPlusIncr
+    00000068 18               [ 2]  333 	clc
+    00000069 6Dr1Dr00         [ 4]  334 	adc	_set_tile_PARM_2
+    0000006C 85*04            [ 3]  335 	sta	*_set_tile_sloc2_1_0
+    0000006E 8A               [ 2]  336 	txa
+    0000006F 6Dr1Er00         [ 4]  337 	adc	(_set_tile_PARM_2 + 1)
+    00000072 85*05            [ 3]  338 	sta	*(_set_tile_sloc2_1_0 + 1)
+                                    339 ;	Raw cost for generated ic 29 : (12, 18.000000) count=0.999975
+                                    340 ;	genPointerGet
+    00000074 A0 00            [ 2]  341 	ldy	#0x00
+    00000076 B1*04            [ 6]  342 	lda	[*_set_tile_sloc2_1_0],y
+                                    343 ;	Raw cost for generated ic 30 : (4, 7.000000) count=0.999975
+                                    344 ;	genLabel
+    00000078                        345 00109$:
+                                    346 ;	Raw cost for generated ic 32 : (0, 0.000000) count=3.999913
+                                    347 ;	genPointerSet
+    00000078 85*00            [ 3]  348 	sta	*(REGTEMP+0)
+                                    349 ;	setupDPTR
+    0000007A 18               [ 2]  350 	clc
+    0000007B A5*02            [ 3]  351 	lda	*_set_tile_sloc1_1_0
+    0000007D 69r0B            [ 2]  352 	adc	#<(_flipped_data+0)
+    0000007F 85*00            [ 3]  353 	sta	*(DPTR+0)
+    00000081 A5*03            [ 3]  354 	lda	*(_set_tile_sloc1_1_0 + 1)
+    00000083 69s00            [ 2]  355 	adc	#>(_flipped_data+0)
+    00000085 85*01            [ 3]  356 	sta	*(DPTR+1)
+    00000087 A5*00            [ 3]  357 	lda	*(REGTEMP+0)
+    00000089 A0 00            [ 2]  358 	ldy	#0x00
+    0000008B 91*00            [ 6]  359 	sta	[DPTR],y
+                                    360 ;	Raw cost for generated ic 33 : (21, 32.000000) count=3.999913
+                                    361 ;	src/metasprites.c: 101: flipped_data[2*i+1] = flip_x ? reverse_bits[data[2*y+1]] : data[2*y+1];
+                                    362 ;	genCast
+                                    363 ;	genCopy
+    0000008D A5*00            [ 3]  364 	lda	*_set_tile_sloc0_1_0
+                                    365 ;	Raw cost for generated ic 35 : (2, 3.000000) count=3.999913
+                                    366 ;	genLeftShift
+                                    367 ;	genLeftShiftLiteral
+                                    368 ;	genlshOne
+    0000008F 0A               [ 2]  369 	asl	a
+    00000090 AA               [ 2]  370 	tax
+                                    371 ;	Raw cost for generated ic 36 : (2, 4.000000) count=3.999913
+                                    372 ;	genPlus
+                                    373 ;	genPlusIncr
+    00000091 E8               [ 2]  374 	inx
+                                    375 ;	Raw cost for generated ic 37 : (1, 2.000000) count=3.999913
+                                    376 ;	genCast
+                                    377 ;	genCopy
+                                    378 ;	Raw cost for generated ic 38 : (0, 0.000000) count=3.999913
+                                    379 ;	genAssign
+                                    380 ;	genAssignLit
+                                    381 ;	genCopy
+    00000092 84*05            [ 3]  382 	sty	*(_set_tile_sloc2_1_0 + 1)
+    00000094 86*04            [ 3]  383 	stx	*_set_tile_sloc2_1_0
+                                    384 ;	Raw cost for generated ic 39 : (4, 6.000000) count=3.999913
+                                    385 ;	genIfx
+    00000096 ADr1Fr00         [ 4]  386 	lda	_set_tile_PARM_3
+                                    387 ;	genIfxJump : z
+    00000099 F0 2A            [ 4]  388 	beq	00110$
+                                    389 ;	Raw cost for generated ic 40 : (8, 9.600000) count=3.999913
+                                    390 ;	genLeftShift
+                                    391 ;	genLeftShiftLiteral
+                                    392 ;	genlshTwo
+    0000009B AEr23r00         [ 4]  393 	ldx	(_set_tile_y_30000_129 + 1)
+    0000009E ADr22r00         [ 4]  394 	lda	_set_tile_y_30000_129
+    000000A1 86*00            [ 3]  395 	stx	*(REGTEMP+0)
+    000000A3 0A               [ 2]  396 	asl	a
+    000000A4 26*00            [ 5]  397 	rol	*(REGTEMP+0)
+    000000A6 A6*00            [ 3]  398 	ldx	*(REGTEMP+0)
+                                    399 ;	Raw cost for generated ic 42 : (13, 21.000000) count=2.999934
+                                    400 ;	genPlus
+                                    401 ;	genPlusIncr
+    000000A8 18               [ 2]  402 	clc
+    000000A9 69 01            [ 2]  403 	adc	#0x01
+    000000AB 90 01            [ 4]  404 	bcc	00149$
+    000000AD E8               [ 2]  405 	inx
+    000000AE                        406 00149$:
+                                    407 ;	Raw cost for generated ic 43 : (6, 8.600000) count=2.999934
+                                    408 ;	genPlus
+                                    409 ;	genPlusIncr
+    000000AE 18               [ 2]  410 	clc
+    000000AF 6Dr1Dr00         [ 4]  411 	adc	_set_tile_PARM_2
+    000000B2 85*02            [ 3]  412 	sta	*_set_tile_sloc1_1_0
+    000000B4 8A               [ 2]  413 	txa
+    000000B5 6Dr1Er00         [ 4]  414 	adc	(_set_tile_PARM_2 + 1)
+    000000B8 85*03            [ 3]  415 	sta	*(_set_tile_sloc1_1_0 + 1)
+                                    416 ;	Raw cost for generated ic 44 : (12, 18.000000) count=2.999934
+                                    417 ;	genPointerGet
+    000000BA B1*02            [ 6]  418 	lda	[*_set_tile_sloc1_1_0],y
+                                    419 ;	Raw cost for generated ic 45 : (2, 5.000000) count=2.999934
+                                    420 ;	genAssign
+                                    421 ;	genAssignLit
+                                    422 ;	genCopy
+    000000BC A2 00            [ 2]  423 	ldx	#0x00
+                                    424 ;	Raw cost for generated ic 46 : (2, 2.000000) count=2.999934
+                                    425 ;	genPointerGet
+    000000BE A8               [ 2]  426 	tay
+    000000BF B9r54r07         [ 5]  427 	lda	(_reverse_bits+0+0x0000),y
+                                    428 ;	Raw cost for generated ic 47 : (4, 6.000000) count=2.999934
+                                    429 ;	genGoto
+    000000C2 4CrE8r00         [ 3]  430 	jmp	00111$
+                                    431 ;	Raw cost for generated ic 49 : (3, 3.000000) count=2.999934
+                                    432 ;	genLabel
+    000000C5                        433 00110$:
+                                    434 ;	Raw cost for generated ic 50 : (0, 0.000000) count=0.999975
+                                    435 ;	genLeftShift
+                                    436 ;	genLeftShiftLiteral
+                                    437 ;	genlshTwo
+    000000C5 AEr23r00         [ 4]  438 	ldx	(_set_tile_y_30000_129 + 1)
+    000000C8 ADr22r00         [ 4]  439 	lda	_set_tile_y_30000_129
+    000000CB 86*00            [ 3]  440 	stx	*(REGTEMP+0)
+    000000CD 0A               [ 2]  441 	asl	a
+    000000CE 26*00            [ 5]  442 	rol	*(REGTEMP+0)
+    000000D0 A6*00            [ 3]  443 	ldx	*(REGTEMP+0)
+                                    444 ;	Raw cost for generated ic 51 : (13, 21.000000) count=0.999975
+                                    445 ;	genPlus
+                                    446 ;	genPlusIncr
+    000000D2 18               [ 2]  447 	clc
+    000000D3 69 01            [ 2]  448 	adc	#0x01
+    000000D5 90 01            [ 4]  449 	bcc	00150$
+    000000D7 E8               [ 2]  450 	inx
+    000000D8                        451 00150$:
+                                    452 ;	Raw cost for generated ic 52 : (6, 8.600000) count=0.999975
+                                    453 ;	genPlus
+                                    454 ;	genPlusIncr
+    000000D8 18               [ 2]  455 	clc
+    000000D9 6Dr1Dr00         [ 4]  456 	adc	_set_tile_PARM_2
+    000000DC 85*02            [ 3]  457 	sta	*_set_tile_sloc1_1_0
+    000000DE 8A               [ 2]  458 	txa
+    000000DF 6Dr1Er00         [ 4]  459 	adc	(_set_tile_PARM_2 + 1)
+    000000E2 85*03            [ 3]  460 	sta	*(_set_tile_sloc1_1_0 + 1)
+                                    461 ;	Raw cost for generated ic 53 : (12, 18.000000) count=0.999975
+                                    462 ;	genPointerGet
+    000000E4 A0 00            [ 2]  463 	ldy	#0x00
+    000000E6 B1*02            [ 6]  464 	lda	[*_set_tile_sloc1_1_0],y
+                                    465 ;	Raw cost for generated ic 54 : (4, 7.000000) count=0.999975
+                                    466 ;	genLabel
+    000000E8                        467 00111$:
+                                    468 ;	Raw cost for generated ic 56 : (0, 0.000000) count=3.999909
+                                    469 ;	genPointerSet
+    000000E8 85*00            [ 3]  470 	sta	*(REGTEMP+0)
+                                    471 ;	setupDPTR
+    000000EA 18               [ 2]  472 	clc
+    000000EB A5*04            [ 3]  473 	lda	*_set_tile_sloc2_1_0
+    000000ED 69r0B            [ 2]  474 	adc	#<(_flipped_data+0)
+    000000EF 85*00            [ 3]  475 	sta	*(DPTR+0)
+    000000F1 A5*05            [ 3]  476 	lda	*(_set_tile_sloc2_1_0 + 1)
+    000000F3 69s00            [ 2]  477 	adc	#>(_flipped_data+0)
+    000000F5 85*01            [ 3]  478 	sta	*(DPTR+1)
+    000000F7 A5*00            [ 3]  479 	lda	*(REGTEMP+0)
+    000000F9 A0 00            [ 2]  480 	ldy	#0x00
+    000000FB 91*00            [ 6]  481 	sta	[DPTR],y
+                                    482 ;	Raw cost for generated ic 57 : (21, 32.000000) count=3.999909
+                                    483 ;	src/metasprites.c: 97: for(i = 0; i < TILE_HEIGHT; i++)
+                                    484 ;	genPlus
+                                    485 ;	genPlusIncr
+    000000FD E6*00            [ 5]  486 	inc	*_set_tile_sloc0_1_0
+    000000FF D0 02            [ 4]  487 	bne	00151$
+    00000101 E6*01            [ 5]  488 	inc	*(_set_tile_sloc0_1_0 + 1)
+    00000103                        489 00151$:
+                                    490 ;	Raw cost for generated ic 60 : (6, 12.600000) count=3.999909
+                                    491 ;	genCmp
+    00000103 A5*00            [ 3]  492 	lda	*_set_tile_sloc0_1_0
+    00000105 38               [ 2]  493 	sec
+    00000106 E9 08            [ 2]  494 	sbc	#0x08
+    00000108 A5*01            [ 3]  495 	lda	*(_set_tile_sloc0_1_0 + 1)
+    0000010A E9 00            [ 2]  496 	sbc	#0x00
+    0000010C B0 03            [ 4]  497 	bcs	00152$
+    0000010E 4Cr09r00         [ 3]  498 	jmp	00102$
+    00000111                        499 00152$:
+                                    500 ;	Raw cost for generated ic 62 : (14, 17.600000) count=3.999909
+                                    501 ;	skipping generated iCode
+                                    502 ;	Raw cost for generated ic 63 : (0, 0.000000) count=3.999909
+                                    503 ;	src/metasprites.c: 103: set_sprite_data(tile_idx, 1, flipped_data);
+                                    504 ;	genCast
+                                    505 ;	genCopy
+    00000111 A9s00            [ 2]  506 	lda	#>_flipped_data
+    00000113 8Dr01r00         [ 4]  507 	sta	(_set_sprite_data_PARM_3 + 1)
+    00000116 A9r0B            [ 2]  508 	lda	#_flipped_data
+    00000118 8Dr00r00         [ 4]  509 	sta	_set_sprite_data_PARM_3
+                                    510 ;	Raw cost for generated ic 67 : (10, 12.000000) count=0.999975
+                                    511 ;	Raw cost for generated ic 68 : (0, 0.000000) count=0.999975
+                                    512 ;	Raw cost for generated ic 69 : (0, 0.000000) count=0.999975
+                                    513 ;	genCall
+                                    514 ;	genSend
+    0000011B ADr21r00         [ 4]  515 	lda	_set_tile_tile_idx_10000_126
+    0000011E A2 01            [ 2]  516 	ldx	#0x01
+                                    517 ;	Raw cost for generated ic 71 : (8, 12.000000) count=0.999975
+                                    518 ;	genLabel
+                                    519 ;	Raw cost for generated ic 72 : (0, 0.000000) count=0.999975
+                                    520 ;	src/metasprites.c: 104: }
+                                    521 ;	genEndFunction
+    00000120 4Cr00r00         [ 3]  522 	jmp	_set_sprite_data
+                                    523 ;	Raw cost for generated ic 73 : (1, 6.000000) count=0.999975
+                                    524 ;------------------------------------------------------------
+                                    525 ;Allocation info for local variables in function 'get_tile_offset'
+                                    526 ;------------------------------------------------------------
+                                    527 ;flipy         Allocated to registers 
+                                    528 ;flipx         Allocated to registers 
+                                    529 ;offset        Allocated to registers 
+                                    530 ;------------------------------------------------------------
+                                    531 ;	src/metasprites.c: 106: uint8_t get_tile_offset(uint8_t flipx, uint8_t flipy)
+                                    532 ;	genLabel
+                                    533 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    534 ;	-----------------------------------------
+                                    535 ;	 function get_tile_offset
+                                    536 ;	-----------------------------------------
+                                    537 ;	Register assignment is optimal.
+                                    538 ;	Stack space usage: 0 bytes.
+    00000123                        539 _get_tile_offset:
+                                    540 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    541 ;	src/metasprites.c: 117: return offset;
+                                    542 ;	genRet
+    00000123 A9 00            [ 2]  543 	lda	#0x00
+                                    544 ;	Raw cost for generated ic 5 : (2, 2.000000) count=1.000000
+                                    545 ;	genLabel
+                                    546 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    547 ;	src/metasprites.c: 118: }
+                                    548 ;	genEndFunction
+    00000125 60               [ 6]  549 	rts
+                                    550 ;	Raw cost for generated ic 7 : (1, 6.000000) count=1.000000
+                                    551 ;------------------------------------------------------------
+                                    552 ;Allocation info for local variables in function 'load_and_duplicate_sprite_tile_data'
+                                    553 ;------------------------------------------------------------
+                                    554 ;sloc0         Allocated with name '_load_and_duplicate_sprite_tile_data_sloc0_1_0'
+                                    555 ;sloc1         Allocated with name '_load_and_duplicate_sprite_tile_data_sloc1_1_0'
+                                    556 ;i             Allocated to registers 
+                                    557 ;------------------------------------------------------------
+                                    558 ;	src/metasprites.c: 123: void load_and_duplicate_sprite_tile_data(void)
+                                    559 ;	genLabel
+                                    560 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    561 ;	-----------------------------------------
+                                    562 ;	 function load_and_duplicate_sprite_tile_data
+                                    563 ;	-----------------------------------------
+                                    564 ;	Register assignment is optimal.
+                                    565 ;	Stack space usage: 0 bytes.
+    00000126                        566 _load_and_duplicate_sprite_tile_data:
+                                    567 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    568 ;	src/metasprites.c: 126: num_tiles = sizeof(sprite_tiles) >> 4;
+                                    569 ;	genAssign
+                                    570 ;	genAssignLit
+    00000126 A2 30            [ 2]  571 	ldx	#0x30
+    00000128 8Er1Br00         [ 4]  572 	stx	_num_tiles
+    0000012B A2 00            [ 2]  573 	ldx	#0x00
+    0000012D 8Er1Cr00         [ 4]  574 	stx	(_num_tiles + 1)
+                                    575 ;	Raw cost for generated ic 3 : (10, 12.000000) count=1.000000
+                                    576 ;	src/metasprites.c: 127: for(i = 0; i < num_tiles; i++)
+                                    577 ;	skipping iCode since result will be rematerialized
+                                    578 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    579 ;	genAssign
+                                    580 ;	genAssignLit
+    00000130 86*00            [ 3]  581 	stx	*_load_and_duplicate_sprite_tile_data_sloc0_1_0
+    00000132 86*01            [ 3]  582 	stx	*(_load_and_duplicate_sprite_tile_data_sloc0_1_0 + 1)
+                                    583 ;	Raw cost for generated ic 33 : (4, 6.000000) count=1.000000
+                                    584 ;	genLabel
+    00000134                        585 00103$:
+                                    586 ;	Raw cost for generated ic 5 : (0, 0.000000) count=3.999997
+                                    587 ;	genCmp
+    00000134 A5*00            [ 3]  588 	lda	*_load_and_duplicate_sprite_tile_data_sloc0_1_0
+    00000136 38               [ 2]  589 	sec
+    00000137 EDr1Br00         [ 4]  590 	sbc	_num_tiles
+    0000013A A5*01            [ 3]  591 	lda	*(_load_and_duplicate_sprite_tile_data_sloc0_1_0 + 1)
+    0000013C EDr1Cr00         [ 4]  592 	sbc	(_num_tiles + 1)
+    0000013F B0 46            [ 4]  593 	bcs	00105$
+                                    594 ;	Raw cost for generated ic 6 : (16, 21.600000) count=3.999997
+                                    595 ;	skipping generated iCode
+                                    596 ;	Raw cost for generated ic 7 : (0, 0.000000) count=3.999997
+                                    597 ;	src/metasprites.c: 129: set_tile(i + get_tile_offset(0, 0), sprite_tiles + (i << 4), 0, 0);
+                                    598 ;	genCast
+                                    599 ;	genCopy
+    00000141 A5*00            [ 3]  600 	lda	*_load_and_duplicate_sprite_tile_data_sloc0_1_0
+    00000143 85*02            [ 3]  601 	sta	*_load_and_duplicate_sprite_tile_data_sloc1_1_0
+                                    602 ;	Raw cost for generated ic 10 : (4, 6.000000) count=2.999997
+                                    603 ;	Raw cost for generated ic 11 : (0, 0.000000) count=2.999997
+                                    604 ;	Raw cost for generated ic 12 : (0, 0.000000) count=2.999997
+                                    605 ;	genCall
+                                    606 ;	genSend
+    00000145 A9 00            [ 2]  607 	lda	#0x00
+    00000147 AA               [ 2]  608 	tax
+    00000148 20r23r01         [ 6]  609 	jsr	_get_tile_offset
+                                    610 ;	assignResultValue
+                                    611 ;	Raw cost for generated ic 13 : (6, 10.000000) count=2.999997
+                                    612 ;	genPlus
+                                    613 ;	genPlusIncr
+    0000014B 18               [ 2]  614 	clc
+    0000014C 65*02            [ 3]  615 	adc	*_load_and_duplicate_sprite_tile_data_sloc1_1_0
+    0000014E A8               [ 2]  616 	tay
+                                    617 ;	Raw cost for generated ic 14 : (4, 7.000000) count=2.999997
+                                    618 ;	genLeftShift
+                                    619 ;	genLeftShiftLiteral
+                                    620 ;	genlshTwo
+    0000014F A6*01            [ 3]  621 	ldx	*(_load_and_duplicate_sprite_tile_data_sloc0_1_0 + 1)
+    00000151 A5*00            [ 3]  622 	lda	*_load_and_duplicate_sprite_tile_data_sloc0_1_0
+    00000153 86*00            [ 3]  623 	stx	*(REGTEMP+0)
+    00000155 0A               [ 2]  624 	asl	a
+    00000156 26*00            [ 5]  625 	rol	*(REGTEMP+0)
+    00000158 0A               [ 2]  626 	asl	a
+    00000159 26*00            [ 5]  627 	rol	*(REGTEMP+0)
+    0000015B 0A               [ 2]  628 	asl	a
+    0000015C 26*00            [ 5]  629 	rol	*(REGTEMP+0)
+    0000015E 0A               [ 2]  630 	asl	a
+    0000015F 26*00            [ 5]  631 	rol	*(REGTEMP+0)
+    00000161 A6*00            [ 3]  632 	ldx	*(REGTEMP+0)
+                                    633 ;	Raw cost for generated ic 16 : (20, 40.000000) count=2.999997
+                                    634 ;	genPlus
+                                    635 ;	genPlusIncr
+    00000163 18               [ 2]  636 	clc
+    00000164 69r00            [ 2]  637 	adc	#_sprite_tiles
+    00000166 48               [ 3]  638 	pha
+    00000167 8A               [ 2]  639 	txa
+    00000168 69s00            [ 2]  640 	adc	#>_sprite_tiles
+    0000016A AA               [ 2]  641 	tax
+    0000016B 68               [ 4]  642 	pla
+                                    643 ;	Raw cost for generated ic 17 : (9, 17.000000) count=2.999997
+                                    644 ;	genCast
+                                    645 ;	genCopy
+    0000016C 8Dr1Dr00         [ 4]  646 	sta	_set_tile_PARM_2
+    0000016F 8Er1Er00         [ 4]  647 	stx	(_set_tile_PARM_2 + 1)
+                                    648 ;	Raw cost for generated ic 18 : (6, 8.000000) count=2.999997
+                                    649 ;	genAssign
+                                    650 ;	genAssignLit
+    00000172 A2 00            [ 2]  651 	ldx	#0x00
+    00000174 8Er1Fr00         [ 4]  652 	stx	_set_tile_PARM_3
+                                    653 ;	Raw cost for generated ic 21 : (5, 6.000000) count=2.999997
+                                    654 ;	genAssign
+                                    655 ;	genAssignLit
+    00000177 8Er20r00         [ 4]  656 	stx	_set_tile_PARM_4
+                                    657 ;	Raw cost for generated ic 22 : (3, 4.000000) count=2.999997
+                                    658 ;	Raw cost for generated ic 19 : (0, 0.000000) count=2.999997
+                                    659 ;	genCall
+                                    660 ;	genSend
+    0000017A 98               [ 2]  661 	tya
+    0000017B 20r00r00         [ 6]  662 	jsr	_set_tile
+                                    663 ;	Raw cost for generated ic 23 : (4, 8.000000) count=2.999997
+                                    664 ;	src/metasprites.c: 127: for(i = 0; i < num_tiles; i++)
+                                    665 ;	genPlus
+                                    666 ;	genPlusIncr
+    0000017E E6*00            [ 5]  667 	inc	*_load_and_duplicate_sprite_tile_data_sloc0_1_0
+    00000180 D0 B2            [ 4]  668 	bne	00103$
+    00000182 E6*01            [ 5]  669 	inc	*(_load_and_duplicate_sprite_tile_data_sloc0_1_0 + 1)
+                                    670 ;	Raw cost for generated ic 26 : (6, 12.600000) count=2.999997
+                                    671 ;	genGoto
+    00000184 4Cr34r01         [ 3]  672 	jmp	00103$
+                                    673 ;	Raw cost for generated ic 28 : (3, 3.000000) count=2.999997
+                                    674 ;	genLabel
+    00000187                        675 00105$:
+                                    676 ;	Raw cost for generated ic 30 : (0, 0.000000) count=0.999999
+                                    677 ;	src/metasprites.c: 140: }
+                                    678 ;	genEndFunction
+    00000187 60               [ 6]  679 	rts
+                                    680 ;	Raw cost for generated ic 31 : (1, 6.000000) count=0.999999
+                                    681 ;------------------------------------------------------------
+                                    682 ;Allocation info for local variables in function 'main'
+                                    683 ;------------------------------------------------------------
+                                    684 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                    685 ;sloc1         Allocated with name '_main_sloc1_1_0'
+                                    686 ;hiwater       Allocated to registers a 
+                                    687 ;subpal        Allocated to registers y 
+                                    688 ;__500010033   Allocated to registers 
+                                    689 ;__500010025   Allocated to registers 
+                                    690 ;__500010017   Allocated to registers a 
+                                    691 ;__500010009   Allocated to registers a 
+                                    692 ;__500010010   Allocated to registers a x 
+                                    693 ;__500010011   Allocated to registers 
+                                    694 ;__500010012   Allocated with name '_main___500010012_50001_170'
+                                    695 ;__500010013   Allocated to registers 
+                                    696 ;__500010014   Allocated to registers 
+                                    697 ;__500010015   Allocated to registers 
+                                    698 ;metasprite    Allocated to registers 
+                                    699 ;base_tile     Allocated to registers 
+                                    700 ;base_prop     Allocated to registers 
+                                    701 ;base_sprite   Allocated to registers 
+                                    702 ;x             Allocated with name '_main_x_60001_171'
+                                    703 ;y             Allocated with name '_main_y_60001_171'
+                                    704 ;__500010018   Allocated to registers a x 
+                                    705 ;__500010019   Allocated to registers 
+                                    706 ;__500010020   Allocated with name '_main___500010020_50001_173'
+                                    707 ;__500010021   Allocated to registers 
+                                    708 ;__500010022   Allocated with name '_main___500010022_50001_173'
+                                    709 ;__500010023   Allocated to registers 
+                                    710 ;metasprite    Allocated to registers 
+                                    711 ;base_tile     Allocated to registers 
+                                    712 ;base_prop     Allocated to registers 
+                                    713 ;base_sprite   Allocated to registers 
+                                    714 ;x             Allocated to registers 
+                                    715 ;y             Allocated with name '_main_y_60001_174'
+                                    716 ;__500010026   Allocated to registers 
+                                    717 ;__500010027   Allocated to registers 
+                                    718 ;__500010028   Allocated with name '_main___500010028_50001_176'
+                                    719 ;__500010029   Allocated to registers 
+                                    720 ;__500010030   Allocated with name '_main___500010030_50001_176'
+                                    721 ;__500010031   Allocated with name '_main___500010031_50001_176'
+                                    722 ;metasprite    Allocated to registers 
+                                    723 ;base_tile     Allocated to registers 
+                                    724 ;base_prop     Allocated to registers 
+                                    725 ;base_sprite   Allocated to registers 
+                                    726 ;x             Allocated to registers 
+                                    727 ;y             Allocated to registers 
+                                    728 ;__500010034   Allocated to registers 
+                                    729 ;__500010035   Allocated to registers 
+                                    730 ;__500010036   Allocated with name '_main___500010036_50001_179'
+                                    731 ;__500010037   Allocated to registers 
+                                    732 ;__500010038   Allocated with name '_main___500010038_50001_179'
+                                    733 ;__500010039   Allocated with name '_main___500010039_50001_179'
+                                    734 ;metasprite    Allocated to registers 
+                                    735 ;base_tile     Allocated to registers 
+                                    736 ;base_prop     Allocated to registers 
+                                    737 ;base_sprite   Allocated to registers 
+                                    738 ;x             Allocated to registers 
+                                    739 ;y             Allocated to registers 
+                                    740 ;------------------------------------------------------------
+                                    741 ;	src/metasprites.c: 160: void main(void) {
+                                    742 ;	genLabel
+                                    743 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    744 ;	-----------------------------------------
+                                    745 ;	 function main
+                                    746 ;	-----------------------------------------
+                                    747 ;	Register assignment is optimal.
+                                    748 ;	Stack space usage: 0 bytes.
+    00000188                        749 _main:
+                                    750 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    751 ;	src/metasprites.c: 161: DISPLAY_OFF;
+                                    752 ;	genCall
+    00000188 20r00r00         [ 6]  753 	jsr	_display_off
+                                    754 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                    755 ;	src/metasprites.c: 170: set_sprite_palette(0, 1, gray_pal);
+                                    756 ;	skipping iCode since result will be rematerialized
+                                    757 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    758 ;	genCast
+                                    759 ;	genCopy
+    0000018B A9s08            [ 2]  760 	lda	#>_gray_pal
+    0000018D 8Dr01r00         [ 4]  761 	sta	(_set_sprite_palette_PARM_3 + 1)
+    00000190 A9r54            [ 2]  762 	lda	#_gray_pal
+    00000192 8Dr00r00         [ 4]  763 	sta	_set_sprite_palette_PARM_3
+                                    764 ;	Raw cost for generated ic 4 : (10, 12.000000) count=1.000000
+                                    765 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    766 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    767 ;	genCall
+                                    768 ;	genSend
+    00000195 A9 00            [ 2]  769 	lda	#0x00
+    00000197 A2 01            [ 2]  770 	ldx	#0x01
+    00000199 20r00r00         [ 6]  771 	jsr	_set_sprite_palette
+                                    772 ;	Raw cost for generated ic 8 : (7, 10.000000) count=1.000000
+                                    773 ;	src/metasprites.c: 171: set_sprite_palette(1, 1, pink_pal);
+                                    774 ;	skipping iCode since result will be rematerialized
+                                    775 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    776 ;	genCast
+                                    777 ;	genCopy
+    0000019C A9s08            [ 2]  778 	lda	#>_pink_pal
+    0000019E 8Dr01r00         [ 4]  779 	sta	(_set_sprite_palette_PARM_3 + 1)
+    000001A1 A9r58            [ 2]  780 	lda	#_pink_pal
+    000001A3 8Dr00r00         [ 4]  781 	sta	_set_sprite_palette_PARM_3
+                                    782 ;	Raw cost for generated ic 10 : (10, 12.000000) count=1.000000
+                                    783 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    784 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    785 ;	genCall
+                                    786 ;	genSend
+    000001A6 A9 01            [ 2]  787 	lda	#0x01
+    000001A8 AA               [ 2]  788 	tax
+    000001A9 20r00r00         [ 6]  789 	jsr	_set_sprite_palette
+                                    790 ;	Raw cost for generated ic 14 : (6, 10.000000) count=1.000000
+                                    791 ;	src/metasprites.c: 172: set_sprite_palette(2, 1, cyan_pal);
+                                    792 ;	skipping iCode since result will be rematerialized
+                                    793 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    794 ;	genCast
+                                    795 ;	genCopy
+    000001AC A9s08            [ 2]  796 	lda	#>_cyan_pal
+    000001AE 8Dr01r00         [ 4]  797 	sta	(_set_sprite_palette_PARM_3 + 1)
+    000001B1 A9r5C            [ 2]  798 	lda	#_cyan_pal
+    000001B3 8Dr00r00         [ 4]  799 	sta	_set_sprite_palette_PARM_3
+                                    800 ;	Raw cost for generated ic 16 : (10, 12.000000) count=1.000000
+                                    801 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    802 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    803 ;	genCall
+                                    804 ;	genSend
+    000001B6 A9 02            [ 2]  805 	lda	#0x02
+    000001B8 A2 01            [ 2]  806 	ldx	#0x01
+    000001BA 20r00r00         [ 6]  807 	jsr	_set_sprite_palette
+                                    808 ;	Raw cost for generated ic 20 : (7, 10.000000) count=1.000000
+                                    809 ;	src/metasprites.c: 173: set_sprite_palette(3, 1, green_pal);
+                                    810 ;	skipping iCode since result will be rematerialized
+                                    811 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    812 ;	genCast
+                                    813 ;	genCopy
+    000001BD A9s08            [ 2]  814 	lda	#>_green_pal
+    000001BF 8Dr01r00         [ 4]  815 	sta	(_set_sprite_palette_PARM_3 + 1)
+    000001C2 A9r60            [ 2]  816 	lda	#_green_pal
+    000001C4 8Dr00r00         [ 4]  817 	sta	_set_sprite_palette_PARM_3
+                                    818 ;	Raw cost for generated ic 22 : (10, 12.000000) count=1.000000
+                                    819 ;	Raw cost for generated ic 23 : (0, 0.000000) count=1.000000
+                                    820 ;	Raw cost for generated ic 24 : (0, 0.000000) count=1.000000
+                                    821 ;	genCall
+                                    822 ;	genSend
+    000001C7 A9 03            [ 2]  823 	lda	#0x03
+    000001C9 A2 01            [ 2]  824 	ldx	#0x01
+    000001CB 20r00r00         [ 6]  825 	jsr	_set_sprite_palette
+                                    826 ;	Raw cost for generated ic 26 : (7, 10.000000) count=1.000000
+                                    827 ;	src/metasprites.c: 177: fill_bkg_rect(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, 0);
+                                    828 ;	genAssign
+                                    829 ;	genAssignLit
+    000001CE A2 20            [ 2]  830 	ldx	#0x20
+    000001D0 8Er00r00         [ 4]  831 	stx	_fill_bkg_rect_PARM_3
+                                    832 ;	Raw cost for generated ic 29 : (5, 6.000000) count=1.000000
+                                    833 ;	genAssign
+                                    834 ;	genAssignLit
+    000001D3 A2 1E            [ 2]  835 	ldx	#0x1e
+    000001D5 8Er00r00         [ 4]  836 	stx	_fill_bkg_rect_PARM_4
+                                    837 ;	Raw cost for generated ic 30 : (5, 6.000000) count=1.000000
+                                    838 ;	genAssign
+                                    839 ;	genAssignLit
+    000001D8 A2 00            [ 2]  840 	ldx	#0x00
+    000001DA 8Er00r00         [ 4]  841 	stx	_fill_bkg_rect_PARM_5
+                                    842 ;	Raw cost for generated ic 31 : (5, 6.000000) count=1.000000
+                                    843 ;	Raw cost for generated ic 27 : (0, 0.000000) count=1.000000
+                                    844 ;	Raw cost for generated ic 28 : (0, 0.000000) count=1.000000
+                                    845 ;	genCall
+                                    846 ;	genSend
+    000001DD 8A               [ 2]  847 	txa
+    000001DE 20r00r00         [ 6]  848 	jsr	_fill_bkg_rect
+                                    849 ;	Raw cost for generated ic 32 : (4, 8.000000) count=1.000000
+                                    850 ;	src/metasprites.c: 180: set_bkg_data(0, 1, pattern);
+                                    851 ;	skipping iCode since result will be rematerialized
+                                    852 ;	Raw cost for generated ic 33 : (0, 0.000000) count=1.000000
+                                    853 ;	genCast
+                                    854 ;	genCopy
+    000001E1 A9s07            [ 2]  855 	lda	#>_pattern
+    000001E3 8Dr01r00         [ 4]  856 	sta	(_set_bkg_data_PARM_3 + 1)
+    000001E6 A9r44            [ 2]  857 	lda	#_pattern
+    000001E8 8Dr00r00         [ 4]  858 	sta	_set_bkg_data_PARM_3
+                                    859 ;	Raw cost for generated ic 34 : (10, 12.000000) count=1.000000
+                                    860 ;	Raw cost for generated ic 35 : (0, 0.000000) count=1.000000
+                                    861 ;	Raw cost for generated ic 36 : (0, 0.000000) count=1.000000
+                                    862 ;	genCall
+                                    863 ;	genSend
+    000001EB A9 00            [ 2]  864 	lda	#0x00
+    000001ED A2 01            [ 2]  865 	ldx	#0x01
+    000001EF 20r00r00         [ 6]  866 	jsr	_set_bkg_data
+                                    867 ;	Raw cost for generated ic 38 : (7, 10.000000) count=1.000000
+                                    868 ;	src/metasprites.c: 183: load_and_duplicate_sprite_tile_data();
+                                    869 ;	genCall
+    000001F2 20r26r01         [ 6]  870 	jsr	_load_and_duplicate_sprite_tile_data
+                                    871 ;	Raw cost for generated ic 39 : (3, 6.000000) count=1.000000
+                                    872 ;	src/metasprites.c: 186: SHOW_BKG; SHOW_SPRITES;
+                                    873 ;	genOr
+    000001F5 ADr00r00         [ 4]  874 	lda	_shadow_PPUMASK
+    000001F8 09 08            [ 2]  875 	ora	#0x08
+    000001FA 8Dr00r00         [ 4]  876 	sta	_shadow_PPUMASK
+                                    877 ;	Raw cost for generated ic 40 : (8, 10.000000) count=1.000000
+                                    878 ;	genOr
+    000001FD ADr00r00         [ 4]  879 	lda	_shadow_PPUMASK
+    00000200 09 10            [ 2]  880 	ora	#0x10
+    00000202 8Dr00r00         [ 4]  881 	sta	_shadow_PPUMASK
+                                    882 ;	Raw cost for generated ic 42 : (8, 10.000000) count=1.000000
+                                    883 ;	src/metasprites.c: 192: SPRITES_8x8;
+                                    884 ;	genAnd
+    00000205 ADr00r00         [ 4]  885 	lda	_shadow_PPUCTRL
+    00000208 29 DF            [ 2]  886 	and	#0xdf
+    0000020A 8Dr00r00         [ 4]  887 	sta	_shadow_PPUCTRL
+                                    888 ;	Raw cost for generated ic 44 : (8, 10.000000) count=1.000000
+                                    889 ;	src/metasprites.c: 194: DISPLAY_ON;
+                                    890 ;	genCall
+    0000020D 20r00r00         [ 6]  891 	jsr	_display_on
+                                    892 ;	Raw cost for generated ic 46 : (3, 6.000000) count=1.000000
+                                    893 ;	src/metasprites.c: 197: PosX = (DEVICE_SCREEN_PX_WIDTH / 2) << 4;
+                                    894 ;	genAssign
+                                    895 ;	genAssignLit
+    00000210 A2 00            [ 2]  896 	ldx	#0x00
+    00000212 8Er00r00         [ 4]  897 	stx	_PosX
+    00000215 A2 08            [ 2]  898 	ldx	#0x08
+    00000217 8Er01r00         [ 4]  899 	stx	(_PosX + 1)
+                                    900 ;	Raw cost for generated ic 48 : (10, 12.000000) count=1.000000
+                                    901 ;	src/metasprites.c: 198: PosY = (DEVICE_SCREEN_PX_HEIGHT / 2) << 4;
+                                    902 ;	genAssign
+                                    903 ;	genAssignLit
+    0000021A A2 80            [ 2]  904 	ldx	#0x80
+    0000021C 8Er02r00         [ 4]  905 	stx	_PosY
+    0000021F A2 07            [ 2]  906 	ldx	#0x07
+    00000221 8Er03r00         [ 4]  907 	stx	(_PosY + 1)
+                                    908 ;	Raw cost for generated ic 50 : (10, 12.000000) count=1.000000
+                                    909 ;	src/metasprites.c: 199: SpdX = SpdY = 0;
+                                    910 ;	genAssign
+                                    911 ;	genAssignLit
+    00000224 A2 00            [ 2]  912 	ldx	#0x00
+    00000226 8Er06r00         [ 4]  913 	stx	_SpdY
+    00000229 8Er07r00         [ 4]  914 	stx	(_SpdY + 1)
+                                    915 ;	Raw cost for generated ic 52 : (8, 10.000000) count=1.000000
+                                    916 ;	genAssign
+                                    917 ;	genAssignLit
+    0000022C 8Er04r00         [ 4]  918 	stx	_SpdX
+    0000022F 8Er05r00         [ 4]  919 	stx	(_SpdX + 1)
+                                    920 ;	Raw cost for generated ic 54 : (6, 8.000000) count=1.000000
+                                    921 ;	src/metasprites.c: 201: idx = 0; rot = 0;
+                                    922 ;	genAssign
+                                    923 ;	genAssignLit
+    00000232 8Er09r00         [ 4]  924 	stx	_idx
+                                    925 ;	Raw cost for generated ic 56 : (3, 5.000000) count=1.000000
+                                    926 ;	genAssign
+                                    927 ;	genAssignLit
+    00000235 8Er0Ar00         [ 4]  928 	stx	_rot
+                                    929 ;	Raw cost for generated ic 58 : (3, 4.000000) count=1.000000
+                                    930 ;	src/metasprites.c: 203: while(TRUE) {        
+                                    931 ;	genLabel
+    00000238                        932 00145$:
+                                    933 ;	Raw cost for generated ic 61 : (0, 0.000000) count=72.000000
+                                    934 ;	src/metasprites.c: 205: KEY_INPUT;
+                                    935 ;	genAssign
+                                    936 ;	genAssignLit
+                                    937 ;	genCopy
+    00000238 ADr00r00         [ 4]  938 	lda	_joyp
+    0000023B 8Dr01r00         [ 4]  939 	sta	_old_joyp
+                                    940 ;	Raw cost for generated ic 62 : (6, 8.000000) count=72.000000
+                                    941 ;	genCall
+    0000023E 20r00r00         [ 6]  942 	jsr	_joypad
+                                    943 ;	assignResultValue
+    00000241 AA               [ 2]  944 	tax
+                                    945 ;	Raw cost for generated ic 64 : (4, 8.000000) count=72.000000
+                                    946 ;	genAssign
+                                    947 ;	genAssignLit
+                                    948 ;	genCopy
+    00000242 8Er00r00         [ 4]  949 	stx	_joyp
+                                    950 ;	Raw cost for generated ic 66 : (3, 4.000000) count=72.000000
+                                    951 ;	src/metasprites.c: 207: PosF = 0;
+                                    952 ;	genAssign
+                                    953 ;	genAssignLit
+    00000245 A0 00            [ 2]  954 	ldy	#0x00
+    00000247 8Cr08r00         [ 4]  955 	sty	_PosF
+                                    956 ;	Raw cost for generated ic 68 : (5, 6.000000) count=72.000000
+                                    957 ;	src/metasprites.c: 209: if (KEY_DOWN(J_UP)) {
+                                    958 ;	genAnd
+    0000024A 8A               [ 2]  959 	txa
+    0000024B 29 08            [ 2]  960 	and	#0x08
+                                    961 ;	genIfxJump : z
+    0000024D F0 3A            [ 4]  962 	beq	00108$
+                                    963 ;	Raw cost for generated ic 70 : (8, 9.600000) count=72.000000
+                                    964 ;	skipping generated iCode
+                                    965 ;	Raw cost for generated ic 71 : (0, 0.000000) count=72.000000
+                                    966 ;	src/metasprites.c: 210: SpdY -= 2;
+                                    967 ;	genCast
+                                    968 ;	genCopy
+    0000024F AEr07r00         [ 4]  969 	ldx	(_SpdY + 1)
+    00000252 ADr06r00         [ 4]  970 	lda	_SpdY
+                                    971 ;	Raw cost for generated ic 74 : (6, 8.000000) count=54.000000
+                                    972 ;	genMinus
+                                    973 ;	genMinusDec
+    00000255 38               [ 2]  974 	sec
+    00000256 E9 02            [ 2]  975 	sbc	#0x02
+    00000258 B0 01            [ 4]  976 	bcs	00297$
+    0000025A CA               [ 2]  977 	dex
+    0000025B                        978 00297$:
+                                    979 ;	Raw cost for generated ic 75 : (6, 8.600000) count=54.000000
+                                    980 ;	genCast
+                                    981 ;	genCopy
+    0000025B 8Dr06r00         [ 4]  982 	sta	_SpdY
+    0000025E 8Er07r00         [ 4]  983 	stx	(_SpdY + 1)
+                                    984 ;	Raw cost for generated ic 76 : (6, 8.000000) count=54.000000
+                                    985 ;	src/metasprites.c: 211: if (SpdY < -32) SpdY = -32;
+                                    986 ;	genCmp
+    00000261 ADr06r00         [ 4]  987 	lda	_SpdY
+    00000264 38               [ 2]  988 	sec
+    00000265 E9 E0            [ 2]  989 	sbc	#0xe0
+    00000267 ADr07r00         [ 4]  990 	lda	(_SpdY + 1)
+    0000026A E9 FF            [ 2]  991 	sbc	#0xff
+    0000026C 50 04            [ 4]  992 	bvc	00299$
+    0000026E 10 04            [ 4]  993 	bpl	00298$
+    00000270 30 0C            [ 4]  994 	bmi	00102$
+    00000272                        995 00299$:
+    00000272 10 0A            [ 4]  996 	bpl	00102$
+    00000274                        997 00298$:
+                                    998 ;	Raw cost for generated ic 79 : (22, 27.400002) count=54.000000
+                                    999 ;	skipping generated iCode
+                                   1000 ;	Raw cost for generated ic 80 : (0, 0.000000) count=54.000000
+                                   1001 ;	genAssign
+                                   1002 ;	genAssignLit
+    00000274 A2 E0            [ 2] 1003 	ldx	#0xe0
+    00000276 8Er06r00         [ 4] 1004 	stx	_SpdY
+    00000279 A2 FF            [ 2] 1005 	ldx	#0xff
+    0000027B 8Er07r00         [ 4] 1006 	stx	(_SpdY + 1)
+                                   1007 ;	Raw cost for generated ic 84 : (10, 12.000000) count=40.500000
+                                   1008 ;	genLabel
+    0000027E                       1009 00102$:
+                                   1010 ;	Raw cost for generated ic 85 : (0, 0.000000) count=54.000000
+                                   1011 ;	src/metasprites.c: 212: PosF |= ACC_Y;
+                                   1012 ;	genOr
+    0000027E ADr08r00         [ 4] 1013 	lda	_PosF
+    00000281 09 02            [ 2] 1014 	ora	#0x02
+    00000283 8Dr08r00         [ 4] 1015 	sta	_PosF
+                                   1016 ;	Raw cost for generated ic 86 : (8, 10.000000) count=54.000000
+                                   1017 ;	genGoto
+    00000286 4CrC7r02         [ 3] 1018 	jmp	00109$
+                                   1019 ;	Raw cost for generated ic 89 : (3, 3.000000) count=54.000000
+                                   1020 ;	genLabel
+    00000289                       1021 00108$:
+                                   1022 ;	Raw cost for generated ic 90 : (0, 0.000000) count=18.000000
+                                   1023 ;	src/metasprites.c: 213: } else if (KEY_DOWN(J_DOWN)) {
+                                   1024 ;	genAnd
+    00000289 8A               [ 2] 1025 	txa
+    0000028A 29 04            [ 2] 1026 	and	#0x04
+                                   1027 ;	genIfxJump : z
+    0000028C F0 39            [ 4] 1028 	beq	00109$
+                                   1029 ;	Raw cost for generated ic 92 : (8, 9.600000) count=18.000000
+                                   1030 ;	skipping generated iCode
+                                   1031 ;	Raw cost for generated ic 93 : (0, 0.000000) count=18.000000
+                                   1032 ;	src/metasprites.c: 214: SpdY += 2;
+                                   1033 ;	genCast
+                                   1034 ;	genCopy
+    0000028E AEr07r00         [ 4] 1035 	ldx	(_SpdY + 1)
+    00000291 ADr06r00         [ 4] 1036 	lda	_SpdY
+                                   1037 ;	Raw cost for generated ic 96 : (6, 8.000000) count=13.500000
+                                   1038 ;	genPlus
+                                   1039 ;	genPlusIncr
+    00000294 18               [ 2] 1040 	clc
+    00000295 69 02            [ 2] 1041 	adc	#0x02
+    00000297 90 01            [ 4] 1042 	bcc	00303$
+    00000299 E8               [ 2] 1043 	inx
+    0000029A                       1044 00303$:
+                                   1045 ;	Raw cost for generated ic 97 : (6, 8.600000) count=13.500000
+                                   1046 ;	genCast
+                                   1047 ;	genCopy
+                                   1048 ;	Raw cost for generated ic 98 : (6, 8.000000) count=13.500000
+                                   1049 ;	src/metasprites.c: 215: if (SpdY > 32) SpdY = 32;
+                                   1050 ;	genCast
+                                   1051 ;	genCopy
+    0000029A 8Dr06r00         [ 4] 1052 	sta	_SpdY
+    0000029D 8Er07r00         [ 4] 1053 	stx	(_SpdY + 1)
+                                   1054 ;	Raw cost for generated ic 101 : (6, 8.000000) count=13.500000
+                                   1055 ;	genCmp
+    000002A0 85*00            [ 3] 1056 	sta	*(REGTEMP+0)
+    000002A2 A9 20            [ 2] 1057 	lda	#0x20
+    000002A4 38               [ 2] 1058 	sec
+    000002A5 E5*00            [ 3] 1059 	sbc	*(REGTEMP+0)
+    000002A7 A9 00            [ 2] 1060 	lda	#0x00
+    000002A9 86*00            [ 3] 1061 	stx	*(REGTEMP+0)
+    000002AB E5*00            [ 3] 1062 	sbc	*(REGTEMP+0)
+    000002AD 50 04            [ 4] 1063 	bvc	00305$
+    000002AF 10 04            [ 4] 1064 	bpl	00304$
+    000002B1 30 0C            [ 4] 1065 	bmi	00104$
+    000002B3                       1066 00305$:
+    000002B3 10 0A            [ 4] 1067 	bpl	00104$
+    000002B5                       1068 00304$:
+                                   1069 ;	Raw cost for generated ic 102 : (24, 31.400002) count=13.500000
+                                   1070 ;	skipping generated iCode
+                                   1071 ;	Raw cost for generated ic 103 : (0, 0.000000) count=13.500000
+                                   1072 ;	genAssign
+                                   1073 ;	genAssignLit
+    000002B5 A2 20            [ 2] 1074 	ldx	#0x20
+    000002B7 8Er06r00         [ 4] 1075 	stx	_SpdY
+    000002BA A2 00            [ 2] 1076 	ldx	#0x00
+    000002BC 8Er07r00         [ 4] 1077 	stx	(_SpdY + 1)
+                                   1078 ;	Raw cost for generated ic 107 : (10, 12.000000) count=10.125000
+                                   1079 ;	genLabel
+    000002BF                       1080 00104$:
+                                   1081 ;	Raw cost for generated ic 108 : (0, 0.000000) count=13.500000
+                                   1082 ;	src/metasprites.c: 216: PosF |= ACC_Y;
+                                   1083 ;	genOr
+    000002BF ADr08r00         [ 4] 1084 	lda	_PosF
+    000002C2 09 02            [ 2] 1085 	ora	#0x02
+    000002C4 8Dr08r00         [ 4] 1086 	sta	_PosF
+                                   1087 ;	Raw cost for generated ic 109 : (8, 10.000000) count=13.500000
+                                   1088 ;	genLabel
+    000002C7                       1089 00109$:
+                                   1090 ;	Raw cost for generated ic 113 : (0, 0.000000) count=72.000000
+                                   1091 ;	src/metasprites.c: 219: if (KEY_DOWN(J_LEFT)) {
+                                   1092 ;	genCast
+                                   1093 ;	genCopy
+    000002C7 AEr00r00         [ 4] 1094 	ldx	_joyp
+                                   1095 ;	Raw cost for generated ic 114 : (3, 4.000000) count=72.000000
+                                   1096 ;	genAnd
+    000002CA 8A               [ 2] 1097 	txa
+    000002CB 29 02            [ 2] 1098 	and	#0x02
+                                   1099 ;	genIfxJump : z
+    000002CD F0 3A            [ 4] 1100 	beq	00117$
+                                   1101 ;	Raw cost for generated ic 115 : (8, 9.600000) count=72.000000
+                                   1102 ;	skipping generated iCode
+                                   1103 ;	Raw cost for generated ic 116 : (0, 0.000000) count=72.000000
+                                   1104 ;	src/metasprites.c: 220: SpdX -= 2;
+                                   1105 ;	genCast
+                                   1106 ;	genCopy
+    000002CF AEr05r00         [ 4] 1107 	ldx	(_SpdX + 1)
+    000002D2 ADr04r00         [ 4] 1108 	lda	_SpdX
+                                   1109 ;	Raw cost for generated ic 119 : (6, 8.000000) count=54.000000
+                                   1110 ;	genMinus
+                                   1111 ;	genMinusDec
+    000002D5 38               [ 2] 1112 	sec
+    000002D6 E9 02            [ 2] 1113 	sbc	#0x02
+    000002D8 B0 01            [ 4] 1114 	bcs	00309$
+    000002DA CA               [ 2] 1115 	dex
+    000002DB                       1116 00309$:
+                                   1117 ;	Raw cost for generated ic 120 : (6, 8.600000) count=54.000000
+                                   1118 ;	genCast
+                                   1119 ;	genCopy
+    000002DB 8Dr04r00         [ 4] 1120 	sta	_SpdX
+    000002DE 8Er05r00         [ 4] 1121 	stx	(_SpdX + 1)
+                                   1122 ;	Raw cost for generated ic 121 : (6, 8.000000) count=54.000000
+                                   1123 ;	src/metasprites.c: 221: if (SpdX < -32) SpdX = -32;
+                                   1124 ;	genCmp
+    000002E1 ADr04r00         [ 4] 1125 	lda	_SpdX
+    000002E4 38               [ 2] 1126 	sec
+    000002E5 E9 E0            [ 2] 1127 	sbc	#0xe0
+    000002E7 ADr05r00         [ 4] 1128 	lda	(_SpdX + 1)
+    000002EA E9 FF            [ 2] 1129 	sbc	#0xff
+    000002EC 50 04            [ 4] 1130 	bvc	00311$
+    000002EE 10 04            [ 4] 1131 	bpl	00310$
+    000002F0 30 0C            [ 4] 1132 	bmi	00111$
+    000002F2                       1133 00311$:
+    000002F2 10 0A            [ 4] 1134 	bpl	00111$
+    000002F4                       1135 00310$:
+                                   1136 ;	Raw cost for generated ic 124 : (22, 27.400002) count=54.000000
+                                   1137 ;	skipping generated iCode
+                                   1138 ;	Raw cost for generated ic 125 : (0, 0.000000) count=54.000000
+                                   1139 ;	genAssign
+                                   1140 ;	genAssignLit
+    000002F4 A2 E0            [ 2] 1141 	ldx	#0xe0
+    000002F6 8Er04r00         [ 4] 1142 	stx	_SpdX
+    000002F9 A2 FF            [ 2] 1143 	ldx	#0xff
+    000002FB 8Er05r00         [ 4] 1144 	stx	(_SpdX + 1)
+                                   1145 ;	Raw cost for generated ic 129 : (10, 12.000000) count=40.500000
+                                   1146 ;	genLabel
+    000002FE                       1147 00111$:
+                                   1148 ;	Raw cost for generated ic 130 : (0, 0.000000) count=54.000000
+                                   1149 ;	src/metasprites.c: 222: PosF |= ACC_X;
+                                   1150 ;	genOr
+    000002FE ADr08r00         [ 4] 1151 	lda	_PosF
+    00000301 09 01            [ 2] 1152 	ora	#0x01
+    00000303 8Dr08r00         [ 4] 1153 	sta	_PosF
+                                   1154 ;	Raw cost for generated ic 131 : (8, 10.000000) count=54.000000
+                                   1155 ;	genGoto
+    00000306 4Cr47r03         [ 3] 1156 	jmp	00118$
+                                   1157 ;	Raw cost for generated ic 134 : (3, 3.000000) count=54.000000
+                                   1158 ;	genLabel
+    00000309                       1159 00117$:
+                                   1160 ;	Raw cost for generated ic 135 : (0, 0.000000) count=18.000000
+                                   1161 ;	src/metasprites.c: 223: } else if (KEY_DOWN(J_RIGHT)) {
+                                   1162 ;	genAnd
+    00000309 8A               [ 2] 1163 	txa
+    0000030A 29 01            [ 2] 1164 	and	#0x01
+                                   1165 ;	genIfxJump : z
+    0000030C F0 39            [ 4] 1166 	beq	00118$
+                                   1167 ;	Raw cost for generated ic 137 : (8, 9.600000) count=18.000000
+                                   1168 ;	skipping generated iCode
+                                   1169 ;	Raw cost for generated ic 138 : (0, 0.000000) count=18.000000
+                                   1170 ;	src/metasprites.c: 224: SpdX += 2;
+                                   1171 ;	genCast
+                                   1172 ;	genCopy
+    0000030E AEr05r00         [ 4] 1173 	ldx	(_SpdX + 1)
+    00000311 ADr04r00         [ 4] 1174 	lda	_SpdX
+                                   1175 ;	Raw cost for generated ic 141 : (6, 8.000000) count=13.500000
+                                   1176 ;	genPlus
+                                   1177 ;	genPlusIncr
+    00000314 18               [ 2] 1178 	clc
+    00000315 69 02            [ 2] 1179 	adc	#0x02
+    00000317 90 01            [ 4] 1180 	bcc	00315$
+    00000319 E8               [ 2] 1181 	inx
+    0000031A                       1182 00315$:
+                                   1183 ;	Raw cost for generated ic 142 : (6, 8.600000) count=13.500000
+                                   1184 ;	genCast
+                                   1185 ;	genCopy
+                                   1186 ;	Raw cost for generated ic 143 : (6, 8.000000) count=13.500000
+                                   1187 ;	src/metasprites.c: 225: if (SpdX > 32) SpdX = 32;
+                                   1188 ;	genCast
+                                   1189 ;	genCopy
+    0000031A 8Dr04r00         [ 4] 1190 	sta	_SpdX
+    0000031D 8Er05r00         [ 4] 1191 	stx	(_SpdX + 1)
+                                   1192 ;	Raw cost for generated ic 146 : (6, 8.000000) count=13.500000
+                                   1193 ;	genCmp
+    00000320 85*00            [ 3] 1194 	sta	*(REGTEMP+0)
+    00000322 A9 20            [ 2] 1195 	lda	#0x20
+    00000324 38               [ 2] 1196 	sec
+    00000325 E5*00            [ 3] 1197 	sbc	*(REGTEMP+0)
+    00000327 A9 00            [ 2] 1198 	lda	#0x00
+    00000329 86*00            [ 3] 1199 	stx	*(REGTEMP+0)
+    0000032B E5*00            [ 3] 1200 	sbc	*(REGTEMP+0)
+    0000032D 50 04            [ 4] 1201 	bvc	00317$
+    0000032F 10 04            [ 4] 1202 	bpl	00316$
+    00000331 30 0C            [ 4] 1203 	bmi	00113$
+    00000333                       1204 00317$:
+    00000333 10 0A            [ 4] 1205 	bpl	00113$
+    00000335                       1206 00316$:
+                                   1207 ;	Raw cost for generated ic 147 : (24, 31.400002) count=13.500000
+                                   1208 ;	skipping generated iCode
+                                   1209 ;	Raw cost for generated ic 148 : (0, 0.000000) count=13.500000
+                                   1210 ;	genAssign
+                                   1211 ;	genAssignLit
+    00000335 A2 20            [ 2] 1212 	ldx	#0x20
+    00000337 8Er04r00         [ 4] 1213 	stx	_SpdX
+    0000033A A2 00            [ 2] 1214 	ldx	#0x00
+    0000033C 8Er05r00         [ 4] 1215 	stx	(_SpdX + 1)
+                                   1216 ;	Raw cost for generated ic 152 : (10, 12.000000) count=10.125000
+                                   1217 ;	genLabel
+    0000033F                       1218 00113$:
+                                   1219 ;	Raw cost for generated ic 153 : (0, 0.000000) count=13.500000
+                                   1220 ;	src/metasprites.c: 226: PosF |= ACC_X;
+                                   1221 ;	genOr
+    0000033F ADr08r00         [ 4] 1222 	lda	_PosF
+    00000342 09 01            [ 2] 1223 	ora	#0x01
+    00000344 8Dr08r00         [ 4] 1224 	sta	_PosF
+                                   1225 ;	Raw cost for generated ic 154 : (8, 10.000000) count=13.500000
+                                   1226 ;	genLabel
+    00000347                       1227 00118$:
+                                   1228 ;	Raw cost for generated ic 158 : (0, 0.000000) count=72.000000
+                                   1229 ;	src/metasprites.c: 230: if (KEY_PRESSED(J_B)) {
+                                   1230 ;	genXor
+    00000347 ADr00r00         [ 4] 1231 	lda	_joyp
+    0000034A 4Dr01r00         [ 4] 1232 	eor	_old_joyp
+                                   1233 ;	Raw cost for generated ic 159 : (6, 8.000000) count=72.000000
+                                   1234 ;	genAnd
+    0000034D 2Dr00r00         [ 4] 1235 	and	_joyp
+                                   1236 ;	Raw cost for generated ic 160 : (3, 4.000000) count=72.000000
+                                   1237 ;	genAnd
+    00000350 29 40            [ 2] 1238 	and	#0x40
+                                   1239 ;	genIfxJump : z
+    00000352 F0 0F            [ 4] 1240 	beq	00122$
+                                   1241 ;	Raw cost for generated ic 162 : (7, 7.600000) count=72.000000
+                                   1242 ;	skipping generated iCode
+                                   1243 ;	Raw cost for generated ic 163 : (0, 0.000000) count=72.000000
+                                   1244 ;	src/metasprites.c: 231: idx++; if (idx >= (sizeof(sprite_metasprites) >> 1)) idx = 0;
+                                   1245 ;	genPlus
+                                   1246 ;	genPlusIncr
+    00000354 EEr09r00         [ 6] 1247 	inc	_idx
+                                   1248 ;	Raw cost for generated ic 167 : (3, 7.000000) count=54.000000
+                                   1249 ;	genCmp
+    00000357 ADr09r00         [ 4] 1250 	lda	_idx
+    0000035A C9 05            [ 2] 1251 	cmp	#0x05
+    0000035C 90 05            [ 4] 1252 	bcc	00122$
+                                   1253 ;	Raw cost for generated ic 170 : (10, 11.600000) count=54.000000
+                                   1254 ;	skipping generated iCode
+                                   1255 ;	Raw cost for generated ic 171 : (0, 0.000000) count=54.000000
+                                   1256 ;	genAssign
+                                   1257 ;	genAssignLit
+    0000035E A2 00            [ 2] 1258 	ldx	#0x00
+    00000360 8Er09r00         [ 4] 1259 	stx	_idx
+                                   1260 ;	Raw cost for generated ic 175 : (5, 7.000000) count=40.500000
+                                   1261 ;	genLabel
+    00000363                       1262 00122$:
+                                   1263 ;	Raw cost for generated ic 177 : (0, 0.000000) count=72.000000
+                                   1264 ;	src/metasprites.c: 235: if (KEY_PRESSED(J_A)) {
+                                   1265 ;	genXor
+    00000363 ADr00r00         [ 4] 1266 	lda	_joyp
+    00000366 4Dr01r00         [ 4] 1267 	eor	_old_joyp
+                                   1268 ;	Raw cost for generated ic 178 : (6, 8.000000) count=72.000000
+                                   1269 ;	genAnd
+    00000369 2Dr00r00         [ 4] 1270 	and	_joyp
+                                   1271 ;	Raw cost for generated ic 179 : (3, 4.000000) count=72.000000
+                                   1272 ;	genAnd
+    0000036C 29 80            [ 2] 1273 	and	#0x80
+                                   1274 ;	genIfxJump : z
+    0000036E F0 0B            [ 4] 1275 	beq	00124$
+                                   1276 ;	Raw cost for generated ic 181 : (7, 7.600000) count=72.000000
+                                   1277 ;	skipping generated iCode
+                                   1278 ;	Raw cost for generated ic 182 : (0, 0.000000) count=72.000000
+                                   1279 ;	src/metasprites.c: 236: rot++; rot &= 0xF;
+                                   1280 ;	genPlus
+                                   1281 ;	genPlusIncr
+    00000370 EEr0Ar00         [ 6] 1282 	inc	_rot
+                                   1283 ;	Raw cost for generated ic 186 : (3, 6.000000) count=54.000000
+                                   1284 ;	genAnd
+    00000373 ADr0Ar00         [ 4] 1285 	lda	_rot
+    00000376 29 0F            [ 2] 1286 	and	#0x0f
+    00000378 8Dr0Ar00         [ 4] 1287 	sta	_rot
+                                   1288 ;	Raw cost for generated ic 190 : (8, 10.000000) count=54.000000
+                                   1289 ;	genLabel
+    0000037B                       1290 00124$:
+                                   1291 ;	Raw cost for generated ic 194 : (0, 0.000000) count=72.000000
+                                   1292 ;	src/metasprites.c: 239: PosX += SpdX, PosY += SpdY; 
+                                   1293 ;	genPlus
+                                   1294 ;	genPlusIncr
+    0000037B ADr00r00         [ 4] 1295 	lda	_PosX
+    0000037E 18               [ 2] 1296 	clc
+    0000037F 6Dr04r00         [ 4] 1297 	adc	_SpdX
+    00000382 8Dr00r00         [ 4] 1298 	sta	_PosX
+    00000385 ADr01r00         [ 4] 1299 	lda	(_PosX + 1)
+    00000388 6Dr05r00         [ 4] 1300 	adc	(_SpdX + 1)
+    0000038B 8Dr01r00         [ 4] 1301 	sta	(_PosX + 1)
+                                   1302 ;	Raw cost for generated ic 195 : (19, 26.000000) count=72.000000
+                                   1303 ;	genPlus
+                                   1304 ;	genPlusIncr
+    0000038E ADr02r00         [ 4] 1305 	lda	_PosY
+    00000391 18               [ 2] 1306 	clc
+    00000392 6Dr06r00         [ 4] 1307 	adc	_SpdY
+    00000395 8Dr02r00         [ 4] 1308 	sta	_PosY
+    00000398 ADr03r00         [ 4] 1309 	lda	(_PosY + 1)
+    0000039B 6Dr07r00         [ 4] 1310 	adc	(_SpdY + 1)
+    0000039E 8Dr03r00         [ 4] 1311 	sta	(_PosY + 1)
+                                   1312 ;	Raw cost for generated ic 198 : (19, 26.000000) count=72.000000
+                                   1313 ;	src/metasprites.c: 250: uint8_t subpal = rot >> 2;
+                                   1314 ;	genRightShift
+                                   1315 ;	genRightShiftLiteral
+                                   1316 ;	genrshOne
+    000003A1 ADr0Ar00         [ 4] 1317 	lda	_rot
+    000003A4 4A               [ 2] 1318 	lsr	a
+    000003A5 4A               [ 2] 1319 	lsr	a
+    000003A6 A8               [ 2] 1320 	tay
+                                   1321 ;	Raw cost for generated ic 202 : (6, 10.000000) count=72.000000
+                                   1322 ;	src/metasprites.c: 251: switch (rot & 0x3) {
+                                   1323 ;	genCast
+                                   1324 ;	genCopy
+    000003A7 ADr0Ar00         [ 4] 1325 	lda	_rot
+                                   1326 ;	Raw cost for generated ic 204 : (3, 4.000000) count=72.000000
+                                   1327 ;	genAnd
+    000003AA 29 03            [ 2] 1328 	and	#0x03
+                                   1329 ;	Raw cost for generated ic 205 : (2, 2.000000) count=72.000000
+                                   1330 ;	genCmpEQorNE
+    000003AC C9 01            [ 2] 1331 	cmp	#0x01
+    000003AE F0 11            [ 4] 1332 	beq	00125$
+                                   1333 ;	Raw cost for generated ic 206 : (7, 7.600000) count=72.000000
+                                   1334 ;	skipping generated iCode
+                                   1335 ;	Raw cost for generated ic 207 : (0, 0.000000) count=72.000000
+                                   1336 ;	genCmpEQorNE
+    000003B0 C9 02            [ 2] 1337 	cmp	#0x02
+    000003B2 D0 03            [ 4] 1338 	bne	00323$
+    000003B4 4Cr8Br04         [ 3] 1339 	jmp	00126$
+    000003B7                       1340 00323$:
+                                   1341 ;	Raw cost for generated ic 208 : (7, 7.600000) count=54.000000
+                                   1342 ;	skipping generated iCode
+                                   1343 ;	Raw cost for generated ic 209 : (0, 0.000000) count=54.000000
+                                   1344 ;	genCmpEQorNE
+    000003B7 C9 03            [ 2] 1345 	cmp	#0x03
+    000003B9 D0 03            [ 4] 1346 	bne	00324$
+    000003BB 4Cr62r05         [ 3] 1347 	jmp	00127$
+    000003BE                       1348 00324$:
+                                   1349 ;	Raw cost for generated ic 210 : (7, 7.600000) count=40.500000
+                                   1350 ;	skipping generated iCode
+                                   1351 ;	Raw cost for generated ic 211 : (0, 0.000000) count=40.500000
+                                   1352 ;	genGoto
+    000003BE 4Cr0Fr06         [ 3] 1353 	jmp	00128$
+                                   1354 ;	Raw cost for generated ic 212 : (3, 3.000000) count=30.375000
+                                   1355 ;	src/metasprites.c: 252: case 1:
+                                   1356 ;	genLabel
+    000003C1                       1357 00125$:
+                                   1358 ;	Raw cost for generated ic 213 : (0, 0.000000) count=18.000000
+                                   1359 ;	src/metasprites.c: 258: DEVICE_SPRITE_PX_OFFSET_Y + (PosY >> 4));
+                                   1360 ;	genRightShift
+                                   1361 ;	genRightShiftLiteral
+                                   1362 ;	genrshTwo
+    000003C1 AEr03r00         [ 4] 1363 	ldx	(_PosY + 1)
+    000003C4 ADr02r00         [ 4] 1364 	lda	_PosY
+    000003C7 86*00            [ 3] 1365 	stx	*(REGTEMP+0)
+    000003C9 E0 80            [ 2] 1366 	cpx	#0x80
+    000003CB 66*00            [ 5] 1367 	ror	*(REGTEMP+0)
+    000003CD 6A               [ 2] 1368 	ror	a
+    000003CE E0 80            [ 2] 1369 	cpx	#0x80
+    000003D0 66*00            [ 5] 1370 	ror	*(REGTEMP+0)
+    000003D2 6A               [ 2] 1371 	ror	a
+    000003D3 E0 80            [ 2] 1372 	cpx	#0x80
+    000003D5 66*00            [ 5] 1373 	ror	*(REGTEMP+0)
+    000003D7 6A               [ 2] 1374 	ror	a
+    000003D8 E0 80            [ 2] 1375 	cpx	#0x80
+    000003DA 66*00            [ 5] 1376 	ror	*(REGTEMP+0)
+    000003DC 6A               [ 2] 1377 	ror	a
+    000003DD A6*00            [ 3] 1378 	ldx	*(REGTEMP+0)
+                                   1379 ;	Raw cost for generated ic 214 : (30, 50.000000) count=18.000000
+                                   1380 ;	genCast
+                                   1381 ;	genCopy
+                                   1382 ;	Raw cost for generated ic 215 : (0, 0.000000) count=18.000000
+                                   1383 ;	genPlus
+                                   1384 ;	genPlusIncr
+    000003DF 18               [ 2] 1385 	clc
+    000003E0 69 FF            [ 2] 1386 	adc	#0xff
+    000003E2 48               [ 3] 1387 	pha
+    000003E3 8A               [ 2] 1388 	txa
+    000003E4 69 FF            [ 2] 1389 	adc	#0xff
+    000003E6 AA               [ 2] 1390 	tax
+    000003E7 68               [ 4] 1391 	pla
+                                   1392 ;	Raw cost for generated ic 216 : (9, 17.000000) count=18.000000
+                                   1393 ;	genCast
+                                   1394 ;	genCopy
+    000003E8 8Dr27r00         [ 4] 1395 	sta	_main_y_60001_171
+    000003EB 8Er28r00         [ 4] 1396 	stx	(_main_y_60001_171 + 1)
+                                   1397 ;	Raw cost for generated ic 217 : (6, 8.000000) count=18.000000
+                                   1398 ;	src/metasprites.c: 257: DEVICE_SPRITE_PX_OFFSET_X + (PosX >> 4),
+                                   1399 ;	genRightShift
+                                   1400 ;	genRightShiftLiteral
+                                   1401 ;	genrshTwo
+    000003EE AEr01r00         [ 4] 1402 	ldx	(_PosX + 1)
+    000003F1 ADr00r00         [ 4] 1403 	lda	_PosX
+    000003F4 86*00            [ 3] 1404 	stx	*(REGTEMP+0)
+    000003F6 E0 80            [ 2] 1405 	cpx	#0x80
+    000003F8 66*00            [ 5] 1406 	ror	*(REGTEMP+0)
+    000003FA 6A               [ 2] 1407 	ror	a
+    000003FB E0 80            [ 2] 1408 	cpx	#0x80
+    000003FD 66*00            [ 5] 1409 	ror	*(REGTEMP+0)
+    000003FF 6A               [ 2] 1410 	ror	a
+    00000400 E0 80            [ 2] 1411 	cpx	#0x80
+    00000402 66*00            [ 5] 1412 	ror	*(REGTEMP+0)
+    00000404 6A               [ 2] 1413 	ror	a
+    00000405 E0 80            [ 2] 1414 	cpx	#0x80
+    00000407 66*00            [ 5] 1415 	ror	*(REGTEMP+0)
+    00000409 6A               [ 2] 1416 	ror	a
+    0000040A A6*00            [ 3] 1417 	ldx	*(REGTEMP+0)
+    0000040C 8Dr25r00         [ 4] 1418 	sta	_main_x_60001_171
+    0000040F 8Er26r00         [ 4] 1419 	stx	(_main_x_60001_171 + 1)
+                                   1420 ;	Raw cost for generated ic 219 : (36, 58.000000) count=18.000000
+                                   1421 ;	genAssign
+                                   1422 ;	genAssignLit
+                                   1423 ;	genCopy
+    00000412 8Cr24r00         [ 4] 1424 	sty	_main___500010012_50001_170
+                                   1425 ;	Raw cost for generated ic 222 : (3, 4.000000) count=18.000000
+                                   1426 ;	src/metasprites.c: 254: TILE_NUM_START + get_tile_offset(0, 1),
+                                   1427 ;	Raw cost for generated ic 223 : (0, 0.000000) count=18.000000
+                                   1428 ;	Raw cost for generated ic 224 : (0, 0.000000) count=18.000000
+                                   1429 ;	genCall
+                                   1430 ;	genSend
+    00000415 A9 00            [ 2] 1431 	lda	#0x00
+    00000417 A2 01            [ 2] 1432 	ldx	#0x01
+    00000419 20r23r01         [ 6] 1433 	jsr	_get_tile_offset
+                                   1434 ;	assignResultValue
+    0000041C 8Dr00r00         [ 4] 1435 	sta	___current_base_tile
+                                   1436 ;	Raw cost for generated ic 225 : (10, 14.000000) count=18.000000
+                                   1437 ;	src/metasprites.c: 253: hiwater += move_metasprite_flipy( sprite_metasprites[idx],
+                                   1438 ;	skipping iCode since result will be rematerialized
+                                   1439 ;	Raw cost for generated ic 227 : (0, 0.000000) count=18.000000
+                                   1440 ;	genCast
+                                   1441 ;	genCopy
+    0000041F A2 00            [ 2] 1442 	ldx	#0x00
+    00000421 ADr09r00         [ 4] 1443 	lda	_idx
+                                   1444 ;	Raw cost for generated ic 228 : (5, 6.000000) count=18.000000
+                                   1445 ;	genLeftShift
+                                   1446 ;	genLeftShiftLiteral
+                                   1447 ;	genlshTwo
+    00000424 86*00            [ 3] 1448 	stx	*(REGTEMP+0)
+    00000426 0A               [ 2] 1449 	asl	a
+    00000427 26*00            [ 5] 1450 	rol	*(REGTEMP+0)
+    00000429 A6*00            [ 3] 1451 	ldx	*(REGTEMP+0)
+                                   1452 ;	Raw cost for generated ic 229 : (7, 13.000000) count=18.000000
+                                   1453 ;	genAssign
+                                   1454 ;	genAssignLit
+                                   1455 ;	genCopy
+                                   1456 ;	Raw cost for generated ic 230 : (0, 0.000000) count=18.000000
+                                   1457 ;	genPointerGet
+                                   1458 ;	setupDPTR
+    0000042B 18               [ 2] 1459 	clc
+    0000042C 69r00            [ 2] 1460 	adc	#<(_sprite_metasprites+0)
+    0000042E 85*00            [ 3] 1461 	sta	*(DPTR+0)
+    00000430 8A               [ 2] 1462 	txa
+    00000431 69s00            [ 2] 1463 	adc	#>(_sprite_metasprites+0)
+    00000433 85*01            [ 3] 1464 	sta	*(DPTR+1)
+    00000435 A0 01            [ 2] 1465 	ldy	#0x01
+    00000437 B1*00            [ 6] 1466 	lda	[DPTR],y
+    00000439 AA               [ 2] 1467 	tax
+    0000043A 88               [ 2] 1468 	dey
+    0000043B B1*00            [ 6] 1469 	lda	[DPTR],y
+                                   1470 ;	Raw cost for generated ic 231 : (18, 30.000000) count=18.000000
+                                   1471 ;	../../../include/nes/metasprites.h: 170: __current_metasprite = metasprite;
+                                   1472 ;	genCast
+                                   1473 ;	genCopy
+    0000043D 8Dr00r00         [ 4] 1474 	sta	___current_metasprite
+    00000440 8Er01r00         [ 4] 1475 	stx	(___current_metasprite + 1)
+                                   1476 ;	Raw cost for generated ic 239 : (6, 8.000000) count=18.000000
+                                   1477 ;	../../../include/nes/metasprites.h: 172: __current_base_prop = base_prop;
+                                   1478 ;	genAssign
+                                   1479 ;	genAssignLit
+                                   1480 ;	genCopy
+    00000443 ADr24r00         [ 4] 1481 	lda	_main___500010012_50001_170
+    00000446 8Dr00r00         [ 4] 1482 	sta	___current_base_prop
+                                   1483 ;	Raw cost for generated ic 245 : (6, 8.000000) count=18.000000
+                                   1484 ;	../../../include/nes/metasprites.h: 173: return __move_metasprite_flipy(base_sprite, x, y - ((shadow_PPUCTRL & PPUCTRL_SPR_8X16) ? 16 : 8) );
+                                   1485 ;	genCast
+                                   1486 ;	genCopy
+    00000449 ADr00r00         [ 4] 1487 	lda	_shadow_PPUCTRL
+                                   1488 ;	Raw cost for generated ic 246 : (3, 4.000000) count=18.000000
+                                   1489 ;	genAnd
+    0000044C 29 20            [ 2] 1490 	and	#0x20
+                                   1491 ;	genIfxJump : z
+    0000044E F0 09            [ 4] 1492 	beq	00153$
+                                   1493 ;	Raw cost for generated ic 247 : (7, 7.600000) count=18.000000
+                                   1494 ;	skipping generated iCode
+                                   1495 ;	Raw cost for generated ic 248 : (0, 0.000000) count=18.000000
+                                   1496 ;	genAssign
+                                   1497 ;	genAssignLit
+    00000450 A2 10            [ 2] 1498 	ldx	#0x10
+    00000452 86*03            [ 3] 1499 	stx	*_main_sloc0_1_0
+    00000454 84*04            [ 3] 1500 	sty	*(_main_sloc0_1_0 + 1)
+                                   1501 ;	Raw cost for generated ic 249 : (6, 8.000000) count=13.500000
+                                   1502 ;	genGoto
+    00000456 4Cr61r04         [ 3] 1503 	jmp	00154$
+                                   1504 ;	Raw cost for generated ic 250 : (3, 3.000000) count=13.500000
+                                   1505 ;	genLabel
+    00000459                       1506 00153$:
+                                   1507 ;	Raw cost for generated ic 251 : (0, 0.000000) count=4.500000
+                                   1508 ;	genAssign
+                                   1509 ;	genAssignLit
+    00000459 A2 08            [ 2] 1510 	ldx	#0x08
+    0000045B 86*03            [ 3] 1511 	stx	*_main_sloc0_1_0
+    0000045D A2 00            [ 2] 1512 	ldx	#0x00
+    0000045F 86*04            [ 3] 1513 	stx	*(_main_sloc0_1_0 + 1)
+                                   1514 ;	Raw cost for generated ic 252 : (8, 10.000000) count=4.500000
+                                   1515 ;	genLabel
+    00000461                       1516 00154$:
+                                   1517 ;	Raw cost for generated ic 253 : (0, 0.000000) count=18.000000
+                                   1518 ;	genCast
+                                   1519 ;	genCopy
+    00000461 AEr28r00         [ 4] 1520 	ldx	(_main_y_60001_171 + 1)
+    00000464 ADr27r00         [ 4] 1521 	lda	_main_y_60001_171
+                                   1522 ;	Raw cost for generated ic 254 : (6, 8.000000) count=18.000000
+                                   1523 ;	genMinus
+                                   1524 ;	genMinusDec
+    00000467 38               [ 2] 1525 	sec
+    00000468 E5*03            [ 3] 1526 	sbc	*_main_sloc0_1_0
+    0000046A 48               [ 3] 1527 	pha
+    0000046B 8A               [ 2] 1528 	txa
+    0000046C E5*04            [ 3] 1529 	sbc	*(_main_sloc0_1_0 + 1)
+    0000046E AA               [ 2] 1530 	tax
+    0000046F 68               [ 4] 1531 	pla
+                                   1532 ;	Raw cost for generated ic 255 : (9, 19.000000) count=18.000000
+                                   1533 ;	genCast
+                                   1534 ;	genCopy
+    00000470 8Dr00r00         [ 4] 1535 	sta	___move_metasprite_flipy_PARM_3
+    00000473 8Er01r00         [ 4] 1536 	stx	(___move_metasprite_flipy_PARM_3 + 1)
+                                   1537 ;	Raw cost for generated ic 256 : (6, 8.000000) count=18.000000
+                                   1538 ;	genAssign
+                                   1539 ;	genAssignLit
+                                   1540 ;	genCopy
+    00000476 ADr26r00         [ 4] 1541 	lda	(_main_x_60001_171 + 1)
+    00000479 8Dr01r00         [ 4] 1542 	sta	(___move_metasprite_flipy_PARM_2 + 1)
+    0000047C ADr25r00         [ 4] 1543 	lda	_main_x_60001_171
+    0000047F 8Dr00r00         [ 4] 1544 	sta	___move_metasprite_flipy_PARM_2
+                                   1545 ;	Raw cost for generated ic 258 : (12, 16.000000) count=18.000000
+                                   1546 ;	Raw cost for generated ic 257 : (0, 0.000000) count=18.000000
+                                   1547 ;	genCall
+                                   1548 ;	genSend
+    00000482 A9 00            [ 2] 1549 	lda	#0x00
+    00000484 20r00r00         [ 6] 1550 	jsr	___move_metasprite_flipy
+                                   1551 ;	assignResultValue
+                                   1552 ;	Raw cost for generated ic 260 : (5, 8.000000) count=18.000000
+                                   1553 ;	src/metasprites.c: 258: DEVICE_SPRITE_PX_OFFSET_Y + (PosY >> 4));
+                                   1554 ;	genPlus
+                                   1555 ;	genPlusIncr
+    00000487 18               [ 2] 1556 	clc
+                                   1557 ;	Raw cost for generated ic 264 : (1, 2.000000) count=18.000000
+                                   1558 ;	src/metasprites.c: 259: break;
+                                   1559 ;	genGoto
+    00000488 4CrB2r06         [ 3] 1560 	jmp	00129$
+                                   1561 ;	Raw cost for generated ic 266 : (3, 3.000000) count=18.000000
+                                   1562 ;	src/metasprites.c: 260: case 2:
+                                   1563 ;	genLabel
+    0000048B                       1564 00126$:
+                                   1565 ;	Raw cost for generated ic 267 : (0, 0.000000) count=13.500000
+                                   1566 ;	src/metasprites.c: 266: DEVICE_SPRITE_PX_OFFSET_Y + (PosY >> 4));
+                                   1567 ;	genRightShift
+                                   1568 ;	genRightShiftLiteral
+                                   1569 ;	genrshTwo
+    0000048B AEr03r00         [ 4] 1570 	ldx	(_PosY + 1)
+    0000048E ADr02r00         [ 4] 1571 	lda	_PosY
+    00000491 86*00            [ 3] 1572 	stx	*(REGTEMP+0)
+    00000493 E0 80            [ 2] 1573 	cpx	#0x80
+    00000495 66*00            [ 5] 1574 	ror	*(REGTEMP+0)
+    00000497 6A               [ 2] 1575 	ror	a
+    00000498 E0 80            [ 2] 1576 	cpx	#0x80
+    0000049A 66*00            [ 5] 1577 	ror	*(REGTEMP+0)
+    0000049C 6A               [ 2] 1578 	ror	a
+    0000049D E0 80            [ 2] 1579 	cpx	#0x80
+    0000049F 66*00            [ 5] 1580 	ror	*(REGTEMP+0)
+    000004A1 6A               [ 2] 1581 	ror	a
+    000004A2 E0 80            [ 2] 1582 	cpx	#0x80
+    000004A4 66*00            [ 5] 1583 	ror	*(REGTEMP+0)
+    000004A6 6A               [ 2] 1584 	ror	a
+    000004A7 A6*00            [ 3] 1585 	ldx	*(REGTEMP+0)
+                                   1586 ;	Raw cost for generated ic 268 : (30, 50.000000) count=13.500000
+                                   1587 ;	genCast
+                                   1588 ;	genCopy
+                                   1589 ;	Raw cost for generated ic 269 : (0, 0.000000) count=13.500000
+                                   1590 ;	genPlus
+                                   1591 ;	genPlusIncr
+    000004A9 18               [ 2] 1592 	clc
+    000004AA 69 FF            [ 2] 1593 	adc	#0xff
+    000004AC 48               [ 3] 1594 	pha
+    000004AD 8A               [ 2] 1595 	txa
+    000004AE 69 FF            [ 2] 1596 	adc	#0xff
+    000004B0 AA               [ 2] 1597 	tax
+    000004B1 68               [ 4] 1598 	pla
+                                   1599 ;	Raw cost for generated ic 270 : (9, 17.000000) count=13.500000
+                                   1600 ;	genCast
+                                   1601 ;	genCopy
+    000004B2 8Dr2Cr00         [ 4] 1602 	sta	_main_y_60001_174
+    000004B5 8Er2Dr00         [ 4] 1603 	stx	(_main_y_60001_174 + 1)
+                                   1604 ;	Raw cost for generated ic 271 : (6, 8.000000) count=13.500000
+                                   1605 ;	src/metasprites.c: 265: DEVICE_SPRITE_PX_OFFSET_X + (PosX >> 4),
+                                   1606 ;	genRightShift
+                                   1607 ;	genRightShiftLiteral
+                                   1608 ;	genrshTwo
+    000004B8 AEr01r00         [ 4] 1609 	ldx	(_PosX + 1)
+    000004BB ADr00r00         [ 4] 1610 	lda	_PosX
+    000004BE 86*00            [ 3] 1611 	stx	*(REGTEMP+0)
+    000004C0 E0 80            [ 2] 1612 	cpx	#0x80
+    000004C2 66*00            [ 5] 1613 	ror	*(REGTEMP+0)
+    000004C4 6A               [ 2] 1614 	ror	a
+    000004C5 E0 80            [ 2] 1615 	cpx	#0x80
+    000004C7 66*00            [ 5] 1616 	ror	*(REGTEMP+0)
+    000004C9 6A               [ 2] 1617 	ror	a
+    000004CA E0 80            [ 2] 1618 	cpx	#0x80
+    000004CC 66*00            [ 5] 1619 	ror	*(REGTEMP+0)
+    000004CE 6A               [ 2] 1620 	ror	a
+    000004CF E0 80            [ 2] 1621 	cpx	#0x80
+    000004D1 66*00            [ 5] 1622 	ror	*(REGTEMP+0)
+    000004D3 6A               [ 2] 1623 	ror	a
+    000004D4 A6*00            [ 3] 1624 	ldx	*(REGTEMP+0)
+    000004D6 8Dr2Ar00         [ 4] 1625 	sta	_main___500010022_50001_173
+    000004D9 8Er2Br00         [ 4] 1626 	stx	(_main___500010022_50001_173 + 1)
+                                   1627 ;	Raw cost for generated ic 273 : (36, 58.000000) count=13.500000
+                                   1628 ;	genAssign
+                                   1629 ;	genAssignLit
+                                   1630 ;	genCopy
+    000004DC 8Cr29r00         [ 4] 1631 	sty	_main___500010020_50001_173
+                                   1632 ;	Raw cost for generated ic 276 : (3, 4.000000) count=13.500000
+                                   1633 ;	src/metasprites.c: 262: TILE_NUM_START + get_tile_offset(1, 1),
+                                   1634 ;	Raw cost for generated ic 277 : (0, 0.000000) count=13.500000
+                                   1635 ;	Raw cost for generated ic 278 : (0, 0.000000) count=13.500000
+                                   1636 ;	genCall
+                                   1637 ;	genSend
+    000004DF A9 01            [ 2] 1638 	lda	#0x01
+    000004E1 AA               [ 2] 1639 	tax
+    000004E2 20r23r01         [ 6] 1640 	jsr	_get_tile_offset
+                                   1641 ;	assignResultValue
+    000004E5 8Dr00r00         [ 4] 1642 	sta	___current_base_tile
+                                   1643 ;	Raw cost for generated ic 279 : (9, 14.000000) count=13.500000
+                                   1644 ;	src/metasprites.c: 261: hiwater += move_metasprite_flipxy(sprite_metasprites[idx],
+                                   1645 ;	skipping iCode since result will be rematerialized
+                                   1646 ;	Raw cost for generated ic 281 : (0, 0.000000) count=13.500000
+                                   1647 ;	genCast
+                                   1648 ;	genCopy
+    000004E8 A2 00            [ 2] 1649 	ldx	#0x00
+    000004EA ADr09r00         [ 4] 1650 	lda	_idx
+                                   1651 ;	Raw cost for generated ic 282 : (5, 6.000000) count=13.500000
+                                   1652 ;	genLeftShift
+                                   1653 ;	genLeftShiftLiteral
+                                   1654 ;	genlshTwo
+    000004ED 86*00            [ 3] 1655 	stx	*(REGTEMP+0)
+    000004EF 0A               [ 2] 1656 	asl	a
+    000004F0 26*00            [ 5] 1657 	rol	*(REGTEMP+0)
+    000004F2 A6*00            [ 3] 1658 	ldx	*(REGTEMP+0)
+                                   1659 ;	Raw cost for generated ic 283 : (7, 13.000000) count=13.500000
+                                   1660 ;	genAssign
+                                   1661 ;	genAssignLit
+                                   1662 ;	genCopy
+                                   1663 ;	Raw cost for generated ic 284 : (0, 0.000000) count=13.500000
+                                   1664 ;	genPointerGet
+                                   1665 ;	setupDPTR
+    000004F4 18               [ 2] 1666 	clc
+    000004F5 69r00            [ 2] 1667 	adc	#<(_sprite_metasprites+0)
+    000004F7 85*00            [ 3] 1668 	sta	*(DPTR+0)
+    000004F9 8A               [ 2] 1669 	txa
+    000004FA 69s00            [ 2] 1670 	adc	#>(_sprite_metasprites+0)
+    000004FC 85*01            [ 3] 1671 	sta	*(DPTR+1)
+    000004FE A0 01            [ 2] 1672 	ldy	#0x01
+    00000500 B1*00            [ 6] 1673 	lda	[DPTR],y
+    00000502 AA               [ 2] 1674 	tax
+    00000503 88               [ 2] 1675 	dey
+    00000504 B1*00            [ 6] 1676 	lda	[DPTR],y
+                                   1677 ;	Raw cost for generated ic 285 : (18, 30.000000) count=13.500000
+                                   1678 ;	../../../include/nes/metasprites.h: 209: __current_metasprite = metasprite;
+                                   1679 ;	genCast
+                                   1680 ;	genCopy
+    00000506 8Dr00r00         [ 4] 1681 	sta	___current_metasprite
+    00000509 8Er01r00         [ 4] 1682 	stx	(___current_metasprite + 1)
+                                   1683 ;	Raw cost for generated ic 293 : (6, 8.000000) count=13.500000
+                                   1684 ;	../../../include/nes/metasprites.h: 211: __current_base_prop = base_prop;
+                                   1685 ;	genAssign
+                                   1686 ;	genAssignLit
+                                   1687 ;	genCopy
+    0000050C ADr29r00         [ 4] 1688 	lda	_main___500010020_50001_173
+    0000050F 8Dr00r00         [ 4] 1689 	sta	___current_base_prop
+                                   1690 ;	Raw cost for generated ic 299 : (6, 8.000000) count=13.500000
+                                   1691 ;	../../../include/nes/metasprites.h: 212: return __move_metasprite_flipxy(base_sprite, x - 8, y - ((shadow_PPUCTRL & PPUCTRL_SPR_8X16) ? 16 : 8));
+                                   1692 ;	genCast
+                                   1693 ;	genCopy
+    00000512 AEr2Br00         [ 4] 1694 	ldx	(_main___500010022_50001_173 + 1)
+    00000515 ADr2Ar00         [ 4] 1695 	lda	_main___500010022_50001_173
+                                   1696 ;	Raw cost for generated ic 300 : (6, 8.000000) count=13.500000
+                                   1697 ;	genMinus
+                                   1698 ;	genMinusDec
+    00000518 38               [ 2] 1699 	sec
+    00000519 E9 08            [ 2] 1700 	sbc	#0x08
+    0000051B B0 01            [ 4] 1701 	bcs	00326$
+    0000051D CA               [ 2] 1702 	dex
+    0000051E                       1703 00326$:
+                                   1704 ;	Raw cost for generated ic 301 : (6, 8.600000) count=13.500000
+                                   1705 ;	genCast
+                                   1706 ;	genCopy
+    0000051E 85*03            [ 3] 1707 	sta	*_main_sloc0_1_0
+    00000520 86*04            [ 3] 1708 	stx	*(_main_sloc0_1_0 + 1)
+                                   1709 ;	Raw cost for generated ic 302 : (4, 6.000000) count=13.500000
+                                   1710 ;	genCast
+                                   1711 ;	genCopy
+    00000522 ADr00r00         [ 4] 1712 	lda	_shadow_PPUCTRL
+                                   1713 ;	Raw cost for generated ic 303 : (3, 4.000000) count=13.500000
+                                   1714 ;	genAnd
+    00000525 29 20            [ 2] 1715 	and	#0x20
+                                   1716 ;	genIfxJump : z
+    00000527 F0 09            [ 4] 1717 	beq	00155$
+                                   1718 ;	Raw cost for generated ic 304 : (7, 7.600000) count=13.500000
+                                   1719 ;	skipping generated iCode
+                                   1720 ;	Raw cost for generated ic 305 : (0, 0.000000) count=13.500000
+                                   1721 ;	genAssign
+                                   1722 ;	genAssignLit
+    00000529 A2 10            [ 2] 1723 	ldx	#0x10
+    0000052B 86*05            [ 3] 1724 	stx	*_main_sloc1_1_0
+    0000052D 84*06            [ 3] 1725 	sty	*(_main_sloc1_1_0 + 1)
+                                   1726 ;	Raw cost for generated ic 306 : (6, 8.000000) count=10.125000
+                                   1727 ;	genGoto
+    0000052F 4Cr3Ar05         [ 3] 1728 	jmp	00156$
+                                   1729 ;	Raw cost for generated ic 307 : (3, 3.000000) count=10.125000
+                                   1730 ;	genLabel
+    00000532                       1731 00155$:
+                                   1732 ;	Raw cost for generated ic 308 : (0, 0.000000) count=3.375000
+                                   1733 ;	genAssign
+                                   1734 ;	genAssignLit
+    00000532 A2 08            [ 2] 1735 	ldx	#0x08
+    00000534 86*05            [ 3] 1736 	stx	*_main_sloc1_1_0
+    00000536 A2 00            [ 2] 1737 	ldx	#0x00
+    00000538 86*06            [ 3] 1738 	stx	*(_main_sloc1_1_0 + 1)
+                                   1739 ;	Raw cost for generated ic 309 : (8, 10.000000) count=3.375000
+                                   1740 ;	genLabel
+    0000053A                       1741 00156$:
+                                   1742 ;	Raw cost for generated ic 310 : (0, 0.000000) count=13.500000
+                                   1743 ;	genCast
+                                   1744 ;	genCopy
+    0000053A AEr2Dr00         [ 4] 1745 	ldx	(_main_y_60001_174 + 1)
+    0000053D ADr2Cr00         [ 4] 1746 	lda	_main_y_60001_174
+                                   1747 ;	Raw cost for generated ic 311 : (6, 8.000000) count=13.500000
+                                   1748 ;	genMinus
+                                   1749 ;	genMinusDec
+    00000540 38               [ 2] 1750 	sec
+    00000541 E5*05            [ 3] 1751 	sbc	*_main_sloc1_1_0
+    00000543 48               [ 3] 1752 	pha
+    00000544 8A               [ 2] 1753 	txa
+    00000545 E5*06            [ 3] 1754 	sbc	*(_main_sloc1_1_0 + 1)
+    00000547 AA               [ 2] 1755 	tax
+    00000548 68               [ 4] 1756 	pla
+                                   1757 ;	Raw cost for generated ic 312 : (9, 19.000000) count=13.500000
+                                   1758 ;	genCast
+                                   1759 ;	genCopy
+    00000549 8Dr00r00         [ 4] 1760 	sta	___move_metasprite_flipxy_PARM_3
+    0000054C 8Er01r00         [ 4] 1761 	stx	(___move_metasprite_flipxy_PARM_3 + 1)
+                                   1762 ;	Raw cost for generated ic 313 : (6, 8.000000) count=13.500000
+                                   1763 ;	genAssign
+                                   1764 ;	genAssignLit
+                                   1765 ;	genCopy
+    0000054F A5*04            [ 3] 1766 	lda	*(_main_sloc0_1_0 + 1)
+    00000551 8Dr01r00         [ 4] 1767 	sta	(___move_metasprite_flipxy_PARM_2 + 1)
+    00000554 A5*03            [ 3] 1768 	lda	*_main_sloc0_1_0
+    00000556 8Dr00r00         [ 4] 1769 	sta	___move_metasprite_flipxy_PARM_2
+                                   1770 ;	Raw cost for generated ic 315 : (10, 14.000000) count=13.500000
+                                   1771 ;	Raw cost for generated ic 314 : (0, 0.000000) count=13.500000
+                                   1772 ;	genCall
+                                   1773 ;	genSend
+    00000559 A9 00            [ 2] 1774 	lda	#0x00
+    0000055B 20r00r00         [ 6] 1775 	jsr	___move_metasprite_flipxy
+                                   1776 ;	assignResultValue
+                                   1777 ;	Raw cost for generated ic 317 : (5, 8.000000) count=13.500000
+                                   1778 ;	src/metasprites.c: 266: DEVICE_SPRITE_PX_OFFSET_Y + (PosY >> 4));
+                                   1779 ;	genPlus
+                                   1780 ;	genPlusIncr
+    0000055E 18               [ 2] 1781 	clc
+                                   1782 ;	Raw cost for generated ic 321 : (1, 2.000000) count=13.500000
+                                   1783 ;	src/metasprites.c: 267: break;
+                                   1784 ;	genGoto
+    0000055F 4CrB2r06         [ 3] 1785 	jmp	00129$
+                                   1786 ;	Raw cost for generated ic 323 : (3, 3.000000) count=13.500000
+                                   1787 ;	src/metasprites.c: 268: case 3:
+                                   1788 ;	genLabel
+    00000562                       1789 00127$:
+                                   1790 ;	Raw cost for generated ic 324 : (0, 0.000000) count=10.125000
+                                   1791 ;	src/metasprites.c: 274: DEVICE_SPRITE_PX_OFFSET_Y + (PosY >> 4));
+                                   1792 ;	genRightShift
+                                   1793 ;	genRightShiftLiteral
+                                   1794 ;	genrshTwo
+    00000562 AEr03r00         [ 4] 1795 	ldx	(_PosY + 1)
+    00000565 ADr02r00         [ 4] 1796 	lda	_PosY
+    00000568 86*00            [ 3] 1797 	stx	*(REGTEMP+0)
+    0000056A E0 80            [ 2] 1798 	cpx	#0x80
+    0000056C 66*00            [ 5] 1799 	ror	*(REGTEMP+0)
+    0000056E 6A               [ 2] 1800 	ror	a
+    0000056F E0 80            [ 2] 1801 	cpx	#0x80
+    00000571 66*00            [ 5] 1802 	ror	*(REGTEMP+0)
+    00000573 6A               [ 2] 1803 	ror	a
+    00000574 E0 80            [ 2] 1804 	cpx	#0x80
+    00000576 66*00            [ 5] 1805 	ror	*(REGTEMP+0)
+    00000578 6A               [ 2] 1806 	ror	a
+    00000579 E0 80            [ 2] 1807 	cpx	#0x80
+    0000057B 66*00            [ 5] 1808 	ror	*(REGTEMP+0)
+    0000057D 6A               [ 2] 1809 	ror	a
+    0000057E A6*00            [ 3] 1810 	ldx	*(REGTEMP+0)
+                                   1811 ;	Raw cost for generated ic 325 : (30, 50.000000) count=10.125000
+                                   1812 ;	genCast
+                                   1813 ;	genCopy
+                                   1814 ;	Raw cost for generated ic 326 : (0, 0.000000) count=10.125000
+                                   1815 ;	genPlus
+                                   1816 ;	genPlusIncr
+    00000580 18               [ 2] 1817 	clc
+    00000581 69 FF            [ 2] 1818 	adc	#0xff
+    00000583 48               [ 3] 1819 	pha
+    00000584 8A               [ 2] 1820 	txa
+    00000585 69 FF            [ 2] 1821 	adc	#0xff
+    00000587 AA               [ 2] 1822 	tax
+    00000588 68               [ 4] 1823 	pla
+                                   1824 ;	Raw cost for generated ic 327 : (9, 17.000000) count=10.125000
+                                   1825 ;	genCast
+                                   1826 ;	genCopy
+    00000589 8Dr31r00         [ 4] 1827 	sta	_main___500010031_50001_176
+    0000058C 8Er32r00         [ 4] 1828 	stx	(_main___500010031_50001_176 + 1)
+                                   1829 ;	Raw cost for generated ic 328 : (6, 8.000000) count=10.125000
+                                   1830 ;	src/metasprites.c: 273: DEVICE_SPRITE_PX_OFFSET_X + (PosX >> 4),
+                                   1831 ;	genRightShift
+                                   1832 ;	genRightShiftLiteral
+                                   1833 ;	genrshTwo
+    0000058F AEr01r00         [ 4] 1834 	ldx	(_PosX + 1)
+    00000592 ADr00r00         [ 4] 1835 	lda	_PosX
+    00000595 86*00            [ 3] 1836 	stx	*(REGTEMP+0)
+    00000597 E0 80            [ 2] 1837 	cpx	#0x80
+    00000599 66*00            [ 5] 1838 	ror	*(REGTEMP+0)
+    0000059B 6A               [ 2] 1839 	ror	a
+    0000059C E0 80            [ 2] 1840 	cpx	#0x80
+    0000059E 66*00            [ 5] 1841 	ror	*(REGTEMP+0)
+    000005A0 6A               [ 2] 1842 	ror	a
+    000005A1 E0 80            [ 2] 1843 	cpx	#0x80
+    000005A3 66*00            [ 5] 1844 	ror	*(REGTEMP+0)
+    000005A5 6A               [ 2] 1845 	ror	a
+    000005A6 E0 80            [ 2] 1846 	cpx	#0x80
+    000005A8 66*00            [ 5] 1847 	ror	*(REGTEMP+0)
+    000005AA 6A               [ 2] 1848 	ror	a
+    000005AB A6*00            [ 3] 1849 	ldx	*(REGTEMP+0)
+    000005AD 8Dr2Fr00         [ 4] 1850 	sta	_main___500010030_50001_176
+    000005B0 8Er30r00         [ 4] 1851 	stx	(_main___500010030_50001_176 + 1)
+                                   1852 ;	Raw cost for generated ic 330 : (36, 58.000000) count=10.125000
+                                   1853 ;	genAssign
+                                   1854 ;	genAssignLit
+                                   1855 ;	genCopy
+    000005B3 8Cr2Er00         [ 4] 1856 	sty	_main___500010028_50001_176
+                                   1857 ;	Raw cost for generated ic 333 : (3, 4.000000) count=10.125000
+                                   1858 ;	src/metasprites.c: 270: TILE_NUM_START + get_tile_offset(1, 0),
+                                   1859 ;	Raw cost for generated ic 334 : (0, 0.000000) count=10.125000
+                                   1860 ;	Raw cost for generated ic 335 : (0, 0.000000) count=10.125000
+                                   1861 ;	genCall
+                                   1862 ;	genSend
+    000005B6 A9 01            [ 2] 1863 	lda	#0x01
+    000005B8 A2 00            [ 2] 1864 	ldx	#0x00
+    000005BA 20r23r01         [ 6] 1865 	jsr	_get_tile_offset
+                                   1866 ;	assignResultValue
+    000005BD 8Dr00r00         [ 4] 1867 	sta	___current_base_tile
+                                   1868 ;	Raw cost for generated ic 336 : (10, 14.000000) count=10.125000
+                                   1869 ;	src/metasprites.c: 269: hiwater += move_metasprite_flipx( sprite_metasprites[idx],
+                                   1870 ;	skipping iCode since result will be rematerialized
+                                   1871 ;	Raw cost for generated ic 338 : (0, 0.000000) count=10.125000
+                                   1872 ;	genCast
+                                   1873 ;	genCopy
+    000005C0 A2 00            [ 2] 1874 	ldx	#0x00
+    000005C2 ADr09r00         [ 4] 1875 	lda	_idx
+                                   1876 ;	Raw cost for generated ic 339 : (5, 6.000000) count=10.125000
+                                   1877 ;	genLeftShift
+                                   1878 ;	genLeftShiftLiteral
+                                   1879 ;	genlshTwo
+    000005C5 86*00            [ 3] 1880 	stx	*(REGTEMP+0)
+    000005C7 0A               [ 2] 1881 	asl	a
+    000005C8 26*00            [ 5] 1882 	rol	*(REGTEMP+0)
+    000005CA A6*00            [ 3] 1883 	ldx	*(REGTEMP+0)
+                                   1884 ;	Raw cost for generated ic 340 : (7, 13.000000) count=10.125000
+                                   1885 ;	genAssign
+                                   1886 ;	genAssignLit
+                                   1887 ;	genCopy
+                                   1888 ;	Raw cost for generated ic 341 : (0, 0.000000) count=10.125000
+                                   1889 ;	genPointerGet
+                                   1890 ;	setupDPTR
+    000005CC 18               [ 2] 1891 	clc
+    000005CD 69r00            [ 2] 1892 	adc	#<(_sprite_metasprites+0)
+    000005CF 85*00            [ 3] 1893 	sta	*(DPTR+0)
+    000005D1 8A               [ 2] 1894 	txa
+    000005D2 69s00            [ 2] 1895 	adc	#>(_sprite_metasprites+0)
+    000005D4 85*01            [ 3] 1896 	sta	*(DPTR+1)
+    000005D6 A0 01            [ 2] 1897 	ldy	#0x01
+    000005D8 B1*00            [ 6] 1898 	lda	[DPTR],y
+    000005DA AA               [ 2] 1899 	tax
+    000005DB 88               [ 2] 1900 	dey
+    000005DC B1*00            [ 6] 1901 	lda	[DPTR],y
+                                   1902 ;	Raw cost for generated ic 342 : (18, 30.000000) count=10.125000
+                                   1903 ;	../../../include/nes/metasprites.h: 130: __current_metasprite = metasprite;
+                                   1904 ;	genCast
+                                   1905 ;	genCopy
+    000005DE 8Dr00r00         [ 4] 1906 	sta	___current_metasprite
+    000005E1 8Er01r00         [ 4] 1907 	stx	(___current_metasprite + 1)
+                                   1908 ;	Raw cost for generated ic 350 : (6, 8.000000) count=10.125000
+                                   1909 ;	../../../include/nes/metasprites.h: 132: __current_base_prop = base_prop;
+                                   1910 ;	genAssign
+                                   1911 ;	genAssignLit
+                                   1912 ;	genCopy
+    000005E4 ADr2Er00         [ 4] 1913 	lda	_main___500010028_50001_176
+    000005E7 8Dr00r00         [ 4] 1914 	sta	___current_base_prop
+                                   1915 ;	Raw cost for generated ic 356 : (6, 8.000000) count=10.125000
+                                   1916 ;	../../../include/nes/metasprites.h: 133: return __move_metasprite_flipx(base_sprite, x - 8, y);
+                                   1917 ;	genCast
+                                   1918 ;	genCopy
+    000005EA AEr30r00         [ 4] 1919 	ldx	(_main___500010030_50001_176 + 1)
+    000005ED ADr2Fr00         [ 4] 1920 	lda	_main___500010030_50001_176
+                                   1921 ;	Raw cost for generated ic 357 : (6, 8.000000) count=10.125000
+                                   1922 ;	genMinus
+                                   1923 ;	genMinusDec
+    000005F0 38               [ 2] 1924 	sec
+    000005F1 E9 08            [ 2] 1925 	sbc	#0x08
+    000005F3 B0 01            [ 4] 1926 	bcs	00328$
+    000005F5 CA               [ 2] 1927 	dex
+    000005F6                       1928 00328$:
+                                   1929 ;	Raw cost for generated ic 358 : (6, 8.600000) count=10.125000
+                                   1930 ;	genCast
+                                   1931 ;	genCopy
+    000005F6 8Dr00r00         [ 4] 1932 	sta	___move_metasprite_flipx_PARM_2
+    000005F9 8Er01r00         [ 4] 1933 	stx	(___move_metasprite_flipx_PARM_2 + 1)
+                                   1934 ;	Raw cost for generated ic 359 : (6, 8.000000) count=10.125000
+                                   1935 ;	genAssign
+                                   1936 ;	genAssignLit
+                                   1937 ;	genCopy
+    000005FC ADr32r00         [ 4] 1938 	lda	(_main___500010031_50001_176 + 1)
+    000005FF 8Dr01r00         [ 4] 1939 	sta	(___move_metasprite_flipx_PARM_3 + 1)
+    00000602 ADr31r00         [ 4] 1940 	lda	_main___500010031_50001_176
+    00000605 8Dr00r00         [ 4] 1941 	sta	___move_metasprite_flipx_PARM_3
+                                   1942 ;	Raw cost for generated ic 362 : (12, 16.000000) count=10.125000
+                                   1943 ;	Raw cost for generated ic 360 : (0, 0.000000) count=10.125000
+                                   1944 ;	genCall
+                                   1945 ;	genSend
+    00000608 98               [ 2] 1946 	tya
+    00000609 20r00r00         [ 6] 1947 	jsr	___move_metasprite_flipx
+                                   1948 ;	assignResultValue
+                                   1949 ;	Raw cost for generated ic 363 : (4, 8.000000) count=10.125000
+                                   1950 ;	src/metasprites.c: 275: break;
+                                   1951 ;	genGoto
+    0000060C 4CrB2r06         [ 3] 1952 	jmp	00129$
+                                   1953 ;	Raw cost for generated ic 369 : (3, 3.000000) count=10.125000
+                                   1954 ;	src/metasprites.c: 276: default:
+                                   1955 ;	genLabel
+    0000060F                       1956 00128$:
+                                   1957 ;	Raw cost for generated ic 370 : (0, 0.000000) count=30.375000
+                                   1958 ;	src/metasprites.c: 282: DEVICE_SPRITE_PX_OFFSET_Y + (PosY >> 4));
+                                   1959 ;	genRightShift
+                                   1960 ;	genRightShiftLiteral
+                                   1961 ;	genrshTwo
+    0000060F AEr03r00         [ 4] 1962 	ldx	(_PosY + 1)
+    00000612 ADr02r00         [ 4] 1963 	lda	_PosY
+    00000615 86*00            [ 3] 1964 	stx	*(REGTEMP+0)
+    00000617 E0 80            [ 2] 1965 	cpx	#0x80
+    00000619 66*00            [ 5] 1966 	ror	*(REGTEMP+0)
+    0000061B 6A               [ 2] 1967 	ror	a
+    0000061C E0 80            [ 2] 1968 	cpx	#0x80
+    0000061E 66*00            [ 5] 1969 	ror	*(REGTEMP+0)
+    00000620 6A               [ 2] 1970 	ror	a
+    00000621 E0 80            [ 2] 1971 	cpx	#0x80
+    00000623 66*00            [ 5] 1972 	ror	*(REGTEMP+0)
+    00000625 6A               [ 2] 1973 	ror	a
+    00000626 E0 80            [ 2] 1974 	cpx	#0x80
+    00000628 66*00            [ 5] 1975 	ror	*(REGTEMP+0)
+    0000062A 6A               [ 2] 1976 	ror	a
+    0000062B A6*00            [ 3] 1977 	ldx	*(REGTEMP+0)
+                                   1978 ;	Raw cost for generated ic 371 : (30, 50.000000) count=30.375000
+                                   1979 ;	genCast
+                                   1980 ;	genCopy
+                                   1981 ;	Raw cost for generated ic 372 : (0, 0.000000) count=30.375000
+                                   1982 ;	genPlus
+                                   1983 ;	genPlusIncr
+    0000062D 18               [ 2] 1984 	clc
+    0000062E 69 FF            [ 2] 1985 	adc	#0xff
+    00000630 48               [ 3] 1986 	pha
+    00000631 8A               [ 2] 1987 	txa
+    00000632 69 FF            [ 2] 1988 	adc	#0xff
+    00000634 AA               [ 2] 1989 	tax
+    00000635 68               [ 4] 1990 	pla
+                                   1991 ;	Raw cost for generated ic 373 : (9, 17.000000) count=30.375000
+                                   1992 ;	genCast
+                                   1993 ;	genCopy
+    00000636 8Dr36r00         [ 4] 1994 	sta	_main___500010039_50001_179
+    00000639 8Er37r00         [ 4] 1995 	stx	(_main___500010039_50001_179 + 1)
+                                   1996 ;	Raw cost for generated ic 374 : (6, 8.000000) count=30.375000
+                                   1997 ;	src/metasprites.c: 281: DEVICE_SPRITE_PX_OFFSET_X + (PosX >> 4),
+                                   1998 ;	genRightShift
+                                   1999 ;	genRightShiftLiteral
+                                   2000 ;	genrshTwo
+    0000063C AEr01r00         [ 4] 2001 	ldx	(_PosX + 1)
+    0000063F ADr00r00         [ 4] 2002 	lda	_PosX
+    00000642 86*00            [ 3] 2003 	stx	*(REGTEMP+0)
+    00000644 E0 80            [ 2] 2004 	cpx	#0x80
+    00000646 66*00            [ 5] 2005 	ror	*(REGTEMP+0)
+    00000648 6A               [ 2] 2006 	ror	a
+    00000649 E0 80            [ 2] 2007 	cpx	#0x80
+    0000064B 66*00            [ 5] 2008 	ror	*(REGTEMP+0)
+    0000064D 6A               [ 2] 2009 	ror	a
+    0000064E E0 80            [ 2] 2010 	cpx	#0x80
+    00000650 66*00            [ 5] 2011 	ror	*(REGTEMP+0)
+    00000652 6A               [ 2] 2012 	ror	a
+    00000653 E0 80            [ 2] 2013 	cpx	#0x80
+    00000655 66*00            [ 5] 2014 	ror	*(REGTEMP+0)
+    00000657 6A               [ 2] 2015 	ror	a
+    00000658 A6*00            [ 3] 2016 	ldx	*(REGTEMP+0)
+    0000065A 8Dr34r00         [ 4] 2017 	sta	_main___500010038_50001_179
+    0000065D 8Er35r00         [ 4] 2018 	stx	(_main___500010038_50001_179 + 1)
+                                   2019 ;	Raw cost for generated ic 376 : (36, 58.000000) count=30.375000
+                                   2020 ;	genAssign
+                                   2021 ;	genAssignLit
+                                   2022 ;	genCopy
+    00000660 8Cr33r00         [ 4] 2023 	sty	_main___500010036_50001_179
+                                   2024 ;	Raw cost for generated ic 379 : (3, 4.000000) count=30.375000
+                                   2025 ;	src/metasprites.c: 278: TILE_NUM_START + get_tile_offset(0, 0),
+                                   2026 ;	Raw cost for generated ic 380 : (0, 0.000000) count=30.375000
+                                   2027 ;	Raw cost for generated ic 381 : (0, 0.000000) count=30.375000
+                                   2028 ;	genCall
+                                   2029 ;	genSend
+    00000663 A9 00            [ 2] 2030 	lda	#0x00
+    00000665 AA               [ 2] 2031 	tax
+    00000666 20r23r01         [ 6] 2032 	jsr	_get_tile_offset
+                                   2033 ;	assignResultValue
+    00000669 8Dr00r00         [ 4] 2034 	sta	___current_base_tile
+                                   2035 ;	Raw cost for generated ic 382 : (9, 14.000000) count=30.375000
+                                   2036 ;	src/metasprites.c: 277: hiwater += move_metasprite_ex(    sprite_metasprites[idx],
+                                   2037 ;	skipping iCode since result will be rematerialized
+                                   2038 ;	Raw cost for generated ic 384 : (0, 0.000000) count=30.375000
+                                   2039 ;	genCast
+                                   2040 ;	genCopy
+    0000066C A2 00            [ 2] 2041 	ldx	#0x00
+    0000066E ADr09r00         [ 4] 2042 	lda	_idx
+                                   2043 ;	Raw cost for generated ic 385 : (5, 6.000000) count=30.375000
+                                   2044 ;	genLeftShift
+                                   2045 ;	genLeftShiftLiteral
+                                   2046 ;	genlshTwo
+    00000671 86*00            [ 3] 2047 	stx	*(REGTEMP+0)
+    00000673 0A               [ 2] 2048 	asl	a
+    00000674 26*00            [ 5] 2049 	rol	*(REGTEMP+0)
+    00000676 A6*00            [ 3] 2050 	ldx	*(REGTEMP+0)
+                                   2051 ;	Raw cost for generated ic 386 : (7, 13.000000) count=30.375000
+                                   2052 ;	genAssign
+                                   2053 ;	genAssignLit
+                                   2054 ;	genCopy
+                                   2055 ;	Raw cost for generated ic 387 : (0, 0.000000) count=30.375000
+                                   2056 ;	genPointerGet
+                                   2057 ;	setupDPTR
+    00000678 18               [ 2] 2058 	clc
+    00000679 69r00            [ 2] 2059 	adc	#<(_sprite_metasprites+0)
+    0000067B 85*00            [ 3] 2060 	sta	*(DPTR+0)
+    0000067D 8A               [ 2] 2061 	txa
+    0000067E 69s00            [ 2] 2062 	adc	#>(_sprite_metasprites+0)
+    00000680 85*01            [ 3] 2063 	sta	*(DPTR+1)
+    00000682 A0 01            [ 2] 2064 	ldy	#0x01
+    00000684 B1*00            [ 6] 2065 	lda	[DPTR],y
+    00000686 AA               [ 2] 2066 	tax
+    00000687 88               [ 2] 2067 	dey
+    00000688 B1*00            [ 6] 2068 	lda	[DPTR],y
+                                   2069 ;	Raw cost for generated ic 388 : (18, 30.000000) count=30.375000
+                                   2070 ;	../../../include/nes/metasprites.h: 91: __current_metasprite = metasprite;
+                                   2071 ;	genCast
+                                   2072 ;	genCopy
+    0000068A 8Dr00r00         [ 4] 2073 	sta	___current_metasprite
+    0000068D 8Er01r00         [ 4] 2074 	stx	(___current_metasprite + 1)
+                                   2075 ;	Raw cost for generated ic 396 : (6, 8.000000) count=30.375000
+                                   2076 ;	../../../include/nes/metasprites.h: 93: __current_base_prop = base_prop;
+                                   2077 ;	genAssign
+                                   2078 ;	genAssignLit
+                                   2079 ;	genCopy
+    00000690 ADr33r00         [ 4] 2080 	lda	_main___500010036_50001_179
+    00000693 8Dr00r00         [ 4] 2081 	sta	___current_base_prop
+                                   2082 ;	Raw cost for generated ic 402 : (6, 8.000000) count=30.375000
+                                   2083 ;	../../../include/nes/metasprites.h: 94: return __move_metasprite(base_sprite, x, y);
+                                   2084 ;	genAssign
+                                   2085 ;	genAssignLit
+                                   2086 ;	genCopy
+    00000696 ADr35r00         [ 4] 2087 	lda	(_main___500010038_50001_179 + 1)
+    00000699 8Dr01r00         [ 4] 2088 	sta	(___move_metasprite_PARM_2 + 1)
+    0000069C ADr34r00         [ 4] 2089 	lda	_main___500010038_50001_179
+    0000069F 8Dr00r00         [ 4] 2090 	sta	___move_metasprite_PARM_2
+                                   2091 ;	Raw cost for generated ic 404 : (12, 16.000000) count=30.375000
+                                   2092 ;	genAssign
+                                   2093 ;	genAssignLit
+                                   2094 ;	genCopy
+    000006A2 ADr37r00         [ 4] 2095 	lda	(_main___500010039_50001_179 + 1)
+    000006A5 8Dr01r00         [ 4] 2096 	sta	(___move_metasprite_PARM_3 + 1)
+    000006A8 ADr36r00         [ 4] 2097 	lda	_main___500010039_50001_179
+    000006AB 8Dr00r00         [ 4] 2098 	sta	___move_metasprite_PARM_3
+                                   2099 ;	Raw cost for generated ic 405 : (12, 16.000000) count=30.375000
+                                   2100 ;	Raw cost for generated ic 403 : (0, 0.000000) count=30.375000
+                                   2101 ;	genCall
+                                   2102 ;	genSend
+    000006AE 98               [ 2] 2103 	tya
+    000006AF 20r00r00         [ 6] 2104 	jsr	___move_metasprite
+                                   2105 ;	assignResultValue
+                                   2106 ;	Raw cost for generated ic 406 : (4, 8.000000) count=30.375000
+                                   2107 ;	src/metasprites.c: 284: }
+                                   2108 ;	genLabel
+    000006B2                       2109 00129$:
+                                   2110 ;	Raw cost for generated ic 413 : (0, 0.000000) count=72.000000
+                                   2111 ;	src/metasprites.c: 287: hide_sprites_range(hiwater, MAX_HARDWARE_SPRITES);        
+                                   2112 ;	Raw cost for generated ic 414 : (0, 0.000000) count=72.000000
+                                   2113 ;	Raw cost for generated ic 415 : (0, 0.000000) count=72.000000
+                                   2114 ;	genCall
+                                   2115 ;	genSend
+    000006B2 A2 40            [ 2] 2116 	ldx	#0x40
+    000006B4 20r00r00         [ 6] 2117 	jsr	_hide_sprites_range
+                                   2118 ;	Raw cost for generated ic 416 : (5, 8.000000) count=72.000000
+                                   2119 ;	src/metasprites.c: 290: if (!(PosF & ACC_Y)) {
+                                   2120 ;	genCast
+                                   2121 ;	genCopy
+    000006B7 ADr08r00         [ 4] 2122 	lda	_PosF
+                                   2123 ;	Raw cost for generated ic 417 : (3, 4.000000) count=72.000000
+                                   2124 ;	genAnd
+    000006BA 29 02            [ 2] 2125 	and	#0x02
+                                   2126 ;	genIfxJump : z
+    000006BC D0 3C            [ 4] 2127 	bne	00136$
+                                   2128 ;	Raw cost for generated ic 418 : (7, 7.600000) count=72.000000
+                                   2129 ;	skipping generated iCode
+                                   2130 ;	Raw cost for generated ic 419 : (0, 0.000000) count=72.000000
+                                   2131 ;	src/metasprites.c: 291: if (SpdY != 0) {
+                                   2132 ;	genIfx
+    000006BE ADr07r00         [ 4] 2133 	lda	(_SpdY + 1)
+    000006C1 0Dr06r00         [ 4] 2134 	ora	_SpdY
+                                   2135 ;	genIfxJump : z
+    000006C4 F0 34            [ 4] 2136 	beq	00136$
+                                   2137 ;	Raw cost for generated ic 422 : (11, 13.600000) count=54.000000
+                                   2138 ;	src/metasprites.c: 292: if (SpdY > 0) SpdY--;
+                                   2139 ;	genCast
+                                   2140 ;	genCopy
+    000006C6 AEr07r00         [ 4] 2141 	ldx	(_SpdY + 1)
+    000006C9 ADr06r00         [ 4] 2142 	lda	_SpdY
+                                   2143 ;	Raw cost for generated ic 425 : (6, 8.000000) count=40.500000
+                                   2144 ;	genCmp
+    000006CC 85*00            [ 3] 2145 	sta	*(REGTEMP+0)
+    000006CE A9 00            [ 2] 2146 	lda	#0x00
+    000006D0 38               [ 2] 2147 	sec
+    000006D1 E5*00            [ 3] 2148 	sbc	*(REGTEMP+0)
+    000006D3 A9 00            [ 2] 2149 	lda	#0x00
+    000006D5 86*00            [ 3] 2150 	stx	*(REGTEMP+0)
+    000006D7 E5*00            [ 3] 2151 	sbc	*(REGTEMP+0)
+    000006D9 50 04            [ 4] 2152 	bvc	00333$
+    000006DB 10 04            [ 4] 2153 	bpl	00332$
+    000006DD 30 13            [ 4] 2154 	bmi	00131$
+    000006DF                       2155 00333$:
+    000006DF 10 11            [ 4] 2156 	bpl	00131$
+    000006E1                       2157 00332$:
+                                   2158 ;	Raw cost for generated ic 426 : (24, 31.400002) count=40.500000
+                                   2159 ;	skipping generated iCode
+                                   2160 ;	Raw cost for generated ic 427 : (0, 0.000000) count=40.500000
+                                   2161 ;	genMinus
+                                   2162 ;	genMinusDec
+    000006E1 38               [ 2] 2163 	sec
+    000006E2 ADr06r00         [ 4] 2164 	lda	_SpdY
+    000006E5 E9 01            [ 2] 2165 	sbc	#0x01
+    000006E7 8Dr06r00         [ 4] 2166 	sta	_SpdY
+    000006EA B0 0E            [ 4] 2167 	bcs	00136$
+    000006EC CEr07r00         [ 6] 2168 	dec	(_SpdY + 1)
+                                   2169 ;	Raw cost for generated ic 431 : (14, 20.600000) count=30.375000
+                                   2170 ;	genGoto
+    000006EF 4CrFAr06         [ 3] 2171 	jmp	00136$
+                                   2172 ;	Raw cost for generated ic 434 : (3, 3.000000) count=30.375000
+                                   2173 ;	genLabel
+    000006F2                       2174 00131$:
+                                   2175 ;	Raw cost for generated ic 435 : (0, 0.000000) count=10.125000
+                                   2176 ;	src/metasprites.c: 293: else SpdY ++;
+                                   2177 ;	genPlus
+                                   2178 ;	genPlusIncr
+    000006F2 EEr06r00         [ 6] 2179 	inc	_SpdY
+    000006F5 D0 03            [ 4] 2180 	bne	00336$
+    000006F7 EEr07r00         [ 6] 2181 	inc	(_SpdY + 1)
+    000006FA                       2182 00336$:
+                                   2183 ;	Raw cost for generated ic 437 : (8, 14.600000) count=10.125000
+                                   2184 ;	genLabel
+    000006FA                       2185 00136$:
+                                   2186 ;	Raw cost for generated ic 442 : (0, 0.000000) count=72.000000
+                                   2187 ;	src/metasprites.c: 298: if (!(PosF & ACC_X)) {
+                                   2188 ;	genCast
+                                   2189 ;	genCopy
+    000006FA ADr08r00         [ 4] 2190 	lda	_PosF
+                                   2191 ;	Raw cost for generated ic 443 : (3, 4.000000) count=72.000000
+                                   2192 ;	genAnd
+    000006FD 29 01            [ 2] 2193 	and	#0x01
+                                   2194 ;	genIfxJump : z
+    000006FF D0 3C            [ 4] 2195 	bne	00143$
+                                   2196 ;	Raw cost for generated ic 444 : (7, 7.600000) count=72.000000
+                                   2197 ;	skipping generated iCode
+                                   2198 ;	Raw cost for generated ic 445 : (0, 0.000000) count=72.000000
+                                   2199 ;	src/metasprites.c: 299: if (SpdX != 0) {
+                                   2200 ;	genIfx
+    00000701 ADr05r00         [ 4] 2201 	lda	(_SpdX + 1)
+    00000704 0Dr04r00         [ 4] 2202 	ora	_SpdX
+                                   2203 ;	genIfxJump : z
+    00000707 F0 34            [ 4] 2204 	beq	00143$
+                                   2205 ;	Raw cost for generated ic 448 : (11, 13.600000) count=54.000000
+                                   2206 ;	src/metasprites.c: 300: if (SpdX > 0) SpdX--;
+                                   2207 ;	genCast
+                                   2208 ;	genCopy
+    00000709 AEr05r00         [ 4] 2209 	ldx	(_SpdX + 1)
+    0000070C ADr04r00         [ 4] 2210 	lda	_SpdX
+                                   2211 ;	Raw cost for generated ic 451 : (6, 8.000000) count=40.500000
+                                   2212 ;	genCmp
+    0000070F 85*00            [ 3] 2213 	sta	*(REGTEMP+0)
+    00000711 A9 00            [ 2] 2214 	lda	#0x00
+    00000713 38               [ 2] 2215 	sec
+    00000714 E5*00            [ 3] 2216 	sbc	*(REGTEMP+0)
+    00000716 A9 00            [ 2] 2217 	lda	#0x00
+    00000718 86*00            [ 3] 2218 	stx	*(REGTEMP+0)
+    0000071A E5*00            [ 3] 2219 	sbc	*(REGTEMP+0)
+    0000071C 50 04            [ 4] 2220 	bvc	00341$
+    0000071E 10 04            [ 4] 2221 	bpl	00340$
+    00000720 30 13            [ 4] 2222 	bmi	00138$
+    00000722                       2223 00341$:
+    00000722 10 11            [ 4] 2224 	bpl	00138$
+    00000724                       2225 00340$:
+                                   2226 ;	Raw cost for generated ic 452 : (24, 31.400002) count=40.500000
+                                   2227 ;	skipping generated iCode
+                                   2228 ;	Raw cost for generated ic 453 : (0, 0.000000) count=40.500000
+                                   2229 ;	genMinus
+                                   2230 ;	genMinusDec
+    00000724 38               [ 2] 2231 	sec
+    00000725 ADr04r00         [ 4] 2232 	lda	_SpdX
+    00000728 E9 01            [ 2] 2233 	sbc	#0x01
+    0000072A 8Dr04r00         [ 4] 2234 	sta	_SpdX
+    0000072D B0 0E            [ 4] 2235 	bcs	00143$
+    0000072F CEr05r00         [ 6] 2236 	dec	(_SpdX + 1)
+                                   2237 ;	Raw cost for generated ic 457 : (14, 20.600000) count=30.375000
+                                   2238 ;	genGoto
+    00000732 4Cr3Dr07         [ 3] 2239 	jmp	00143$
+                                   2240 ;	Raw cost for generated ic 460 : (3, 3.000000) count=30.375000
+                                   2241 ;	genLabel
+    00000735                       2242 00138$:
+                                   2243 ;	Raw cost for generated ic 461 : (0, 0.000000) count=10.125000
+                                   2244 ;	src/metasprites.c: 301: else SpdX ++;
+                                   2245 ;	genPlus
+                                   2246 ;	genPlusIncr
+    00000735 EEr04r00         [ 6] 2247 	inc	_SpdX
+    00000738 D0 03            [ 4] 2248 	bne	00344$
+    0000073A EEr05r00         [ 6] 2249 	inc	(_SpdX + 1)
+    0000073D                       2250 00344$:
+                                   2251 ;	Raw cost for generated ic 463 : (8, 14.600000) count=10.125000
+                                   2252 ;	genLabel
+    0000073D                       2253 00143$:
+                                   2254 ;	Raw cost for generated ic 468 : (0, 0.000000) count=72.000000
+                                   2255 ;	src/metasprites.c: 307: vsync();
+                                   2256 ;	genCall
+    0000073D 20r00r00         [ 6] 2257 	jsr	_vsync
+                                   2258 ;	Raw cost for generated ic 469 : (3, 6.000000) count=72.000000
+                                   2259 ;	genGoto
+    00000740 4Cr38r02         [ 3] 2260 	jmp	00145$
+                                   2261 ;	Raw cost for generated ic 470 : (3, 3.000000) count=72.000000
+                                   2262 ;	genLabel
+                                   2263 ;	Raw cost for generated ic 472 : (0, 0.000000) count=0.000000
+                                   2264 ;	src/metasprites.c: 309: }
+                                   2265 ;	genEndFunction
+    00000743 60               [ 6] 2266 	rts
+                                   2267 ;	Raw cost for generated ic 473 : (1, 6.000000) count=0.000000
+                                   2268 	.area _CODE
+    00000744                       2269 _pattern:
+    00000744 80                    2270 	.db #0x80	; 128
+    00000745 80                    2271 	.db #0x80	; 128
+    00000746 40                    2272 	.db #0x40	; 64
+    00000747 40                    2273 	.db #0x40	; 64
+    00000748 20                    2274 	.db #0x20	; 32
+    00000749 20                    2275 	.db #0x20	; 32
+    0000074A 10                    2276 	.db #0x10	; 16
+    0000074B 10                    2277 	.db #0x10	; 16
+    0000074C 08                    2278 	.db #0x08	; 8
+    0000074D 08                    2279 	.db #0x08	; 8
+    0000074E 04                    2280 	.db #0x04	; 4
+    0000074F 04                    2281 	.db #0x04	; 4
+    00000750 02                    2282 	.db #0x02	; 2
+    00000751 02                    2283 	.db #0x02	; 2
+    00000752 01                    2284 	.db #0x01	; 1
+    00000753 01                    2285 	.db #0x01	; 1
+    00000754                       2286 _reverse_bits:
+    00000754 00                    2287 	.db #0x00	; 0
+    00000755 80                    2288 	.db #0x80	; 128
+    00000756 40                    2289 	.db #0x40	; 64
+    00000757 C0                    2290 	.db #0xc0	; 192
+    00000758 20                    2291 	.db #0x20	; 32
+    00000759 A0                    2292 	.db #0xa0	; 160
+    0000075A 60                    2293 	.db #0x60	; 96
+    0000075B E0                    2294 	.db #0xe0	; 224
+    0000075C 10                    2295 	.db #0x10	; 16
+    0000075D 90                    2296 	.db #0x90	; 144
+    0000075E 50                    2297 	.db #0x50	; 80	'P'
+    0000075F D0                    2298 	.db #0xd0	; 208
+    00000760 30                    2299 	.db #0x30	; 48	'0'
+    00000761 B0                    2300 	.db #0xb0	; 176
+    00000762 70                    2301 	.db #0x70	; 112	'p'
+    00000763 F0                    2302 	.db #0xf0	; 240
+    00000764 08                    2303 	.db #0x08	; 8
+    00000765 88                    2304 	.db #0x88	; 136
+    00000766 48                    2305 	.db #0x48	; 72	'H'
+    00000767 C8                    2306 	.db #0xc8	; 200
+    00000768 28                    2307 	.db #0x28	; 40
+    00000769 A8                    2308 	.db #0xa8	; 168
+    0000076A 68                    2309 	.db #0x68	; 104	'h'
+    0000076B E8                    2310 	.db #0xe8	; 232
+    0000076C 18                    2311 	.db #0x18	; 24
+    0000076D 98                    2312 	.db #0x98	; 152
+    0000076E 58                    2313 	.db #0x58	; 88	'X'
+    0000076F D8                    2314 	.db #0xd8	; 216
+    00000770 38                    2315 	.db #0x38	; 56	'8'
+    00000771 B8                    2316 	.db #0xb8	; 184
+    00000772 78                    2317 	.db #0x78	; 120	'x'
+    00000773 F8                    2318 	.db #0xf8	; 248
+    00000774 04                    2319 	.db #0x04	; 4
+    00000775 84                    2320 	.db #0x84	; 132
+    00000776 44                    2321 	.db #0x44	; 68	'D'
+    00000777 C4                    2322 	.db #0xc4	; 196
+    00000778 24                    2323 	.db #0x24	; 36
+    00000779 A4                    2324 	.db #0xa4	; 164
+    0000077A 64                    2325 	.db #0x64	; 100	'd'
+    0000077B E4                    2326 	.db #0xe4	; 228
+    0000077C 14                    2327 	.db #0x14	; 20
+    0000077D 94                    2328 	.db #0x94	; 148
+    0000077E 54                    2329 	.db #0x54	; 84	'T'
+    0000077F D4                    2330 	.db #0xd4	; 212
+    00000780 34                    2331 	.db #0x34	; 52	'4'
+    00000781 B4                    2332 	.db #0xb4	; 180
+    00000782 74                    2333 	.db #0x74	; 116	't'
+    00000783 F4                    2334 	.db #0xf4	; 244
+    00000784 0C                    2335 	.db #0x0c	; 12
+    00000785 8C                    2336 	.db #0x8c	; 140
+    00000786 4C                    2337 	.db #0x4c	; 76	'L'
+    00000787 CC                    2338 	.db #0xcc	; 204
+    00000788 2C                    2339 	.db #0x2c	; 44
+    00000789 AC                    2340 	.db #0xac	; 172
+    0000078A 6C                    2341 	.db #0x6c	; 108	'l'
+    0000078B EC                    2342 	.db #0xec	; 236
+    0000078C 1C                    2343 	.db #0x1c	; 28
+    0000078D 9C                    2344 	.db #0x9c	; 156
+    0000078E 5C                    2345 	.db #0x5c	; 92
+    0000078F DC                    2346 	.db #0xdc	; 220
+    00000790 3C                    2347 	.db #0x3c	; 60
+    00000791 BC                    2348 	.db #0xbc	; 188
+    00000792 7C                    2349 	.db #0x7c	; 124
+    00000793 FC                    2350 	.db #0xfc	; 252
+    00000794 02                    2351 	.db #0x02	; 2
+    00000795 82                    2352 	.db #0x82	; 130
+    00000796 42                    2353 	.db #0x42	; 66	'B'
+    00000797 C2                    2354 	.db #0xc2	; 194
+    00000798 22                    2355 	.db #0x22	; 34
+    00000799 A2                    2356 	.db #0xa2	; 162
+    0000079A 62                    2357 	.db #0x62	; 98	'b'
+    0000079B E2                    2358 	.db #0xe2	; 226
+    0000079C 12                    2359 	.db #0x12	; 18
+    0000079D 92                    2360 	.db #0x92	; 146
+    0000079E 52                    2361 	.db #0x52	; 82	'R'
+    0000079F D2                    2362 	.db #0xd2	; 210
+    000007A0 32                    2363 	.db #0x32	; 50	'2'
+    000007A1 B2                    2364 	.db #0xb2	; 178
+    000007A2 72                    2365 	.db #0x72	; 114	'r'
+    000007A3 F2                    2366 	.db #0xf2	; 242
+    000007A4 0A                    2367 	.db #0x0a	; 10
+    000007A5 8A                    2368 	.db #0x8a	; 138
+    000007A6 4A                    2369 	.db #0x4a	; 74	'J'
+    000007A7 CA                    2370 	.db #0xca	; 202
+    000007A8 2A                    2371 	.db #0x2a	; 42
+    000007A9 AA                    2372 	.db #0xaa	; 170
+    000007AA 6A                    2373 	.db #0x6a	; 106	'j'
+    000007AB EA                    2374 	.db #0xea	; 234
+    000007AC 1A                    2375 	.db #0x1a	; 26
+    000007AD 9A                    2376 	.db #0x9a	; 154
+    000007AE 5A                    2377 	.db #0x5a	; 90	'Z'
+    000007AF DA                    2378 	.db #0xda	; 218
+    000007B0 3A                    2379 	.db #0x3a	; 58
+    000007B1 BA                    2380 	.db #0xba	; 186
+    000007B2 7A                    2381 	.db #0x7a	; 122	'z'
+    000007B3 FA                    2382 	.db #0xfa	; 250
+    000007B4 06                    2383 	.db #0x06	; 6
+    000007B5 86                    2384 	.db #0x86	; 134
+    000007B6 46                    2385 	.db #0x46	; 70	'F'
+    000007B7 C6                    2386 	.db #0xc6	; 198
+    000007B8 26                    2387 	.db #0x26	; 38
+    000007B9 A6                    2388 	.db #0xa6	; 166
+    000007BA 66                    2389 	.db #0x66	; 102	'f'
+    000007BB E6                    2390 	.db #0xe6	; 230
+    000007BC 16                    2391 	.db #0x16	; 22
+    000007BD 96                    2392 	.db #0x96	; 150
+    000007BE 56                    2393 	.db #0x56	; 86	'V'
+    000007BF D6                    2394 	.db #0xd6	; 214
+    000007C0 36                    2395 	.db #0x36	; 54	'6'
+    000007C1 B6                    2396 	.db #0xb6	; 182
+    000007C2 76                    2397 	.db #0x76	; 118	'v'
+    000007C3 F6                    2398 	.db #0xf6	; 246
+    000007C4 0E                    2399 	.db #0x0e	; 14
+    000007C5 8E                    2400 	.db #0x8e	; 142
+    000007C6 4E                    2401 	.db #0x4e	; 78	'N'
+    000007C7 CE                    2402 	.db #0xce	; 206
+    000007C8 2E                    2403 	.db #0x2e	; 46
+    000007C9 AE                    2404 	.db #0xae	; 174
+    000007CA 6E                    2405 	.db #0x6e	; 110	'n'
+    000007CB EE                    2406 	.db #0xee	; 238
+    000007CC 1E                    2407 	.db #0x1e	; 30
+    000007CD 9E                    2408 	.db #0x9e	; 158
+    000007CE 5E                    2409 	.db #0x5e	; 94
+    000007CF DE                    2410 	.db #0xde	; 222
+    000007D0 3E                    2411 	.db #0x3e	; 62
+    000007D1 BE                    2412 	.db #0xbe	; 190
+    000007D2 7E                    2413 	.db #0x7e	; 126
+    000007D3 FE                    2414 	.db #0xfe	; 254
+    000007D4 01                    2415 	.db #0x01	; 1
+    000007D5 81                    2416 	.db #0x81	; 129
+    000007D6 41                    2417 	.db #0x41	; 65	'A'
+    000007D7 C1                    2418 	.db #0xc1	; 193
+    000007D8 21                    2419 	.db #0x21	; 33
+    000007D9 A1                    2420 	.db #0xa1	; 161
+    000007DA 61                    2421 	.db #0x61	; 97	'a'
+    000007DB E1                    2422 	.db #0xe1	; 225
+    000007DC 11                    2423 	.db #0x11	; 17
+    000007DD 91                    2424 	.db #0x91	; 145
+    000007DE 51                    2425 	.db #0x51	; 81	'Q'
+    000007DF D1                    2426 	.db #0xd1	; 209
+    000007E0 31                    2427 	.db #0x31	; 49	'1'
+    000007E1 B1                    2428 	.db #0xb1	; 177
+    000007E2 71                    2429 	.db #0x71	; 113	'q'
+    000007E3 F1                    2430 	.db #0xf1	; 241
+    000007E4 09                    2431 	.db #0x09	; 9
+    000007E5 89                    2432 	.db #0x89	; 137
+    000007E6 49                    2433 	.db #0x49	; 73	'I'
+    000007E7 C9                    2434 	.db #0xc9	; 201
+    000007E8 29                    2435 	.db #0x29	; 41
+    000007E9 A9                    2436 	.db #0xa9	; 169
+    000007EA 69                    2437 	.db #0x69	; 105	'i'
+    000007EB E9                    2438 	.db #0xe9	; 233
+    000007EC 19                    2439 	.db #0x19	; 25
+    000007ED 99                    2440 	.db #0x99	; 153
+    000007EE 59                    2441 	.db #0x59	; 89	'Y'
+    000007EF D9                    2442 	.db #0xd9	; 217
+    000007F0 39                    2443 	.db #0x39	; 57	'9'
+    000007F1 B9                    2444 	.db #0xb9	; 185
+    000007F2 79                    2445 	.db #0x79	; 121	'y'
+    000007F3 F9                    2446 	.db #0xf9	; 249
+    000007F4 05                    2447 	.db #0x05	; 5
+    000007F5 85                    2448 	.db #0x85	; 133
+    000007F6 45                    2449 	.db #0x45	; 69	'E'
+    000007F7 C5                    2450 	.db #0xc5	; 197
+    000007F8 25                    2451 	.db #0x25	; 37
+    000007F9 A5                    2452 	.db #0xa5	; 165
+    000007FA 65                    2453 	.db #0x65	; 101	'e'
+    000007FB E5                    2454 	.db #0xe5	; 229
+    000007FC 15                    2455 	.db #0x15	; 21
+    000007FD 95                    2456 	.db #0x95	; 149
+    000007FE 55                    2457 	.db #0x55	; 85	'U'
+    000007FF D5                    2458 	.db #0xd5	; 213
+    00000800 35                    2459 	.db #0x35	; 53	'5'
+    00000801 B5                    2460 	.db #0xb5	; 181
+    00000802 75                    2461 	.db #0x75	; 117	'u'
+    00000803 F5                    2462 	.db #0xf5	; 245
+    00000804 0D                    2463 	.db #0x0d	; 13
+    00000805 8D                    2464 	.db #0x8d	; 141
+    00000806 4D                    2465 	.db #0x4d	; 77	'M'
+    00000807 CD                    2466 	.db #0xcd	; 205
+    00000808 2D                    2467 	.db #0x2d	; 45
+    00000809 AD                    2468 	.db #0xad	; 173
+    0000080A 6D                    2469 	.db #0x6d	; 109	'm'
+    0000080B ED                    2470 	.db #0xed	; 237
+    0000080C 1D                    2471 	.db #0x1d	; 29
+    0000080D 9D                    2472 	.db #0x9d	; 157
+    0000080E 5D                    2473 	.db #0x5d	; 93
+    0000080F DD                    2474 	.db #0xdd	; 221
+    00000810 3D                    2475 	.db #0x3d	; 61
+    00000811 BD                    2476 	.db #0xbd	; 189
+    00000812 7D                    2477 	.db #0x7d	; 125
+    00000813 FD                    2478 	.db #0xfd	; 253
+    00000814 03                    2479 	.db #0x03	; 3
+    00000815 83                    2480 	.db #0x83	; 131
+    00000816 43                    2481 	.db #0x43	; 67	'C'
+    00000817 C3                    2482 	.db #0xc3	; 195
+    00000818 23                    2483 	.db #0x23	; 35
+    00000819 A3                    2484 	.db #0xa3	; 163
+    0000081A 63                    2485 	.db #0x63	; 99	'c'
+    0000081B E3                    2486 	.db #0xe3	; 227
+    0000081C 13                    2487 	.db #0x13	; 19
+    0000081D 93                    2488 	.db #0x93	; 147
+    0000081E 53                    2489 	.db #0x53	; 83	'S'
+    0000081F D3                    2490 	.db #0xd3	; 211
+    00000820 33                    2491 	.db #0x33	; 51	'3'
+    00000821 B3                    2492 	.db #0xb3	; 179
+    00000822 73                    2493 	.db #0x73	; 115	's'
+    00000823 F3                    2494 	.db #0xf3	; 243
+    00000824 0B                    2495 	.db #0x0b	; 11
+    00000825 8B                    2496 	.db #0x8b	; 139
+    00000826 4B                    2497 	.db #0x4b	; 75	'K'
+    00000827 CB                    2498 	.db #0xcb	; 203
+    00000828 2B                    2499 	.db #0x2b	; 43
+    00000829 AB                    2500 	.db #0xab	; 171
+    0000082A 6B                    2501 	.db #0x6b	; 107	'k'
+    0000082B EB                    2502 	.db #0xeb	; 235
+    0000082C 1B                    2503 	.db #0x1b	; 27
+    0000082D 9B                    2504 	.db #0x9b	; 155
+    0000082E 5B                    2505 	.db #0x5b	; 91
+    0000082F DB                    2506 	.db #0xdb	; 219
+    00000830 3B                    2507 	.db #0x3b	; 59
+    00000831 BB                    2508 	.db #0xbb	; 187
+    00000832 7B                    2509 	.db #0x7b	; 123
+    00000833 FB                    2510 	.db #0xfb	; 251
+    00000834 07                    2511 	.db #0x07	; 7
+    00000835 87                    2512 	.db #0x87	; 135
+    00000836 47                    2513 	.db #0x47	; 71	'G'
+    00000837 C7                    2514 	.db #0xc7	; 199
+    00000838 27                    2515 	.db #0x27	; 39
+    00000839 A7                    2516 	.db #0xa7	; 167
+    0000083A 67                    2517 	.db #0x67	; 103	'g'
+    0000083B E7                    2518 	.db #0xe7	; 231
+    0000083C 17                    2519 	.db #0x17	; 23
+    0000083D 97                    2520 	.db #0x97	; 151
+    0000083E 57                    2521 	.db #0x57	; 87	'W'
+    0000083F D7                    2522 	.db #0xd7	; 215
+    00000840 37                    2523 	.db #0x37	; 55	'7'
+    00000841 B7                    2524 	.db #0xb7	; 183
+    00000842 77                    2525 	.db #0x77	; 119	'w'
+    00000843 F7                    2526 	.db #0xf7	; 247
+    00000844 0F                    2527 	.db #0x0f	; 15
+    00000845 8F                    2528 	.db #0x8f	; 143
+    00000846 4F                    2529 	.db #0x4f	; 79	'O'
+    00000847 CF                    2530 	.db #0xcf	; 207
+    00000848 2F                    2531 	.db #0x2f	; 47
+    00000849 AF                    2532 	.db #0xaf	; 175
+    0000084A 6F                    2533 	.db #0x6f	; 111	'o'
+    0000084B EF                    2534 	.db #0xef	; 239
+    0000084C 1F                    2535 	.db #0x1f	; 31
+    0000084D 9F                    2536 	.db #0x9f	; 159
+    0000084E 5F                    2537 	.db #0x5f	; 95
+    0000084F DF                    2538 	.db #0xdf	; 223
+    00000850 3F                    2539 	.db #0x3f	; 63
+    00000851 BF                    2540 	.db #0xbf	; 191
+    00000852 7F                    2541 	.db #0x7f	; 127
+    00000853 FF                    2542 	.db #0xff	; 255
+    00000854                       2543 _gray_pal:
+    00000854 20                    2544 	.db #0x20	; 32
+    00000855 3D                    2545 	.db #0x3d	; 61
+    00000856 00                    2546 	.db #0x00	; 0
+    00000857 1D                    2547 	.db #0x1d	; 29
+    00000858                       2548 _pink_pal:
+    00000858 20                    2549 	.db #0x20	; 32
+    00000859 24                    2550 	.db #0x24	; 36
+    0000085A 14                    2551 	.db #0x14	; 20
+    0000085B 04                    2552 	.db #0x04	; 4
+    0000085C                       2553 _cyan_pal:
+    0000085C 20                    2554 	.db #0x20	; 32
+    0000085D 3C                    2555 	.db #0x3c	; 60
+    0000085E 2C                    2556 	.db #0x2c	; 44
+    0000085F 1C                    2557 	.db #0x1c	; 28
+    00000860                       2558 _green_pal:
+    00000860 20                    2559 	.db #0x20	; 32
+    00000861 3A                    2560 	.db #0x3a	; 58
+    00000862 2A                    2561 	.db #0x2a	; 42
+    00000863 19                    2562 	.db #0x19	; 25
+                                   2563 	.area _XINIT
+    00000000                       2564 __xinit__joyp:
+    00000000 00                    2565 	.db #0x00	; 0
+    00000001                       2566 __xinit__old_joyp:
+    00000001 00                    2567 	.db #0x00	; 0
+                                   2568 	.area _CABS    (ABS)

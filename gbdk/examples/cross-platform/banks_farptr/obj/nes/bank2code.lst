@@ -1,0 +1,486 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module bank2code
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl b_some_bank2_proc2
+                                     22 	.globl _some_bank2_proc2
+                                     23 	.globl b___func_some_bank2_proc2
+                                     24 	.globl ___func_some_bank2_proc2
+                                     25 	.globl b_some_bank2_proc1
+                                     26 	.globl _some_bank2_proc1
+                                     27 	.globl b___func_some_bank2_proc1
+                                     28 	.globl ___func_some_bank2_proc1
+                                     29 	.globl b_some_bank2_proc0
+                                     30 	.globl _some_bank2_proc0
+                                     31 	.globl b___func_some_bank2_proc0
+                                     32 	.globl ___func_some_bank2_proc0
+                                     33 	.globl _printf
+                                     34 	.globl _OAMDMA
+                                     35 	.globl _PPUDATA
+                                     36 	.globl _PPUADDR
+                                     37 	.globl _PPUSCROLL
+                                     38 	.globl _OAMDATA
+                                     39 	.globl _OAMADDR
+                                     40 	.globl _PPUSTATUS
+                                     41 	.globl _PPUMASK
+                                     42 	.globl _PPUCTRL
+                                     43 ;--------------------------------------------------------
+                                     44 ; ZP ram data
+                                     45 ;--------------------------------------------------------
+                                     46 	.area _ZP      (PAG)
+    00000000                         47 _local_bank2_proc_sloc0_1_0:
+    00000000                         48 	.ds 2
+    00000002                         49 _local_bank2_proc_sloc1_1_0:
+    00000002                         50 	.ds 2
+                                     51 ;--------------------------------------------------------
+                                     52 ; overlayable items in ram
+                                     53 ;--------------------------------------------------------
+                                     54 ;--------------------------------------------------------
+                                     55 ; uninitialized external ram data
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _BSS
+                         00002000    58 _PPUCTRL	=	0x2000
+                         00002001    59 _PPUMASK	=	0x2001
+                         00002002    60 _PPUSTATUS	=	0x2002
+                         00002003    61 _OAMADDR	=	0x2003
+                         00002004    62 _OAMDATA	=	0x2004
+                         00002005    63 _PPUSCROLL	=	0x2005
+                         00002006    64 _PPUADDR	=	0x2006
+                         00002007    65 _PPUDATA	=	0x2007
+                         00004014    66 _OAMDMA	=	0x4014
+    00000000                         67 _local_bank2_proc_PARM_2:
+    00000000                         68 	.ds 2
+    00000002                         69 _some_bank2_proc1_param2_10000_113:
+    00000002                         70 	.ds 1
+    00000003                         71 _some_bank2_proc1_param1_10000_113:
+    00000003                         72 	.ds 1
+                                     73 ;--------------------------------------------------------
+                                     74 ; absolute external ram data
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _DABS    (ABS)
+                                     77 ;--------------------------------------------------------
+                                     78 ; initialized external ram data
+                                     79 ;--------------------------------------------------------
+                                     80 	.area _DATA
+                                     81 ;--------------------------------------------------------
+                                     82 ; global & static initialisations
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _HOME
+                                     85 	.area _GSINIT
+                                     86 	.area _GSFINAL
+                                     87 	.area _GSINIT
+                                     88 ;--------------------------------------------------------
+                                     89 ; Home
+                                     90 ;--------------------------------------------------------
+                                     91 	.area _HOME
+                                     92 	.area _HOME
+                                     93 ;--------------------------------------------------------
+                                     94 ; code
+                                     95 ;--------------------------------------------------------
+                                     96 	.area _CODE_2
+                                     97 ;------------------------------------------------------------
+                                     98 ;Allocation info for local variables in function 'local_bank2_proc'
+                                     99 ;------------------------------------------------------------
+                                    100 ;sloc0         Allocated with name '_local_bank2_proc_sloc0_1_0'
+                                    101 ;sloc1         Allocated with name '_local_bank2_proc_sloc1_1_0'
+                                    102 ;param2        Allocated with name '_local_bank2_proc_PARM_2'
+                                    103 ;param1        Allocated to registers a x 
+                                    104 ;------------------------------------------------------------
+                                    105 ;	src/bank2code.c: 7: static int local_bank2_proc(int param1, int param2) {
+                                    106 ;	genLabel
+                                    107 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    108 ;	-----------------------------------------
+                                    109 ;	 function local_bank2_proc
+                                    110 ;	-----------------------------------------
+                                    111 ;	Register assignment is optimal.
+                                    112 ;	Stack space usage: 0 bytes.
+    00000000                        113 _local_bank2_proc:
+                                    114 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    115 ;	genReceive
+                                    116 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    117 ;	src/bank2code.c: 8: printf("  sum: %d (bank=%d)\n", param1 + param2, (int)CURRENT_BANK);
+                                    118 ;	genCast
+    00000000 ACr00r00         [ 4]  119 	ldy	__current_bank
+    00000003 84*00            [ 3]  120 	sty	*_local_bank2_proc_sloc0_1_0
+    00000005 A0 00            [ 2]  121 	ldy	#0x00
+    00000007 84*01            [ 3]  122 	sty	*(_local_bank2_proc_sloc0_1_0 + 1)
+                                    123 ;	Raw cost for generated ic 3 : (9, 12.000000) count=1.000000
+                                    124 ;	genPlus
+                                    125 ;	genPlusIncr
+    00000009 18               [ 2]  126 	clc
+    0000000A 6Dr00r00         [ 4]  127 	adc	_local_bank2_proc_PARM_2
+    0000000D 85*02            [ 3]  128 	sta	*_local_bank2_proc_sloc1_1_0
+    0000000F 8A               [ 2]  129 	txa
+    00000010 6Dr01r00         [ 4]  130 	adc	(_local_bank2_proc_PARM_2 + 1)
+    00000013 85*03            [ 3]  131 	sta	*(_local_bank2_proc_sloc1_1_0 + 1)
+                                    132 ;	Raw cost for generated ic 4 : (12, 18.000000) count=1.000000
+                                    133 ;	skipping iCode since result will be rematerialized
+                                    134 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    135 ;	skipping iCode since result will be rematerialized
+                                    136 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    137 ;	genIpush
+    00000015 A5*01            [ 3]  138 	lda	*(_local_bank2_proc_sloc0_1_0 + 1)
+    00000017 48               [ 3]  139 	pha
+    00000018 A5*00            [ 3]  140 	lda	*_local_bank2_proc_sloc0_1_0
+    0000001A 48               [ 3]  141 	pha
+                                    142 ;	Raw cost for generated ic 7 : (6, 12.000000) count=1.000000
+                                    143 ;	genIpush
+    0000001B A5*03            [ 3]  144 	lda	*(_local_bank2_proc_sloc1_1_0 + 1)
+    0000001D 48               [ 3]  145 	pha
+    0000001E A5*02            [ 3]  146 	lda	*_local_bank2_proc_sloc1_1_0
+    00000020 48               [ 3]  147 	pha
+                                    148 ;	Raw cost for generated ic 8 : (6, 12.000000) count=1.000000
+                                    149 ;	genIpush
+    00000021 A9s00            [ 2]  150 	lda	#>___str_0
+    00000023 48               [ 3]  151 	pha
+    00000024 A9rBE            [ 2]  152 	lda	#___str_0
+    00000026 48               [ 3]  153 	pha
+                                    154 ;	Raw cost for generated ic 9 : (6, 10.000000) count=1.000000
+                                    155 ;	genCall
+    00000027 20r00r00         [ 6]  156 	jsr	_printf
+    0000002A 68               [ 4]  157 	pla
+    0000002B 68               [ 4]  158 	pla
+    0000002C 68               [ 4]  159 	pla
+    0000002D 68               [ 4]  160 	pla
+    0000002E 68               [ 4]  161 	pla
+    0000002F 68               [ 4]  162 	pla
+                                    163 ;	Raw cost for generated ic 10 : (9, 30.000000) count=1.000000
+                                    164 ;	src/bank2code.c: 9: return (param1 + param2) << 1;
+                                    165 ;	genLeftShift
+                                    166 ;	genLeftShiftLiteral
+                                    167 ;	genlshTwo
+    00000030 A6*03            [ 3]  168 	ldx	*(_local_bank2_proc_sloc1_1_0 + 1)
+    00000032 A5*02            [ 3]  169 	lda	*_local_bank2_proc_sloc1_1_0
+    00000034 86*00            [ 3]  170 	stx	*(REGTEMP+0)
+    00000036 0A               [ 2]  171 	asl	a
+    00000037 26*00            [ 5]  172 	rol	*(REGTEMP+0)
+    00000039 A6*00            [ 3]  173 	ldx	*(REGTEMP+0)
+                                    174 ;	Raw cost for generated ic 12 : (11, 19.000000) count=1.000000
+                                    175 ;	genRet
+                                    176 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    177 ;	genLabel
+                                    178 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    179 ;	src/bank2code.c: 10: }
+                                    180 ;	genEndFunction
+    0000003B 60               [ 6]  181 	rts
+                                    182 ;	Raw cost for generated ic 15 : (1, 6.000000) count=1.000000
+                                    183 ;------------------------------------------------------------
+                                    184 ;Allocation info for local variables in function '__func_some_bank2_proc0'
+                                    185 ;------------------------------------------------------------
+                                    186 ;	src/bank2code.c: 12: BANKREF(some_bank2_proc0)
+                                    187 ;	genLabel
+                                    188 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    189 ;	-----------------------------------------
+                                    190 ;	 function __func_some_bank2_proc0
+                                    191 ;	-----------------------------------------
+                                    192 ;	Register assignment is optimal.
+                                    193 ;	Stack space usage: 0 bytes.
+                         00000002   194 	b___func_some_bank2_proc0	= 2
+    0000003C                        195 ___func_some_bank2_proc0:
+                                    196 ;	naked function: no prologue.
+                                    197 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    198 ;	m6502_genInline
+                                    199 		.local b___func_some_bank2_proc0 
+                         00000002   200 	 ___bank_some_bank2_proc0 = b___func_some_bank2_proc0 
+                                    201 	 .globl ___bank_some_bank2_proc0 
+                                    202 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    203 ;	genLabel
+                                    204 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    205 ;	genEndFunction
+                                    206 ;	naked function: no epilogue.
+                                    207 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    208 ;------------------------------------------------------------
+                                    209 ;Allocation info for local variables in function 'some_bank2_proc0'
+                                    210 ;------------------------------------------------------------
+                                    211 ;	src/bank2code.c: 13: void some_bank2_proc0(void) BANKED {
+                                    212 ;	genLabel
+                                    213 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    214 ;	-----------------------------------------
+                                    215 ;	 function some_bank2_proc0
+                                    216 ;	-----------------------------------------
+                                    217 ;	Register assignment is optimal.
+                                    218 ;	Stack space usage: 0 bytes.
+                         00000002   219 	b_some_bank2_proc0	= 2
+    0000003C                        220 _some_bank2_proc0:
+                                    221 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    222 ;	src/bank2code.c: 14: printf("some_bank2_proc0\n");
+                                    223 ;	skipping iCode since result will be rematerialized
+                                    224 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    225 ;	skipping iCode since result will be rematerialized
+                                    226 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    227 ;	genIpush
+    0000003C A9s00            [ 2]  228 	lda	#>___str_1
+    0000003E 48               [ 3]  229 	pha
+    0000003F A9rD3            [ 2]  230 	lda	#___str_1
+    00000041 48               [ 3]  231 	pha
+                                    232 ;	Raw cost for generated ic 4 : (6, 10.000000) count=1.000000
+                                    233 ;	genCall
+    00000042 20r00r00         [ 6]  234 	jsr	_printf
+    00000045 68               [ 4]  235 	pla
+    00000046 68               [ 4]  236 	pla
+                                    237 ;	Raw cost for generated ic 5 : (5, 14.000000) count=1.000000
+                                    238 ;	genLabel
+                                    239 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    240 ;	src/bank2code.c: 15: }
+                                    241 ;	genEndFunction
+    00000047 60               [ 6]  242 	rts
+                                    243 ;	Raw cost for generated ic 7 : (1, 6.000000) count=1.000000
+                                    244 ;------------------------------------------------------------
+                                    245 ;Allocation info for local variables in function '__func_some_bank2_proc1'
+                                    246 ;------------------------------------------------------------
+                                    247 ;	src/bank2code.c: 17: BANKREF(some_bank2_proc1)
+                                    248 ;	genLabel
+                                    249 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    250 ;	-----------------------------------------
+                                    251 ;	 function __func_some_bank2_proc1
+                                    252 ;	-----------------------------------------
+                                    253 ;	Register assignment is optimal.
+                                    254 ;	Stack space usage: 0 bytes.
+                         00000002   255 	b___func_some_bank2_proc1	= 2
+    00000048                        256 ___func_some_bank2_proc1:
+                                    257 ;	naked function: no prologue.
+                                    258 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    259 ;	m6502_genInline
+                                    260 		.local b___func_some_bank2_proc1 
+                         00000002   261 	 ___bank_some_bank2_proc1 = b___func_some_bank2_proc1 
+                                    262 	 .globl ___bank_some_bank2_proc1 
+                                    263 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    264 ;	genLabel
+                                    265 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    266 ;	genEndFunction
+                                    267 ;	naked function: no epilogue.
+                                    268 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    269 ;------------------------------------------------------------
+                                    270 ;Allocation info for local variables in function 'some_bank2_proc1'
+                                    271 ;------------------------------------------------------------
+                                    272 ;param2        Allocated with name '_some_bank2_proc1_param2_10000_113'
+                                    273 ;param1        Allocated with name '_some_bank2_proc1_param1_10000_113'
+                                    274 ;------------------------------------------------------------
+                                    275 ;	src/bank2code.c: 18: int some_bank2_proc1(uint8_t param1, uint8_t param2) BANKED {
+                                    276 ;	genLabel
+                                    277 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    278 ;	-----------------------------------------
+                                    279 ;	 function some_bank2_proc1
+                                    280 ;	-----------------------------------------
+                                    281 ;	Register assignment is optimal.
+                                    282 ;	Stack space usage: 0 bytes.
+                         00000002   283 	b_some_bank2_proc1	= 2
+    00000048                        284 _some_bank2_proc1:
+                                    285 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    286 ;	genReceive
+    00000048 8Dr03r00         [ 4]  287 	sta	_some_bank2_proc1_param1_10000_113
+                                    288 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    289 ;	genReceive
+    0000004B 8Er02r00         [ 4]  290 	stx	_some_bank2_proc1_param2_10000_113
+                                    291 ;	Raw cost for generated ic 3 : (3, 4.000000) count=1.000000
+                                    292 ;	src/bank2code.c: 19: printf("some_bank2_proc1\n");
+                                    293 ;	skipping iCode since result will be rematerialized
+                                    294 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    295 ;	skipping iCode since result will be rematerialized
+                                    296 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    297 ;	genIpush
+    0000004E A9s00            [ 2]  298 	lda	#>___str_2
+    00000050 48               [ 3]  299 	pha
+    00000051 A9rE5            [ 2]  300 	lda	#___str_2
+    00000053 48               [ 3]  301 	pha
+                                    302 ;	Raw cost for generated ic 6 : (6, 10.000000) count=1.000000
+                                    303 ;	genCall
+    00000054 20r00r00         [ 6]  304 	jsr	_printf
+    00000057 68               [ 4]  305 	pla
+    00000058 68               [ 4]  306 	pla
+                                    307 ;	Raw cost for generated ic 7 : (5, 14.000000) count=1.000000
+                                    308 ;	src/bank2code.c: 20: return local_bank2_proc(param1, param2);
+                                    309 ;	genCast
+                                    310 ;	genCopy
+    00000059 A2 00            [ 2]  311 	ldx	#0x00
+    0000005B ADr03r00         [ 4]  312 	lda	_some_bank2_proc1_param1_10000_113
+                                    313 ;	Raw cost for generated ic 8 : (5, 6.000000) count=1.000000
+                                    314 ;	genCast
+    0000005E ACr02r00         [ 4]  315 	ldy	_some_bank2_proc1_param2_10000_113
+    00000061 8Cr00r00         [ 4]  316 	sty	_local_bank2_proc_PARM_2
+    00000064 8Er01r00         [ 4]  317 	stx	(_local_bank2_proc_PARM_2 + 1)
+                                    318 ;	Raw cost for generated ic 9 : (9, 12.000000) count=1.000000
+                                    319 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    320 ;	genCall
+                                    321 ;	genSend
+                                    322 ;	assignResultValue
+                                    323 ;	Raw cost for generated ic 12 : (3, 6.000000) count=1.000000
+                                    324 ;	genRet
+                                    325 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    326 ;	genLabel
+                                    327 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    328 ;	src/bank2code.c: 21: }
+                                    329 ;	genEndFunction
+    00000067 4Cr00r00         [ 3]  330 	jmp	_local_bank2_proc
+                                    331 ;	Raw cost for generated ic 15 : (1, 6.000000) count=1.000000
+                                    332 ;------------------------------------------------------------
+                                    333 ;Allocation info for local variables in function '__func_some_bank2_proc2'
+                                    334 ;------------------------------------------------------------
+                                    335 ;	src/bank2code.c: 23: BANKREF(some_bank2_proc2)
+                                    336 ;	genLabel
+                                    337 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    338 ;	-----------------------------------------
+                                    339 ;	 function __func_some_bank2_proc2
+                                    340 ;	-----------------------------------------
+                                    341 ;	Register assignment is optimal.
+                                    342 ;	Stack space usage: 0 bytes.
+                         00000002   343 	b___func_some_bank2_proc2	= 2
+    0000006A                        344 ___func_some_bank2_proc2:
+                                    345 ;	naked function: no prologue.
+                                    346 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    347 ;	m6502_genInline
+                                    348 		.local b___func_some_bank2_proc2 
+                         00000002   349 	 ___bank_some_bank2_proc2 = b___func_some_bank2_proc2 
+                                    350 	 .globl ___bank_some_bank2_proc2 
+                                    351 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    352 ;	genLabel
+                                    353 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    354 ;	genEndFunction
+                                    355 ;	naked function: no epilogue.
+                                    356 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    357 ;------------------------------------------------------------
+                                    358 ;Allocation info for local variables in function 'some_bank2_proc2'
+                                    359 ;------------------------------------------------------------
+                                    360 ;param3        Allocated to stack - sp +9 +1 
+                                    361 ;param2        Allocated to registers y 
+                                    362 ;param1        Allocated to stack - sp +3 +1 
+                                    363 ;sloc0         Allocated to stack - sp +1 +2 
+                                    364 ;------------------------------------------------------------
+                                    365 ;	src/bank2code.c: 24: int some_bank2_proc2(uint8_t param1, uint8_t param2, uint8_t param3) BANKED REENTRANT {
+                                    366 ;	genLabel
+                                    367 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    368 ;	-----------------------------------------
+                                    369 ;	 function some_bank2_proc2
+                                    370 ;	-----------------------------------------
+                                    371 ;	Register assignment is optimal.
+                                    372 ;	Stack space usage: 3 bytes.
+                         00000002   373 	b_some_bank2_proc2	= 2
+    0000006A                        374 _some_bank2_proc2:
+                                    375 ;	genReceive: size=1
+                                    376 ;	pushreg: ofs=0
+    0000006A 48               [ 3]  377 	pha
+    0000006B 48               [ 3]  378 	pha
+    0000006C 48               [ 3]  379 	pha
+                                    380 ;	Raw cost for generated ic 1 : (3, 9.000000) count=1.000000
+                                    381 ;	skipping generated iCode
+                                    382 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    383 ;	genReceive
+    0000006D 86*00            [ 3]  384 	stx	*(REGTEMP+0)
+    0000006F A4*00            [ 3]  385 	ldy	*(REGTEMP+0)
+                                    386 ;	Raw cost for generated ic 3 : (4, 6.000000) count=1.000000
+                                    387 ;	src/bank2code.c: 25: printf("some_bank2_proc2\n");
+                                    388 ;	skipping iCode since result will be rematerialized
+                                    389 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    390 ;	skipping iCode since result will be rematerialized
+                                    391 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    392 ;	genIpush
+    00000071 85*00            [ 3]  393 	sta	*(REGTEMP+0)
+    00000073 98               [ 2]  394 	tya
+    00000074 48               [ 3]  395 	pha
+    00000075 A9s00            [ 2]  396 	lda	#>___str_3
+    00000077 48               [ 3]  397 	pha
+    00000078 A9rF7            [ 2]  398 	lda	#___str_3
+    0000007A 48               [ 3]  399 	pha
+                                    400 ;	Raw cost for generated ic 6 : (12, 21.000000) count=1.000000
+                                    401 ;	genCall
+    0000007B 20r00r00         [ 6]  402 	jsr	_printf
+    0000007E 68               [ 4]  403 	pla
+    0000007F 68               [ 4]  404 	pla
+    00000080 85*00            [ 3]  405 	sta	*(REGTEMP+0)
+    00000082 68               [ 4]  406 	pla
+    00000083 A8               [ 2]  407 	tay
+    00000084 A5*00            [ 3]  408 	lda	*(REGTEMP+0)
+                                    409 ;	Raw cost for generated ic 7 : (11, 26.000000) count=1.000000
+                                    410 ;	src/bank2code.c: 26: return local_bank2_proc(param1, param2 * param3);
+                                    411 ;	genCast
+    00000086 BA               [ 2]  412 	tsx
+    00000087 BD 03 01         [ 5]  413 	lda	0x103,x
+    0000008A 9D 01 01         [ 5]  414 	sta	0x101,x
+    0000008D A9 00            [ 2]  415 	lda	#0x00
+    0000008F 9D 02 01         [ 5]  416 	sta	0x102,x
+                                    417 ;	Raw cost for generated ic 8 : (12, 18.000000) count=1.000000
+                                    418 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    419 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    420 ;	genCall
+                                    421 ;	genSend
+    00000092 98               [ 2]  422 	tya
+    00000093 85*00            [ 3]  423 	sta	*(REGTEMP+0)
+    00000095 BD 09 01         [ 5]  424 	lda	0x109,x
+    00000098 AA               [ 2]  425 	tax
+    00000099 A5*00            [ 3]  426 	lda	*(REGTEMP+0)
+    0000009B 20r00r00         [ 6]  427 	jsr	__muluchar
+                                    428 ;	assignResultValue
+    0000009E 8Dr00r00         [ 4]  429 	sta	_local_bank2_proc_PARM_2
+    000000A1 8Er01r00         [ 4]  430 	stx	(_local_bank2_proc_PARM_2 + 1)
+                                    431 ;	Raw cost for generated ic 18 : (18, 28.000000) count=1.000000
+                                    432 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    433 ;	genCall
+                                    434 ;	genSend
+    000000A4 BA               [ 2]  435 	tsx
+    000000A5 BD 02 01         [ 5]  436 	lda	0x102,x
+    000000A8 AA               [ 2]  437 	tax
+    000000A9 86*00            [ 3]  438 	stx	*(REGTEMP+0)
+    000000AB BA               [ 2]  439 	tsx
+    000000AC BD 01 01         [ 5]  440 	lda	0x101,x
+    000000AF 08               [ 3]  441 	php
+    000000B0 A6*00            [ 3]  442 	ldx	*(REGTEMP+0)
+    000000B2 28               [ 4]  443 	plp
+    000000B3 20r00r00         [ 6]  444 	jsr	_local_bank2_proc
+                                    445 ;	assignResultValue
+                                    446 ;	Raw cost for generated ic 12 : (18, 33.000000) count=1.000000
+                                    447 ;	genRet
+                                    448 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    449 ;	genLabel
+                                    450 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    451 ;	src/bank2code.c: 27: }
+                                    452 ;	genEndFunction
+    000000B6 85*00            [ 3]  453 	sta	*(REGTEMP+0)
+    000000B8 68               [ 4]  454 	pla
+    000000B9 68               [ 4]  455 	pla
+    000000BA 68               [ 4]  456 	pla
+    000000BB A5*00            [ 3]  457 	lda	*(REGTEMP+0)
+    000000BD 60               [ 6]  458 	rts
+                                    459 ;	Raw cost for generated ic 15 : (8, 24.000000) count=1.000000
+                                    460 	.area _CODE_2
+    000000BE                        461 ___str_0:
+    000000BE 20 20 73 75 6D 3A 20   462 	.ascii "  sum: %d (bank=%d)"
+             25 64 20 28 62 61 6E
+             6B 3D 25 64 29
+    000000D1 0A                     463 	.db 0x0a
+    000000D2 00                     464 	.db 0x00
+    000000D3                        465 ___str_1:
+    000000D3 73 6F 6D 65 5F 62 61   466 	.ascii "some_bank2_proc0"
+             6E 6B 32 5F 70 72 6F
+             63 30
+    000000E3 0A                     467 	.db 0x0a
+    000000E4 00                     468 	.db 0x00
+    000000E5                        469 ___str_2:
+    000000E5 73 6F 6D 65 5F 62 61   470 	.ascii "some_bank2_proc1"
+             6E 6B 32 5F 70 72 6F
+             63 31
+    000000F5 0A                     471 	.db 0x0a
+    000000F6 00                     472 	.db 0x00
+    000000F7                        473 ___str_3:
+    000000F7 73 6F 6D 65 5F 62 61   474 	.ascii "some_bank2_proc2"
+             6E 6B 32 5F 70 72 6F
+             63 32
+    00000107 0A                     475 	.db 0x0a
+    00000108 00                     476 	.db 0x00
+                                    477 	.area _XINIT
+                                    478 	.area _CABS    (ABS)

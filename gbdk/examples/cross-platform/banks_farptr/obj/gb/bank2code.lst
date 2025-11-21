@@ -1,0 +1,182 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module bank2code
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl b_some_bank2_proc2
+                                     11 	.globl _some_bank2_proc2
+                                     12 	.globl b___func_some_bank2_proc2
+                                     13 	.globl ___func_some_bank2_proc2
+                                     14 	.globl b_some_bank2_proc1
+                                     15 	.globl _some_bank2_proc1
+                                     16 	.globl b___func_some_bank2_proc1
+                                     17 	.globl ___func_some_bank2_proc1
+                                     18 	.globl b_some_bank2_proc0
+                                     19 	.globl _some_bank2_proc0
+                                     20 	.globl b___func_some_bank2_proc0
+                                     21 	.globl ___func_some_bank2_proc0
+                                     22 	.globl _puts
+                                     23 	.globl _printf
+                                     24 ;--------------------------------------------------------
+                                     25 ; special function registers
+                                     26 ;--------------------------------------------------------
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DATA
+                                     31 ;--------------------------------------------------------
+                                     32 ; ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _INITIALIZED
+                                     35 ;--------------------------------------------------------
+                                     36 ; absolute external ram data
+                                     37 ;--------------------------------------------------------
+                                     38 	.area _DABS (ABS)
+                                     39 ;--------------------------------------------------------
+                                     40 ; global & static initialisations
+                                     41 ;--------------------------------------------------------
+                                     42 	.area _HOME
+                                     43 	.area _GSINIT
+                                     44 	.area _GSFINAL
+                                     45 	.area _GSINIT
+                                     46 ;--------------------------------------------------------
+                                     47 ; Home
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _HOME
+                                     50 	.area _HOME
+                                     51 ;--------------------------------------------------------
+                                     52 ; code
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _CODE_2
+                                     55 ;src/bank2code.c:7: static int local_bank2_proc(int param1, int param2) {
+                                     56 ;	---------------------------------
+                                     57 ; Function local_bank2_proc
+                                     58 ; ---------------------------------
+    00000000                         59 _local_bank2_proc:
+    00000000 6B               [ 4]   60 	ld	l, e
+    00000001 62               [ 4]   61 	ld	h, d
+                                     62 ;src/bank2code.c:8: printf("  sum: %d (bank=%d)\n", param1 + param2, (int)CURRENT_BANK);
+    00000002 F0r00            [12]   63 	ldh	a, (__current_bank + 0)
+    00000004 5F               [ 4]   64 	ld	e, a
+    00000005 16 00            [ 8]   65 	ld	d, #0x00
+    00000007 09               [ 8]   66 	add	hl, bc
+    00000008 4D               [ 4]   67 	ld	c, l
+    00000009 44               [ 4]   68 	ld	b, h
+    0000000A C5               [16]   69 	push	bc
+    0000000B D5               [16]   70 	push	de
+    0000000C C5               [16]   71 	push	bc
+    0000000D 11r1Cr00         [12]   72 	ld	de, #___str_0
+    00000010 D5               [16]   73 	push	de
+    00000011 CDr00r00         [24]   74 	call	_printf
+    00000014 E8 06            [16]   75 	add	sp, #6
+    00000016 C1               [12]   76 	pop	bc
+                                     77 ;src/bank2code.c:9: return (param1 + param2) << 1;
+    00000017 CB 21            [ 8]   78 	sla	c
+    00000019 CB 10            [ 8]   79 	rl	b
+                                     80 ;src/bank2code.c:10: }
+    0000001B C9               [16]   81 	ret
+    0000001C                         82 ___str_0:
+    0000001C 20 20 73 75 6D 3A 20    83 	.ascii "  sum: %d (bank=%d)"
+             25 64 20 28 62 61 6E
+             6B 3D 25 64 29
+    0000002F 0A                      84 	.db 0x0a
+    00000030 00                      85 	.db 0x00
+                                     86 ;src/bank2code.c:12: BANKREF(some_bank2_proc0)
+                                     87 ;	---------------------------------
+                                     88 ; Function __func_some_bank2_proc0
+                                     89 ; ---------------------------------
+                         00000002    90 	b___func_some_bank2_proc0	= 2
+    00000031                         91 ___func_some_bank2_proc0::
+                                     92 	.local b___func_some_bank2_proc0 
+                         00000002    93 	___bank_some_bank2_proc0 = b___func_some_bank2_proc0 
+                                     94 	.globl ___bank_some_bank2_proc0 
+                                     95 ;src/bank2code.c:13: void some_bank2_proc0(void) BANKED {
+                                     96 ;	---------------------------------
+                                     97 ; Function some_bank2_proc0
+                                     98 ; ---------------------------------
+                         00000002    99 	b_some_bank2_proc0	= 2
+    00000031                        100 _some_bank2_proc0::
+                                    101 ;src/bank2code.c:14: printf("some_bank2_proc0\n");
+    00000031 11r37r00         [12]  102 	ld	de, #___str_2
+                                    103 ;src/bank2code.c:15: }
+    00000034 C3r00r00         [16]  104 	jp	_puts
+    00000037                        105 ___str_2:
+    00000037 73 6F 6D 65 5F 62 61   106 	.ascii "some_bank2_proc0"
+             6E 6B 32 5F 70 72 6F
+             63 30
+    00000047 00                     107 	.db 0x00
+                                    108 ;src/bank2code.c:17: BANKREF(some_bank2_proc1)
+                                    109 ;	---------------------------------
+                                    110 ; Function __func_some_bank2_proc1
+                                    111 ; ---------------------------------
+                         00000002   112 	b___func_some_bank2_proc1	= 2
+    00000048                        113 ___func_some_bank2_proc1::
+                                    114 	.local b___func_some_bank2_proc1 
+                         00000002   115 	___bank_some_bank2_proc1 = b___func_some_bank2_proc1 
+                                    116 	.globl ___bank_some_bank2_proc1 
+                                    117 ;src/bank2code.c:18: int some_bank2_proc1(uint8_t param1, uint8_t param2) BANKED {
+                                    118 ;	---------------------------------
+                                    119 ; Function some_bank2_proc1
+                                    120 ; ---------------------------------
+                         00000002   121 	b_some_bank2_proc1	= 2
+    00000048                        122 _some_bank2_proc1::
+                                    123 ;src/bank2code.c:19: printf("some_bank2_proc1\n");
+    00000048 11r5Ar00         [12]  124 	ld	de, #___str_4
+    0000004B CDr00r00         [24]  125 	call	_puts
+                                    126 ;src/bank2code.c:20: return local_bank2_proc(param1, param2);
+    0000004E F8 07            [12]  127 	ldhl	sp,	#7
+    00000050 3A               [ 8]  128 	ld	a, (hl-)
+    00000051 4F               [ 4]  129 	ld	c, a
+    00000052 06 00            [ 8]  130 	ld	b, #0x00
+    00000054 5E               [ 8]  131 	ld	e, (hl)
+    00000055 AF               [ 4]  132 	xor	a, a
+    00000056 57               [ 4]  133 	ld	d, a
+                                    134 ;src/bank2code.c:21: }
+    00000057 C3r00r00         [16]  135 	jp	_local_bank2_proc
+    0000005A                        136 ___str_4:
+    0000005A 73 6F 6D 65 5F 62 61   137 	.ascii "some_bank2_proc1"
+             6E 6B 32 5F 70 72 6F
+             63 31
+    0000006A 00                     138 	.db 0x00
+                                    139 ;src/bank2code.c:23: BANKREF(some_bank2_proc2)
+                                    140 ;	---------------------------------
+                                    141 ; Function __func_some_bank2_proc2
+                                    142 ; ---------------------------------
+                         00000002   143 	b___func_some_bank2_proc2	= 2
+    0000006B                        144 ___func_some_bank2_proc2::
+                                    145 	.local b___func_some_bank2_proc2 
+                         00000002   146 	___bank_some_bank2_proc2 = b___func_some_bank2_proc2 
+                                    147 	.globl ___bank_some_bank2_proc2 
+                                    148 ;src/bank2code.c:24: int some_bank2_proc2(uint8_t param1, uint8_t param2, uint8_t param3) BANKED REENTRANT {
+                                    149 ;	---------------------------------
+                                    150 ; Function some_bank2_proc2
+                                    151 ; ---------------------------------
+                         00000002   152 	b_some_bank2_proc2	= 2
+    0000006B                        153 _some_bank2_proc2::
+                                    154 ;src/bank2code.c:25: printf("some_bank2_proc2\n");
+    0000006B 11r81r00         [12]  155 	ld	de, #___str_6
+    0000006E CDr00r00         [24]  156 	call	_puts
+                                    157 ;src/bank2code.c:26: return local_bank2_proc(param1, param2 * param3);
+    00000071 F8 08            [12]  158 	ldhl	sp,	#8
+    00000073 3A               [ 8]  159 	ld	a, (hl-)
+    00000074 5F               [ 4]  160 	ld	e, a
+    00000075 7E               [ 8]  161 	ld	a, (hl)
+    00000076 CDr00r00         [24]  162 	call	__muluchar
+    00000079 F8 06            [12]  163 	ldhl	sp,	#6
+    0000007B 5E               [ 8]  164 	ld	e, (hl)
+    0000007C AF               [ 4]  165 	xor	a, a
+    0000007D 57               [ 4]  166 	ld	d, a
+                                    167 ;src/bank2code.c:27: }
+    0000007E C3r00r00         [16]  168 	jp	_local_bank2_proc
+    00000081                        169 ___str_6:
+    00000081 73 6F 6D 65 5F 62 61   170 	.ascii "some_bank2_proc2"
+             6E 6B 32 5F 70 72 6F
+             63 32
+    00000091 00                     171 	.db 0x00
+                                    172 	.area _CODE_2
+                                    173 	.area _INITIALIZER
+                                    174 	.area _CABS (ABS)

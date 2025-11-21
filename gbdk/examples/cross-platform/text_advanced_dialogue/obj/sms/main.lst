@@ -1,0 +1,1178 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _ClearScreen
+                                     12 	.globl _DrawTextAdvanced
+                                     13 	.globl _vsyncMultiple
+                                     14 	.globl _ResetLoadedCharacters
+                                     15 	.globl _HideDialgoueBox
+                                     16 	.globl _ShowDialgoueBox
+                                     17 	.globl _ClearDialogueBox
+                                     18 	.globl _WaitForAButton
+                                     19 	.globl _BreakLineEarly
+                                     20 	.globl _IsAlphaNumeric
+                                     21 	.globl _GetTileForCharacter
+                                     22 	.globl _MoveWindow
+                                     23 	.globl _get_bkg_xy_addr
+                                     24 	.globl _set_tile_xy
+                                     25 	.globl _set_vram_byte
+                                     26 	.globl _fill_rect_compat
+                                     27 	.globl _set_tile_map_compat
+                                     28 	.globl _set_native_tile_data
+                                     29 	.globl _joypad
+                                     30 	.globl _vsync
+                                     31 	.globl _loadedCharacterCount
+                                     32 	.globl _joypadPrevious
+                                     33 	.globl _joypadCurrent
+                                     34 	.globl _fontTilesStart
+                                     35 	.globl _windowYPosition
+                                     36 	.globl _loadedCharacters
+                                     37 ;--------------------------------------------------------
+                                     38 ; special function registers
+                                     39 ;--------------------------------------------------------
+                         00000000    40 _GG_STATE	=	0x0000
+                         00000001    41 _GG_EXT_7BIT	=	0x0001
+                         00000002    42 _GG_EXT_CTL	=	0x0002
+                         00000003    43 _GG_SIO_SEND	=	0x0003
+                         00000004    44 _GG_SIO_RECV	=	0x0004
+                         00000005    45 _GG_SIO_CTL	=	0x0005
+                         00000006    46 _GG_SOUND_PAN	=	0x0006
+                         0000003E    47 _MEMORY_CTL	=	0x003e
+                         0000003F    48 _JOY_CTL	=	0x003f
+                         0000007E    49 _VCOUNTER	=	0x007e
+                         0000007F    50 _PSG	=	0x007f
+                         0000007F    51 _HCOUNTER	=	0x007f
+                         000000BE    52 _VDP_DATA	=	0x00be
+                         000000BF    53 _VDP_CMD	=	0x00bf
+                         000000BF    54 _VDP_STATUS	=	0x00bf
+                         000000DC    55 _JOY_PORT1	=	0x00dc
+                         000000DD    56 _JOY_PORT2	=	0x00dd
+                         000000F0    57 _FMADDRESS	=	0x00f0
+                         000000F1    58 _FMDATA	=	0x00f1
+                         000000F2    59 _AUDIOCTRL	=	0x00f2
+                                     60 ;--------------------------------------------------------
+                                     61 ; ram data
+                                     62 ;--------------------------------------------------------
+                                     63 	.area _DATA
+                         0000FFFC    64 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    65 _GLASSES_3D	=	0xfff8
+                         0000FFFD    66 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    67 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    68 _MAP_FRAME2	=	0xffff
+    00000000                         69 _loadedCharacters::
+    00000000                         70 	.ds 46
+                                     71 ;--------------------------------------------------------
+                                     72 ; ram data
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _INITIALIZED
+    00000000                         75 _windowYPosition::
+    00000000                         76 	.ds 2
+    00000002                         77 _fontTilesStart::
+    00000002                         78 	.ds 1
+    00000003                         79 _joypadCurrent::
+    00000003                         80 	.ds 1
+    00000004                         81 _joypadPrevious::
+    00000004                         82 	.ds 1
+    00000005                         83 _loadedCharacterCount::
+    00000005                         84 	.ds 1
+                                     85 ;--------------------------------------------------------
+                                     86 ; absolute external ram data
+                                     87 ;--------------------------------------------------------
+                                     88 	.area _DABS (ABS)
+                                     89 ;--------------------------------------------------------
+                                     90 ; global & static initialisations
+                                     91 ;--------------------------------------------------------
+                                     92 	.area _HOME
+                                     93 	.area _GSINIT
+                                     94 	.area _GSFINAL
+                                     95 	.area _GSINIT
+                                     96 ;--------------------------------------------------------
+                                     97 ; Home
+                                     98 ;--------------------------------------------------------
+                                     99 	.area _HOME
+                                    100 	.area _HOME
+                                    101 ;--------------------------------------------------------
+                                    102 ; code
+                                    103 ;--------------------------------------------------------
+                                    104 	.area _CODE
+                                    105 ;src/main.c:50: void MoveWindow(void){
+                                    106 ;	---------------------------------
+                                    107 ; Function MoveWindow
+                                    108 ; ---------------------------------
+    00000000                        109 _MoveWindow::
+                                    110 ;src/main.c:57: }
+    00000000 C9               [10]  111 	ret
+                                    112 ;src/main.c:60: uint8_t GetTileForCharacter(char character) {
+                                    113 ;	---------------------------------
+                                    114 ; Function GetTileForCharacter
+                                    115 ; ---------------------------------
+    00000001                        116 _GetTileForCharacter::
+    00000001 47               [ 4]  117 	ld	b, a
+                                    118 ;src/main.c:62: uint8_t vramTile=0;
+    00000002 0E 00            [ 7]  119 	ld	c, #0x00
+                                    120 ;src/main.c:68: if      (character >= 'a' && character <= 'z') vramTile = (character - 'a') + 1;
+    00000004 78               [ 4]  121 	ld	a, b
+    00000005 EE 80            [ 7]  122 	xor	a, #0x80
+    00000007 D6 E1            [ 7]  123 	sub	a, #0xe1
+    00000009 38 11            [12]  124 	jr	C, 00120$
+    0000000B 3E 7A            [ 7]  125 	ld	a, #0x7a
+    0000000D 90               [ 4]  126 	sub	a, b
+    0000000E E2r13r00         [10]  127 	jp	PO, 00230$
+    00000011 EE 80            [ 7]  128 	xor	a, #0x80
+    00000013                        129 00230$:
+    00000013 FAr1Cr00         [10]  130 	jp	M, 00120$
+    00000016 78               [ 4]  131 	ld	a, b
+    00000017 C6 A0            [ 7]  132 	add	a, #0xa0
+    00000019 4F               [ 4]  133 	ld	c, a
+    0000001A 18 79            [12]  134 	jr	00121$
+    0000001C                        135 00120$:
+                                    136 ;src/main.c:69: else if (character >= 'A' && character <= 'Z') vramTile = (character - 'A') + 1;
+    0000001C 78               [ 4]  137 	ld	a, b
+    0000001D EE 80            [ 7]  138 	xor	a, #0x80
+    0000001F D6 C1            [ 7]  139 	sub	a, #0xc1
+    00000021 38 11            [12]  140 	jr	C, 00116$
+    00000023 3E 5A            [ 7]  141 	ld	a, #0x5a
+    00000025 90               [ 4]  142 	sub	a, b
+    00000026 E2r2Br00         [10]  143 	jp	PO, 00231$
+    00000029 EE 80            [ 7]  144 	xor	a, #0x80
+    0000002B                        145 00231$:
+    0000002B FAr34r00         [10]  146 	jp	M, 00116$
+    0000002E 78               [ 4]  147 	ld	a, b
+    0000002F C6 C0            [ 7]  148 	add	a, #0xc0
+    00000031 4F               [ 4]  149 	ld	c, a
+    00000032 18 61            [12]  150 	jr	00121$
+    00000034                        151 00116$:
+                                    152 ;src/main.c:70: else if (character >= '0' && character <= '9') vramTile = (character - '0') + 27;
+    00000034 78               [ 4]  153 	ld	a, b
+    00000035 EE 80            [ 7]  154 	xor	a, #0x80
+    00000037 D6 B0            [ 7]  155 	sub	a, #0xb0
+    00000039 38 11            [12]  156 	jr	C, 00112$
+    0000003B 3E 39            [ 7]  157 	ld	a, #0x39
+    0000003D 90               [ 4]  158 	sub	a, b
+    0000003E E2r43r00         [10]  159 	jp	PO, 00232$
+    00000041 EE 80            [ 7]  160 	xor	a, #0x80
+    00000043                        161 00232$:
+    00000043 FAr4Cr00         [10]  162 	jp	M, 00112$
+    00000046 78               [ 4]  163 	ld	a, b
+    00000047 C6 EB            [ 7]  164 	add	a, #0xeb
+    00000049 4F               [ 4]  165 	ld	c, a
+    0000004A 18 49            [12]  166 	jr	00121$
+    0000004C                        167 00112$:
+                                    168 ;src/main.c:72: switch(character) {
+    0000004C 78               [ 4]  169 	ld	a,b
+    0000004D FE 21            [ 7]  170 	cp	a,#0x21
+    0000004F 28 22            [12]  171 	jr	Z, 00101$
+    00000051 FE 2C            [ 7]  172 	cp	a,#0x2c
+    00000053 28 32            [12]  173 	jr	Z, 00106$
+    00000055 FE 2E            [ 7]  174 	cp	a,#0x2e
+    00000057 28 32            [12]  175 	jr	Z, 00107$
+    00000059 FE 2F            [ 7]  176 	cp	a,#0x2f
+    0000005B 28 22            [12]  177 	jr	Z, 00104$
+    0000005D FE 3A            [ 7]  178 	cp	a,#0x3a
+    0000005F 28 16            [12]  179 	jr	Z, 00102$
+    00000061 FE 3C            [ 7]  180 	cp	a,#0x3c
+    00000063 28 2A            [12]  181 	jr	Z, 00108$
+    00000065 FE 3D            [ 7]  182 	cp	a,#0x3d
+    00000067 28 1A            [12]  183 	jr	Z, 00105$
+    00000069 FE 3E            [ 7]  184 	cp	a,#0x3e
+    0000006B 28 26            [12]  185 	jr	Z, 00109$
+    0000006D D6 3F            [ 7]  186 	sub	a, #0x3f
+    0000006F 28 0A            [12]  187 	jr	Z, 00103$
+    00000071 18 22            [12]  188 	jr	00121$
+                                    189 ;src/main.c:73: case '!': vramTile = 37; break;
+    00000073                        190 00101$:
+    00000073 0E 25            [ 7]  191 	ld	c, #0x25
+    00000075 18 1E            [12]  192 	jr	00121$
+                                    193 ;src/main.c:74: case ':': vramTile = 38; break;
+    00000077                        194 00102$:
+    00000077 0E 26            [ 7]  195 	ld	c, #0x26
+    00000079 18 1A            [12]  196 	jr	00121$
+                                    197 ;src/main.c:75: case '?': vramTile = 39; break;
+    0000007B                        198 00103$:
+    0000007B 0E 27            [ 7]  199 	ld	c, #0x27
+    0000007D 18 16            [12]  200 	jr	00121$
+                                    201 ;src/main.c:76: case '/': vramTile = 40; break;
+    0000007F                        202 00104$:
+    0000007F 0E 28            [ 7]  203 	ld	c, #0x28
+    00000081 18 12            [12]  204 	jr	00121$
+                                    205 ;src/main.c:77: case '=': vramTile = 41; break;
+    00000083                        206 00105$:
+    00000083 0E 29            [ 7]  207 	ld	c, #0x29
+    00000085 18 0E            [12]  208 	jr	00121$
+                                    209 ;src/main.c:78: case ',': vramTile = 42; break;
+    00000087                        210 00106$:
+    00000087 0E 2A            [ 7]  211 	ld	c, #0x2a
+    00000089 18 0A            [12]  212 	jr	00121$
+                                    213 ;src/main.c:79: case '.': vramTile = 43; break;
+    0000008B                        214 00107$:
+    0000008B 0E 2B            [ 7]  215 	ld	c, #0x2b
+    0000008D 18 06            [12]  216 	jr	00121$
+                                    217 ;src/main.c:80: case '<': vramTile = 44; break;
+    0000008F                        218 00108$:
+    0000008F 0E 2C            [ 7]  219 	ld	c, #0x2c
+    00000091 18 02            [12]  220 	jr	00121$
+                                    221 ;src/main.c:81: case '>': vramTile = 45; break;
+    00000093                        222 00109$:
+    00000093 0E 2D            [ 7]  223 	ld	c, #0x2d
+                                    224 ;src/main.c:82: }
+    00000095                        225 00121$:
+                                    226 ;src/main.c:85: return vramTile;
+    00000095 79               [ 4]  227 	ld	a, c
+                                    228 ;src/main.c:87: }
+    00000096 C9               [10]  229 	ret
+                                    230 ;src/main.c:89: uint8_t IsAlphaNumeric(char character){
+                                    231 ;	---------------------------------
+                                    232 ; Function IsAlphaNumeric
+                                    233 ; ---------------------------------
+    00000097                        234 _IsAlphaNumeric::
+                                    235 ;src/main.c:92: if(character>='a'&&character<='z')return TRUE;
+    00000097 4F               [ 4]  236 	ld	c, a
+    00000098 EE 80            [ 7]  237 	xor	a, #0x80
+    0000009A D6 E1            [ 7]  238 	sub	a, #0xe1
+    0000009C 38 0E            [12]  239 	jr	C, 00109$
+    0000009E 3E 7A            [ 7]  240 	ld	a, #0x7a
+    000000A0 91               [ 4]  241 	sub	a, c
+    000000A1 E2rA6r00         [10]  242 	jp	PO, 00156$
+    000000A4 EE 80            [ 7]  243 	xor	a, #0x80
+    000000A6                        244 00156$:
+    000000A6 FArACr00         [10]  245 	jp	M, 00109$
+    000000A9 3E 01            [ 7]  246 	ld	a, #0x01
+    000000AB C9               [10]  247 	ret
+    000000AC                        248 00109$:
+                                    249 ;src/main.c:93: else if(character>='A'&&character<='Z')return TRUE;
+    000000AC 79               [ 4]  250 	ld	a, c
+    000000AD EE 80            [ 7]  251 	xor	a, #0x80
+    000000AF D6 C1            [ 7]  252 	sub	a, #0xc1
+    000000B1 38 0E            [12]  253 	jr	C, 00105$
+    000000B3 3E 5A            [ 7]  254 	ld	a, #0x5a
+    000000B5 91               [ 4]  255 	sub	a, c
+    000000B6 E2rBBr00         [10]  256 	jp	PO, 00157$
+    000000B9 EE 80            [ 7]  257 	xor	a, #0x80
+    000000BB                        258 00157$:
+    000000BB FArC1r00         [10]  259 	jp	M, 00105$
+    000000BE 3E 01            [ 7]  260 	ld	a, #0x01
+    000000C0 C9               [10]  261 	ret
+    000000C1                        262 00105$:
+                                    263 ;src/main.c:94: else if(character>='0'&&character<='9')return TRUE;
+    000000C1 79               [ 4]  264 	ld	a, c
+    000000C2 EE 80            [ 7]  265 	xor	a, #0x80
+    000000C4 D6 B0            [ 7]  266 	sub	a, #0xb0
+    000000C6 38 0E            [12]  267 	jr	C, 00110$
+    000000C8 3E 39            [ 7]  268 	ld	a, #0x39
+    000000CA 91               [ 4]  269 	sub	a, c
+    000000CB E2rD0r00         [10]  270 	jp	PO, 00158$
+    000000CE EE 80            [ 7]  271 	xor	a, #0x80
+    000000D0                        272 00158$:
+    000000D0 FArD6r00         [10]  273 	jp	M, 00110$
+    000000D3 3E 01            [ 7]  274 	ld	a, #0x01
+    000000D5 C9               [10]  275 	ret
+    000000D6                        276 00110$:
+                                    277 ;src/main.c:96: return FALSE;
+    000000D6 AF               [ 4]  278 	xor	a, a
+                                    279 ;src/main.c:97: }
+    000000D7 C9               [10]  280 	ret
+                                    281 ;src/main.c:99: uint8_t BreakLineEarly(uint16_t index, uint8_t columnSize, char* text){
+                                    282 ;	---------------------------------
+                                    283 ; Function BreakLineEarly
+                                    284 ; ---------------------------------
+    000000D8                        285 _BreakLineEarly::
+    000000D8 DD E5            [15]  286 	push	ix
+    000000DA DD 21 00 00      [14]  287 	ld	ix,#0
+    000000DE DD 39            [15]  288 	add	ix,sp
+    000000E0 F5               [11]  289 	push	af
+                                    290 ;src/main.c:101: char character = text[index++];
+    000000E1 4D               [ 4]  291 	ld	c, l
+    000000E2 44               [ 4]  292 	ld	b, h
+    000000E3 23               [ 6]  293 	inc	hl
+    000000E4 E3               [19]  294 	ex	(sp), hl
+    000000E5 DD 6E 05         [19]  295 	ld	l, 5 (ix)
+    000000E8 DD 66 06         [19]  296 	ld	h, 6 (ix)
+    000000EB 09               [11]  297 	add	hl, bc
+    000000EC 4E               [ 7]  298 	ld	c, (hl)
+                                    299 ;src/main.c:104: if(columnSize>=INNER_DIALOGUE_BOX_WIDTH)return TRUE;
+    000000ED DD 7E 04         [19]  300 	ld	a, 4 (ix)
+    000000F0 D6 1E            [ 7]  301 	sub	a, #0x1e
+    000000F2 38 04            [12]  302 	jr	C, 00102$
+    000000F4 3E 01            [ 7]  303 	ld	a, #0x01
+    000000F6 18 31            [12]  304 	jr	00110$
+    000000F8                        305 00102$:
+                                    306 ;src/main.c:107: if(IsAlphaNumeric(character))return FALSE;
+    000000F8 79               [ 4]  307 	ld	a, c
+    000000F9 CDr97r00         [17]  308 	call	_IsAlphaNumeric
+    000000FC B7               [ 4]  309 	or	a, a
+    000000FD 28 03            [12]  310 	jr	Z, 00104$
+    000000FF AF               [ 4]  311 	xor	a, a
+    00000100 18 27            [12]  312 	jr	00110$
+    00000102                        313 00104$:
+                                    314 ;src/main.c:111: uint8_t nextColumnSize=columnSize+1;
+    00000102 DD 4E 04         [19]  315 	ld	c, 4 (ix)
+    00000105 0C               [ 4]  316 	inc	c
+                                    317 ;src/main.c:114: while((character=text[index++])!='\0'){
+    00000106 D1               [10]  318 	pop	de
+    00000107 D5               [11]  319 	push	de
+    00000108                        320 00107$:
+    00000108 DD 6E 05         [19]  321 	ld	l, 5 (ix)
+    0000010B DD 66 06         [19]  322 	ld	h, 6 (ix)
+    0000010E 19               [11]  323 	add	hl, de
+    0000010F 13               [ 6]  324 	inc	de
+    00000110 7E               [ 7]  325 	ld	a, (hl)
+    00000111 47               [ 4]  326 	ld	b, a
+    00000112 B7               [ 4]  327 	or	a, a
+    00000113 28 0E            [12]  328 	jr	Z, 00109$
+                                    329 ;src/main.c:117: if(!IsAlphaNumeric(character))break;
+    00000115 C5               [11]  330 	push	bc
+    00000116 D5               [11]  331 	push	de
+    00000117 78               [ 4]  332 	ld	a, b
+    00000118 CDr97r00         [17]  333 	call	_IsAlphaNumeric
+    0000011B D1               [10]  334 	pop	de
+    0000011C C1               [10]  335 	pop	bc
+    0000011D B7               [ 4]  336 	or	a, a
+    0000011E 28 03            [12]  337 	jr	Z, 00109$
+                                    338 ;src/main.c:120: nextColumnSize++;
+    00000120 0C               [ 4]  339 	inc	c
+    00000121 18 E5            [12]  340 	jr	00107$
+    00000123                        341 00109$:
+                                    342 ;src/main.c:124: return nextColumnSize>INNER_DIALOGUE_BOX_WIDTH;
+    00000123 3E 1E            [ 7]  343 	ld	a, #0x1e
+    00000125 91               [ 4]  344 	sub	a, c
+    00000126 3E 00            [ 7]  345 	ld	a, #0x00
+    00000128 17               [ 4]  346 	rla
+    00000129                        347 00110$:
+                                    348 ;src/main.c:125: }   
+    00000129 DD F9            [10]  349 	ld	sp, ix
+    0000012B DD E1            [14]  350 	pop	ix
+    0000012D E1               [10]  351 	pop	hl
+    0000012E C1               [10]  352 	pop	bc
+    0000012F 33               [ 6]  353 	inc	sp
+    00000130 E9               [ 4]  354 	jp	(hl)
+                                    355 ;src/main.c:128: void WaitForAButton(void){
+                                    356 ;	---------------------------------
+                                    357 ; Function WaitForAButton
+                                    358 ; ---------------------------------
+    00000131                        359 _WaitForAButton::
+                                    360 ;src/main.c:129: while(TRUE){
+    00000131                        361 00105$:
+                                    362 ;src/main.c:131: joypadPrevious=joypadCurrent;
+    00000131 3Ar03r00         [13]  363 	ld	a, (_joypadCurrent+0)
+    00000134 32r04r00         [13]  364 	ld	(_joypadPrevious+0), a
+                                    365 ;src/main.c:132: joypadCurrent = joypad();
+    00000137 CDr00r00         [17]  366 	call	_joypad
+    0000013A 7D               [ 4]  367 	ld	a, l
+    0000013B 32r03r00         [13]  368 	ld	(_joypadCurrent+0), a
+                                    369 ;src/main.c:134: if((joypadCurrent & J_A) && !(joypadPrevious & J_A))break;
+    0000013E 3Ar03r00         [13]  370 	ld	a, (_joypadCurrent)
+    00000141 CB 6F            [ 8]  371 	bit	5, a
+    00000143 28 EC            [12]  372 	jr	Z, 00105$
+    00000145 3Ar04r00         [13]  373 	ld	a, (_joypadPrevious)
+    00000148 CB 6F            [ 8]  374 	bit	5, a
+    0000014A 20 E5            [12]  375 	jr	NZ, 00105$
+                                    376 ;src/main.c:137: }
+    0000014C C9               [10]  377 	ret
+                                    378 ;src/main.c:139: void ClearDialogueBox(void){
+                                    379 ;	---------------------------------
+                                    380 ; Function ClearDialogueBox
+                                    381 ; ---------------------------------
+    0000014D                        382 _ClearDialogueBox::
+                                    383 ;src/main.c:142: fill_winbkg_rect(1,DIALOGUE_BOX_Y+1,DEVICE_SCREEN_WIDTH-2,DIALOG_BOX_HEIGHT-2,0);
+    0000014D 21 00 00         [10]  384 	ld	hl, #0x0000
+    00000150 E5               [11]  385 	push	hl
+    00000151 21 1E 05         [10]  386 	ld	hl, #0x51e
+    00000154 E5               [11]  387 	push	hl
+    00000155 21 01 12         [10]  388 	ld	hl, #0x1201
+    00000158 E5               [11]  389 	push	hl
+    00000159 CDr00r00         [17]  390 	call	_fill_rect_compat
+                                    391 ;src/main.c:145: fill_winbkg_rect(1,DIALOGUE_BOX_Y,DEVICE_SCREEN_WIDTH-2,1,2);
+    0000015C 21 02 00         [10]  392 	ld	hl, #0x0002
+    0000015F E5               [11]  393 	push	hl
+    00000160 21 1E 01         [10]  394 	ld	hl, #0x11e
+    00000163 E5               [11]  395 	push	hl
+    00000164 21 01 11         [10]  396 	ld	hl, #0x1101
+    00000167 E5               [11]  397 	push	hl
+    00000168 CDr00r00         [17]  398 	call	_fill_rect_compat
+                                    399 ;src/main.c:146: set_winbkg_tile_xy(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,6);
+    0000016B 21 17 06         [10]  400 	ld	hl, #0x617
+    0000016E E5               [11]  401 	push	hl
+    0000016F 3E 1F            [ 7]  402 	ld	a, #0x1f
+    00000171 F5               [11]  403 	push	af
+    00000172 33               [ 6]  404 	inc	sp
+    00000173 CDr00r00         [17]  405 	call	_set_tile_xy
+                                    406 ;src/main.c:147: fill_winbkg_rect(1,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,DEVICE_SCREEN_WIDTH-2,1,2);
+    00000176 21 02 00         [10]  407 	ld	hl, #0x0002
+    00000179 E5               [11]  408 	push	hl
+    0000017A 21 1E 01         [10]  409 	ld	hl, #0x11e
+    0000017D E5               [11]  410 	push	hl
+    0000017E 21 01 17         [10]  411 	ld	hl, #0x1701
+    00000181 E5               [11]  412 	push	hl
+    00000182 CDr00r00         [17]  413 	call	_fill_rect_compat
+                                    414 ;src/main.c:150: fill_winbkg_rect(0,DIALOGUE_BOX_Y+1,1,DIALOG_BOX_HEIGHT-2,4);
+    00000185 21 04 00         [10]  415 	ld	hl, #0x0004
+    00000188 E5               [11]  416 	push	hl
+    00000189 21 01 05         [10]  417 	ld	hl, #0x501
+    0000018C E5               [11]  418 	push	hl
+    0000018D 21 00 12         [10]  419 	ld	hl, #0x1200
+    00000190 E5               [11]  420 	push	hl
+    00000191 CDr00r00         [17]  421 	call	_fill_rect_compat
+                                    422 ;src/main.c:151: fill_winbkg_rect(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y+1,1,DIALOG_BOX_HEIGHT-2,4);
+    00000194 21 04 00         [10]  423 	ld	hl, #0x0004
+    00000197 E5               [11]  424 	push	hl
+    00000198 21 01 05         [10]  425 	ld	hl, #0x501
+    0000019B E5               [11]  426 	push	hl
+    0000019C 21 1F 12         [10]  427 	ld	hl, #0x121f
+    0000019F E5               [11]  428 	push	hl
+    000001A0 CDr00r00         [17]  429 	call	_fill_rect_compat
+                                    430 ;src/main.c:154: set_winbkg_tile_xy(0,DIALOGUE_BOX_Y,1);
+    000001A3 21 11 01         [10]  431 	ld	hl, #0x111
+    000001A6 E5               [11]  432 	push	hl
+    000001A7 AF               [ 4]  433 	xor	a, a
+    000001A8 F5               [11]  434 	push	af
+    000001A9 33               [ 6]  435 	inc	sp
+    000001AA CDr00r00         [17]  436 	call	_set_tile_xy
+                                    437 ;src/main.c:155: set_winbkg_tile_xy(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y,3);
+    000001AD 21 11 03         [10]  438 	ld	hl, #0x311
+    000001B0 E5               [11]  439 	push	hl
+    000001B1 3E 1F            [ 7]  440 	ld	a, #0x1f
+    000001B3 F5               [11]  441 	push	af
+    000001B4 33               [ 6]  442 	inc	sp
+    000001B5 CDr00r00         [17]  443 	call	_set_tile_xy
+                                    444 ;src/main.c:158: set_winbkg_tile_xy(0,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,5);
+    000001B8 21 17 05         [10]  445 	ld	hl, #0x517
+    000001BB E5               [11]  446 	push	hl
+    000001BC AF               [ 4]  447 	xor	a, a
+    000001BD F5               [11]  448 	push	af
+    000001BE 33               [ 6]  449 	inc	sp
+    000001BF CDr00r00         [17]  450 	call	_set_tile_xy
+                                    451 ;src/main.c:159: set_winbkg_tile_xy(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,6);
+    000001C2 21 17 06         [10]  452 	ld	hl, #0x617
+    000001C5 E5               [11]  453 	push	hl
+    000001C6 3E 1F            [ 7]  454 	ld	a, #0x1f
+    000001C8 F5               [11]  455 	push	af
+    000001C9 33               [ 6]  456 	inc	sp
+    000001CA CDr00r00         [17]  457 	call	_set_tile_xy
+                                    458 ;src/main.c:160: }
+    000001CD C9               [10]  459 	ret
+                                    460 ;src/main.c:162: void ShowDialgoueBox(void){
+                                    461 ;	---------------------------------
+                                    462 ; Function ShowDialgoueBox
+                                    463 ; ---------------------------------
+    000001CE                        464 _ShowDialgoueBox::
+                                    465 ;src/main.c:164: ClearDialogueBox();
+    000001CE CDr4Dr01         [17]  466 	call	_ClearDialogueBox
+                                    467 ;src/main.c:168: while(windowYPosition>desiredWindowPosition){
+    000001D1                        468 00101$:
+    000001D1 3E 88            [ 7]  469 	ld	a, #0x88
+    000001D3 FD 21r00r00      [14]  470 	ld	iy, #_windowYPosition
+    000001D7 FD BE 00         [19]  471 	cp	a, 0 (iy)
+    000001DA 3E 00            [ 7]  472 	ld	a, #0x00
+    000001DC FD 9E 01         [19]  473 	sbc	a, 1 (iy)
+    000001DF E2rE4r01         [10]  474 	jp	PO, 00120$
+    000001E2 EE 80            [ 7]  475 	xor	a, #0x80
+    000001E4                        476 00120$:
+    000001E4 F0               [11]  477 	ret	P
+                                    478 ;src/main.c:170: windowYPosition-=4;
+    000001E5 2Ar00r00         [16]  479 	ld	hl, (_windowYPosition)
+    000001E8 7D               [ 4]  480 	ld	a, l
+    000001E9 C6 FC            [ 7]  481 	add	a, #0xfc
+    000001EB 6F               [ 4]  482 	ld	l, a
+    000001EC 7C               [ 4]  483 	ld	a, h
+    000001ED CE FF            [ 7]  484 	adc	a, #0xff
+    000001EF 67               [ 4]  485 	ld	h, a
+    000001F0 22r00r00         [16]  486 	ld	(_windowYPosition), hl
+                                    487 ;src/main.c:171: MoveWindow();
+    000001F3 CDr00r00         [17]  488 	call	_MoveWindow
+                                    489 ;src/main.c:172: vsync();
+    000001F6 CDr00r00         [17]  490 	call	_vsync
+                                    491 ;src/main.c:174: }
+    000001F9 18 D6            [12]  492 	jr	00101$
+                                    493 ;src/main.c:176: void HideDialgoueBox(void){
+                                    494 ;	---------------------------------
+                                    495 ; Function HideDialgoueBox
+                                    496 ; ---------------------------------
+    000001FB                        497 _HideDialgoueBox::
+                                    498 ;src/main.c:180: while(windowYPosition<desiredWindowPosition){
+    000001FB                        499 00101$:
+    000001FB 3Ar00r00         [13]  500 	ld	a, (_windowYPosition+0)
+    000001FE D6 C0            [ 7]  501 	sub	a, #0xc0
+    00000200 3Ar01r00         [13]  502 	ld	a, (_windowYPosition+1)
+    00000203 17               [ 4]  503 	rla
+    00000204 3F               [ 4]  504 	ccf
+    00000205 1F               [ 4]  505 	rra
+    00000206 DE 80            [ 7]  506 	sbc	a, #0x80
+    00000208 D0               [11]  507 	ret	NC
+                                    508 ;src/main.c:182: windowYPosition+=4;
+    00000209 2Ar00r00         [16]  509 	ld	hl, (_windowYPosition)
+    0000020C 01 04 00         [10]  510 	ld	bc, #0x0004
+    0000020F 09               [11]  511 	add	hl, bc
+    00000210 22r00r00         [16]  512 	ld	(_windowYPosition), hl
+                                    513 ;src/main.c:183: MoveWindow();
+    00000213 CDr00r00         [17]  514 	call	_MoveWindow
+                                    515 ;src/main.c:184: vsync();
+    00000216 CDr00r00         [17]  516 	call	_vsync
+                                    517 ;src/main.c:186: }
+    00000219 18 E0            [12]  518 	jr	00101$
+                                    519 ;src/main.c:188: void ResetLoadedCharacters(void){
+                                    520 ;	---------------------------------
+                                    521 ; Function ResetLoadedCharacters
+                                    522 ; ---------------------------------
+    0000021B                        523 _ResetLoadedCharacters::
+                                    524 ;src/main.c:190: loadedCharacterCount=1;
+    0000021B 21r05r00         [10]  525 	ld	hl, #_loadedCharacterCount
+    0000021E 36 01            [10]  526 	ld	(hl), #0x01
+                                    527 ;src/main.c:193: for(uint8_t i=0;i<45;i++)loadedCharacters[i]=255;
+    00000220 0E 00            [ 7]  528 	ld	c, #0x00
+    00000222                        529 00103$:
+    00000222 79               [ 4]  530 	ld	a, c
+    00000223 D6 2D            [ 7]  531 	sub	a, #0x2d
+    00000225 D0               [11]  532 	ret	NC
+    00000226 21r00r00         [10]  533 	ld	hl, #_loadedCharacters
+    00000229 06 00            [ 7]  534 	ld	b, #0x00
+    0000022B 09               [11]  535 	add	hl, bc
+    0000022C 36 FF            [10]  536 	ld	(hl), #0xff
+    0000022E 0C               [ 4]  537 	inc	c
+                                    538 ;src/main.c:194: }
+    0000022F 18 F1            [12]  539 	jr	00103$
+                                    540 ;src/main.c:196: void vsyncMultiple(uint8_t count){
+                                    541 ;	---------------------------------
+                                    542 ; Function vsyncMultiple
+                                    543 ; ---------------------------------
+    00000231                        544 _vsyncMultiple::
+    00000231 4F               [ 4]  545 	ld	c, a
+                                    546 ;src/main.c:199: for(uint8_t i=0;i<count;i++){
+    00000232 06 00            [ 7]  547 	ld	b, #0x00
+    00000234                        548 00103$:
+    00000234 78               [ 4]  549 	ld	a, b
+    00000235 91               [ 4]  550 	sub	a, c
+    00000236 D0               [11]  551 	ret	NC
+                                    552 ;src/main.c:201: vsync();
+    00000237 CDr00r00         [17]  553 	call	_vsync
+                                    554 ;src/main.c:199: for(uint8_t i=0;i<count;i++){
+    0000023A 04               [ 4]  555 	inc	b
+                                    556 ;src/main.c:203: }
+    0000023B 18 F7            [12]  557 	jr	00103$
+                                    558 ;src/main.c:205: void DrawTextAdvanced(char* text){
+                                    559 ;	---------------------------------
+                                    560 ; Function DrawTextAdvanced
+                                    561 ; ---------------------------------
+    0000023D                        562 _DrawTextAdvanced::
+    0000023D DD E5            [15]  563 	push	ix
+    0000023F DD 21 00 00      [14]  564 	ld	ix,#0
+    00000243 DD 39            [15]  565 	add	ix,sp
+    00000245 FD 21 42 FF      [14]  566 	ld	iy, #-190
+    00000249 FD 39            [15]  567 	add	iy, sp
+    0000024B FD F9            [10]  568 	ld	sp, iy
+    0000024D DD 75 F9         [19]  569 	ld	-7 (ix), l
+    00000250 DD 74 FA         [19]  570 	ld	-6 (ix), h
+                                    571 ;src/main.c:210: ShowDialgoueBox();
+    00000253 CDrCEr01         [17]  572 	call	_ShowDialgoueBox
+                                    573 ;src/main.c:212: ResetLoadedCharacters();
+    00000256 CDr1Br02         [17]  574 	call	_ResetLoadedCharacters
+                                    575 ;src/main.c:214: uint16_t index=0;
+    00000259 AF               [ 4]  576 	xor	a, a
+    0000025A DD 77 FB         [19]  577 	ld	-5 (ix), a
+    0000025D DD 77 FC         [19]  578 	ld	-4 (ix), a
+                                    579 ;src/main.c:215: uint8_t columnSize=0;
+    00000260 DD 36 FF 00      [19]  580 	ld	-1 (ix), #0x00
+                                    581 ;src/main.c:216: uint8_t rowCount=0;
+    00000264 FD 21 00 00      [14]  582 	ld	iy, #0
+    00000268 FD 39            [15]  583 	add	iy, sp
+    0000026A FD 36 00 00      [19]  584 	ld	0 (iy), #0x00
+                                    585 ;src/main.c:221: uint8_t copyBufferCount=0;
+    0000026E DD 36 FD 00      [19]  586 	ld	-3 (ix), #0x00
+                                    587 ;src/main.c:224: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+    00000272 0E 00            [ 7]  588 	ld	c, #0x00
+    00000274                        589 00132$:
+    00000274 79               [ 4]  590 	ld	a, c
+    00000275 D6 1E            [ 7]  591 	sub	a, #0x1e
+    00000277 30 2D            [12]  592 	jr	NC, 00102$
+                                    593 ;src/main.c:225: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+    00000279 DD 36 FE 00      [19]  594 	ld	-2 (ix), #0x00
+    0000027D                        595 00129$:
+    0000027D DD 7E FE         [19]  596 	ld	a, -2 (ix)
+    00000280 D6 06            [ 7]  597 	sub	a, #0x06
+    00000282 30 1F            [12]  598 	jr	NC, 00133$
+                                    599 ;src/main.c:226: copyBuffer[t][k]=0;
+    00000284 DD 5E FE         [19]  600 	ld	e, -2 (ix)
+    00000287 16 00            [ 7]  601 	ld	d, #0x00
+    00000289 6B               [ 4]  602 	ld	l, e
+    0000028A 62               [ 4]  603 	ld	h, d
+    0000028B 29               [11]  604 	add	hl, hl
+    0000028C 19               [11]  605 	add	hl, de
+    0000028D 29               [11]  606 	add	hl, hl
+    0000028E 19               [11]  607 	add	hl, de
+    0000028F 29               [11]  608 	add	hl, hl
+    00000290 19               [11]  609 	add	hl, de
+    00000291 29               [11]  610 	add	hl, hl
+    00000292 EB               [ 4]  611 	ex	de, hl
+    00000293 21 01 00         [10]  612 	ld	hl, #1
+    00000296 39               [11]  613 	add	hl, sp
+    00000297 19               [11]  614 	add	hl, de
+    00000298 59               [ 4]  615 	ld	e, c
+    00000299 16 00            [ 7]  616 	ld	d, #0x00
+    0000029B 19               [11]  617 	add	hl, de
+    0000029C 36 00            [10]  618 	ld	(hl), #0x00
+                                    619 ;src/main.c:225: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+    0000029E DD 34 FE         [23]  620 	inc	-2 (ix)
+    000002A1 18 DA            [12]  621 	jr	00129$
+    000002A3                        622 00133$:
+                                    623 ;src/main.c:224: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+    000002A3 0C               [ 4]  624 	inc	c
+    000002A4 18 CE            [12]  625 	jr	00132$
+    000002A6                        626 00102$:
+                                    627 ;src/main.c:232: uint8_t* vramAddress = get_winbkg_xy_addr(column,row);
+    000002A6 21 01 12         [10]  628 	ld	hl, #0x1201
+    000002A9 E5               [11]  629 	push	hl
+    000002AA CDr00r00         [17]  630 	call	_get_bkg_xy_addr
+    000002AD DD 75 F7         [19]  631 	ld	-9 (ix), l
+    000002B0 DD 74 F8         [19]  632 	ld	-8 (ix), h
+                                    633 ;src/main.c:236: while((c=text[index])!='\0'){
+    000002B3                        634 00125$:
+    000002B3 DD 7E F9         [19]  635 	ld	a, -7 (ix)
+    000002B6 DD 86 FB         [19]  636 	add	a, -5 (ix)
+    000002B9 4F               [ 4]  637 	ld	c, a
+    000002BA DD 7E FA         [19]  638 	ld	a, -6 (ix)
+    000002BD DD 8E FC         [19]  639 	adc	a, -4 (ix)
+    000002C0 69               [ 4]  640 	ld	l, c
+    000002C1 67               [ 4]  641 	ld	h, a
+    000002C2 4E               [ 7]  642 	ld	c, (hl)
+    000002C3 DD 71 FE         [19]  643 	ld	-2 (ix), c
+    000002C6 79               [ 4]  644 	ld	a, c
+    000002C7 B7               [ 4]  645 	or	a, a
+    000002C8 CArEDr04         [10]  646 	jp	Z, 00127$
+                                    647 ;src/main.c:238: uint8_t vramTile = GetTileForCharacter(c);
+    000002CB DD 7E FE         [19]  648 	ld	a, -2 (ix)
+    000002CE CDr01r00         [17]  649 	call	_GetTileForCharacter
+                                    650 ;src/main.c:241: if(loadedCharacters[vramTile]==255){
+    000002D1 5F               [ 4]  651 	ld	e, a
+    000002D2 C6r00            [ 7]  652 	add	a,#<(_loadedCharacters)
+    000002D4 4F               [ 4]  653 	ld	c, a
+    000002D5 3Es00            [ 7]  654 	ld	a, #>(_loadedCharacters)
+    000002D7 CE 00            [ 7]  655 	adc	a, #0x00
+    000002D9 47               [ 4]  656 	ld	b, a
+    000002DA 0A               [ 7]  657 	ld	a, (bc)
+    000002DB 3C               [ 4]  658 	inc	a
+    000002DC 20 2B            [12]  659 	jr	NZ, 00104$
+                                    660 ;src/main.c:244: loadedCharacters[vramTile]=fontTilesStart+loadedCharacterCount++;
+    000002DE 3Ar05r00         [13]  661 	ld	a, (_loadedCharacterCount)
+    000002E1 57               [ 4]  662 	ld	d, a
+    000002E2 21r05r00         [10]  663 	ld	hl, #_loadedCharacterCount
+    000002E5 34               [11]  664 	inc	(hl)
+    000002E6 21r02r00         [10]  665 	ld	hl, #_fontTilesStart
+    000002E9 7A               [ 4]  666 	ld	a, d
+    000002EA 86               [ 7]  667 	add	a, (hl)
+    000002EB 6F               [ 4]  668 	ld	l, a
+    000002EC 02               [ 7]  669 	ld	(bc), a
+                                    670 ;src/main.c:247: set_native_tile_data(loadedCharacters[vramTile],1,Font_tiles+vramTile*TILE_SIZE_BYTES);
+    000002ED 16 00            [ 7]  671 	ld	d, #0x00
+    000002EF EB               [ 4]  672 	ex	de, hl
+    000002F0 29               [11]  673 	add	hl, hl
+    000002F1 29               [11]  674 	add	hl, hl
+    000002F2 29               [11]  675 	add	hl, hl
+    000002F3 29               [11]  676 	add	hl, hl
+    000002F4 29               [11]  677 	add	hl, hl
+    000002F5 EB               [ 4]  678 	ex	de, hl
+    000002F6 7B               [ 4]  679 	ld	a, e
+    000002F7 C6r00            [ 7]  680 	add	a, #<(_Font_tiles)
+    000002F9 5F               [ 4]  681 	ld	e, a
+    000002FA 7A               [ 4]  682 	ld	a, d
+    000002FB CEs00            [ 7]  683 	adc	a, #>(_Font_tiles)
+    000002FD 57               [ 4]  684 	ld	d, a
+    000002FE 26 00            [ 7]  685 	ld	h, #0x00
+    00000300 C5               [11]  686 	push	bc
+    00000301 D5               [11]  687 	push	de
+    00000302 11 01 00         [10]  688 	ld	de, #0x0001
+    00000305 CDr00r00         [17]  689 	call	_set_native_tile_data
+    00000308 C1               [10]  690 	pop	bc
+    00000309                        691 00104$:
+                                    692 ;src/main.c:253: set_vram_byte(vramAddress++,loadedCharacters[vramTile]);
+    00000309 0A               [ 7]  693 	ld	a, (bc)
+    0000030A DD 5E F7         [19]  694 	ld	e, -9 (ix)
+    0000030D DD 56 F8         [19]  695 	ld	d, -8 (ix)
+    00000310 DD 6E F7         [19]  696 	ld	l, -9 (ix)
+    00000313 DD 66 F8         [19]  697 	ld	h, -8 (ix)
+    00000316 23               [ 6]  698 	inc	hl
+    00000317 E5               [11]  699 	push	hl
+    00000318 C5               [11]  700 	push	bc
+    00000319 F5               [11]  701 	push	af
+    0000031A 33               [ 6]  702 	inc	sp
+    0000031B D5               [11]  703 	push	de
+    0000031C CDr00r00         [17]  704 	call	_set_vram_byte
+    0000031F C1               [10]  705 	pop	bc
+    00000320 E1               [10]  706 	pop	hl
+                                    707 ;src/main.c:256: set_vram_byte(vramAddress++,0);
+    00000321 5D               [ 4]  708 	ld	e, l
+    00000322 54               [ 4]  709 	ld	d, h
+    00000323 23               [ 6]  710 	inc	hl
+    00000324 DD 75 F7         [19]  711 	ld	-9 (ix), l
+    00000327 DD 74 F8         [19]  712 	ld	-8 (ix), h
+    0000032A C5               [11]  713 	push	bc
+    0000032B AF               [ 4]  714 	xor	a, a
+    0000032C F5               [11]  715 	push	af
+    0000032D 33               [ 6]  716 	inc	sp
+    0000032E D5               [11]  717 	push	de
+    0000032F CDr00r00         [17]  718 	call	_set_vram_byte
+    00000332 C1               [10]  719 	pop	bc
+                                    720 ;src/main.c:261: if(rowCount<DIALOG_BOX_INNER_HEIGHT)copyBuffer[rowCount][copyBufferCount++] = loadedCharacters[vramTile];
+    00000333 21 00 00         [10]  721 	ld	hl, #0
+    00000336 39               [11]  722 	add	hl, sp
+    00000337 5E               [ 7]  723 	ld	e, (hl)
+    00000338 16 00            [ 7]  724 	ld	d, #0x00
+    0000033A 6B               [ 4]  725 	ld	l, e
+    0000033B 62               [ 4]  726 	ld	h, d
+    0000033C 29               [11]  727 	add	hl, hl
+    0000033D 19               [11]  728 	add	hl, de
+    0000033E 29               [11]  729 	add	hl, hl
+    0000033F 19               [11]  730 	add	hl, de
+    00000340 29               [11]  731 	add	hl, hl
+    00000341 19               [11]  732 	add	hl, de
+    00000342 29               [11]  733 	add	hl, hl
+    00000343 EB               [ 4]  734 	ex	de, hl
+    00000344 D5               [11]  735 	push	de
+    00000345 21 03 00         [10]  736 	ld	hl, #3
+    00000348 39               [11]  737 	add	hl, sp
+    00000349 19               [11]  738 	add	hl, de
+    0000034A D1               [10]  739 	pop	de
+    0000034B EB               [ 4]  740 	ex	de, hl
+    0000034C DD 7E FD         [19]  741 	ld	a, -3 (ix)
+    0000034F DD 34 FD         [23]  742 	inc	-3 (ix)
+    00000352 6F               [ 4]  743 	ld	l, a
+    00000353 26 00            [ 7]  744 	ld	h, #0x00
+    00000355 19               [11]  745 	add	hl, de
+    00000356 0A               [ 7]  746 	ld	a, (bc)
+    00000357 77               [ 7]  747 	ld	(hl), a
+                                    748 ;src/main.c:263: index++;
+    00000358 DD 34 FB         [23]  749 	inc	-5 (ix)
+    0000035B 20 03            [12]  750 	jr	NZ, 00344$
+    0000035D DD 34 FC         [23]  751 	inc	-4 (ix)
+    00000360                        752 00344$:
+                                    753 ;src/main.c:264: columnSize++;
+    00000360 DD 34 FF         [23]  754 	inc	-1 (ix)
+                                    755 ;src/main.c:267: if(BreakLineEarly(index,columnSize,text) || c=='.'){
+    00000363 DD 6E F9         [19]  756 	ld	l, -7 (ix)
+    00000366 DD 66 FA         [19]  757 	ld	h, -6 (ix)
+    00000369 E5               [11]  758 	push	hl
+    0000036A DD 7E FF         [19]  759 	ld	a, -1 (ix)
+    0000036D F5               [11]  760 	push	af
+    0000036E 33               [ 6]  761 	inc	sp
+    0000036F DD 6E FB         [19]  762 	ld	l, -5 (ix)
+    00000372 DD 66 FC         [19]  763 	ld	h, -4 (ix)
+    00000375 CDrD8r00         [17]  764 	call	_BreakLineEarly
+    00000378 47               [ 4]  765 	ld	b, a
+    00000379 DD 7E FE         [19]  766 	ld	a, -2 (ix)
+    0000037C D6 2E            [ 7]  767 	sub	a, #0x2e
+    0000037E 3E 01            [ 7]  768 	ld	a, #0x01
+    00000380 28 01            [12]  769 	jr	Z, 00346$
+    00000382 AF               [ 4]  770 	xor	a, a
+    00000383                        771 00346$:
+    00000383 4F               [ 4]  772 	ld	c, a
+    00000384 78               [ 4]  773 	ld	a, b
+    00000385 B7               [ 4]  774 	or	a, a
+    00000386 20 04            [12]  775 	jr	NZ, 00122$
+    00000388 B1               [ 4]  776 	or	a, c
+    00000389 CArE5r04         [10]  777 	jp	Z, 00123$
+    0000038C                        778 00122$:
+                                    779 ;src/main.c:269: rowCount+=LINE_SKIP;
+    0000038C FD 21 00 00      [14]  780 	ld	iy, #0
+    00000390 FD 39            [15]  781 	add	iy, sp
+    00000392 FD 7E 00         [19]  782 	ld	a, 0 (iy)
+    00000395 C6 02            [ 7]  783 	add	a, #0x02
+    00000397 FD 77 00         [19]  784 	ld	0 (iy), a
+                                    785 ;src/main.c:272: copyBufferCount=0;
+    0000039A DD 36 FD 00      [19]  786 	ld	-3 (ix), #0x00
+                                    787 ;src/main.c:276: if(c=='.'||c=='?'){
+    0000039E 79               [ 4]  788 	ld	a, c
+    0000039F B7               [ 4]  789 	or	a, a
+    000003A0 20 07            [12]  790 	jr	NZ, 00115$
+    000003A2 DD 7E FE         [19]  791 	ld	a, -2 (ix)
+    000003A5 D6 3F            [ 7]  792 	sub	a, #0x3f
+    000003A7 20 45            [12]  793 	jr	NZ, 00116$
+    000003A9                        794 00115$:
+                                    795 ;src/main.c:277: WaitForAButton();
+    000003A9 CDr31r01         [17]  796 	call	_WaitForAButton
+                                    797 ;src/main.c:278: ClearDialogueBox();
+    000003AC CDr4Dr01         [17]  798 	call	_ClearDialogueBox
+                                    799 ;src/main.c:279: rowCount=0;
+    000003AF FD 21 00 00      [14]  800 	ld	iy, #0
+    000003B3 FD 39            [15]  801 	add	iy, sp
+    000003B5 FD 36 00 00      [19]  802 	ld	0 (iy), #0x00
+                                    803 ;src/main.c:282: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+    000003B9 0E 00            [ 7]  804 	ld	c, #0x00
+    000003BB                        805 00138$:
+    000003BB 79               [ 4]  806 	ld	a, c
+    000003BC D6 1E            [ 7]  807 	sub	a, #0x1e
+    000003BE D2rB2r04         [10]  808 	jp	NC, 00117$
+                                    809 ;src/main.c:283: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+    000003C1 DD 36 FF 00      [19]  810 	ld	-1 (ix), #0x00
+    000003C5                        811 00135$:
+    000003C5 DD 7E FF         [19]  812 	ld	a, -1 (ix)
+    000003C8 D6 06            [ 7]  813 	sub	a, #0x06
+    000003CA 30 1F            [12]  814 	jr	NC, 00139$
+                                    815 ;src/main.c:284: copyBuffer[t][k]=0;
+    000003CC DD 5E FF         [19]  816 	ld	e, -1 (ix)
+    000003CF 16 00            [ 7]  817 	ld	d, #0x00
+    000003D1 6B               [ 4]  818 	ld	l, e
+    000003D2 62               [ 4]  819 	ld	h, d
+    000003D3 29               [11]  820 	add	hl, hl
+    000003D4 19               [11]  821 	add	hl, de
+    000003D5 29               [11]  822 	add	hl, hl
+    000003D6 19               [11]  823 	add	hl, de
+    000003D7 29               [11]  824 	add	hl, hl
+    000003D8 19               [11]  825 	add	hl, de
+    000003D9 29               [11]  826 	add	hl, hl
+    000003DA EB               [ 4]  827 	ex	de, hl
+    000003DB 21 01 00         [10]  828 	ld	hl, #1
+    000003DE 39               [11]  829 	add	hl, sp
+    000003DF 19               [11]  830 	add	hl, de
+    000003E0 59               [ 4]  831 	ld	e, c
+    000003E1 16 00            [ 7]  832 	ld	d, #0x00
+    000003E3 19               [11]  833 	add	hl, de
+    000003E4 36 00            [10]  834 	ld	(hl), #0x00
+                                    835 ;src/main.c:283: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+    000003E6 DD 34 FF         [23]  836 	inc	-1 (ix)
+    000003E9 18 DA            [12]  837 	jr	00135$
+    000003EB                        838 00139$:
+                                    839 ;src/main.c:282: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+    000003EB 0C               [ 4]  840 	inc	c
+    000003EC 18 CD            [12]  841 	jr	00138$
+    000003EE                        842 00116$:
+                                    843 ;src/main.c:291: else if( rowCount>=DIALOG_BOX_INNER_HEIGHT){
+    000003EE FD 21 00 00      [14]  844 	ld	iy, #0
+    000003F2 FD 39            [15]  845 	add	iy, sp
+    000003F4 FD 7E 00         [19]  846 	ld	a, 0 (iy)
+    000003F7 D6 05            [ 7]  847 	sub	a, #0x05
+    000003F9 DArB2r04         [10]  848 	jp	C, 00117$
+                                    849 ;src/main.c:294: uint8_t shiftCount = rowCount-LINE_SKIP;
+    000003FC FD 7E 00         [19]  850 	ld	a, 0 (iy)
+    000003FF C6 FE            [ 7]  851 	add	a, #0xfe
+    00000401 DD 77 F7         [19]  852 	ld	-9 (ix), a
+                                    853 ;src/main.c:296: for(uint8_t k=0;k<shiftCount;k++){
+    00000404 DD 36 FE 00      [19]  854 	ld	-2 (ix), #0x00
+    00000408                        855 00144$:
+    00000408 DD 7E FE         [19]  856 	ld	a, -2 (ix)
+    0000040B DD 96 F7         [19]  857 	sub	a, -9 (ix)
+    0000040E 30 6C            [12]  858 	jr	NC, 00110$
+                                    859 ;src/main.c:298: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+    00000410 DD 36 FF 00      [19]  860 	ld	-1 (ix), #0x00
+    00000414                        861 00141$:
+    00000414 DD 7E FF         [19]  862 	ld	a, -1 (ix)
+    00000417 D6 05            [ 7]  863 	sub	a, #0x05
+    00000419 30 57            [12]  864 	jr	NC, 00109$
+                                    865 ;src/main.c:300: uint8_t copyBufferIndex = MIN(1+t+k,DIALOG_BOX_INNER_HEIGHT);
+    0000041B DD 4E FF         [19]  866 	ld	c, -1 (ix)
+    0000041E 06 00            [ 7]  867 	ld	b, #0x00
+    00000420 03               [ 6]  868 	inc	bc
+    00000421 DD 6E FE         [19]  869 	ld	l, -2 (ix)
+    00000424 26 00            [ 7]  870 	ld	h, #0x00
+    00000426 09               [11]  871 	add	hl, bc
+    00000427 4D               [ 4]  872 	ld	c, l
+    00000428 DD 7E FF         [19]  873 	ld	a, -1 (ix)
+    0000042B DD 77 F8         [19]  874 	ld	-8 (ix), a
+    0000042E 79               [ 4]  875 	ld	a, c
+    0000042F D6 05            [ 7]  876 	sub	a, #0x05
+    00000431 7C               [ 4]  877 	ld	a, h
+    00000432 17               [ 4]  878 	rla
+    00000433 3F               [ 4]  879 	ccf
+    00000434 1F               [ 4]  880 	rra
+    00000435 DE 80            [ 7]  881 	sbc	a, #0x80
+    00000437 30 0B            [12]  882 	jr	NC, 00154$
+    00000439 DD 7E F8         [19]  883 	ld	a, -8 (ix)
+    0000043C 3C               [ 4]  884 	inc	a
+    0000043D DD 4E FE         [19]  885 	ld	c, -2 (ix)
+    00000440 81               [ 4]  886 	add	a, c
+    00000441 4F               [ 4]  887 	ld	c, a
+    00000442 18 02            [12]  888 	jr	00155$
+    00000444                        889 00154$:
+    00000444 0E 05            [ 7]  890 	ld	c, #0x05
+    00000446                        891 00155$:
+                                    892 ;src/main.c:302: set_text_tiles(1,DIALOGUE_BOX_Y+1+t,INNER_DIALOGUE_BOX_WIDTH,1,copyBuffer[copyBufferIndex]);
+    00000446 06 00            [ 7]  893 	ld	b, #0x00
+    00000448 69               [ 4]  894 	ld	l, c
+    00000449 60               [ 4]  895 	ld	h, b
+    0000044A 29               [11]  896 	add	hl, hl
+    0000044B 09               [11]  897 	add	hl, bc
+    0000044C 29               [11]  898 	add	hl, hl
+    0000044D 09               [11]  899 	add	hl, bc
+    0000044E 29               [11]  900 	add	hl, hl
+    0000044F 09               [11]  901 	add	hl, bc
+    00000450 29               [11]  902 	add	hl, hl
+    00000451 EB               [ 4]  903 	ex	de, hl
+    00000452 21 01 00         [10]  904 	ld	hl, #1
+    00000455 39               [11]  905 	add	hl, sp
+    00000456 19               [11]  906 	add	hl, de
+    00000457 EB               [ 4]  907 	ex	de, hl
+    00000458 DD 7E F8         [19]  908 	ld	a, -8 (ix)
+    0000045B C6 12            [ 7]  909 	add	a, #0x12
+    0000045D D5               [11]  910 	push	de
+    0000045E 26 01            [ 7]  911 	ld	h, #0x01
+    00000460 E5               [11]  912 	push	hl
+    00000461 33               [ 6]  913 	inc	sp
+    00000462 26 1E            [ 7]  914 	ld	h, #0x1e
+    00000464 E5               [11]  915 	push	hl
+    00000465 33               [ 6]  916 	inc	sp
+    00000466 67               [ 4]  917 	ld	h, a
+    00000467 2E 01            [ 7]  918 	ld	l, #0x01
+    00000469 E5               [11]  919 	push	hl
+    0000046A CDr00r00         [17]  920 	call	_set_tile_map_compat
+                                    921 ;src/main.c:298: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+    0000046D DD 34 FF         [23]  922 	inc	-1 (ix)
+    00000470 18 A2            [12]  923 	jr	00141$
+    00000472                        924 00109$:
+                                    925 ;src/main.c:306: vsyncMultiple(LINE_SKIP_DELAY);
+    00000472 3E 07            [ 7]  926 	ld	a, #0x07
+    00000474 CDr31r02         [17]  927 	call	_vsyncMultiple
+                                    928 ;src/main.c:296: for(uint8_t k=0;k<shiftCount;k++){
+    00000477 DD 34 FE         [23]  929 	inc	-2 (ix)
+    0000047A 18 8C            [12]  930 	jr	00144$
+    0000047C                        931 00110$:
+                                    932 ;src/main.c:310: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+    0000047C 0E 00            [ 7]  933 	ld	c, #0x00
+    0000047E                        934 00150$:
+    0000047E 79               [ 4]  935 	ld	a, c
+    0000047F D6 1E            [ 7]  936 	sub	a, #0x1e
+    00000481 30 25            [12]  937 	jr	NC, 00112$
+                                    938 ;src/main.c:311: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+    00000483 06 00            [ 7]  939 	ld	b, #0x00
+    00000485                        940 00147$:
+    00000485 78               [ 4]  941 	ld	a, b
+    00000486 D6 05            [ 7]  942 	sub	a, #0x05
+    00000488 30 1B            [12]  943 	jr	NC, 00151$
+                                    944 ;src/main.c:312: copyBuffer[t][k]=0;
+    0000048A 58               [ 4]  945 	ld	e, b
+    0000048B 16 00            [ 7]  946 	ld	d, #0x00
+    0000048D 6B               [ 4]  947 	ld	l, e
+    0000048E 62               [ 4]  948 	ld	h, d
+    0000048F 29               [11]  949 	add	hl, hl
+    00000490 19               [11]  950 	add	hl, de
+    00000491 29               [11]  951 	add	hl, hl
+    00000492 19               [11]  952 	add	hl, de
+    00000493 29               [11]  953 	add	hl, hl
+    00000494 19               [11]  954 	add	hl, de
+    00000495 29               [11]  955 	add	hl, hl
+    00000496 EB               [ 4]  956 	ex	de, hl
+    00000497 21 01 00         [10]  957 	ld	hl, #1
+    0000049A 39               [11]  958 	add	hl, sp
+    0000049B 19               [11]  959 	add	hl, de
+    0000049C 59               [ 4]  960 	ld	e, c
+    0000049D 16 00            [ 7]  961 	ld	d, #0x00
+    0000049F 19               [11]  962 	add	hl, de
+    000004A0 36 00            [10]  963 	ld	(hl), #0x00
+                                    964 ;src/main.c:311: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+    000004A2 04               [ 4]  965 	inc	b
+    000004A3 18 E0            [12]  966 	jr	00147$
+    000004A5                        967 00151$:
+                                    968 ;src/main.c:310: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+    000004A5 0C               [ 4]  969 	inc	c
+    000004A6 18 D6            [12]  970 	jr	00150$
+    000004A8                        971 00112$:
+                                    972 ;src/main.c:317: rowCount=LINE_SKIP;
+    000004A8 FD 21 00 00      [14]  973 	ld	iy, #0
+    000004AC FD 39            [15]  974 	add	iy, sp
+    000004AE FD 36 00 02      [19]  975 	ld	0 (iy), #0x02
+    000004B2                        976 00117$:
+                                    977 ;src/main.c:322: vramAddress = get_winbkg_xy_addr(column,row+rowCount);
+    000004B2 21 00 00         [10]  978 	ld	hl, #0
+    000004B5 39               [11]  979 	add	hl, sp
+    000004B6 7E               [ 7]  980 	ld	a, (hl)
+    000004B7 C6 12            [ 7]  981 	add	a, #0x12
+    000004B9 67               [ 4]  982 	ld	h, a
+    000004BA 2E 01            [ 7]  983 	ld	l, #0x01
+    000004BC E5               [11]  984 	push	hl
+    000004BD CDr00r00         [17]  985 	call	_get_bkg_xy_addr
+    000004C0 DD 75 F7         [19]  986 	ld	-9 (ix), l
+    000004C3 DD 74 F8         [19]  987 	ld	-8 (ix), h
+                                    988 ;src/main.c:324: columnSize=0;
+    000004C6 DD 36 FF 00      [19]  989 	ld	-1 (ix), #0x00
+                                    990 ;src/main.c:327: while(text[index]==' '){
+    000004CA DD 5E FB         [19]  991 	ld	e, -5 (ix)
+    000004CD DD 56 FC         [19]  992 	ld	d, -4 (ix)
+    000004D0                        993 00119$:
+    000004D0 DD 6E F9         [19]  994 	ld	l, -7 (ix)
+    000004D3 DD 66 FA         [19]  995 	ld	h, -6 (ix)
+    000004D6 19               [11]  996 	add	hl, de
+    000004D7 7E               [ 7]  997 	ld	a, (hl)
+    000004D8 D6 20            [ 7]  998 	sub	a, #0x20
+    000004DA 20 03            [12]  999 	jr	NZ, 00186$
+                                   1000 ;src/main.c:328: index++;
+    000004DC 13               [ 6] 1001 	inc	de
+    000004DD 18 F1            [12] 1002 	jr	00119$
+    000004DF                       1003 00186$:
+    000004DF DD 73 FB         [19] 1004 	ld	-5 (ix), e
+    000004E2 DD 72 FC         [19] 1005 	ld	-4 (ix), d
+    000004E5                       1006 00123$:
+                                   1007 ;src/main.c:332: vsyncMultiple(TYPEWRITER_DELAY);
+    000004E5 3E 02            [ 7] 1008 	ld	a, #0x02
+    000004E7 CDr31r02         [17] 1009 	call	_vsyncMultiple
+    000004EA C3rB3r02         [10] 1010 	jp	00125$
+    000004ED                       1011 00127$:
+                                   1012 ;src/main.c:335: HideDialgoueBox();
+    000004ED CDrFBr01         [17] 1013 	call	_HideDialgoueBox
+                                   1014 ;src/main.c:337: }
+    000004F0 DD F9            [10] 1015 	ld	sp, ix
+    000004F2 DD E1            [14] 1016 	pop	ix
+    000004F4 C9               [10] 1017 	ret
+                                   1018 ;src/main.c:341: void ClearScreen(void){
+                                   1019 ;	---------------------------------
+                                   1020 ; Function ClearScreen
+                                   1021 ; ---------------------------------
+    000004F5                       1022 _ClearScreen::
+                                   1023 ;src/main.c:346: fill_bkg_rect(0,0,DEVICE_SCREEN_WIDTH,DEVICE_SCREEN_HEIGHT,0);
+    000004F5 21 00 00         [10] 1024 	ld	hl, #0x0000
+    000004F8 E5               [11] 1025 	push	hl
+    000004F9 21 20 18         [10] 1026 	ld	hl, #0x1820
+    000004FC E5               [11] 1027 	push	hl
+    000004FD 21 00 00         [10] 1028 	ld	hl, #0x00
+    00000500 E5               [11] 1029 	push	hl
+    00000501 CDr00r00         [17] 1030 	call	_fill_rect_compat
+                                   1031 ;src/main.c:347: }
+    00000504 C9               [10] 1032 	ret
+                                   1033 ;src/main.c:349: void main(void)
+                                   1034 ;	---------------------------------
+                                   1035 ; Function main
+                                   1036 ; ---------------------------------
+    00000505                       1037 _main::
+    00000505 21 E0 FF         [10] 1038 	ld	hl, #-32
+    00000508 39               [11] 1039 	add	hl, sp
+    00000509 F9               [ 6] 1040 	ld	sp, hl
+                                   1041 ;src/main.c:351: DISPLAY_ON;
+    0000050A 3Ar00r00         [13] 1042 	ld	a, (_shadow_VDP_R1+0)
+    0000050D F6 40            [ 7] 1043 	or	a, #0x40
+    0000050F 32r00r00         [13] 1044 	ld	(_shadow_VDP_R1+0), a
+    00000512 F3               [ 4] 1045 	di
+    00000513 3Ar00r00         [13] 1046 	ld	a, (_shadow_VDP_R1+0)
+    00000516 D3 BF            [11] 1047 	out	(_VDP_CMD), a
+    00000518 3E 81            [ 7] 1048 	ld	a, #0x81
+    0000051A D3 BF            [11] 1049 	out	(_VDP_CMD), a
+    0000051C FB               [ 4] 1050 	ei
+                                   1051 ;src/main.c:358: fontTilesStart = DialogueBox_TILE_COUNT+1;
+    0000051D 21r02r00         [10] 1052 	ld	hl, #_fontTilesStart
+    00000520 36 07            [10] 1053 	ld	(hl), #0x07
+                                   1054 ;src/main.c:360: for(uint8_t i=0;i<TILE_SIZE_BYTES;i++)emptyTile[i]=0;
+    00000522 21 00 00         [10] 1055 	ld	hl, #0
+    00000525 39               [11] 1056 	add	hl, sp
+    00000526 EB               [ 4] 1057 	ex	de, hl
+    00000527 0E 00            [ 7] 1058 	ld	c, #0x00
+    00000529                       1059 00106$:
+    00000529 79               [ 4] 1060 	ld	a, c
+    0000052A D6 20            [ 7] 1061 	sub	a, #0x20
+    0000052C 30 09            [12] 1062 	jr	NC, 00101$
+    0000052E 69               [ 4] 1063 	ld	l, c
+    0000052F 26 00            [ 7] 1064 	ld	h, #0x00
+    00000531 19               [11] 1065 	add	hl, de
+    00000532 36 00            [10] 1066 	ld	(hl), #0x00
+    00000534 0C               [ 4] 1067 	inc	c
+    00000535 18 F2            [12] 1068 	jr	00106$
+    00000537                       1069 00101$:
+                                   1070 ;src/main.c:362: set_native_tile_data(0,1,emptyTile);
+    00000537 D5               [11] 1071 	push	de
+    00000538 11 01 00         [10] 1072 	ld	de, #0x0001
+    0000053B 21 00 00         [10] 1073 	ld	hl, #0x0000
+    0000053E CDr00r00         [17] 1074 	call	_set_native_tile_data
+                                   1075 ;src/main.c:364: ClearScreen();
+    00000541 CDrF5r04         [17] 1076 	call	_ClearScreen
+                                   1077 ;src/main.c:366: set_native_tile_data(1,DialogueBox_TILE_COUNT,DialogueBox_tiles);
+    00000544 21r00r00         [10] 1078 	ld	hl, #_DialogueBox_tiles
+    00000547 E5               [11] 1079 	push	hl
+    00000548 11 06 00         [10] 1080 	ld	de, #0x0006
+    0000054B 21 01 00         [10] 1081 	ld	hl, #0x0001
+    0000054E CDr00r00         [17] 1082 	call	_set_native_tile_data
+                                   1083 ;src/main.c:368: while(TRUE){
+    00000551                       1084 00103$:
+                                   1085 ;src/main.c:372: DrawTextAdvanced("When the code reaches a period or question mark, it will pause and wait for you to press the A button for it to continue. Afterwards, It will start a new page and continue.  The code will automatically jump to a new line, when it cannot fully draw a word.  When both rows of text are full, the code will slide the current text upwards and continue. For every page, the code will dynamically populate VRAM. Only letters and characters used, will be loaded into VRAM.");
+    00000551 21r5Fr05         [10] 1086 	ld	hl, #___str_0
+    00000554 CDr3Dr02         [17] 1087 	call	_DrawTextAdvanced
+    00000557 18 F8            [12] 1088 	jr	00103$
+                                   1089 ;src/main.c:375: }
+    00000559 21 20 00         [10] 1090 	ld	hl, #32
+    0000055C 39               [11] 1091 	add	hl, sp
+    0000055D F9               [ 6] 1092 	ld	sp, hl
+    0000055E C9               [10] 1093 	ret
+    0000055F                       1094 ___str_0:
+    0000055F 57 68 65 6E 20 74 68  1095 	.ascii "When the code reaches a period or question mark, it will pau"
+             65 20 63 6F 64 65 20
+             72 65 61 63 68 65 73
+             20 61 20 70 65 72 69
+             6F 64 20 6F 72 20 71
+             75 65 73 74 69 6F 6E
+             20 6D 61 72 6B 2C 20
+             69 74 20 77 69 6C 6C
+             20 70 61 75
+    0000059B 73 65 20 61 6E 64 20  1096 	.ascii "se and wait for you to press the A button for it to continue"
+             77 61 69 74 20 66 6F
+             72 20 79 6F 75 20 74
+             6F 20 70 72 65 73 73
+             20 74 68 65 20 41 20
+             62 75 74 74 6F 6E 20
+             66 6F 72 20 69 74 20
+             74 6F 20 63 6F 6E 74
+             69 6E 75 65
+    000005D7 2E 20 41 66 74 65 72  1097 	.ascii ". Afterwards, It will start a new page and continue.  The co"
+             77 61 72 64 73 2C 20
+             49 74 20 77 69 6C 6C
+             20 73 74 61 72 74 20
+             61 20 6E 65 77 20 70
+             61 67 65 20 61 6E 64
+             20 63 6F 6E 74 69 6E
+             75 65 2E 20 20 54 68
+             65 20 63 6F
+    00000613 64 65 20 77 69 6C 6C  1098 	.ascii "de will automatically jump to a new line, when it cannot ful"
+             20 61 75 74 6F 6D 61
+             74 69 63 61 6C 6C 79
+             20 6A 75 6D 70 20 74
+             6F 20 61 20 6E 65 77
+             20 6C 69 6E 65 2C 20
+             77 68 65 6E 20 69 74
+             20 63 61 6E 6E 6F 74
+             20 66 75 6C
+    0000064F 6C 79 20 64 72 61 77  1099 	.ascii "ly draw a word.  When both rows of text are full, the code w"
+             20 61 20 77 6F 72 64
+             2E 20 20 57 68 65 6E
+             20 62 6F 74 68 20 72
+             6F 77 73 20 6F 66 20
+             74 65 78 74 20 61 72
+             65 20 66 75 6C 6C 2C
+             20 74 68 65 20 63 6F
+             64 65 20 77
+    0000068B 69 6C 6C 20 73 6C 69  1100 	.ascii "ill slide the current text upwards and continue. For every p"
+             64 65 20 74 68 65 20
+             63 75 72 72 65 6E 74
+             20 74 65 78 74 20 75
+             70 77 61 72 64 73 20
+             61 6E 64 20 63 6F 6E
+             74 69 6E 75 65 2E 20
+             46 6F 72 20 65 76 65
+             72 79 20 70
+    000006C7 61 67 65 2C 20 74 68  1101 	.ascii "age, the code will dynamically populate VRAM. Only letters a"
+             65 20 63 6F 64 65 20
+             77 69 6C 6C 20 64 79
+             6E 61 6D 69 63 61 6C
+             6C 79 20 70 6F 70 75
+             6C 61 74 65 20 56 52
+             41 4D 2E 20 4F 6E 6C
+             79 20 6C 65 74 74 65
+             72 73 20 61
+    00000703 6E 64 20 63 68 61 72  1102 	.ascii "nd characters used, will be loaded into VRAM."
+             61 63 74 65 72 73 20
+             75 73 65 64 2C 20 77
+             69 6C 6C 20 62 65 20
+             6C 6F 61 64 65 64 20
+             69 6E 74 6F 20 56 52
+             41 4D 2E
+    00000730 00                    1103 	.db 0x00
+                                   1104 	.area _CODE
+                                   1105 	.area _INITIALIZER
+    00000000                       1106 __xinit__windowYPosition:
+    00000000 C0 00                 1107 	.dw #0x00c0
+    00000002                       1108 __xinit__fontTilesStart:
+    00000002 00                    1109 	.db #0x00	; 0
+    00000003                       1110 __xinit__joypadCurrent:
+    00000003 00                    1111 	.db #0x00	; 0
+    00000004                       1112 __xinit__joypadPrevious:
+    00000004 00                    1113 	.db #0x00	; 0
+    00000005                       1114 __xinit__loadedCharacterCount:
+    00000005 00                    1115 	.db #0x00	; 0
+                                   1116 	.area _CABS (ABS)

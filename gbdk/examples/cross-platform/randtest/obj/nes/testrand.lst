@@ -1,0 +1,255 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module testrand
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _waitpadup
+                                     23 	.globl _waitpad
+                                     24 	.globl _arand
+                                     25 	.globl _initarand
+                                     26 	.globl _rand
+                                     27 	.globl _puts
+                                     28 	.globl _printf
+                                     29 	.globl _OAMDMA
+                                     30 	.globl _PPUDATA
+                                     31 	.globl _PPUADDR
+                                     32 	.globl _PPUSCROLL
+                                     33 	.globl _OAMDATA
+                                     34 	.globl _OAMADDR
+                                     35 	.globl _PPUSTATUS
+                                     36 	.globl _PPUMASK
+                                     37 	.globl _PPUCTRL
+                                     38 ;--------------------------------------------------------
+                                     39 ; ZP ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _ZP      (PAG)
+    00000000                         42 _main_sloc0_1_0:
+    00000000                         43 	.ds 1
+    00000001                         44 _main_sloc1_1_0:
+    00000001                         45 	.ds 2
+    00000003                         46 _main_sloc2_1_0:
+    00000003                         47 	.ds 2
+                                     48 ;--------------------------------------------------------
+                                     49 ; overlayable items in ram
+                                     50 ;--------------------------------------------------------
+                                     51 ;--------------------------------------------------------
+                                     52 ; uninitialized external ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _BSS
+                         00002000    55 _PPUCTRL	=	0x2000
+                         00002001    56 _PPUMASK	=	0x2001
+                         00002002    57 _PPUSTATUS	=	0x2002
+                         00002003    58 _OAMADDR	=	0x2003
+                         00002004    59 _OAMDATA	=	0x2004
+                         00002005    60 _PPUSCROLL	=	0x2005
+                         00002006    61 _PPUADDR	=	0x2006
+                         00002007    62 _PPUDATA	=	0x2007
+                         00004014    63 _OAMDMA	=	0x4014
+                                     64 ;--------------------------------------------------------
+                                     65 ; absolute external ram data
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _DABS    (ABS)
+                                     68 ;--------------------------------------------------------
+                                     69 ; initialized external ram data
+                                     70 ;--------------------------------------------------------
+                                     71 	.area _DATA
+                                     72 ;--------------------------------------------------------
+                                     73 ; global & static initialisations
+                                     74 ;--------------------------------------------------------
+                                     75 	.area _HOME
+                                     76 	.area _GSINIT
+                                     77 	.area _GSFINAL
+                                     78 	.area _GSINIT
+                                     79 ;--------------------------------------------------------
+                                     80 ; Home
+                                     81 ;--------------------------------------------------------
+                                     82 	.area _HOME
+                                     83 	.area _HOME
+                                     84 ;--------------------------------------------------------
+                                     85 ; code
+                                     86 ;--------------------------------------------------------
+                                     87 	.area _CODE
+                                     88 ;------------------------------------------------------------
+                                     89 ;Allocation info for local variables in function 'main'
+                                     90 ;------------------------------------------------------------
+                                     91 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                     92 ;sloc1         Allocated with name '_main_sloc1_1_0'
+                                     93 ;sloc2         Allocated with name '_main_sloc2_1_0'
+                                     94 ;i             Allocated to registers 
+                                     95 ;------------------------------------------------------------
+                                     96 ;	src/testrand.c: 14: void main(void)
+                                     97 ;	genLabel
+                                     98 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                     99 ;	-----------------------------------------
+                                    100 ;	 function main
+                                    101 ;	-----------------------------------------
+                                    102 ;	Register assignment is optimal.
+                                    103 ;	Stack space usage: 0 bytes.
+    00000000                        104 _main:
+                                    105 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    106 ;	src/testrand.c: 16: puts("press A...");
+                                    107 ;	skipping iCode since result will be rematerialized
+                                    108 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    109 ;	skipping iCode since result will be rematerialized
+                                    110 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    111 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    112 ;	genCall
+                                    113 ;	genSend
+    00000000 A2s00            [ 2]  114 	ldx	#>___str_0
+    00000002 A9r64            [ 2]  115 	lda	#___str_0
+    00000004 20r00r00         [ 6]  116 	jsr	_puts
+                                    117 ;	Raw cost for generated ic 5 : (7, 10.000000) count=1.000000
+                                    118 ;	src/testrand.c: 17: waitpad(J_A);
+                                    119 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    120 ;	genCall
+                                    121 ;	genSend
+    00000007 A9 80            [ 2]  122 	lda	#0x80
+    00000009 20r00r00         [ 6]  123 	jsr	_waitpad
+                                    124 ;	Raw cost for generated ic 7 : (5, 8.000000) count=1.000000
+                                    125 ;	src/testrand.c: 18: initarand(sys_time);
+                                    126 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    127 ;	genCall
+                                    128 ;	genSend
+    0000000C ADr00r00         [ 4]  129 	lda	_sys_time
+    0000000F AEr01r00         [ 4]  130 	ldx	(_sys_time + 1)
+    00000012 20r00r00         [ 6]  131 	jsr	_initarand
+                                    132 ;	Raw cost for generated ic 9 : (9, 14.000000) count=1.000000
+                                    133 ;	src/testrand.c: 19: while(TRUE) {
+                                    134 ;	genLabel
+    00000015                        135 00103$:
+                                    136 ;	Raw cost for generated ic 12 : (0, 0.000000) count=18.750000
+                                    137 ;	src/testrand.c: 20: waitpadup();
+                                    138 ;	genCall
+    00000015 20r00r00         [ 6]  139 	jsr	_waitpadup
+                                    140 ;	Raw cost for generated ic 13 : (3, 6.000000) count=18.750000
+                                    141 ;	src/testrand.c: 21: for (uint8_t i = 0; i != 16; i++) 
+                                    142 ;	skipping iCode since result will be rematerialized
+                                    143 ;	Raw cost for generated ic 24 : (0, 0.000000) count=18.750000
+                                    144 ;	genAssign
+                                    145 ;	genAssignLit
+    00000018 A2 00            [ 2]  146 	ldx	#0x00
+    0000001A 86*00            [ 3]  147 	stx	*_main_sloc0_1_0
+                                    148 ;	Raw cost for generated ic 48 : (4, 5.000000) count=18.750000
+                                    149 ;	genLabel
+    0000001C                        150 00106$:
+                                    151 ;	Raw cost for generated ic 15 : (0, 0.000000) count=72.000000
+                                    152 ;	genCmpEQorNE
+    0000001C A5*00            [ 3]  153 	lda	*_main_sloc0_1_0
+    0000001E C9 10            [ 2]  154 	cmp	#0x10
+    00000020 F0 32            [ 4]  155 	beq	00101$
+                                    156 ;	Raw cost for generated ic 16 : (9, 10.600000) count=72.000000
+                                    157 ;	skipping generated iCode
+                                    158 ;	Raw cost for generated ic 17 : (0, 0.000000) count=72.000000
+                                    159 ;	src/testrand.c: 22: printf("r=%x a=%x\n", (uint16_t)rand(), (uint16_t)arand());
+                                    160 ;	genCall
+    00000022 20r00r00         [ 6]  161 	jsr	_arand
+                                    162 ;	assignResultValue
+                                    163 ;	Raw cost for generated ic 20 : (3, 6.000000) count=54.000000
+                                    164 ;	genCast
+    00000025 85*01            [ 3]  165 	sta	*_main_sloc1_1_0
+    00000027 A2 00            [ 2]  166 	ldx	#0x00
+    00000029 86*02            [ 3]  167 	stx	*(_main_sloc1_1_0 + 1)
+                                    168 ;	Raw cost for generated ic 21 : (6, 8.000000) count=54.000000
+                                    169 ;	genCall
+    0000002B 20r00r00         [ 6]  170 	jsr	_rand
+                                    171 ;	assignResultValue
+                                    172 ;	Raw cost for generated ic 22 : (3, 6.000000) count=54.000000
+                                    173 ;	genCast
+    0000002E 85*03            [ 3]  174 	sta	*_main_sloc2_1_0
+    00000030 A2 00            [ 2]  175 	ldx	#0x00
+    00000032 86*04            [ 3]  176 	stx	*(_main_sloc2_1_0 + 1)
+                                    177 ;	Raw cost for generated ic 23 : (6, 8.000000) count=54.000000
+                                    178 ;	skipping iCode since result will be rematerialized
+                                    179 ;	Raw cost for generated ic 25 : (0, 0.000000) count=54.000000
+                                    180 ;	genIpush
+    00000034 A5*02            [ 3]  181 	lda	*(_main_sloc1_1_0 + 1)
+    00000036 48               [ 3]  182 	pha
+    00000037 A5*01            [ 3]  183 	lda	*_main_sloc1_1_0
+    00000039 48               [ 3]  184 	pha
+                                    185 ;	Raw cost for generated ic 26 : (6, 12.000000) count=54.000000
+                                    186 ;	genIpush
+    0000003A A5*04            [ 3]  187 	lda	*(_main_sloc2_1_0 + 1)
+    0000003C 48               [ 3]  188 	pha
+    0000003D A5*03            [ 3]  189 	lda	*_main_sloc2_1_0
+    0000003F 48               [ 3]  190 	pha
+                                    191 ;	Raw cost for generated ic 27 : (6, 12.000000) count=54.000000
+                                    192 ;	genIpush
+    00000040 A9s00            [ 2]  193 	lda	#>___str_1
+    00000042 48               [ 3]  194 	pha
+    00000043 A9r6F            [ 2]  195 	lda	#___str_1
+    00000045 48               [ 3]  196 	pha
+                                    197 ;	Raw cost for generated ic 28 : (6, 10.000000) count=54.000000
+                                    198 ;	genCall
+    00000046 20r00r00         [ 6]  199 	jsr	_printf
+    00000049 68               [ 4]  200 	pla
+    0000004A 68               [ 4]  201 	pla
+    0000004B 68               [ 4]  202 	pla
+    0000004C 68               [ 4]  203 	pla
+    0000004D 68               [ 4]  204 	pla
+    0000004E 68               [ 4]  205 	pla
+                                    206 ;	Raw cost for generated ic 29 : (9, 30.000000) count=54.000000
+                                    207 ;	src/testrand.c: 21: for (uint8_t i = 0; i != 16; i++) 
+                                    208 ;	genPlus
+                                    209 ;	genPlusIncr
+    0000004F E6*00            [ 5]  210 	inc	*_main_sloc0_1_0
+                                    211 ;	Raw cost for generated ic 32 : (2, 5.000000) count=54.000000
+                                    212 ;	genGoto
+    00000051 4Cr1Cr00         [ 3]  213 	jmp	00106$
+                                    214 ;	Raw cost for generated ic 34 : (3, 3.000000) count=54.000000
+                                    215 ;	genLabel
+    00000054                        216 00101$:
+                                    217 ;	Raw cost for generated ic 35 : (0, 0.000000) count=18.000000
+                                    218 ;	src/testrand.c: 23: puts("press A...");
+                                    219 ;	skipping iCode since result will be rematerialized
+                                    220 ;	Raw cost for generated ic 37 : (0, 0.000000) count=18.000000
+                                    221 ;	Raw cost for generated ic 38 : (0, 0.000000) count=18.000000
+                                    222 ;	genCall
+                                    223 ;	genSend
+    00000054 A2s00            [ 2]  224 	ldx	#>___str_0
+    00000056 A9r64            [ 2]  225 	lda	#___str_0
+    00000058 20r00r00         [ 6]  226 	jsr	_puts
+                                    227 ;	Raw cost for generated ic 39 : (7, 10.000000) count=18.000000
+                                    228 ;	src/testrand.c: 24: waitpad(J_A);
+                                    229 ;	Raw cost for generated ic 40 : (0, 0.000000) count=18.000000
+                                    230 ;	genCall
+                                    231 ;	genSend
+    0000005B A9 80            [ 2]  232 	lda	#0x80
+    0000005D 20r00r00         [ 6]  233 	jsr	_waitpad
+                                    234 ;	Raw cost for generated ic 41 : (5, 8.000000) count=18.000000
+                                    235 ;	genGoto
+    00000060 4Cr15r00         [ 3]  236 	jmp	00103$
+                                    237 ;	Raw cost for generated ic 42 : (3, 3.000000) count=18.000000
+                                    238 ;	genLabel
+                                    239 ;	Raw cost for generated ic 44 : (0, 0.000000) count=0.000000
+                                    240 ;	src/testrand.c: 26: }
+                                    241 ;	genEndFunction
+    00000063 60               [ 6]  242 	rts
+                                    243 ;	Raw cost for generated ic 45 : (1, 6.000000) count=0.000000
+                                    244 	.area _CODE
+    00000064                        245 ___str_0:
+    00000064 70 72 65 73 73 20 41   246 	.ascii "press A..."
+             2E 2E 2E
+    0000006E 00                     247 	.db 0x00
+    0000006F                        248 ___str_1:
+    0000006F 72 3D 25 78 20 61 3D   249 	.ascii "r=%x a=%x"
+             25 78
+    00000078 0A                     250 	.db 0x0a
+    00000079 00                     251 	.db 0x00
+                                    252 	.area _XINIT
+                                    253 	.area _CABS    (ABS)

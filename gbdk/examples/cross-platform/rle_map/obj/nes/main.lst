@@ -1,0 +1,541 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl b___func_map_compressed
+                                     23 	.globl ___func_map_compressed
+                                     24 	.globl b___func_map_tiles
+                                     25 	.globl ___func_map_tiles
+                                     26 	.globl _rle_decompress
+                                     27 	.globl _rle_init
+                                     28 	.globl _set_bkg_tiles
+                                     29 	.globl _set_bkg_data
+                                     30 	.globl _vsync
+                                     31 	.globl _datapos
+                                     32 	.globl _scrollpos
+                                     33 	.globl _data
+                                     34 	.globl _OAMDMA
+                                     35 	.globl _PPUDATA
+                                     36 	.globl _PPUADDR
+                                     37 	.globl _PPUSCROLL
+                                     38 	.globl _OAMDATA
+                                     39 	.globl _OAMADDR
+                                     40 	.globl _PPUSTATUS
+                                     41 	.globl _PPUMASK
+                                     42 	.globl _PPUCTRL
+                                     43 ;--------------------------------------------------------
+                                     44 ; ZP ram data
+                                     45 ;--------------------------------------------------------
+                                     46 	.area _ZP      (PAG)
+    00000000                         47 _main_sloc0_1_0:
+    00000000                         48 	.ds 1
+                                     49 ;--------------------------------------------------------
+                                     50 ; overlayable items in ram
+                                     51 ;--------------------------------------------------------
+                                     52 ;--------------------------------------------------------
+                                     53 ; uninitialized external ram data
+                                     54 ;--------------------------------------------------------
+                                     55 	.area _BSS
+                         00002000    56 _PPUCTRL	=	0x2000
+                         00002001    57 _PPUMASK	=	0x2001
+                         00002002    58 _PPUSTATUS	=	0x2002
+                         00002003    59 _OAMADDR	=	0x2003
+                         00002004    60 _OAMDATA	=	0x2004
+                         00002005    61 _PPUSCROLL	=	0x2005
+                         00002006    62 _PPUADDR	=	0x2006
+                         00002007    63 _PPUDATA	=	0x2007
+                         00004014    64 _OAMDMA	=	0x4014
+    00000000                         65 _data::
+    00000000                         66 	.ds 18
+    00000012                         67 _main_map_x_column_40001_114:
+    00000012                         68 	.ds 1
+                                     69 ;--------------------------------------------------------
+                                     70 ; absolute external ram data
+                                     71 ;--------------------------------------------------------
+                                     72 	.area _DABS    (ABS)
+                                     73 ;--------------------------------------------------------
+                                     74 ; initialized external ram data
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _DATA
+    00000000                         77 _scrollpos::
+    00000000                         78 	.ds 2
+    00000002                         79 _datapos::
+    00000002                         80 	.ds 1
+                                     81 ;--------------------------------------------------------
+                                     82 ; global & static initialisations
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _HOME
+                                     85 	.area _GSINIT
+                                     86 	.area _GSFINAL
+                                     87 	.area _GSINIT
+                                     88 ;--------------------------------------------------------
+                                     89 ; Home
+                                     90 ;--------------------------------------------------------
+                                     91 	.area _HOME
+                                     92 	.area _HOME
+                                     93 ;--------------------------------------------------------
+                                     94 ; code
+                                     95 ;--------------------------------------------------------
+                                     96 	.area _CODE
+                                     97 ;------------------------------------------------------------
+                                     98 ;Allocation info for local variables in function '__func_map_tiles'
+                                     99 ;------------------------------------------------------------
+                                    100 ;	src/main.c: 8: INCBIN(map_tiles, "res/map_tiles.bin")
+                                    101 ;	genLabel
+                                    102 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    103 ;	-----------------------------------------
+                                    104 ;	 function __func_map_tiles
+                                    105 ;	-----------------------------------------
+                                    106 ;	Register assignment is optimal.
+                                    107 ;	Stack space usage: 0 bytes.
+                         00000000   108 	b___func_map_tiles	= 0
+    00000000                        109 ___func_map_tiles:
+                                    110 ;	naked function: no prologue.
+                                    111 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    112 ;	m6502_genInline
+    00000000                        113 		_map_tiles::
+    00000000                        114 	 1$:
+    00000000 FF 00 FF 00 FF 00 FF   115 	 .incbin "res/map_tiles.bin" 
+             00 FF 00 FF 00 DF 20
+             FF 00 FF 00 FF 00 FF
+             00 FF 00 3F C0 BF 00
+             FF 00 FF 00 FF 00 FF
+             00 FF 00 FF 00 FF 00
+             FF 00 FF 00 FF 00 FF
+             00 EF 10 F8 00 F0 00
+             F0 00 E1 00 C5 22 F3
+             0C FD 03 F8 07 78 07
+             5A 25 BC 43 7C 83 FC
+             03 E0 07 FF FF FF FF
+             FF FF FF FF FF FF FF
+             FF FF FF FF FF FF FF
+             FF FF FF FF FF FF FF
+             FF FF FF DF FF FF FF
+             FF FF FF FF FF FF FF
+             FF 3F FF BF FF FF FF
+             FF FF
+    00000780                        116 	 2$:
+                         00000780   117 	 ___size_map_tiles = (2$-1$) 
+                                    118 	 .globl ___size_map_tiles 
+                                    119 	 .local b___func_map_tiles 
+                         00000000   120 	 ___bank_map_tiles = b___func_map_tiles 
+                                    121 	 .globl ___bank_map_tiles 
+                                    122 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    123 ;	genLabel
+                                    124 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    125 ;	genEndFunction
+                                    126 ;	naked function: no epilogue.
+                                    127 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    128 ;------------------------------------------------------------
+                                    129 ;Allocation info for local variables in function '__func_map_compressed'
+                                    130 ;------------------------------------------------------------
+                                    131 ;	src/main.c: 15: INCBIN(map_compressed, "res/map.bin.rle")
+                                    132 ;	genLabel
+                                    133 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    134 ;	-----------------------------------------
+                                    135 ;	 function __func_map_compressed
+                                    136 ;	-----------------------------------------
+                                    137 ;	Register assignment is optimal.
+                                    138 ;	Stack space usage: 0 bytes.
+                         00000000   139 	b___func_map_compressed	= 0
+    00000780                        140 ___func_map_compressed:
+                                    141 ;	naked function: no prologue.
+                                    142 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    143 ;	m6502_genInline
+    00000780                        144 		_map_compressed::
+    00000780                        145 	 1$:
+    00000780 08 00 0D 03 0F 02 02   146 	 .incbin "res/map.bin.rle" 
+             26 38 FC 05 0E 06 11
+             05 05 1E 0D 01 0E 0C
+             23 02 02 0B 16 FC 05
+             78 07 12 05 05 1F 0E
+             02 02 00 0D 26 2A 00
+             19 08 13 06 11 4A 5D
+             62 41 35 42 02 02 01
+             0E 0B 2B 01 1A 09 14
+             07 12 1F 0E 0C 1C 37
+             23 03 0F 00 0D 02 02
+             00 39 06 11 05 05 1E
+             02 26 38 1E 02 04 10
+             1D 0E 02 02 01 3A 07
+             12 05 05 20 24 63 6A
+             1F 02 05 05 1E 02 00
+             0D 02 3B 06 11 4A 53
+             4A 5E 64 02 03 0F 05
+             05 1F
+    00000E45                        147 	 2$:
+                         000006C5   148 	 ___size_map_compressed = (2$-1$) 
+                                    149 	 .globl ___size_map_compressed 
+                                    150 	 .local b___func_map_compressed 
+                         00000000   151 	 ___bank_map_compressed = b___func_map_compressed 
+                                    152 	 .globl ___bank_map_compressed 
+                                    153 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    154 ;	genLabel
+                                    155 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    156 ;	genEndFunction
+                                    157 ;	naked function: no epilogue.
+                                    158 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    159 ;------------------------------------------------------------
+                                    160 ;Allocation info for local variables in function 'main'
+                                    161 ;------------------------------------------------------------
+                                    162 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                    163 ;i             Allocated to registers 
+                                    164 ;__300000009   Allocated to registers 
+                                    165 ;__300000010   Allocated to registers 
+                                    166 ;x             Allocated to registers 
+                                    167 ;y             Allocated to registers 
+                                    168 ;map_x_column  Allocated with name '_main_map_x_column_40001_114'
+                                    169 ;------------------------------------------------------------
+                                    170 ;	src/main.c: 22: void main(void) {
+                                    171 ;	genLabel
+                                    172 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    173 ;	-----------------------------------------
+                                    174 ;	 function main
+                                    175 ;	-----------------------------------------
+                                    176 ;	Register assignment is optimal.
+                                    177 ;	Stack space usage: 0 bytes.
+    00000E45                        178 _main:
+                                    179 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    180 ;	src/main.c: 28: HIDE_LEFT_COLUMN;
+                                    181 ;	genAnd
+    00000E45 ADr00r00         [ 4]  182 	lda	_shadow_PPUMASK
+    00000E48 29 F9            [ 2]  183 	and	#0xf9
+    00000E4A 8Dr00r00         [ 4]  184 	sta	_shadow_PPUMASK
+                                    185 ;	Raw cost for generated ic 4 : (8, 10.000000) count=1.000000
+                                    186 ;	src/main.c: 30: SHOW_BKG;
+                                    187 ;	genOr
+    00000E4D ADr00r00         [ 4]  188 	lda	_shadow_PPUMASK
+    00000E50 09 08            [ 2]  189 	ora	#0x08
+    00000E52 8Dr00r00         [ 4]  190 	sta	_shadow_PPUMASK
+                                    191 ;	Raw cost for generated ic 7 : (8, 10.000000) count=1.000000
+                                    192 ;	src/main.c: 33: set_bkg_data(0, INCBIN_SIZE(map_tiles) >> 4, map_tiles);
+                                    193 ;	skipping iCode since result will be rematerialized
+                                    194 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    195 ;	genCast
+                                    196 ;	genCopy
+    00000E55 A2s00            [ 2]  197 	ldx	#>___size_map_tiles
+    00000E57 A9r00            [ 2]  198 	lda	#___size_map_tiles
+                                    199 ;	Raw cost for generated ic 10 : (4, 4.000000) count=1.000000
+                                    200 ;	genRightShift
+                                    201 ;	genRightShiftLiteral
+                                    202 ;	genrshTwo
+    00000E59 86*00            [ 3]  203 	stx	*(REGTEMP+0)
+    00000E5B 46*00            [ 5]  204 	lsr	*(REGTEMP+0)
+    00000E5D 6A               [ 2]  205 	ror	a
+    00000E5E 46*00            [ 5]  206 	lsr	*(REGTEMP+0)
+    00000E60 6A               [ 2]  207 	ror	a
+    00000E61 46*00            [ 5]  208 	lsr	*(REGTEMP+0)
+    00000E63 6A               [ 2]  209 	ror	a
+    00000E64 46*00            [ 5]  210 	lsr	*(REGTEMP+0)
+    00000E66 6A               [ 2]  211 	ror	a
+                                    212 ;	Raw cost for generated ic 11 : (16, 34.000000) count=1.000000
+                                    213 ;	genCast
+                                    214 ;	genCopy
+                                    215 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    216 ;	skipping iCode since result will be rematerialized
+                                    217 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    218 ;	genCast
+                                    219 ;	genCopy
+    00000E67 A2s00            [ 2]  220 	ldx	#>_map_tiles
+    00000E69 8Er01r00         [ 4]  221 	stx	(_set_bkg_data_PARM_3 + 1)
+    00000E6C A2r00            [ 2]  222 	ldx	#_map_tiles
+    00000E6E 8Er00r00         [ 4]  223 	stx	_set_bkg_data_PARM_3
+                                    224 ;	Raw cost for generated ic 14 : (10, 12.000000) count=1.000000
+                                    225 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    226 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    227 ;	genCall
+                                    228 ;	genSend
+    00000E71 AA               [ 2]  229 	tax
+    00000E72 A9 00            [ 2]  230 	lda	#0x00
+    00000E74 20r00r00         [ 6]  231 	jsr	_set_bkg_data
+                                    232 ;	Raw cost for generated ic 18 : (6, 10.000000) count=1.000000
+                                    233 ;	src/main.c: 36: rle_init(map_compressed);
+                                    234 ;	skipping iCode since result will be rematerialized
+                                    235 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    236 ;	skipping iCode since result will be rematerialized
+                                    237 ;	Raw cost for generated ic 20 : (0, 0.000000) count=1.000000
+                                    238 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    239 ;	genCall
+                                    240 ;	genSend
+    00000E77 A2s07            [ 2]  241 	ldx	#>_map_compressed
+    00000E79 A9r80            [ 2]  242 	lda	#_map_compressed
+    00000E7B 20r00r00         [ 6]  243 	jsr	_rle_init
+                                    244 ;	Raw cost for generated ic 22 : (7, 10.000000) count=1.000000
+                                    245 ;	src/main.c: 41: for (uint8_t i = 0; (i != DEVICE_SCREEN_WIDTH + 1); i++) {
+                                    246 ;	skipping iCode since result will be rematerialized
+                                    247 ;	Raw cost for generated ic 29 : (0, 0.000000) count=1.000000
+                                    248 ;	genAssign
+                                    249 ;	genAssignLit
+    00000E7E A2 00            [ 2]  250 	ldx	#0x00
+    00000E80 86*00            [ 3]  251 	stx	*_main_sloc0_1_0
+                                    252 ;	Raw cost for generated ic 126 : (4, 5.000000) count=1.000000
+                                    253 ;	genLabel
+    00000E82                        254 00113$:
+                                    255 ;	Raw cost for generated ic 24 : (0, 0.000000) count=3.999997
+                                    256 ;	genCmpEQorNE
+    00000E82 A5*00            [ 3]  257 	lda	*_main_sloc0_1_0
+    00000E84 C9 21            [ 2]  258 	cmp	#0x21
+    00000E86 F0 2E            [ 4]  259 	beq	00103$
+                                    260 ;	Raw cost for generated ic 25 : (9, 10.600000) count=3.999997
+                                    261 ;	skipping generated iCode
+                                    262 ;	Raw cost for generated ic 26 : (0, 0.000000) count=3.999997
+                                    263 ;	src/main.c: 42: rle_decompress(data, MAP_DATA_HEIGHT);
+                                    264 ;	skipping iCode since result will be rematerialized
+                                    265 ;	Raw cost for generated ic 30 : (0, 0.000000) count=2.999997
+                                    266 ;	genAssign
+                                    267 ;	genAssignLit
+    00000E88 A2 12            [ 2]  268 	ldx	#0x12
+    00000E8A 8Er00r00         [ 4]  269 	stx	_rle_decompress_PARM_2
+                                    270 ;	Raw cost for generated ic 32 : (5, 6.000000) count=2.999997
+                                    271 ;	Raw cost for generated ic 31 : (0, 0.000000) count=2.999997
+                                    272 ;	genCall
+                                    273 ;	genSend
+    00000E8D A2s00            [ 2]  274 	ldx	#>_data
+    00000E8F A9r00            [ 2]  275 	lda	#_data
+    00000E91 20r00r00         [ 6]  276 	jsr	_rle_decompress
+                                    277 ;	Raw cost for generated ic 33 : (7, 10.000000) count=2.999997
+                                    278 ;	src/main.c: 47: set_bkg_tiles(i & (DEVICE_SCREEN_BUFFER_WIDTH-1), 0, 1, MAP_DATA_HEIGHT, data);
+                                    279 ;	genAnd
+    00000E94 A5*00            [ 3]  280 	lda	*_main_sloc0_1_0
+    00000E96 29 1F            [ 2]  281 	and	#0x1f
+                                    282 ;	Raw cost for generated ic 34 : (4, 5.000000) count=2.999997
+                                    283 ;	genCast
+                                    284 ;	genCopy
+    00000E98 A2s00            [ 2]  285 	ldx	#>_data
+    00000E9A 8Er01r00         [ 4]  286 	stx	(_set_bkg_tiles_PARM_5 + 1)
+    00000E9D A2r00            [ 2]  287 	ldx	#_data
+    00000E9F 8Er00r00         [ 4]  288 	stx	_set_bkg_tiles_PARM_5
+                                    289 ;	Raw cost for generated ic 36 : (10, 12.000000) count=2.999997
+                                    290 ;	genAssign
+                                    291 ;	genAssignLit
+    00000EA2 A2 01            [ 2]  292 	ldx	#0x01
+    00000EA4 8Er00r00         [ 4]  293 	stx	_set_bkg_tiles_PARM_3
+                                    294 ;	Raw cost for generated ic 39 : (5, 6.000000) count=2.999997
+                                    295 ;	genAssign
+                                    296 ;	genAssignLit
+    00000EA7 A2 12            [ 2]  297 	ldx	#0x12
+    00000EA9 8Er00r00         [ 4]  298 	stx	_set_bkg_tiles_PARM_4
+                                    299 ;	Raw cost for generated ic 40 : (5, 6.000000) count=2.999997
+                                    300 ;	Raw cost for generated ic 37 : (0, 0.000000) count=2.999997
+                                    301 ;	Raw cost for generated ic 38 : (0, 0.000000) count=2.999997
+                                    302 ;	genCall
+                                    303 ;	genSend
+    00000EAC A2 00            [ 2]  304 	ldx	#0x00
+    00000EAE 20r00r00         [ 6]  305 	jsr	_set_bkg_tiles
+                                    306 ;	Raw cost for generated ic 42 : (5, 8.000000) count=2.999997
+                                    307 ;	src/main.c: 41: for (uint8_t i = 0; (i != DEVICE_SCREEN_WIDTH + 1); i++) {
+                                    308 ;	genPlus
+                                    309 ;	genPlusIncr
+    00000EB1 E6*00            [ 5]  310 	inc	*_main_sloc0_1_0
+                                    311 ;	Raw cost for generated ic 45 : (2, 5.000000) count=2.999997
+                                    312 ;	genGoto
+    00000EB3 4Cr82r0E         [ 3]  313 	jmp	00113$
+                                    314 ;	Raw cost for generated ic 47 : (3, 3.000000) count=2.999997
+                                    315 ;	genLabel
+    00000EB6                        316 00103$:
+                                    317 ;	Raw cost for generated ic 48 : (0, 0.000000) count=0.999999
+                                    318 ;	src/main.c: 51: datapos = 0;
+                                    319 ;	genAssign
+                                    320 ;	genAssignLit
+    00000EB6 A2 00            [ 2]  321 	ldx	#0x00
+    00000EB8 8Er02r00         [ 4]  322 	stx	_datapos
+                                    323 ;	Raw cost for generated ic 50 : (5, 6.000000) count=0.999999
+                                    324 ;	src/main.c: 52: scrollpos = 1;
+                                    325 ;	genAssign
+                                    326 ;	genAssignLit
+    00000EBB E8               [ 2]  327 	inx
+    00000EBC 8Er00r00         [ 4]  328 	stx	_scrollpos
+    00000EBF CA               [ 2]  329 	dex
+    00000EC0 8Er01r00         [ 4]  330 	stx	(_scrollpos + 1)
+                                    331 ;	Raw cost for generated ic 52 : (8, 12.000000) count=0.999999
+                                    332 ;	src/main.c: 53: while(TRUE) {
+                                    333 ;	genLabel
+    00000EC3                        334 00109$:
+                                    335 ;	Raw cost for generated ic 55 : (0, 0.000000) count=68.918907
+                                    336 ;	src/main.c: 55: vsync();
+                                    337 ;	genCall
+    00000EC3 20r00r00         [ 6]  338 	jsr	_vsync
+                                    339 ;	Raw cost for generated ic 56 : (3, 6.000000) count=68.918907
+                                    340 ;	src/main.c: 60: scrollpos++;
+                                    341 ;	genPlus
+                                    342 ;	genPlusIncr
+    00000EC6 EEr00r00         [ 6]  343 	inc	_scrollpos
+    00000EC9 D0 03            [ 4]  344 	bne	00152$
+    00000ECB EEr01r00         [ 6]  345 	inc	(_scrollpos + 1)
+    00000ECE                        346 00152$:
+                                    347 ;	Raw cost for generated ic 58 : (8, 14.600000) count=68.918907
+                                    348 ;	src/main.c: 61: move_bkg(scrollpos, 0);
+                                    349 ;	genCast
+                                    350 ;	genCopy
+    00000ECE ADr00r00         [ 4]  351 	lda	_scrollpos
+    00000ED1 8Dr00r00         [ 4]  352 	sta	_bkg_scroll_x
+                                    353 ;	Raw cost for generated ic 62 : (6, 9.000000) count=68.918907
+                                    354 ;	../../../include/nes/nes.h: 976: bkg_scroll_y = (uint8_t)(y >= 240 ? (y - 240) : y);
+                                    355 ;	genAssign
+                                    356 ;	genAssignLit
+                                    357 ;	genCopy
+    00000ED4 A2 00            [ 2]  358 	ldx	#0x00
+    00000ED6 8Er00r00         [ 4]  359 	stx	_bkg_scroll_y
+                                    360 ;	Raw cost for generated ic 78 : (5, 7.000000) count=68.918907
+                                    361 ;	src/main.c: 65: if ((scrollpos & 0x07u) == 0) {
+                                    362 ;	genAssign
+                                    363 ;	genAssignLit
+                                    364 ;	genCopy
+    00000ED9 AEr01r00         [ 4]  365 	ldx	(_scrollpos + 1)
+    00000EDC ADr00r00         [ 4]  366 	lda	_scrollpos
+                                    367 ;	Raw cost for generated ic 80 : (6, 8.000000) count=68.918907
+                                    368 ;	genAnd
+    00000EDF 85*00            [ 3]  369 	sta	*(REGTEMP+0)
+    00000EE1 29 07            [ 2]  370 	and	#0x07
+    00000EE3 08               [ 3]  371 	php
+    00000EE4 A5*00            [ 3]  372 	lda	*(REGTEMP+0)
+    00000EE6 28               [ 4]  373 	plp
+                                    374 ;	genIfxJump : z
+    00000EE7 D0 DA            [ 4]  375 	bne	00109$
+                                    376 ;	Raw cost for generated ic 81 : (15, 23.200001) count=68.918907
+                                    377 ;	skipping generated iCode
+                                    378 ;	Raw cost for generated ic 82 : (0, 0.000000) count=68.918907
+                                    379 ;	src/main.c: 69: datapos = (scrollpos >> 3);
+                                    380 ;	genRightShift
+                                    381 ;	genRightShiftLiteral
+                                    382 ;	genrshTwo
+    00000EE9 86*00            [ 3]  383 	stx	*(REGTEMP+0)
+    00000EEB 46*00            [ 5]  384 	lsr	*(REGTEMP+0)
+    00000EED 6A               [ 2]  385 	ror	a
+    00000EEE 46*00            [ 5]  386 	lsr	*(REGTEMP+0)
+    00000EF0 6A               [ 2]  387 	ror	a
+    00000EF1 46*00            [ 5]  388 	lsr	*(REGTEMP+0)
+    00000EF3 6A               [ 2]  389 	ror	a
+    00000EF4 A6*00            [ 3]  390 	ldx	*(REGTEMP+0)
+                                    391 ;	Raw cost for generated ic 85 : (13, 27.000000) count=17.229727
+                                    392 ;	genCast
+                                    393 ;	genCopy
+                                    394 ;	Raw cost for generated ic 86 : (0, 0.000000) count=17.229727
+                                    395 ;	genAssign
+                                    396 ;	genAssignLit
+                                    397 ;	genCopy
+    00000EF6 8Dr02r00         [ 4]  398 	sta	_datapos
+                                    399 ;	Raw cost for generated ic 88 : (3, 4.000000) count=17.229727
+                                    400 ;	src/main.c: 70: uint8_t map_x_column = (datapos + DEVICE_SCREEN_WIDTH) & (DEVICE_SCREEN_BUFFER_WIDTH-1);
+                                    401 ;	genCast
+                                    402 ;	genCopy
+                                    403 ;	Raw cost for generated ic 89 : (0, 0.000000) count=17.229727
+                                    404 ;	genPlus
+                                    405 ;	genPlusIncr
+    00000EF9 18               [ 2]  406 	clc
+    00000EFA 69 20            [ 2]  407 	adc	#0x20
+                                    408 ;	Raw cost for generated ic 90 : (3, 4.000000) count=17.229727
+                                    409 ;	genAnd
+    00000EFC 29 1F            [ 2]  410 	and	#0x1f
+    00000EFE 8Dr12r00         [ 4]  411 	sta	_main_map_x_column_40001_114
+                                    412 ;	Raw cost for generated ic 91 : (5, 6.000000) count=17.229727
+                                    413 ;	src/main.c: 75: if (!rle_decompress(data, MAP_DATA_HEIGHT)) {
+                                    414 ;	skipping iCode since result will be rematerialized
+                                    415 ;	Raw cost for generated ic 93 : (0, 0.000000) count=17.229727
+                                    416 ;	skipping iCode since result will be rematerialized
+                                    417 ;	Raw cost for generated ic 94 : (0, 0.000000) count=17.229727
+                                    418 ;	genAssign
+                                    419 ;	genAssignLit
+    00000F01 A2 12            [ 2]  420 	ldx	#0x12
+    00000F03 8Er00r00         [ 4]  421 	stx	_rle_decompress_PARM_2
+                                    422 ;	Raw cost for generated ic 96 : (5, 6.000000) count=17.229727
+                                    423 ;	Raw cost for generated ic 95 : (0, 0.000000) count=17.229727
+                                    424 ;	genCall
+                                    425 ;	genSend
+    00000F06 A2s00            [ 2]  426 	ldx	#>_data
+    00000F08 A9r00            [ 2]  427 	lda	#_data
+    00000F0A 20r00r00         [ 6]  428 	jsr	_rle_decompress
+                                    429 ;	assignResultValue
+                                    430 ;	Raw cost for generated ic 97 : (7, 10.000000) count=17.229727
+                                    431 ;	genIfx
+    00000F0D C9 00            [ 2]  432 	cmp	#0x00
+                                    433 ;	genIfxJump : z
+    00000F0F D0 13            [ 4]  434 	bne	00105$
+                                    435 ;	Raw cost for generated ic 98 : (7, 7.600000) count=17.229727
+                                    436 ;	src/main.c: 76: rle_init(map_compressed);
+                                    437 ;	skipping iCode since result will be rematerialized
+                                    438 ;	Raw cost for generated ic 102 : (0, 0.000000) count=12.922290
+                                    439 ;	Raw cost for generated ic 103 : (0, 0.000000) count=12.922290
+                                    440 ;	genCall
+                                    441 ;	genSend
+    00000F11 A2s07            [ 2]  442 	ldx	#>_map_compressed
+    00000F13 A9r80            [ 2]  443 	lda	#_map_compressed
+    00000F15 20r00r00         [ 6]  444 	jsr	_rle_init
+                                    445 ;	Raw cost for generated ic 104 : (7, 10.000000) count=12.922290
+                                    446 ;	src/main.c: 77: rle_decompress(data, MAP_DATA_HEIGHT);
+                                    447 ;	skipping iCode since result will be rematerialized
+                                    448 ;	Raw cost for generated ic 106 : (0, 0.000000) count=12.922290
+                                    449 ;	genAssign
+                                    450 ;	genAssignLit
+    00000F18 A2 12            [ 2]  451 	ldx	#0x12
+    00000F1A 8Er00r00         [ 4]  452 	stx	_rle_decompress_PARM_2
+                                    453 ;	Raw cost for generated ic 108 : (5, 6.000000) count=12.922290
+                                    454 ;	Raw cost for generated ic 107 : (0, 0.000000) count=12.922290
+                                    455 ;	genCall
+                                    456 ;	genSend
+    00000F1D A2s00            [ 2]  457 	ldx	#>_data
+    00000F1F A9r00            [ 2]  458 	lda	#_data
+    00000F21 20r00r00         [ 6]  459 	jsr	_rle_decompress
+                                    460 ;	Raw cost for generated ic 109 : (7, 10.000000) count=12.922290
+                                    461 ;	genLabel
+    00000F24                        462 00105$:
+                                    463 ;	Raw cost for generated ic 110 : (0, 0.000000) count=17.229727
+                                    464 ;	src/main.c: 83: set_bkg_tiles(map_x_column, 0, 1, MAP_DATA_HEIGHT, data);
+                                    465 ;	genCast
+                                    466 ;	genCopy
+    00000F24 A9s00            [ 2]  467 	lda	#>_data
+    00000F26 8Dr01r00         [ 4]  468 	sta	(_set_bkg_tiles_PARM_5 + 1)
+    00000F29 A9r00            [ 2]  469 	lda	#_data
+    00000F2B 8Dr00r00         [ 4]  470 	sta	_set_bkg_tiles_PARM_5
+                                    471 ;	Raw cost for generated ic 112 : (10, 12.000000) count=17.229727
+                                    472 ;	genAssign
+                                    473 ;	genAssignLit
+    00000F2E A2 01            [ 2]  474 	ldx	#0x01
+    00000F30 8Er00r00         [ 4]  475 	stx	_set_bkg_tiles_PARM_3
+                                    476 ;	Raw cost for generated ic 115 : (5, 6.000000) count=17.229727
+                                    477 ;	genAssign
+                                    478 ;	genAssignLit
+    00000F33 A2 12            [ 2]  479 	ldx	#0x12
+    00000F35 8Er00r00         [ 4]  480 	stx	_set_bkg_tiles_PARM_4
+                                    481 ;	Raw cost for generated ic 116 : (5, 6.000000) count=17.229727
+                                    482 ;	Raw cost for generated ic 113 : (0, 0.000000) count=17.229727
+                                    483 ;	Raw cost for generated ic 114 : (0, 0.000000) count=17.229727
+                                    484 ;	genCall
+                                    485 ;	genSend
+    00000F38 ADr12r00         [ 4]  486 	lda	_main_map_x_column_40001_114
+    00000F3B A2 00            [ 2]  487 	ldx	#0x00
+    00000F3D 20r00r00         [ 6]  488 	jsr	_set_bkg_tiles
+                                    489 ;	Raw cost for generated ic 118 : (8, 12.000000) count=17.229727
+                                    490 ;	genGoto
+    00000F40 4CrC3r0E         [ 3]  491 	jmp	00109$
+                                    492 ;	Raw cost for generated ic 120 : (3, 3.000000) count=17.229727
+                                    493 ;	genLabel
+                                    494 ;	Raw cost for generated ic 122 : (0, 0.000000) count=0.000000
+                                    495 ;	src/main.c: 86: }
+                                    496 ;	genEndFunction
+    00000F43 60               [ 6]  497 	rts
+                                    498 ;	Raw cost for generated ic 123 : (1, 6.000000) count=0.000000
+                                    499 	.area _CODE
+                                    500 	.area _XINIT
+    00000000                        501 __xinit__scrollpos:
+    00000000 00 00                  502 	.dw #0x0000
+    00000002                        503 __xinit__datapos:
+    00000002 00                     504 	.db #0x00	; 0
+                                    505 	.area _CABS    (ABS)

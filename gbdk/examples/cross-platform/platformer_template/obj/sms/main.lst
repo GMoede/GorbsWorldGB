@@ -1,0 +1,225 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _SetCurrentLevelSubmap
+                                     12 	.globl b_UpdateCamera
+                                     13 	.globl _UpdateCamera
+                                     14 	.globl _SetupCurrentLevel
+                                     15 	.globl _ShowCentered
+                                     16 	.globl _WaitForStartOrA
+                                     17 	.globl _hide_sprites_range
+                                     18 	.globl b_UpdatePlayer
+                                     19 	.globl _UpdatePlayer
+                                     20 	.globl b_SetupPlayer
+                                     21 	.globl _SetupPlayer
+                                     22 	.globl _joypad
+                                     23 	.globl _vsync
+                                     24 ;--------------------------------------------------------
+                                     25 ; special function registers
+                                     26 ;--------------------------------------------------------
+                         00000000    27 _GG_STATE	=	0x0000
+                         00000001    28 _GG_EXT_7BIT	=	0x0001
+                         00000002    29 _GG_EXT_CTL	=	0x0002
+                         00000003    30 _GG_SIO_SEND	=	0x0003
+                         00000004    31 _GG_SIO_RECV	=	0x0004
+                         00000005    32 _GG_SIO_CTL	=	0x0005
+                         00000006    33 _GG_SOUND_PAN	=	0x0006
+                         0000003E    34 _MEMORY_CTL	=	0x003e
+                         0000003F    35 _JOY_CTL	=	0x003f
+                         0000007E    36 _VCOUNTER	=	0x007e
+                         0000007F    37 _PSG	=	0x007f
+                         0000007F    38 _HCOUNTER	=	0x007f
+                         000000BE    39 _VDP_DATA	=	0x00be
+                         000000BF    40 _VDP_CMD	=	0x00bf
+                         000000BF    41 _VDP_STATUS	=	0x00bf
+                         000000DC    42 _JOY_PORT1	=	0x00dc
+                         000000DD    43 _JOY_PORT2	=	0x00dd
+                         000000F0    44 _FMADDRESS	=	0x00f0
+                         000000F1    45 _FMDATA	=	0x00f1
+                         000000F2    46 _AUDIOCTRL	=	0x00f2
+                                     47 ;--------------------------------------------------------
+                                     48 ; ram data
+                                     49 ;--------------------------------------------------------
+                                     50 	.area _DATA
+                         0000FFFC    51 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    52 _GLASSES_3D	=	0xfff8
+                         0000FFFD    53 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    54 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    55 _MAP_FRAME2	=	0xffff
+                                     56 ;--------------------------------------------------------
+                                     57 ; ram data
+                                     58 ;--------------------------------------------------------
+                                     59 	.area _INITIALIZED
+                                     60 ;--------------------------------------------------------
+                                     61 ; absolute external ram data
+                                     62 ;--------------------------------------------------------
+                                     63 	.area _DABS (ABS)
+                                     64 ;--------------------------------------------------------
+                                     65 ; global & static initialisations
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _HOME
+                                     68 	.area _GSINIT
+                                     69 	.area _GSFINAL
+                                     70 	.area _GSINIT
+                                     71 ;--------------------------------------------------------
+                                     72 ; Home
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _HOME
+                                     75 	.area _HOME
+                                     76 ;--------------------------------------------------------
+                                     77 ; code
+                                     78 ;--------------------------------------------------------
+                                     79 	.area _CODE
+                                     80 ;src/main.c:14: void main(void)
+                                     81 ;	---------------------------------
+                                     82 ; Function main
+                                     83 ; ---------------------------------
+    00000000                         84 _main::
+                                     85 ;src/main.c:26: SHOW_SPRITES;
+    00000000 AF               [ 4]   86 	xor	a, a
+    00000001 32r00r00         [13]   87 	ld	(__sprites_OFF+0), a
+                                     88 ;src/main.c:27: SPRITES_8x16;
+    00000004 3Ar00r00         [13]   89 	ld	a, (_shadow_VDP_R1+0)
+    00000007 F6 02            [ 7]   90 	or	a, #0x02
+    00000009 32r00r00         [13]   91 	ld	(_shadow_VDP_R1+0), a
+    0000000C F3               [ 4]   92 	di
+    0000000D 3Ar00r00         [13]   93 	ld	a, (_shadow_VDP_R1+0)
+    00000010 D3 BF            [11]   94 	out	(_VDP_CMD), a
+    00000012 3E 81            [ 7]   95 	ld	a, #0x81
+    00000014 D3 BF            [11]   96 	out	(_VDP_CMD), a
+    00000016 FB               [ 4]   97 	ei
+                                     98 ;src/main.c:29: ShowCentered(TitleScreen_WIDTH,TitleScreen_HEIGHT,BANK(TitleScreen),TitleScreen_tiles,TitleScreen_TILE_COUNT,TitleScreen_map,TitleScreen_palettes);
+    00000017 11r00r00         [10]   99 	ld	de, #_TitleScreen_map+0
+    0000001A 01r00r00         [10]  100 	ld	bc, #_TitleScreen_tiles+0
+    0000001D 3Er00            [ 7]  101 	ld	a, #<(___bank_TitleScreen)
+    0000001F 21r00r00         [10]  102 	ld	hl, #_TitleScreen_palettes
+    00000022 E5               [11]  103 	push	hl
+    00000023 D5               [11]  104 	push	de
+    00000024 26 76            [ 7]  105 	ld	h, #0x76
+    00000026 E5               [11]  106 	push	hl
+    00000027 33               [ 6]  107 	inc	sp
+    00000028 C5               [11]  108 	push	bc
+    00000029 F5               [11]  109 	push	af
+    0000002A 33               [ 6]  110 	inc	sp
+    0000002B 2E 48            [ 7]  111 	ld	l, #0x48
+    0000002D 3E A0            [ 7]  112 	ld	a, #0xa0
+    0000002F CDr00r00         [17]  113 	call	_ShowCentered
+                                    114 ;src/main.c:31: WaitForStartOrA();
+    00000032 CDr00r00         [17]  115 	call	_WaitForStartOrA
+                                    116 ;src/main.c:34: currentLevel=255;
+    00000035 3E FF            [ 7]  117 	ld	a, #0xff
+    00000037 32r00r00         [13]  118 	ld	(#_currentLevel), a
+                                    119 ;src/main.c:35: nextLevel=0;
+    0000003A AF               [ 4]  120 	xor	a, a
+    0000003B 32r00r00         [13]  121 	ld	(_nextLevel+0), a
+                                    122 ;src/main.c:38: while(1) {
+    0000003E                        123 00106$:
+                                    124 ;src/main.c:41: vsync();
+    0000003E CDr00r00         [17]  125 	call	_vsync
+                                    126 ;src/main.c:44: if(nextLevel!=currentLevel){
+    00000041 3Ar00r00         [13]  127 	ld	a, (_nextLevel+0)
+    00000044 FD 21r00r00      [14]  128 	ld	iy, #_currentLevel
+    00000048 FD 96 00         [19]  129 	sub	a, 0 (iy)
+    0000004B CArCBr00         [10]  130 	jp	Z, 00104$
+                                    131 ;src/main.c:48: if(currentLevel!=255){
+    0000004E 3Ar00r00         [13]  132 	ld	a, (_currentLevel+0)
+    00000051 3C               [ 4]  133 	inc	a
+    00000052 28 1E            [12]  134 	jr	Z, 00102$
+                                    135 ;src/main.c:50: ShowCentered(NextLevel_WIDTH,NextLevel_HEIGHT,BANK(NextLevel),NextLevel_tiles,NextLevel_TILE_COUNT,NextLevel_map,NextLevel_palettes);
+    00000054 01r00r00         [10]  136 	ld	bc, #_NextLevel_map
+    00000057 11r00r00         [10]  137 	ld	de, #_NextLevel_tiles
+    0000005A 3Er00            [ 7]  138 	ld	a, #<(___bank_NextLevel)
+    0000005C 21r00r00         [10]  139 	ld	hl, #_NextLevel_palettes
+    0000005F E5               [11]  140 	push	hl
+    00000060 C5               [11]  141 	push	bc
+    00000061 26 1C            [ 7]  142 	ld	h, #0x1c
+    00000063 E5               [11]  143 	push	hl
+    00000064 33               [ 6]  144 	inc	sp
+    00000065 D5               [11]  145 	push	de
+    00000066 F5               [11]  146 	push	af
+    00000067 33               [ 6]  147 	inc	sp
+    00000068 2E 48            [ 7]  148 	ld	l, #0x48
+    0000006A 3E A0            [ 7]  149 	ld	a, #0xa0
+    0000006C CDr00r00         [17]  150 	call	_ShowCentered
+                                    151 ;src/main.c:52: WaitForStartOrA();
+    0000006F CDr00r00         [17]  152 	call	_WaitForStartOrA
+    00000072                        153 00102$:
+                                    154 ;src/main.c:56: currentLevel=nextLevel;
+    00000072 3Ar00r00         [13]  155 	ld	a, (_nextLevel+0)
+    00000075 32r00r00         [13]  156 	ld	(_currentLevel+0), a
+                                    157 ;../../../include/sms/sms.h:254: __WRITE_VDP_REG(VDP_R1, __READ_VDP_REG(VDP_R1) &= (~R1_DISP_ON));
+    00000078 3Ar00r00         [13]  158 	ld	a, (_shadow_VDP_R1+0)
+    0000007B E6 BF            [ 7]  159 	and	a, #0xbf
+    0000007D 32r00r00         [13]  160 	ld	(_shadow_VDP_R1+0), a
+    00000080 F3               [ 4]  161 	di
+    00000081 3Ar00r00         [13]  162 	ld	a, (_shadow_VDP_R1+0)
+    00000084 D3 BF            [11]  163 	out	(_VDP_CMD), a
+    00000086 3E 81            [ 7]  164 	ld	a, #0x81
+    00000088 D3 BF            [11]  165 	out	(_VDP_CMD), a
+    0000008A FB               [ 4]  166 	ei
+                                    167 ;src/main.c:61: SetupCurrentLevel();
+    0000008B CDr00r00         [17]  168 	call	_SetupCurrentLevel
+                                    169 ;src/main.c:63: camera_x=0;
+    0000008E 21 00 00         [10]  170 	ld	hl, #0x0000
+    00000091 22r00r00         [16]  171 	ld	(_camera_x), hl
+                                    172 ;src/main.c:69: SetCurrentLevelSubmap(0,0,DEVICE_SCREEN_WIDTH+1,DEVICE_SCREEN_HEIGHT);
+    00000094 21 21 18         [10]  173 	ld	hl, #0x1821
+    00000097 E5               [11]  174 	push	hl
+    00000098 AF               [ 4]  175 	xor	a, a
+    00000099 6F               [ 4]  176 	ld	l, a
+    0000009A CDr00r00         [17]  177 	call	_SetCurrentLevelSubmap
+                                    178 ;src/main.c:71: DISPLAY_ON;
+    0000009D 3Ar00r00         [13]  179 	ld	a, (_shadow_VDP_R1+0)
+    000000A0 F6 40            [ 7]  180 	or	a, #0x40
+    000000A2 32r00r00         [13]  181 	ld	(_shadow_VDP_R1+0), a
+    000000A5 F3               [ 4]  182 	di
+    000000A6 3Ar00r00         [13]  183 	ld	a, (_shadow_VDP_R1+0)
+    000000A9 D3 BF            [11]  184 	out	(_VDP_CMD), a
+    000000AB 3E 81            [ 7]  185 	ld	a, #0x81
+    000000AD D3 BF            [11]  186 	out	(_VDP_CMD), a
+    000000AF FB               [ 4]  187 	ei
+                                    188 ;src/main.c:77: HIDE_LEFT_COLUMN;
+    000000B0 3Ar00r00         [13]  189 	ld	a, (_shadow_VDP_R0+0)
+    000000B3 F6 20            [ 7]  190 	or	a, #0x20
+    000000B5 32r00r00         [13]  191 	ld	(_shadow_VDP_R0+0), a
+    000000B8 F3               [ 4]  192 	di
+    000000B9 3Ar00r00         [13]  193 	ld	a, (_shadow_VDP_R0+0)
+    000000BC D3 BF            [11]  194 	out	(_VDP_CMD), a
+    000000BE 3E 80            [ 7]  195 	ld	a, #0x80
+    000000C0 D3 BF            [11]  196 	out	(_VDP_CMD), a
+    000000C2 FB               [ 4]  197 	ei
+                                    198 ;src/main.c:81: SetupPlayer();
+    000000C3 1Er00            [ 7]  199 	ld	e, #b_SetupPlayer
+    000000C5 21r00r00         [10]  200 	ld	hl, #_SetupPlayer
+    000000C8 CDr00r00         [17]  201 	call	___sdcc_bcall_ehl
+    000000CB                        202 00104$:
+                                    203 ;src/main.c:85: joypadPrevious = joypadCurrent;
+    000000CB 3Ar00r00         [13]  204 	ld	a, (_joypadCurrent+0)
+    000000CE 32r00r00         [13]  205 	ld	(_joypadPrevious+0), a
+                                    206 ;src/main.c:86: joypadCurrent = joypad();
+    000000D1 CDr00r00         [17]  207 	call	_joypad
+    000000D4 7D               [ 4]  208 	ld	a, l
+    000000D5 32r00r00         [13]  209 	ld	(_joypadCurrent+0), a
+                                    210 ;src/main.c:88: uint8_t spritesUsed = UpdatePlayer();
+    000000D8 1Er00            [ 7]  211 	ld	e, #b_UpdatePlayer
+    000000DA 21r00r00         [10]  212 	ld	hl, #_UpdatePlayer
+    000000DD CDr00r00         [17]  213 	call	___sdcc_bcall_ehl
+                                    214 ;src/main.c:89: hide_sprites_range(spritesUsed,MAX_HARDWARE_SPRITES);
+    000000E0 2E 40            [ 7]  215 	ld	l, #0x40
+    000000E2 CDr00r00         [17]  216 	call	_hide_sprites_range
+                                    217 ;src/main.c:91: UpdateCamera();
+    000000E5 1Er00            [ 7]  218 	ld	e, #b_UpdateCamera
+    000000E7 21r00r00         [10]  219 	ld	hl, #_UpdateCamera
+    000000EA CDr00r00         [17]  220 	call	___sdcc_bcall_ehl
+                                    221 ;src/main.c:93: }
+    000000ED C3r3Er00         [10]  222 	jp	00106$
+                                    223 	.area _CODE
+                                    224 	.area _INITIALIZER
+                                    225 	.area _CABS (ABS)

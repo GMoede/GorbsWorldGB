@@ -1,0 +1,139 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module testrand
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _waitpadup
+                                     12 	.globl _waitpad
+                                     13 	.globl _arand
+                                     14 	.globl _initarand
+                                     15 	.globl _rand
+                                     16 	.globl _puts
+                                     17 	.globl _printf
+                                     18 ;--------------------------------------------------------
+                                     19 ; special function registers
+                                     20 ;--------------------------------------------------------
+                         00000000    21 _GG_STATE	=	0x0000
+                         00000001    22 _GG_EXT_7BIT	=	0x0001
+                         00000002    23 _GG_EXT_CTL	=	0x0002
+                         00000003    24 _GG_SIO_SEND	=	0x0003
+                         00000004    25 _GG_SIO_RECV	=	0x0004
+                         00000005    26 _GG_SIO_CTL	=	0x0005
+                         00000006    27 _GG_SOUND_PAN	=	0x0006
+                         0000003E    28 _MEMORY_CTL	=	0x003e
+                         0000003F    29 _JOY_CTL	=	0x003f
+                         0000007E    30 _VCOUNTER	=	0x007e
+                         0000007F    31 _PSG	=	0x007f
+                         0000007F    32 _HCOUNTER	=	0x007f
+                         000000BE    33 _VDP_DATA	=	0x00be
+                         000000BF    34 _VDP_CMD	=	0x00bf
+                         000000BF    35 _VDP_STATUS	=	0x00bf
+                         000000DC    36 _JOY_PORT1	=	0x00dc
+                         000000DD    37 _JOY_PORT2	=	0x00dd
+                         000000F0    38 _FMADDRESS	=	0x00f0
+                         000000F1    39 _FMDATA	=	0x00f1
+                         000000F2    40 _AUDIOCTRL	=	0x00f2
+                                     41 ;--------------------------------------------------------
+                                     42 ; ram data
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _DATA
+                         0000FFFC    45 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    46 _GLASSES_3D	=	0xfff8
+                         0000FFFD    47 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    48 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    49 _MAP_FRAME2	=	0xffff
+                                     50 ;--------------------------------------------------------
+                                     51 ; ram data
+                                     52 ;--------------------------------------------------------
+                                     53 	.area _INITIALIZED
+                                     54 ;--------------------------------------------------------
+                                     55 ; absolute external ram data
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _DABS (ABS)
+                                     58 ;--------------------------------------------------------
+                                     59 ; global & static initialisations
+                                     60 ;--------------------------------------------------------
+                                     61 	.area _HOME
+                                     62 	.area _GSINIT
+                                     63 	.area _GSFINAL
+                                     64 	.area _GSINIT
+                                     65 ;--------------------------------------------------------
+                                     66 ; Home
+                                     67 ;--------------------------------------------------------
+                                     68 	.area _HOME
+                                     69 	.area _HOME
+                                     70 ;--------------------------------------------------------
+                                     71 ; code
+                                     72 ;--------------------------------------------------------
+                                     73 	.area _CODE
+                                     74 ;src/testrand.c:14: void main(void)
+                                     75 ;	---------------------------------
+                                     76 ; Function main
+                                     77 ; ---------------------------------
+    00000000                         78 _main::
+                                     79 ;src/testrand.c:16: puts("press A...");
+    00000000 21r46r00         [10]   80 	ld	hl, #___str_0
+    00000003 CDr00r00         [17]   81 	call	_puts
+                                     82 ;src/testrand.c:17: waitpad(J_A);
+    00000006 2E 20            [ 7]   83 	ld	l, #0x20
+    00000008 CDr00r00         [17]   84 	call	_waitpad
+                                     85 ;src/testrand.c:18: initarand(sys_time);
+    0000000B 2Ar00r00         [16]   86 	ld	hl, (_sys_time)
+    0000000E CDr00r00         [17]   87 	call	_initarand
+                                     88 ;src/testrand.c:19: while(TRUE) {
+    00000011                         89 00103$:
+                                     90 ;src/testrand.c:20: waitpadup();
+    00000011 CDr00r00         [17]   91 	call	_waitpadup
+                                     92 ;src/testrand.c:21: for (uint8_t i = 0; i != 16; i++) 
+    00000014 0E 00            [ 7]   93 	ld	c, #0x00
+    00000016                         94 00106$:
+    00000016 79               [ 4]   95 	ld	a, c
+    00000017 D6 10            [ 7]   96 	sub	a, #0x10
+    00000019 28 1E            [12]   97 	jr	Z, 00101$
+                                     98 ;src/testrand.c:22: printf("r=%x a=%x\n", (uint16_t)rand(), (uint16_t)arand());
+    0000001B CDr00r00         [17]   99 	call	_arand
+    0000001E 5D               [ 4]  100 	ld	e, l
+    0000001F 16 00            [ 7]  101 	ld	d, #0x00
+    00000021 D5               [11]  102 	push	de
+    00000022 CDr00r00         [17]  103 	call	_rand
+    00000025 D1               [10]  104 	pop	de
+    00000026 26 00            [ 7]  105 	ld	h, #0x00
+    00000028 C5               [11]  106 	push	bc
+    00000029 D5               [11]  107 	push	de
+    0000002A E5               [11]  108 	push	hl
+    0000002B 21r51r00         [10]  109 	ld	hl, #___str_1
+    0000002E E5               [11]  110 	push	hl
+    0000002F CDr00r00         [17]  111 	call	_printf
+    00000032 F1               [10]  112 	pop	af
+    00000033 F1               [10]  113 	pop	af
+    00000034 F1               [10]  114 	pop	af
+    00000035 C1               [10]  115 	pop	bc
+                                    116 ;src/testrand.c:21: for (uint8_t i = 0; i != 16; i++) 
+    00000036 0C               [ 4]  117 	inc	c
+    00000037 18 DD            [12]  118 	jr	00106$
+    00000039                        119 00101$:
+                                    120 ;src/testrand.c:23: puts("press A...");
+    00000039 21r46r00         [10]  121 	ld	hl, #___str_0
+    0000003C CDr00r00         [17]  122 	call	_puts
+                                    123 ;src/testrand.c:24: waitpad(J_A);
+    0000003F 2E 20            [ 7]  124 	ld	l, #0x20
+    00000041 CDr00r00         [17]  125 	call	_waitpad
+                                    126 ;src/testrand.c:26: }
+    00000044 18 CB            [12]  127 	jr	00103$
+    00000046                        128 ___str_0:
+    00000046 70 72 65 73 73 20 41   129 	.ascii "press A..."
+             2E 2E 2E
+    00000050 00                     130 	.db 0x00
+    00000051                        131 ___str_1:
+    00000051 72 3D 25 78 20 61 3D   132 	.ascii "r=%x a=%x"
+             25 78
+    0000005A 0A                     133 	.db 0x0a
+    0000005B 00                     134 	.db 0x00
+                                    135 	.area _CODE
+                                    136 	.area _INITIALIZER
+                                    137 	.area _CABS (ABS)

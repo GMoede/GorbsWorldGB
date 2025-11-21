@@ -1,0 +1,665 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module banks_farptr
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _run
+                                     23 	.globl b_some_bank2_proc2
+                                     24 	.globl _some_bank2_proc2
+                                     25 	.globl b_some_bank2_proc1
+                                     26 	.globl _some_bank2_proc1
+                                     27 	.globl b_some_bank2_proc0
+                                     28 	.globl _some_bank2_proc0
+                                     29 	.globl _to_far_ptr
+                                     30 	.globl ___call__banked
+                                     31 	.globl _printf
+                                     32 	.globl _res
+                                     33 	.globl _farptr_var3
+                                     34 	.globl _farptr_var2
+                                     35 	.globl _farptr_var1
+                                     36 	.globl _farptr_var0
+                                     37 	.globl _OAMDMA
+                                     38 	.globl _PPUDATA
+                                     39 	.globl _PPUADDR
+                                     40 	.globl _PPUSCROLL
+                                     41 	.globl _OAMDATA
+                                     42 	.globl _OAMADDR
+                                     43 	.globl _PPUSTATUS
+                                     44 	.globl _PPUMASK
+                                     45 	.globl _PPUCTRL
+                                     46 ;--------------------------------------------------------
+                                     47 ; ZP ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _ZP      (PAG)
+    00000000                         50 _run_sloc0_1_0:
+    00000000                         51 	.ds 2
+    00000002                         52 _run_sloc1_1_0:
+    00000002                         53 	.ds 2
+                                     54 ;--------------------------------------------------------
+                                     55 ; overlayable items in ram
+                                     56 ;--------------------------------------------------------
+                                     57 ;--------------------------------------------------------
+                                     58 ; uninitialized external ram data
+                                     59 ;--------------------------------------------------------
+                                     60 	.area _BSS
+                         00002000    61 _PPUCTRL	=	0x2000
+                         00002001    62 _PPUMASK	=	0x2001
+                         00002002    63 _PPUSTATUS	=	0x2002
+                         00002003    64 _OAMADDR	=	0x2003
+                         00002004    65 _OAMDATA	=	0x2004
+                         00002005    66 _PPUSCROLL	=	0x2005
+                         00002006    67 _PPUADDR	=	0x2006
+                         00002007    68 _PPUDATA	=	0x2007
+                         00004014    69 _OAMDMA	=	0x4014
+    00000000                         70 _farptr_var0::
+    00000000                         71 	.ds 4
+    00000004                         72 _farptr_var1::
+    00000004                         73 	.ds 4
+    00000008                         74 _farptr_var2::
+    00000008                         75 	.ds 4
+    0000000C                         76 _farptr_var3::
+    0000000C                         77 	.ds 4
+    00000010                         78 _res::
+    00000010                         79 	.ds 2
+                                     80 ;--------------------------------------------------------
+                                     81 ; absolute external ram data
+                                     82 ;--------------------------------------------------------
+                                     83 	.area _DABS    (ABS)
+                                     84 ;--------------------------------------------------------
+                                     85 ; initialized external ram data
+                                     86 ;--------------------------------------------------------
+                                     87 	.area _DATA
+                                     88 ;--------------------------------------------------------
+                                     89 ; global & static initialisations
+                                     90 ;--------------------------------------------------------
+                                     91 	.area _HOME
+                                     92 	.area _GSINIT
+                                     93 	.area _GSFINAL
+                                     94 	.area _GSINIT
+                                     95 ;--------------------------------------------------------
+                                     96 ; Home
+                                     97 ;--------------------------------------------------------
+                                     98 	.area _HOME
+                                     99 	.area _HOME
+                                    100 ;--------------------------------------------------------
+                                    101 ; code
+                                    102 ;--------------------------------------------------------
+                                    103 	.area _CODE
+                                    104 ;------------------------------------------------------------
+                                    105 ;Allocation info for local variables in function 'run'
+                                    106 ;------------------------------------------------------------
+                                    107 ;sloc0         Allocated with name '_run_sloc0_1_0'
+                                    108 ;sloc1         Allocated with name '_run_sloc1_1_0'
+                                    109 ;------------------------------------------------------------
+                                    110 ;	src/banks_farptr.c: 23: void run(void) {
+                                    111 ;	genLabel
+                                    112 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    113 ;	-----------------------------------------
+                                    114 ;	 function run
+                                    115 ;	-----------------------------------------
+                                    116 ;	Register assignment is optimal.
+                                    117 ;	Stack space usage: 0 bytes.
+    00000000                        118 _run:
+                                    119 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    120 ;	src/banks_farptr.c: 25: farptr_var0 = to_far_ptr(some_bank2_proc1, BANK(some_bank2_proc1));
+                                    121 ;	genCast
+                                    122 ;	genCopy
+    00000000 A2s00            [ 2]  123 	ldx	#>(_some_bank2_proc1)
+    00000002 A9r00            [ 2]  124 	lda	#(_some_bank2_proc1)
+                                    125 ;	Raw cost for generated ic 2 : (4, 4.000000) count=1.000000
+                                    126 ;	skipping iCode since result will be rematerialized
+                                    127 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    128 ;	genCast
+                                    129 ;	genCopy
+    00000004 A0r00            [ 2]  130 	ldy	#___bank_some_bank2_proc1
+                                    131 ;	Raw cost for generated ic 4 : (2, 2.000000) count=1.000000
+                                    132 ;	genCast
+    00000006 84*00            [ 3]  133 	sty	*_run_sloc0_1_0
+    00000008 48               [ 3]  134 	pha
+    00000009 A9 00            [ 2]  135 	lda	#0x00
+    0000000B 85*01            [ 3]  136 	sta	*(_run_sloc0_1_0 + 1)
+    0000000D 68               [ 4]  137 	pla
+                                    138 ;	Raw cost for generated ic 5 : (8, 15.000000) count=1.000000
+                                    139 ;	genAssign
+                                    140 ;	genAssignLit
+                                    141 ;	genCopy
+    0000000E A4*01            [ 3]  142 	ldy	*(_run_sloc0_1_0 + 1)
+    00000010 8Cr01r00         [ 4]  143 	sty	(_to_far_ptr_PARM_2 + 1)
+    00000013 A4*00            [ 3]  144 	ldy	*_run_sloc0_1_0
+    00000015 8Cr00r00         [ 4]  145 	sty	_to_far_ptr_PARM_2
+                                    146 ;	Raw cost for generated ic 7 : (10, 14.000000) count=1.000000
+                                    147 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    148 ;	genCall
+                                    149 ;	genSend
+    00000018 20r00r00         [ 6]  150 	jsr	_to_far_ptr
+                                    151 ;	assignResultValue
+    0000001B 8Dr00r00         [ 4]  152 	sta	_farptr_var0
+    0000001E 8Er01r00         [ 4]  153 	stx	(_farptr_var0 + 1)
+    00000021 A5*00            [ 3]  154 	lda	*___SDCC_m6502_ret2
+    00000023 8Dr02r00         [ 4]  155 	sta	(_farptr_var0 + 2)
+    00000026 A5*00            [ 3]  156 	lda	*___SDCC_m6502_ret3
+    00000028 8Dr03r00         [ 4]  157 	sta	(_farptr_var0 + 3)
+                                    158 ;	Raw cost for generated ic 8 : (19, 28.000000) count=1.000000
+                                    159 ;	src/banks_farptr.c: 26: farptr_var1 = to_far_ptr(some_bank2_proc1, BANK(some_bank2_proc1));
+                                    160 ;	genCast
+                                    161 ;	genCopy
+    0000002B A2s00            [ 2]  162 	ldx	#>(_some_bank2_proc1)
+    0000002D A9r00            [ 2]  163 	lda	#(_some_bank2_proc1)
+                                    164 ;	Raw cost for generated ic 11 : (4, 4.000000) count=1.000000
+                                    165 ;	genAssign
+                                    166 ;	genAssignLit
+                                    167 ;	genCopy
+    0000002F A4*01            [ 3]  168 	ldy	*(_run_sloc0_1_0 + 1)
+    00000031 8Cr01r00         [ 4]  169 	sty	(_to_far_ptr_PARM_2 + 1)
+    00000034 A4*00            [ 3]  170 	ldy	*_run_sloc0_1_0
+    00000036 8Cr00r00         [ 4]  171 	sty	_to_far_ptr_PARM_2
+                                    172 ;	Raw cost for generated ic 16 : (10, 14.000000) count=1.000000
+                                    173 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    174 ;	genCall
+                                    175 ;	genSend
+    00000039 20r00r00         [ 6]  176 	jsr	_to_far_ptr
+                                    177 ;	assignResultValue
+    0000003C 8Dr04r00         [ 4]  178 	sta	_farptr_var1
+    0000003F 8Er05r00         [ 4]  179 	stx	(_farptr_var1 + 1)
+    00000042 A5*00            [ 3]  180 	lda	*___SDCC_m6502_ret2
+    00000044 8Dr06r00         [ 4]  181 	sta	(_farptr_var1 + 2)
+    00000047 A5*00            [ 3]  182 	lda	*___SDCC_m6502_ret3
+    00000049 8Dr07r00         [ 4]  183 	sta	(_farptr_var1 + 3)
+                                    184 ;	Raw cost for generated ic 17 : (19, 28.000000) count=1.000000
+                                    185 ;	src/banks_farptr.c: 27: farptr_var2 = to_far_ptr(some_bank2_proc0, BANK(some_bank2_proc0));
+                                    186 ;	genCast
+                                    187 ;	genCopy
+    0000004C A2s00            [ 2]  188 	ldx	#>(_some_bank2_proc0)
+    0000004E A9r00            [ 2]  189 	lda	#(_some_bank2_proc0)
+                                    190 ;	Raw cost for generated ic 20 : (4, 4.000000) count=1.000000
+                                    191 ;	skipping iCode since result will be rematerialized
+                                    192 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    193 ;	genCast
+                                    194 ;	genCopy
+    00000050 A0r00            [ 2]  195 	ldy	#___bank_some_bank2_proc0
+                                    196 ;	Raw cost for generated ic 22 : (2, 2.000000) count=1.000000
+                                    197 ;	genCast
+    00000052 84*00            [ 3]  198 	sty	*_run_sloc0_1_0
+    00000054 48               [ 3]  199 	pha
+    00000055 A9 00            [ 2]  200 	lda	#0x00
+    00000057 85*01            [ 3]  201 	sta	*(_run_sloc0_1_0 + 1)
+    00000059 68               [ 4]  202 	pla
+                                    203 ;	Raw cost for generated ic 23 : (8, 15.000000) count=1.000000
+                                    204 ;	genAssign
+                                    205 ;	genAssignLit
+                                    206 ;	genCopy
+    0000005A A4*01            [ 3]  207 	ldy	*(_run_sloc0_1_0 + 1)
+    0000005C 8Cr01r00         [ 4]  208 	sty	(_to_far_ptr_PARM_2 + 1)
+    0000005F A4*00            [ 3]  209 	ldy	*_run_sloc0_1_0
+    00000061 8Cr00r00         [ 4]  210 	sty	_to_far_ptr_PARM_2
+                                    211 ;	Raw cost for generated ic 25 : (10, 14.000000) count=1.000000
+                                    212 ;	Raw cost for generated ic 24 : (0, 0.000000) count=1.000000
+                                    213 ;	genCall
+                                    214 ;	genSend
+    00000064 20r00r00         [ 6]  215 	jsr	_to_far_ptr
+                                    216 ;	assignResultValue
+    00000067 8Dr08r00         [ 4]  217 	sta	_farptr_var2
+    0000006A 8Er09r00         [ 4]  218 	stx	(_farptr_var2 + 1)
+    0000006D A5*00            [ 3]  219 	lda	*___SDCC_m6502_ret2
+    0000006F 8Dr0Ar00         [ 4]  220 	sta	(_farptr_var2 + 2)
+    00000072 A5*00            [ 3]  221 	lda	*___SDCC_m6502_ret3
+    00000074 8Dr0Br00         [ 4]  222 	sta	(_farptr_var2 + 3)
+                                    223 ;	Raw cost for generated ic 26 : (19, 28.000000) count=1.000000
+                                    224 ;	src/banks_farptr.c: 28: farptr_var2 = to_far_ptr(some_bank2_proc0, BANK(some_bank2_proc0));
+                                    225 ;	genCast
+                                    226 ;	genCopy
+    00000077 A2s00            [ 2]  227 	ldx	#>(_some_bank2_proc0)
+    00000079 A9r00            [ 2]  228 	lda	#(_some_bank2_proc0)
+                                    229 ;	Raw cost for generated ic 29 : (4, 4.000000) count=1.000000
+                                    230 ;	genAssign
+                                    231 ;	genAssignLit
+                                    232 ;	genCopy
+    0000007B A4*01            [ 3]  233 	ldy	*(_run_sloc0_1_0 + 1)
+    0000007D 8Cr01r00         [ 4]  234 	sty	(_to_far_ptr_PARM_2 + 1)
+    00000080 A4*00            [ 3]  235 	ldy	*_run_sloc0_1_0
+    00000082 8Cr00r00         [ 4]  236 	sty	_to_far_ptr_PARM_2
+                                    237 ;	Raw cost for generated ic 34 : (10, 14.000000) count=1.000000
+                                    238 ;	Raw cost for generated ic 33 : (0, 0.000000) count=1.000000
+                                    239 ;	genCall
+                                    240 ;	genSend
+    00000085 20r00r00         [ 6]  241 	jsr	_to_far_ptr
+                                    242 ;	assignResultValue
+    00000088 8Dr08r00         [ 4]  243 	sta	_farptr_var2
+    0000008B 8Er09r00         [ 4]  244 	stx	(_farptr_var2 + 1)
+    0000008E A5*00            [ 3]  245 	lda	*___SDCC_m6502_ret2
+    00000090 8Dr0Ar00         [ 4]  246 	sta	(_farptr_var2 + 2)
+    00000093 A5*00            [ 3]  247 	lda	*___SDCC_m6502_ret3
+    00000095 8Dr0Br00         [ 4]  248 	sta	(_farptr_var2 + 3)
+                                    249 ;	Raw cost for generated ic 35 : (19, 28.000000) count=1.000000
+                                    250 ;	src/banks_farptr.c: 31: printf("FAR PTR0: %x:%x\n", (int)FAR_SEG(farptr_var0), (int)FAR_OFS(farptr_var0));
+                                    251 ;	skipping iCode since result will be rematerialized
+                                    252 ;	Raw cost for generated ic 38 : (0, 0.000000) count=1.000000
+                                    253 ;	genPointerGet
+                                    254 ;	genDataPointerGet
+    00000098 AEr01r00         [ 4]  255 	ldx	(_farptr_var0 + 1)
+    0000009B ADr00r00         [ 4]  256 	lda	_farptr_var0
+                                    257 ;	Raw cost for generated ic 42 : (6, 8.000000) count=1.000000
+                                    258 ;	genCast
+                                    259 ;	genCopy
+    0000009E 85*00            [ 3]  260 	sta	*_run_sloc0_1_0
+    000000A0 86*01            [ 3]  261 	stx	*(_run_sloc0_1_0 + 1)
+                                    262 ;	Raw cost for generated ic 43 : (4, 6.000000) count=1.000000
+                                    263 ;	skipping iCode since result will be rematerialized
+                                    264 ;	Raw cost for generated ic 47 : (0, 0.000000) count=1.000000
+                                    265 ;	genPointerGet
+                                    266 ;	genDataPointerGet
+    000000A2 AEr03r00         [ 4]  267 	ldx	((_farptr_var0 + 0x0002) + 1)
+    000000A5 ADr02r00         [ 4]  268 	lda	(_farptr_var0 + 0x0002)
+                                    269 ;	Raw cost for generated ic 48 : (6, 8.000000) count=1.000000
+                                    270 ;	genCast
+                                    271 ;	genCopy
+    000000A8 85*02            [ 3]  272 	sta	*_run_sloc1_1_0
+    000000AA 86*03            [ 3]  273 	stx	*(_run_sloc1_1_0 + 1)
+                                    274 ;	Raw cost for generated ic 49 : (4, 6.000000) count=1.000000
+                                    275 ;	skipping iCode since result will be rematerialized
+                                    276 ;	Raw cost for generated ic 50 : (0, 0.000000) count=1.000000
+                                    277 ;	skipping iCode since result will be rematerialized
+                                    278 ;	Raw cost for generated ic 51 : (0, 0.000000) count=1.000000
+                                    279 ;	genIpush
+    000000AC A5*01            [ 3]  280 	lda	*(_run_sloc0_1_0 + 1)
+    000000AE 48               [ 3]  281 	pha
+    000000AF A5*00            [ 3]  282 	lda	*_run_sloc0_1_0
+    000000B1 48               [ 3]  283 	pha
+                                    284 ;	Raw cost for generated ic 52 : (6, 12.000000) count=1.000000
+                                    285 ;	genIpush
+    000000B2 A5*03            [ 3]  286 	lda	*(_run_sloc1_1_0 + 1)
+    000000B4 48               [ 3]  287 	pha
+    000000B5 A5*02            [ 3]  288 	lda	*_run_sloc1_1_0
+    000000B7 48               [ 3]  289 	pha
+                                    290 ;	Raw cost for generated ic 53 : (6, 12.000000) count=1.000000
+                                    291 ;	genIpush
+    000000B8 A9s01            [ 2]  292 	lda	#>___str_0
+    000000BA 48               [ 3]  293 	pha
+    000000BB A9rDF            [ 2]  294 	lda	#___str_0
+    000000BD 48               [ 3]  295 	pha
+                                    296 ;	Raw cost for generated ic 54 : (6, 10.000000) count=1.000000
+                                    297 ;	genCall
+    000000BE 20r00r00         [ 6]  298 	jsr	_printf
+    000000C1 68               [ 4]  299 	pla
+    000000C2 68               [ 4]  300 	pla
+    000000C3 68               [ 4]  301 	pla
+    000000C4 68               [ 4]  302 	pla
+    000000C5 68               [ 4]  303 	pla
+    000000C6 68               [ 4]  304 	pla
+                                    305 ;	Raw cost for generated ic 55 : (9, 30.000000) count=1.000000
+                                    306 ;	src/banks_farptr.c: 32: printf("FAR PTR1: %x:%x\n", (int)FAR_SEG(farptr_var1), (int)FAR_OFS(farptr_var1));
+                                    307 ;	skipping iCode since result will be rematerialized
+                                    308 ;	Raw cost for generated ic 56 : (0, 0.000000) count=1.000000
+                                    309 ;	genPointerGet
+                                    310 ;	genDataPointerGet
+    000000C7 AEr05r00         [ 4]  311 	ldx	(_farptr_var1 + 1)
+    000000CA ADr04r00         [ 4]  312 	lda	_farptr_var1
+                                    313 ;	Raw cost for generated ic 60 : (6, 8.000000) count=1.000000
+                                    314 ;	genCast
+                                    315 ;	genCopy
+    000000CD 85*02            [ 3]  316 	sta	*_run_sloc1_1_0
+    000000CF 86*03            [ 3]  317 	stx	*(_run_sloc1_1_0 + 1)
+                                    318 ;	Raw cost for generated ic 61 : (4, 6.000000) count=1.000000
+                                    319 ;	skipping iCode since result will be rematerialized
+                                    320 ;	Raw cost for generated ic 65 : (0, 0.000000) count=1.000000
+                                    321 ;	genPointerGet
+                                    322 ;	genDataPointerGet
+    000000D1 AEr07r00         [ 4]  323 	ldx	((_farptr_var1 + 0x0002) + 1)
+    000000D4 ADr06r00         [ 4]  324 	lda	(_farptr_var1 + 0x0002)
+                                    325 ;	Raw cost for generated ic 66 : (6, 8.000000) count=1.000000
+                                    326 ;	genCast
+                                    327 ;	genCopy
+    000000D7 85*00            [ 3]  328 	sta	*_run_sloc0_1_0
+    000000D9 86*01            [ 3]  329 	stx	*(_run_sloc0_1_0 + 1)
+                                    330 ;	Raw cost for generated ic 67 : (4, 6.000000) count=1.000000
+                                    331 ;	skipping iCode since result will be rematerialized
+                                    332 ;	Raw cost for generated ic 68 : (0, 0.000000) count=1.000000
+                                    333 ;	skipping iCode since result will be rematerialized
+                                    334 ;	Raw cost for generated ic 69 : (0, 0.000000) count=1.000000
+                                    335 ;	genIpush
+    000000DB A5*03            [ 3]  336 	lda	*(_run_sloc1_1_0 + 1)
+    000000DD 48               [ 3]  337 	pha
+    000000DE A5*02            [ 3]  338 	lda	*_run_sloc1_1_0
+    000000E0 48               [ 3]  339 	pha
+                                    340 ;	Raw cost for generated ic 70 : (6, 12.000000) count=1.000000
+                                    341 ;	genIpush
+    000000E1 A5*01            [ 3]  342 	lda	*(_run_sloc0_1_0 + 1)
+    000000E3 48               [ 3]  343 	pha
+    000000E4 A5*00            [ 3]  344 	lda	*_run_sloc0_1_0
+    000000E6 48               [ 3]  345 	pha
+                                    346 ;	Raw cost for generated ic 71 : (6, 12.000000) count=1.000000
+                                    347 ;	genIpush
+    000000E7 A9s01            [ 2]  348 	lda	#>___str_1
+    000000E9 48               [ 3]  349 	pha
+    000000EA A9rF0            [ 2]  350 	lda	#___str_1
+    000000EC 48               [ 3]  351 	pha
+                                    352 ;	Raw cost for generated ic 72 : (6, 10.000000) count=1.000000
+                                    353 ;	genCall
+    000000ED 20r00r00         [ 6]  354 	jsr	_printf
+    000000F0 68               [ 4]  355 	pla
+    000000F1 68               [ 4]  356 	pla
+    000000F2 68               [ 4]  357 	pla
+    000000F3 68               [ 4]  358 	pla
+    000000F4 68               [ 4]  359 	pla
+    000000F5 68               [ 4]  360 	pla
+                                    361 ;	Raw cost for generated ic 73 : (9, 30.000000) count=1.000000
+                                    362 ;	src/banks_farptr.c: 35: FAR_CALL(farptr_var2, void (*)(void));
+                                    363 ;	genAssign
+                                    364 ;	genAssignLit
+                                    365 ;	genCopy
+    000000F6 ADr0Br00         [ 4]  366 	lda	(_farptr_var2 + 3)
+    000000F9 8Dr03r00         [ 4]  367 	sta	(___call_banked_ptr + 3)
+    000000FC ADr0Ar00         [ 4]  368 	lda	(_farptr_var2 + 2)
+    000000FF 8Dr02r00         [ 4]  369 	sta	(___call_banked_ptr + 2)
+    00000102 ADr09r00         [ 4]  370 	lda	(_farptr_var2 + 1)
+    00000105 8Dr01r00         [ 4]  371 	sta	(___call_banked_ptr + 1)
+    00000108 ADr08r00         [ 4]  372 	lda	_farptr_var2
+    0000010B 8Dr00r00         [ 4]  373 	sta	___call_banked_ptr
+                                    374 ;	Raw cost for generated ic 74 : (24, 32.000000) count=1.000000
+                                    375 ;	genCall
+    0000010E 20r00r00         [ 6]  376 	jsr	___call__banked
+                                    377 ;	Raw cost for generated ic 75 : (3, 6.000000) count=1.000000
+                                    378 ;	src/banks_farptr.c: 38: res = some_bank2_proc1(100, 50);
+                                    379 ;	Raw cost for generated ic 76 : (0, 0.000000) count=1.000000
+                                    380 ;	Raw cost for generated ic 77 : (0, 0.000000) count=1.000000
+                                    381 ;	genCall
+                                    382 ;	genSend
+    00000111 A9 64            [ 2]  383 	lda	#0x64
+    00000113 A2 32            [ 2]  384 	ldx	#0x32
+    00000115 20r00r00         [ 6]  385 	jsr	___sdcc_bcall
+    00000118r00                     386 	.db	b_some_bank2_proc1
+    00000119rFFrFF                  387 	.dw 	_some_bank2_proc1-1
+                                    388 ;	assignResultValue
+                                    389 ;	Raw cost for generated ic 78 : (4, 4.000000) count=1.000000
+                                    390 ;	genAssign
+                                    391 ;	genAssignLit
+                                    392 ;	genCopy
+    0000011B 8Dr10r00         [ 4]  393 	sta	_res
+    0000011E 8Er11r00         [ 4]  394 	stx	(_res + 1)
+                                    395 ;	Raw cost for generated ic 80 : (6, 8.000000) count=1.000000
+                                    396 ;	src/banks_farptr.c: 39: printf("CALL DIR: %d\n", res);
+                                    397 ;	skipping iCode since result will be rematerialized
+                                    398 ;	Raw cost for generated ic 81 : (0, 0.000000) count=1.000000
+                                    399 ;	skipping iCode since result will be rematerialized
+                                    400 ;	Raw cost for generated ic 82 : (0, 0.000000) count=1.000000
+                                    401 ;	genIpush
+    00000121 85*00            [ 3]  402 	sta	*(REGTEMP+0)
+    00000123 8A               [ 2]  403 	txa
+    00000124 48               [ 3]  404 	pha
+    00000125 A5*00            [ 3]  405 	lda	*(REGTEMP+0)
+    00000127 48               [ 3]  406 	pha
+                                    407 ;	Raw cost for generated ic 83 : (7, 14.000000) count=1.000000
+                                    408 ;	genIpush
+    00000128 A9s02            [ 2]  409 	lda	#>___str_2
+    0000012A 48               [ 3]  410 	pha
+    0000012B A9r01            [ 2]  411 	lda	#___str_2
+    0000012D 48               [ 3]  412 	pha
+                                    413 ;	Raw cost for generated ic 84 : (6, 10.000000) count=1.000000
+                                    414 ;	genCall
+    0000012E 20r00r00         [ 6]  415 	jsr	_printf
+    00000131 68               [ 4]  416 	pla
+    00000132 68               [ 4]  417 	pla
+    00000133 68               [ 4]  418 	pla
+    00000134 68               [ 4]  419 	pla
+                                    420 ;	Raw cost for generated ic 85 : (7, 22.000000) count=1.000000
+                                    421 ;	src/banks_farptr.c: 42: res = some_bank2_proc2(100, 50, 1);
+                                    422 ;	genIpush
+    00000135 A9 01            [ 2]  423 	lda	#0x01
+    00000137 48               [ 3]  424 	pha
+                                    425 ;	Raw cost for generated ic 86 : (3, 5.000000) count=1.000000
+                                    426 ;	Raw cost for generated ic 87 : (0, 0.000000) count=1.000000
+                                    427 ;	Raw cost for generated ic 88 : (0, 0.000000) count=1.000000
+                                    428 ;	genCall
+                                    429 ;	genSend
+    00000138 A9 64            [ 2]  430 	lda	#0x64
+    0000013A A2 32            [ 2]  431 	ldx	#0x32
+    0000013C 20r00r00         [ 6]  432 	jsr	___sdcc_bcall
+    0000013Fr00                     433 	.db	b_some_bank2_proc2
+    00000140rFFrFF                  434 	.dw 	_some_bank2_proc2-1
+                                    435 ;	assignResultValue
+    00000142 85*00            [ 3]  436 	sta	*(REGTEMP+0)
+    00000144 68               [ 4]  437 	pla
+    00000145 A5*00            [ 3]  438 	lda	*(REGTEMP+0)
+                                    439 ;	Raw cost for generated ic 89 : (9, 14.000000) count=1.000000
+                                    440 ;	genAssign
+                                    441 ;	genAssignLit
+                                    442 ;	genCopy
+    00000147 8Dr10r00         [ 4]  443 	sta	_res
+    0000014A 8Er11r00         [ 4]  444 	stx	(_res + 1)
+                                    445 ;	Raw cost for generated ic 91 : (6, 8.000000) count=1.000000
+                                    446 ;	src/banks_farptr.c: 43: printf("CALL DIR (RE): %d\n", res);
+                                    447 ;	skipping iCode since result will be rematerialized
+                                    448 ;	Raw cost for generated ic 92 : (0, 0.000000) count=1.000000
+                                    449 ;	skipping iCode since result will be rematerialized
+                                    450 ;	Raw cost for generated ic 93 : (0, 0.000000) count=1.000000
+                                    451 ;	genIpush
+    0000014D 85*00            [ 3]  452 	sta	*(REGTEMP+0)
+    0000014F 8A               [ 2]  453 	txa
+    00000150 48               [ 3]  454 	pha
+    00000151 A5*00            [ 3]  455 	lda	*(REGTEMP+0)
+    00000153 48               [ 3]  456 	pha
+                                    457 ;	Raw cost for generated ic 94 : (7, 14.000000) count=1.000000
+                                    458 ;	genIpush
+    00000154 A9s02            [ 2]  459 	lda	#>___str_3
+    00000156 48               [ 3]  460 	pha
+    00000157 A9r0F            [ 2]  461 	lda	#___str_3
+    00000159 48               [ 3]  462 	pha
+                                    463 ;	Raw cost for generated ic 95 : (6, 10.000000) count=1.000000
+                                    464 ;	genCall
+    0000015A 20r00r00         [ 6]  465 	jsr	_printf
+    0000015D 68               [ 4]  466 	pla
+    0000015E 68               [ 4]  467 	pla
+    0000015F 68               [ 4]  468 	pla
+    00000160 68               [ 4]  469 	pla
+                                    470 ;	Raw cost for generated ic 96 : (7, 22.000000) count=1.000000
+                                    471 ;	src/banks_farptr.c: 50: res = FAR_CALL(farptr_var1, int (*)(uint8_t, uint8_t), 100, 50);
+                                    472 ;	genAssign
+                                    473 ;	genAssignLit
+                                    474 ;	genCopy
+    00000161 ADr07r00         [ 4]  475 	lda	(_farptr_var1 + 3)
+    00000164 8Dr03r00         [ 4]  476 	sta	(___call_banked_ptr + 3)
+    00000167 ADr06r00         [ 4]  477 	lda	(_farptr_var1 + 2)
+    0000016A 8Dr02r00         [ 4]  478 	sta	(___call_banked_ptr + 2)
+    0000016D ADr05r00         [ 4]  479 	lda	(_farptr_var1 + 1)
+    00000170 8Dr01r00         [ 4]  480 	sta	(___call_banked_ptr + 1)
+    00000173 ADr04r00         [ 4]  481 	lda	_farptr_var1
+    00000176 8Dr00r00         [ 4]  482 	sta	___call_banked_ptr
+                                    483 ;	Raw cost for generated ic 97 : (24, 32.000000) count=1.000000
+                                    484 ;	genCast
+                                    485 ;	genCopy
+    00000179 A9s00            [ 2]  486 	lda	#>(___call__banked)
+    0000017B 85*03            [ 3]  487 	sta	*(_run_sloc1_1_0 + 1)
+    0000017D A9r00            [ 2]  488 	lda	#(___call__banked)
+                                    489 ;	Raw cost for generated ic 98 : (8, 10.000000) count=1.000000
+                                    490 ;	Raw cost for generated ic 99 : (0, 0.000000) count=1.000000
+                                    491 ;	Raw cost for generated ic 100 : (0, 0.000000) count=1.000000
+                                    492 ;	genPcall
+    0000017F 85*02            [ 3]  493 	sta	*_run_sloc1_1_0
+    00000181 85*00            [ 3]  494 	sta	*(REGTEMP+0)
+    00000183 A5*03            [ 3]  495 	lda	*(_run_sloc1_1_0 + 1)
+    00000185 85*01            [ 3]  496 	sta	*(REGTEMP+1)
+                                    497 ;	genSend
+    00000187 A9 64            [ 2]  498 	lda	#0x64
+    00000189 A2 32            [ 2]  499 	ldx	#0x32
+    0000018B 20r00r00         [ 6]  500 	jsr	__sdcc_indirect_jsr
+                                    501 ;	assignResultValue
+                                    502 ;	Raw cost for generated ic 101 : (15, 22.000000) count=1.000000
+                                    503 ;	genAssign
+                                    504 ;	genAssignLit
+                                    505 ;	genCopy
+    0000018E 8Dr10r00         [ 4]  506 	sta	_res
+    00000191 8Er11r00         [ 4]  507 	stx	(_res + 1)
+                                    508 ;	Raw cost for generated ic 103 : (6, 8.000000) count=1.000000
+                                    509 ;	src/banks_farptr.c: 56: printf("CALL IND: %d\n", res);
+                                    510 ;	skipping iCode since result will be rematerialized
+                                    511 ;	Raw cost for generated ic 104 : (0, 0.000000) count=1.000000
+                                    512 ;	skipping iCode since result will be rematerialized
+                                    513 ;	Raw cost for generated ic 105 : (0, 0.000000) count=1.000000
+                                    514 ;	genIpush
+    00000194 85*00            [ 3]  515 	sta	*(REGTEMP+0)
+    00000196 8A               [ 2]  516 	txa
+    00000197 48               [ 3]  517 	pha
+    00000198 A5*00            [ 3]  518 	lda	*(REGTEMP+0)
+    0000019A 48               [ 3]  519 	pha
+                                    520 ;	Raw cost for generated ic 106 : (7, 14.000000) count=1.000000
+                                    521 ;	genIpush
+    0000019B A9s02            [ 2]  522 	lda	#>___str_4
+    0000019D 48               [ 3]  523 	pha
+    0000019E A9r22            [ 2]  524 	lda	#___str_4
+    000001A0 48               [ 3]  525 	pha
+                                    526 ;	Raw cost for generated ic 107 : (6, 10.000000) count=1.000000
+                                    527 ;	genCall
+    000001A1 20r00r00         [ 6]  528 	jsr	_printf
+    000001A4 68               [ 4]  529 	pla
+    000001A5 68               [ 4]  530 	pla
+    000001A6 68               [ 4]  531 	pla
+    000001A7 68               [ 4]  532 	pla
+                                    533 ;	Raw cost for generated ic 108 : (7, 22.000000) count=1.000000
+                                    534 ;	genLabel
+                                    535 ;	Raw cost for generated ic 109 : (0, 0.000000) count=1.000000
+                                    536 ;	src/banks_farptr.c: 57: }
+                                    537 ;	genEndFunction
+    000001A8 60               [ 6]  538 	rts
+                                    539 ;	Raw cost for generated ic 110 : (1, 6.000000) count=1.000000
+                                    540 ;------------------------------------------------------------
+                                    541 ;Allocation info for local variables in function 'main'
+                                    542 ;------------------------------------------------------------
+                                    543 ;	src/banks_farptr.c: 59: void main(void) {
+                                    544 ;	genLabel
+                                    545 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    546 ;	-----------------------------------------
+                                    547 ;	 function main
+                                    548 ;	-----------------------------------------
+                                    549 ;	Register assignment is optimal.
+                                    550 ;	Stack space usage: 0 bytes.
+    000001A9                        551 _main:
+                                    552 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    553 ;	src/banks_farptr.c: 61: printf("START (bank=%d)\n", (int)CURRENT_BANK);
+                                    554 ;	genCast
+                                    555 ;	genCopy
+    000001A9 A2 00            [ 2]  556 	ldx	#0x00
+    000001AB ADr00r00         [ 4]  557 	lda	__current_bank
+                                    558 ;	Raw cost for generated ic 2 : (5, 6.000000) count=1.000000
+                                    559 ;	skipping iCode since result will be rematerialized
+                                    560 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    561 ;	skipping iCode since result will be rematerialized
+                                    562 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    563 ;	genIpush
+    000001AE 85*00            [ 3]  564 	sta	*(REGTEMP+0)
+    000001B0 8A               [ 2]  565 	txa
+    000001B1 48               [ 3]  566 	pha
+    000001B2 A5*00            [ 3]  567 	lda	*(REGTEMP+0)
+    000001B4 48               [ 3]  568 	pha
+                                    569 ;	Raw cost for generated ic 5 : (7, 14.000000) count=1.000000
+                                    570 ;	genIpush
+    000001B5 A9s02            [ 2]  571 	lda	#>___str_5
+    000001B7 48               [ 3]  572 	pha
+    000001B8 A9r30            [ 2]  573 	lda	#___str_5
+    000001BA 48               [ 3]  574 	pha
+                                    575 ;	Raw cost for generated ic 6 : (6, 10.000000) count=1.000000
+                                    576 ;	genCall
+    000001BB 20r00r00         [ 6]  577 	jsr	_printf
+    000001BE 68               [ 4]  578 	pla
+    000001BF 68               [ 4]  579 	pla
+    000001C0 68               [ 4]  580 	pla
+    000001C1 68               [ 4]  581 	pla
+                                    582 ;	Raw cost for generated ic 7 : (7, 22.000000) count=1.000000
+                                    583 ;	src/banks_farptr.c: 62: run();
+                                    584 ;	genCall
+    000001C2 20r00r00         [ 6]  585 	jsr	_run
+                                    586 ;	Raw cost for generated ic 8 : (3, 6.000000) count=1.000000
+                                    587 ;	src/banks_farptr.c: 63: printf("DONE! (bank=%d)\n", (int)CURRENT_BANK);
+                                    588 ;	genCast
+                                    589 ;	genCopy
+    000001C5 A2 00            [ 2]  590 	ldx	#0x00
+    000001C7 ADr00r00         [ 4]  591 	lda	__current_bank
+                                    592 ;	Raw cost for generated ic 9 : (5, 6.000000) count=1.000000
+                                    593 ;	skipping iCode since result will be rematerialized
+                                    594 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    595 ;	skipping iCode since result will be rematerialized
+                                    596 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    597 ;	genIpush
+    000001CA 85*00            [ 3]  598 	sta	*(REGTEMP+0)
+    000001CC 8A               [ 2]  599 	txa
+    000001CD 48               [ 3]  600 	pha
+    000001CE A5*00            [ 3]  601 	lda	*(REGTEMP+0)
+    000001D0 48               [ 3]  602 	pha
+                                    603 ;	Raw cost for generated ic 12 : (7, 14.000000) count=1.000000
+                                    604 ;	genIpush
+    000001D1 A9s02            [ 2]  605 	lda	#>___str_6
+    000001D3 48               [ 3]  606 	pha
+    000001D4 A9r41            [ 2]  607 	lda	#___str_6
+    000001D6 48               [ 3]  608 	pha
+                                    609 ;	Raw cost for generated ic 13 : (6, 10.000000) count=1.000000
+                                    610 ;	genCall
+    000001D7 20r00r00         [ 6]  611 	jsr	_printf
+    000001DA 68               [ 4]  612 	pla
+    000001DB 68               [ 4]  613 	pla
+    000001DC 68               [ 4]  614 	pla
+    000001DD 68               [ 4]  615 	pla
+                                    616 ;	Raw cost for generated ic 14 : (7, 22.000000) count=1.000000
+                                    617 ;	genLabel
+                                    618 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    619 ;	src/banks_farptr.c: 64: }
+                                    620 ;	genEndFunction
+    000001DE 60               [ 6]  621 	rts
+                                    622 ;	Raw cost for generated ic 16 : (1, 6.000000) count=1.000000
+                                    623 	.area _CODE
+    000001DF                        624 ___str_0:
+    000001DF 46 41 52 20 50 54 52   625 	.ascii "FAR PTR0: %x:%x"
+             30 3A 20 25 78 3A 25
+             78
+    000001EE 0A                     626 	.db 0x0a
+    000001EF 00                     627 	.db 0x00
+    000001F0                        628 ___str_1:
+    000001F0 46 41 52 20 50 54 52   629 	.ascii "FAR PTR1: %x:%x"
+             31 3A 20 25 78 3A 25
+             78
+    000001FF 0A                     630 	.db 0x0a
+    00000200 00                     631 	.db 0x00
+    00000201                        632 ___str_2:
+    00000201 43 41 4C 4C 20 44 49   633 	.ascii "CALL DIR: %d"
+             52 3A 20 25 64
+    0000020D 0A                     634 	.db 0x0a
+    0000020E 00                     635 	.db 0x00
+    0000020F                        636 ___str_3:
+    0000020F 43 41 4C 4C 20 44 49   637 	.ascii "CALL DIR (RE): %d"
+             52 20 28 52 45 29 3A
+             20 25 64
+    00000220 0A                     638 	.db 0x0a
+    00000221 00                     639 	.db 0x00
+    00000222                        640 ___str_4:
+    00000222 43 41 4C 4C 20 49 4E   641 	.ascii "CALL IND: %d"
+             44 3A 20 25 64
+    0000022E 0A                     642 	.db 0x0a
+    0000022F 00                     643 	.db 0x00
+    00000230                        644 ___str_5:
+    00000230 53 54 41 52 54 20 28   645 	.ascii "START (bank=%d)"
+             62 61 6E 6B 3D 25 64
+             29
+    0000023F 0A                     646 	.db 0x0a
+    00000240 00                     647 	.db 0x00
+    00000241                        648 ___str_6:
+    00000241 44 4F 4E 45 21 20 28   649 	.ascii "DONE! (bank=%d)"
+             62 61 6E 6B 3D 25 64
+             29
+    00000250 0A                     650 	.db 0x0a
+    00000251 00                     651 	.db 0x00
+                                    652 	.area _XINIT
+                                    653 	.area _CABS    (ABS)

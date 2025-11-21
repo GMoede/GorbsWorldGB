@@ -1,0 +1,828 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module gbprinter
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _printer_wait
+                                     11 	.globl _printer_check_cancel
+                                     12 	.globl _printer_print_tile
+                                     13 	.globl _printer_send_command
+                                     14 	.globl _printer_send_byte
+                                     15 	.globl _printer_send_receive
+                                     16 	.globl _memset
+                                     17 	.globl _memcpy
+                                     18 	.globl _vsync
+                                     19 	.globl _PRN_PKT_START
+                                     20 	.globl _gbprinter_detect
+                                     21 	.globl _gbprinter_print_image
+                                     22 ;--------------------------------------------------------
+                                     23 ; special function registers
+                                     24 ;--------------------------------------------------------
+                                     25 ;--------------------------------------------------------
+                                     26 ; ram data
+                                     27 ;--------------------------------------------------------
+                                     28 	.area _DATA
+    00000000                         29 _printer_status:
+    00000000                         30 	.ds 2
+    00000002                         31 _printer_tile_num:
+    00000002                         32 	.ds 1
+    00000003                         33 _printer_print_tile_printer_CRC_10000_159:
+    00000003                         34 	.ds 2
+    00000005                         35 _gbprinter_print_image_img_10000_183:
+    00000005                         36 	.ds 2
+    00000007                         37 _gbprinter_print_image_error_10000_183:
+    00000007                         38 	.ds 1
+                                     39 ;--------------------------------------------------------
+                                     40 ; ram data
+                                     41 ;--------------------------------------------------------
+                                     42 	.area _INITIALIZED
+    00000000                         43 _PRN_PKT_START::
+    00000000                         44 	.ds 14
+                                     45 ;--------------------------------------------------------
+                                     46 ; absolute external ram data
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _DABS (ABS)
+                                     49 ;--------------------------------------------------------
+                                     50 ; global & static initialisations
+                                     51 ;--------------------------------------------------------
+                                     52 	.area _HOME
+                                     53 	.area _GSINIT
+                                     54 	.area _GSFINAL
+                                     55 	.area _GSINIT
+                                     56 ;--------------------------------------------------------
+                                     57 ; Home
+                                     58 ;--------------------------------------------------------
+                                     59 	.area _HOME
+                                     60 	.area _HOME
+                                     61 ;--------------------------------------------------------
+                                     62 ; code
+                                     63 ;--------------------------------------------------------
+                                     64 	.area _CODE
+                                     65 ;src/gbprinter.c:31: uint8_t printer_send_receive(uint8_t b) {
+                                     66 ;	---------------------------------
+                                     67 ; Function printer_send_receive
+                                     68 ; ---------------------------------
+    00000000                         69 _printer_send_receive::
+    00000000 E0r00            [12]   70 	ldh	(_SB_REG + 0), a
+                                     71 ;src/gbprinter.c:33: SC_REG = START_TRANSFER;
+    00000002 3E 81            [ 8]   72 	ld	a, #0x81
+    00000004 E0r00            [12]   73 	ldh	(_SC_REG + 0), a
+                                     74 ;src/gbprinter.c:34: while (SC_REG & 0x80);
+    00000006                         75 00101$:
+    00000006 F0r00            [12]   76 	ldh	a, (_SC_REG + 0)
+    00000008 07               [ 4]   77 	rlca
+    00000009 38 FB            [12]   78 	jr	C, 00101$
+                                     79 ;src/gbprinter.c:35: return SB_REG;
+    0000000B F0r00            [12]   80 	ldh	a, (_SB_REG + 0)
+                                     81 ;src/gbprinter.c:36: }
+    0000000D C9               [16]   82 	ret
+    0000000E                         83 _PRN_PKT_INIT:
+    0000000E 88                      84 	.db #0x88	; 136
+    0000000F 33                      85 	.db #0x33	; 51	'3'
+    00000010 01                      86 	.db #0x01	; 1
+    00000011 00                      87 	.db #0x00	; 0
+    00000012 00                      88 	.db #0x00	; 0
+    00000013 00                      89 	.db #0x00	; 0
+    00000014 01                      90 	.db #0x01	; 1
+    00000015 00                      91 	.db #0x00	; 0
+    00000016 00                      92 	.db #0x00	; 0
+    00000017 00                      93 	.db #0x00	; 0
+    00000018                         94 _PRN_PKT_STATUS:
+    00000018 88                      95 	.db #0x88	; 136
+    00000019 33                      96 	.db #0x33	; 51	'3'
+    0000001A 0F                      97 	.db #0x0f	; 15
+    0000001B 00                      98 	.db #0x00	; 0
+    0000001C 00                      99 	.db #0x00	; 0
+    0000001D 00                     100 	.db #0x00	; 0
+    0000001E 0F                     101 	.db #0x0f	; 15
+    0000001F 00                     102 	.db #0x00	; 0
+    00000020 00                     103 	.db #0x00	; 0
+    00000021 00                     104 	.db #0x00	; 0
+    00000022                        105 _PRN_PKT_EOF:
+    00000022 88                     106 	.db #0x88	; 136
+    00000023 33                     107 	.db #0x33	; 51	'3'
+    00000024 04                     108 	.db #0x04	; 4
+    00000025 00                     109 	.db #0x00	; 0
+    00000026 00                     110 	.db #0x00	; 0
+    00000027 00                     111 	.db #0x00	; 0
+    00000028 04                     112 	.db #0x04	; 4
+    00000029 00                     113 	.db #0x00	; 0
+    0000002A 00                     114 	.db #0x00	; 0
+    0000002B 00                     115 	.db #0x00	; 0
+    0000002C                        116 _PRN_PKT_CANCEL:
+    0000002C 88                     117 	.db #0x88	; 136
+    0000002D 33                     118 	.db #0x33	; 51	'3'
+    0000002E 08                     119 	.db #0x08	; 8
+    0000002F 00                     120 	.db #0x00	; 0
+    00000030 00                     121 	.db #0x00	; 0
+    00000031 00                     122 	.db #0x00	; 0
+    00000032 01                     123 	.db #0x01	; 1
+    00000033 00                     124 	.db #0x00	; 0
+    00000034 00                     125 	.db #0x00	; 0
+    00000035 00                     126 	.db #0x00	; 0
+                                    127 ;src/gbprinter.c:38: uint8_t printer_send_byte(uint8_t b) {
+                                    128 ;	---------------------------------
+                                    129 ; Function printer_send_byte
+                                    130 ; ---------------------------------
+    00000036                        131 _printer_send_byte::
+                                    132 ;src/gbprinter.c:39: return (uint8_t)(printer_status = ((printer_status << 8) | printer_send_receive(b)));
+    00000036 21r00r00         [12]  133 	ld	hl, #_printer_status
+    00000039 46               [ 8]  134 	ld	b, (hl)
+    0000003A 0E 00            [ 8]  135 	ld	c, #0x00
+    0000003C C5               [16]  136 	push	bc
+    0000003D CDr00r00         [24]  137 	call	_printer_send_receive
+    00000040 C1               [12]  138 	pop	bc
+    00000041 21r00r00         [12]  139 	ld	hl, #_printer_status
+    00000044 22               [ 8]  140 	ld	(hl+), a
+    00000045 70               [ 8]  141 	ld	(hl), b
+                                    142 ;src/gbprinter.c:40: }
+    00000046 C9               [16]  143 	ret
+                                    144 ;src/gbprinter.c:42: uint8_t printer_send_command(const uint8_t *command, uint8_t length) {
+                                    145 ;	---------------------------------
+                                    146 ; Function printer_send_command
+                                    147 ; ---------------------------------
+    00000047                        148 _printer_send_command::
+    00000047 4F               [ 4]  149 	ld	c, a
+                                    150 ;src/gbprinter.c:44: while (index++ < length) printer_send_byte(*command++);
+    00000048 06 00            [ 8]  151 	ld	b, #0x00
+    0000004A                        152 00101$:
+    0000004A 78               [ 4]  153 	ld	a, b
+    0000004B 91               [ 4]  154 	sub	a, c
+    0000004C 30 0C            [12]  155 	jr	NC, 00103$
+    0000004E 04               [ 4]  156 	inc	b
+    0000004F 1A               [ 8]  157 	ld	a, (de)
+    00000050 13               [ 8]  158 	inc	de
+    00000051 C5               [16]  159 	push	bc
+    00000052 D5               [16]  160 	push	de
+    00000053 CDr36r00         [24]  161 	call	_printer_send_byte
+    00000056 D1               [12]  162 	pop	de
+    00000057 C1               [12]  163 	pop	bc
+    00000058 18 F0            [12]  164 	jr	00101$
+    0000005A                        165 00103$:
+                                    166 ;src/gbprinter.c:45: return ((uint8_t)(printer_status >> 8) == PRN_MAGIC_DETECT) ? (uint8_t)printer_status : PRN_STATUS_MASK_ERRORS;
+    0000005A FAr01r00         [16]  167 	ld	a, (_printer_status + 1)
+    0000005D D6 81            [ 8]  168 	sub	a, #0x81
+    0000005F 20 04            [12]  169 	jr	NZ, 00106$
+    00000061 FAr00r00         [16]  170 	ld	a, (_printer_status)
+    00000064 C9               [16]  171 	ret
+    00000065                        172 00106$:
+    00000065 3E F0            [ 8]  173 	ld	a, #0xf0
+                                    174 ;src/gbprinter.c:46: }
+    00000067 C9               [16]  175 	ret
+                                    176 ;src/gbprinter.c:49: uint8_t printer_print_tile(const uint8_t *tiledata) {
+                                    177 ;	---------------------------------
+                                    178 ; Function printer_print_tile
+                                    179 ; ---------------------------------
+    00000068                        180 _printer_print_tile::
+    00000068 3B               [ 8]  181 	dec	sp
+    00000069 3B               [ 8]  182 	dec	sp
+    0000006A 43               [ 4]  183 	ld	b, e
+                                    184 ;src/gbprinter.c:52: if (printer_tile_num == 0) {
+    0000006B FAr02r00         [16]  185 	ld	a, (#_printer_tile_num)
+    0000006E B7               [ 4]  186 	or	a, a
+    0000006F 20 1E            [12]  187 	jr	NZ, 00119$
+                                    188 ;src/gbprinter.c:53: const uint8_t * data = PRINT_TILE;
+    00000071 21rEFr00         [12]  189 	ld	hl, #_printer_print_tile_PRINT_TILE_10000_159
+                                    190 ;src/gbprinter.c:54: for (uint8_t i = sizeof(PRINT_TILE); i != 0; i--) printer_send_receive(*data++);
+    00000074 0E 06            [ 8]  191 	ld	c, #0x06
+    00000076                        192 00108$:
+    00000076 79               [ 4]  193 	ld	a, c
+    00000077 B7               [ 4]  194 	or	a, a
+    00000078 28 0D            [12]  195 	jr	Z, 00101$
+    0000007A 2A               [ 8]  196 	ld	a, (hl+)
+    0000007B E5               [16]  197 	push	hl
+    0000007C C5               [16]  198 	push	bc
+    0000007D D5               [16]  199 	push	de
+    0000007E CDr00r00         [24]  200 	call	_printer_send_receive
+    00000081 D1               [12]  201 	pop	de
+    00000082 C1               [12]  202 	pop	bc
+    00000083 E1               [12]  203 	pop	hl
+    00000084 0D               [ 4]  204 	dec	c
+    00000085 18 EF            [12]  205 	jr	00108$
+    00000087                        206 00101$:
+                                    207 ;src/gbprinter.c:55: printer_CRC = 0x04 + 0x80 + 0x02;
+    00000087 21r03r00         [12]  208 	ld	hl, #_printer_print_tile_printer_CRC_10000_159
+    0000008A 3E 86            [ 8]  209 	ld	a, #0x86
+    0000008C 22               [ 8]  210 	ld	(hl+), a
+    0000008D AF               [ 4]  211 	xor	a, a
+    0000008E 77               [ 8]  212 	ld	(hl), a
+                                    213 ;src/gbprinter.c:57: for(uint8_t i = 0x10; i != 0; i--, tiledata++) {
+    0000008F                        214 00119$:
+    0000008F 0E 10            [ 8]  215 	ld	c, #0x10
+    00000091 F8 00            [12]  216 	ldhl	sp,	#0
+    00000093 78               [ 4]  217 	ld	a, b
+    00000094 22               [ 8]  218 	ld	(hl+), a
+    00000095 72               [ 8]  219 	ld	(hl), d
+    00000096                        220 00111$:
+    00000096 79               [ 4]  221 	ld	a, c
+    00000097 B7               [ 4]  222 	or	a, a
+    00000098 28 27            [12]  223 	jr	Z, 00104$
+                                    224 ;src/gbprinter.c:58: printer_CRC += *tiledata;
+    0000009A D1               [12]  225 	pop	de
+    0000009B D5               [16]  226 	push	de
+    0000009C 1A               [ 8]  227 	ld	a, (de)
+    0000009D 5F               [ 4]  228 	ld	e, a
+    0000009E FAr03r00         [16]  229 	ld	a, (_printer_print_tile_printer_CRC_10000_159)
+    000000A1 21r04r00         [12]  230 	ld	hl, #_printer_print_tile_printer_CRC_10000_159 + 1
+    000000A4 46               [ 8]  231 	ld	b, (hl)
+    000000A5 2B               [ 8]  232 	dec	hl
+    000000A6 16 00            [ 8]  233 	ld	d, #0x00
+    000000A8 83               [ 4]  234 	add	a, e
+    000000A9 5F               [ 4]  235 	ld	e, a
+    000000AA 78               [ 4]  236 	ld	a, b
+    000000AB 8A               [ 4]  237 	adc	a, d
+    000000AC 73               [ 8]  238 	ld	(hl), e
+    000000AD 23               [ 8]  239 	inc	hl
+    000000AE 77               [ 8]  240 	ld	(hl), a
+                                    241 ;src/gbprinter.c:59: printer_send_receive(*tiledata);
+    000000AF D1               [12]  242 	pop	de
+    000000B0 D5               [16]  243 	push	de
+    000000B1 1A               [ 8]  244 	ld	a, (de)
+    000000B2 C5               [16]  245 	push	bc
+    000000B3 CDr00r00         [24]  246 	call	_printer_send_receive
+    000000B6 C1               [12]  247 	pop	bc
+                                    248 ;src/gbprinter.c:57: for(uint8_t i = 0x10; i != 0; i--, tiledata++) {
+    000000B7 0D               [ 4]  249 	dec	c
+    000000B8 F8 00            [12]  250 	ldhl	sp,	#0
+    000000BA 34               [12]  251 	inc	(hl)
+    000000BB 20 D9            [12]  252 	jr	NZ, 00111$
+    000000BD 23               [ 8]  253 	inc	hl
+    000000BE 34               [12]  254 	inc	(hl)
+    000000BF 18 D5            [12]  255 	jr	00111$
+    000000C1                        256 00104$:
+                                    257 ;src/gbprinter.c:61: if (++printer_tile_num == 40) {
+    000000C1 21r02r00         [12]  258 	ld	hl, #_printer_tile_num
+    000000C4 34               [12]  259 	inc	(hl)
+    000000C5 7E               [ 8]  260 	ld	a, (hl)
+    000000C6 D6 28            [ 8]  261 	sub	a, #0x28
+    000000C8 20 21            [12]  262 	jr	NZ, 00106$
+                                    263 ;src/gbprinter.c:62: printer_send_receive((uint8_t)printer_CRC);
+    000000CA FAr03r00         [16]  264 	ld	a, (_printer_print_tile_printer_CRC_10000_159)
+    000000CD CDr00r00         [24]  265 	call	_printer_send_receive
+                                    266 ;src/gbprinter.c:63: printer_send_receive((uint8_t)(printer_CRC >> 8));
+    000000D0 FAr04r00         [16]  267 	ld	a, (_printer_print_tile_printer_CRC_10000_159 + 1)
+    000000D3 CDr00r00         [24]  268 	call	_printer_send_receive
+                                    269 ;src/gbprinter.c:64: printer_send_receive(0x00);
+    000000D6 AF               [ 4]  270 	xor	a, a
+    000000D7 CDr00r00         [24]  271 	call	_printer_send_receive
+                                    272 ;src/gbprinter.c:65: printer_send_receive(0x00);
+    000000DA AF               [ 4]  273 	xor	a, a
+    000000DB CDr00r00         [24]  274 	call	_printer_send_receive
+                                    275 ;src/gbprinter.c:66: printer_CRC = printer_tile_num = 0;
+    000000DE AF               [ 4]  276 	xor	a, a
+    000000DF EAr02r00         [16]  277 	ld	(#_printer_tile_num), a
+    000000E2 21r03r00         [12]  278 	ld	hl, #_printer_print_tile_printer_CRC_10000_159
+    000000E5 22               [ 8]  279 	ld	(hl+), a
+    000000E6 77               [ 8]  280 	ld	(hl), a
+                                    281 ;src/gbprinter.c:67: return TRUE;
+    000000E7 3E 01            [ 8]  282 	ld	a, #0x01
+    000000E9 18 01            [12]  283 	jr	00113$
+    000000EB                        284 00106$:
+                                    285 ;src/gbprinter.c:69: return FALSE;
+    000000EB AF               [ 4]  286 	xor	a, a
+    000000EC                        287 00113$:
+                                    288 ;src/gbprinter.c:70: }
+    000000EC 33               [ 8]  289 	inc	sp
+    000000ED 33               [ 8]  290 	inc	sp
+    000000EE C9               [16]  291 	ret
+    000000EF                        292 _printer_print_tile_PRINT_TILE_10000_159:
+    000000EF 88                     293 	.db #0x88	; 136
+    000000F0 33                     294 	.db #0x33	; 51	'3'
+    000000F1 04                     295 	.db #0x04	; 4
+    000000F2 00                     296 	.db #0x00	; 0
+    000000F3 80                     297 	.db #0x80	; 128
+    000000F4 02                     298 	.db #0x02	; 2
+                                    299 ;src/gbprinter.c:79: uint8_t printer_wait(uint16_t timeout, uint8_t mask, uint8_t value) {
+                                    300 ;	---------------------------------
+                                    301 ; Function printer_wait
+                                    302 ; ---------------------------------
+    000000F5                        303 _printer_wait::
+    000000F5 4F               [ 4]  304 	ld	c, a
+                                    305 ;src/gbprinter.c:81: while (((error = PRINTER_SEND_COMMAND(PRN_PKT_STATUS)) & mask) != value) {
+    000000F6                        306 00107$:
+    000000F6 C5               [16]  307 	push	bc
+    000000F7 D5               [16]  308 	push	de
+    000000F8 3E 0A            [ 8]  309 	ld	a, #0x0a
+    000000FA 11r18r00         [12]  310 	ld	de, #_PRN_PKT_STATUS
+    000000FD CDr47r00         [24]  311 	call	_printer_send_command
+    00000100 D1               [12]  312 	pop	de
+    00000101 C1               [12]  313 	pop	bc
+    00000102 47               [ 4]  314 	ld	b, a
+    00000103 A1               [ 4]  315 	and	a, c
+    00000104 F8 02            [12]  316 	ldhl	sp,	#2
+    00000106 96               [ 8]  317 	sub	a, (hl)
+    00000107 28 2C            [12]  318 	jr	Z, 00109$
+                                    319 ;src/gbprinter.c:82: if (printer_check_cancel()) {
+    00000109 C5               [16]  320 	push	bc
+    0000010A D5               [16]  321 	push	de
+    0000010B CDr00r00         [24]  322 	call	_printer_check_cancel
+    0000010E 6F               [ 4]  323 	ld	l, a
+    0000010F D1               [12]  324 	pop	de
+    00000110 C1               [12]  325 	pop	bc
+    00000111 CB 45            [ 8]  326 	bit	0, l
+    00000113 28 0C            [12]  327 	jr	Z, 00102$
+                                    328 ;src/gbprinter.c:83: PRINTER_SEND_COMMAND(PRN_PKT_CANCEL);
+    00000115 3E 0A            [ 8]  329 	ld	a, #0x0a
+    00000117 11r2Cr00         [12]  330 	ld	de, #_PRN_PKT_CANCEL
+    0000011A CDr47r00         [24]  331 	call	_printer_send_command
+                                    332 ;src/gbprinter.c:84: return PRN_STATUS_CANCELLED;
+    0000011D 3E 40            [ 8]  333 	ld	a, #0x40
+    0000011F 18 15            [12]  334 	jr	00110$
+    00000121                        335 00102$:
+                                    336 ;src/gbprinter.c:86: if (timeout-- == 0) return PRN_STATUS_MASK_ERRORS;
+    00000121 7B               [ 4]  337 	ld	a, e
+    00000122 6A               [ 4]  338 	ld	l, d
+    00000123 1B               [ 8]  339 	dec	de
+    00000124 B5               [ 4]  340 	or	a, l
+    00000125 20 04            [12]  341 	jr	NZ, 00104$
+    00000127 3E F0            [ 8]  342 	ld	a, #0xf0
+    00000129 18 0B            [12]  343 	jr	00110$
+    0000012B                        344 00104$:
+                                    345 ;src/gbprinter.c:87: if (error & PRN_STATUS_MASK_ERRORS) break;
+    0000012B 78               [ 4]  346 	ld	a, b
+    0000012C E6 F0            [ 8]  347 	and	a, #0xf0
+    0000012E 20 05            [12]  348 	jr	NZ, 00109$
+                                    349 ;src/gbprinter.c:88: vsync();
+    00000130 CDr00r00         [24]  350 	call	_vsync
+    00000133 18 C1            [12]  351 	jr	00107$
+    00000135                        352 00109$:
+                                    353 ;src/gbprinter.c:90: return error;
+    00000135 78               [ 4]  354 	ld	a, b
+    00000136                        355 00110$:
+                                    356 ;src/gbprinter.c:91: }
+    00000136 E1               [12]  357 	pop	hl
+    00000137 33               [ 8]  358 	inc	sp
+    00000138 E9               [ 4]  359 	jp	(hl)
+                                    360 ;src/gbprinter.c:93: uint8_t gbprinter_detect(uint8_t delay) {
+                                    361 ;	---------------------------------
+                                    362 ; Function gbprinter_detect
+                                    363 ; ---------------------------------
+    00000139                        364 _gbprinter_detect::
+    00000139 5F               [ 4]  365 	ld	e, a
+                                    366 ;src/gbprinter.c:73: printer_tile_num = 0;
+    0000013A AF               [ 4]  367 	xor	a, a
+    0000013B EAr02r00         [16]  368 	ld	(#_printer_tile_num),a
+                                    369 ;src/gbprinter.c:74: PRINTER_SEND_COMMAND(PRN_PKT_INIT);
+    0000013E D5               [16]  370 	push	de
+    0000013F 3E 0A            [ 8]  371 	ld	a, #0x0a
+    00000141 11r0Er00         [12]  372 	ld	de, #_PRN_PKT_INIT
+    00000144 CDr47r00         [24]  373 	call	_printer_send_command
+    00000147 D1               [12]  374 	pop	de
+                                    375 ;src/gbprinter.c:95: return printer_wait(delay, PRN_STATUS_MASK_ANY, PRN_STATUS_OK);
+    00000148 AF               [ 4]  376 	xor	a, a
+    00000149 57               [ 4]  377 	ld	d, a
+    0000014A F5               [16]  378 	push	af
+    0000014B 33               [ 8]  379 	inc	sp
+    0000014C 3E FF            [ 8]  380 	ld	a, #0xff
+    0000014E CDrF5r00         [24]  381 	call	_printer_wait
+                                    382 ;src/gbprinter.c:96: }
+    00000151 C9               [16]  383 	ret
+                                    384 ;src/gbprinter.c:98: uint8_t gbprinter_print_image(const uint8_t * image_map, const uint8_t * image, int8_t pos_x, uint8_t width, uint8_t height) {
+                                    385 ;	---------------------------------
+                                    386 ; Function gbprinter_print_image
+                                    387 ; ---------------------------------
+    00000152                        388 _gbprinter_print_image::
+    00000152 E8 DF            [16]  389 	add	sp, #-33
+    00000154 F8 1B            [12]  390 	ldhl	sp,	#27
+    00000156 7B               [ 4]  391 	ld	a, e
+    00000157 22               [ 8]  392 	ld	(hl+), a
+    00000158 72               [ 8]  393 	ld	(hl), d
+    00000159 F8 19            [12]  394 	ldhl	sp,	#25
+    0000015B 79               [ 4]  395 	ld	a, c
+    0000015C 22               [ 8]  396 	ld	(hl+), a
+    0000015D 70               [ 8]  397 	ld	(hl), b
+                                    398 ;src/gbprinter.c:102: uint8_t tile_data[16], rows = (((height + 1) >> 1) << 1), pkt_count = 0;
+    0000015E F8 25            [12]  399 	ldhl	sp,	#37
+    00000160 4E               [ 8]  400 	ld	c, (hl)
+    00000161 AF               [ 4]  401 	xor	a, a
+    00000162 47               [ 4]  402 	ld	b, a
+    00000163 03               [ 8]  403 	inc	bc
+    00000164 CB 28            [ 8]  404 	sra	b
+    00000166 CB 19            [ 8]  405 	rr	c
+    00000168 79               [ 4]  406 	ld	a, c
+    00000169 87               [ 4]  407 	add	a, a
+    0000016A F8 12            [12]  408 	ldhl	sp,	#18
+    0000016C 77               [ 8]  409 	ld	(hl), a
+    0000016D F8 1D            [12]  410 	ldhl	sp,	#29
+    0000016F 36 00            [12]  411 	ld	(hl), #0x00
+                                    412 ;src/gbprinter.c:104: if ((rows >> 1) == 0) return PRN_STATUS_OK;
+    00000171 F8 12            [12]  413 	ldhl	sp,	#18
+    00000173 7E               [ 8]  414 	ld	a, (hl)
+    00000174 CB 3F            [ 8]  415 	srl	a
+    00000176 F8 20            [12]  416 	ldhl	sp,	#32
+    00000178 77               [ 8]  417 	ld	(hl), a
+    00000179 B7               [ 4]  418 	or	a, a
+    0000017A 20 04            [12]  419 	jr	NZ, 00102$
+    0000017C AF               [ 4]  420 	xor	a, a
+    0000017D C3rBEr03         [16]  421 	jp	00138$
+    00000180                        422 00102$:
+                                    423 ;src/gbprinter.c:106: img = image;
+    00000180 F8 19            [12]  424 	ldhl	sp,	#25
+    00000182 7E               [ 8]  425 	ld	a, (hl)
+    00000183 EAr05r00         [16]  426 	ld	(#_gbprinter_print_image_img_10000_183),a
+    00000186 F8 1A            [12]  427 	ldhl	sp,	#26
+    00000188 7E               [ 8]  428 	ld	a, (hl)
+    00000189 EAr06r00         [16]  429 	ld	(#_gbprinter_print_image_img_10000_183 + 1),a
+                                    430 ;src/gbprinter.c:108: printer_tile_num = 0;
+    0000018C AF               [ 4]  431 	xor	a, a
+    0000018D EAr02r00         [16]  432 	ld	(#_printer_tile_num),a
+                                    433 ;src/gbprinter.c:110: for (uint8_t y = 0; y != rows; y++) {
+    00000190 F8 1E            [12]  434 	ldhl	sp,	#30
+    00000192 36 00            [12]  435 	ld	(hl), #0x00
+    00000194                        436 00136$:
+    00000194 F8 12            [12]  437 	ldhl	sp,	#18
+    00000196 7E               [ 8]  438 	ld	a, (hl)
+    00000197 F8 1E            [12]  439 	ldhl	sp,	#30
+    00000199 96               [ 8]  440 	sub	a, (hl)
+    0000019A CAr5Br03         [16]  441 	jp	Z, 00123$
+                                    442 ;src/gbprinter.c:111: for (int16_t x = 0; x != PRN_TILE_WIDTH; x++) {
+    0000019D F8 1E            [12]  443 	ldhl	sp,	#30
+    0000019F 7E               [ 8]  444 	ld	a, (hl)
+    000001A0 F8 25            [12]  445 	ldhl	sp,	#37
+    000001A2 96               [ 8]  446 	sub	a, (hl)
+    000001A3 3E 00            [ 8]  447 	ld	a, #0x00
+    000001A5 17               [ 4]  448 	rla
+    000001A6 F8 13            [12]  449 	ldhl	sp,	#19
+    000001A8 77               [ 8]  450 	ld	(hl), a
+    000001A9 F8 24            [12]  451 	ldhl	sp,	#36
+    000001AB 5E               [ 8]  452 	ld	e, (hl)
+    000001AC F8 1E            [12]  453 	ldhl	sp,	#30
+    000001AE 7E               [ 8]  454 	ld	a, (hl)
+    000001AF CDr00r00         [24]  455 	call	__muluchar
+    000001B2 F8 14            [12]  456 	ldhl	sp,	#20
+    000001B4 79               [ 4]  457 	ld	a, c
+    000001B5 22               [ 8]  458 	ld	(hl+), a
+    000001B6 70               [ 8]  459 	ld	(hl), b
+    000001B7 AF               [ 4]  460 	xor	a, a
+    000001B8 F8 1F            [12]  461 	ldhl	sp,	#31
+    000001BA 22               [ 8]  462 	ld	(hl+), a
+    000001BB 77               [ 8]  463 	ld	(hl), a
+    000001BC                        464 00133$:
+    000001BC F8 1F            [12]  465 	ldhl	sp,	#31
+    000001BE 7E               [ 8]  466 	ld	a, (hl)
+    000001BF F8 00            [12]  467 	ldhl	sp,	#0
+    000001C1 77               [ 8]  468 	ld	(hl), a
+    000001C2 F8 20            [12]  469 	ldhl	sp,	#32
+    000001C4 7E               [ 8]  470 	ld	a, (hl)
+    000001C5 F8 01            [12]  471 	ldhl	sp,	#1
+    000001C7 32               [ 8]  472 	ld	(hl-), a
+    000001C8 2A               [ 8]  473 	ld	a, (hl+)
+    000001C9 D6 14            [ 8]  474 	sub	a, #0x14
+    000001CB B6               [ 8]  475 	or	a, (hl)
+    000001CC CAr55r03         [16]  476 	jp	Z, 00137$
+                                    477 ;src/gbprinter.c:113: if ((y < height) && (x >= pos_x) && (x < (pos_x + width))) {
+    000001CF F8 13            [12]  478 	ldhl	sp,	#19
+    000001D1 7E               [ 8]  479 	ld	a, (hl)
+    000001D2 B7               [ 4]  480 	or	a, a
+    000001D3 CAr68r02         [16]  481 	jp	Z, 00104$
+    000001D6 F8 23            [12]  482 	ldhl	sp,	#35
+    000001D8 7E               [ 8]  483 	ld	a, (hl)
+    000001D9 4F               [ 4]  484 	ld	c, a
+    000001DA 07               [ 4]  485 	rlca
+    000001DB 9F               [ 4]  486 	sbc	a, a
+    000001DC 47               [ 4]  487 	ld	b, a
+    000001DD F8 1F            [12]  488 	ldhl	sp,	#31
+    000001DF 2A               [ 8]  489 	ld	a, (hl+)
+    000001E0 91               [ 4]  490 	sub	a, c
+    000001E1 7E               [ 8]  491 	ld	a, (hl)
+    000001E2 98               [ 4]  492 	sbc	a, b
+    000001E3 56               [ 8]  493 	ld	d, (hl)
+    000001E4 78               [ 4]  494 	ld	a, b
+    000001E5 CB 7F            [ 8]  495 	bit	7,a
+    000001E7 28 07            [12]  496 	jr	Z, 00277$
+    000001E9 CB 7A            [ 8]  497 	bit	7, d
+    000001EB 20 08            [12]  498 	jr	NZ, 00278$
+    000001ED BF               [ 4]  499 	cp	a, a
+    000001EE 18 05            [12]  500 	jr	00278$
+    000001F0                        501 00277$:
+    000001F0 CB 7A            [ 8]  502 	bit	7, d
+    000001F2 28 01            [12]  503 	jr	Z, 00278$
+    000001F4 37               [ 4]  504 	scf
+    000001F5                        505 00278$:
+    000001F5 38 71            [12]  506 	jr	C, 00104$
+    000001F7 F8 23            [12]  507 	ldhl	sp,	#35
+    000001F9 7E               [ 8]  508 	ld	a, (hl)
+    000001FA F8 17            [12]  509 	ldhl	sp,	#23
+    000001FC 22               [ 8]  510 	ld	(hl+), a
+    000001FD 07               [ 4]  511 	rlca
+    000001FE 9F               [ 4]  512 	sbc	a, a
+    000001FF 77               [ 8]  513 	ld	(hl), a
+    00000200 F8 24            [12]  514 	ldhl	sp,	#36
+    00000202 4E               [ 8]  515 	ld	c, (hl)
+    00000203 06 00            [ 8]  516 	ld	b, #0x00
+    00000205 F8 17            [12]  517 	ldhl	sp,	#23
+    00000207 2A               [ 8]  518 	ld	a,	(hl+)
+    00000208 66               [ 8]  519 	ld	h, (hl)
+    00000209 6F               [ 4]  520 	ld	l, a
+    0000020A 09               [ 8]  521 	add	hl, bc
+    0000020B 4D               [ 4]  522 	ld	c, l
+    0000020C 44               [ 4]  523 	ld	b, h
+    0000020D F8 00            [12]  524 	ldhl	sp,	#0
+    0000020F 2A               [ 8]  525 	ld	a, (hl+)
+    00000210 91               [ 4]  526 	sub	a, c
+    00000211 7E               [ 8]  527 	ld	a, (hl)
+    00000212 98               [ 4]  528 	sbc	a, b
+    00000213 56               [ 8]  529 	ld	d, (hl)
+    00000214 78               [ 4]  530 	ld	a, b
+    00000215 CB 7F            [ 8]  531 	bit	7,a
+    00000217 28 07            [12]  532 	jr	Z, 00279$
+    00000219 CB 7A            [ 8]  533 	bit	7, d
+    0000021B 20 08            [12]  534 	jr	NZ, 00280$
+    0000021D BF               [ 4]  535 	cp	a, a
+    0000021E 18 05            [12]  536 	jr	00280$
+    00000220                        537 00279$:
+    00000220 CB 7A            [ 8]  538 	bit	7, d
+    00000222 28 01            [12]  539 	jr	Z, 00280$
+    00000224 37               [ 4]  540 	scf
+    00000225                        541 00280$:
+    00000225 30 41            [12]  542 	jr	NC, 00104$
+                                    543 ;src/gbprinter.c:114: uint8_t tile = image_map[(y * width) + (x - pos_x)];
+    00000227 D1               [12]  544 	pop	de
+    00000228 D5               [16]  545 	push	de
+    00000229 F8 17            [12]  546 	ldhl	sp,	#23
+    0000022B 2A               [ 8]  547 	ld	a,	(hl+)
+    0000022C 66               [ 8]  548 	ld	h, (hl)
+    0000022D 6F               [ 4]  549 	ld	l, a
+    0000022E 7B               [ 4]  550 	ld	a, e
+    0000022F 95               [ 4]  551 	sub	a, l
+    00000230 5F               [ 4]  552 	ld	e, a
+    00000231 7A               [ 4]  553 	ld	a, d
+    00000232 9C               [ 4]  554 	sbc	a, h
+    00000233 47               [ 4]  555 	ld	b, a
+    00000234 4B               [ 4]  556 	ld	c, e
+    00000235 F8 14            [12]  557 	ldhl	sp,	#20
+    00000237 2A               [ 8]  558 	ld	a,	(hl+)
+    00000238 66               [ 8]  559 	ld	h, (hl)
+    00000239 6F               [ 4]  560 	ld	l, a
+    0000023A 09               [ 8]  561 	add	hl, bc
+    0000023B 4D               [ 4]  562 	ld	c, l
+    0000023C 44               [ 4]  563 	ld	b, h
+    0000023D F8 1B            [12]  564 	ldhl	sp,	#27
+    0000023F 2A               [ 8]  565 	ld	a,	(hl+)
+    00000240 66               [ 8]  566 	ld	h, (hl)
+    00000241 6F               [ 4]  567 	ld	l, a
+    00000242 09               [ 8]  568 	add	hl, bc
+    00000243 4D               [ 4]  569 	ld	c, l
+    00000244 44               [ 4]  570 	ld	b, h
+    00000245 0A               [ 8]  571 	ld	a, (bc)
+                                    572 ;src/gbprinter.c:115: memcpy(tile_data, img + ((uint16_t)tile << 4), sizeof(tile_data));
+    00000246 6F               [ 4]  573 	ld	l, a
+    00000247 26 00            [ 8]  574 	ld	h, #0x00
+    00000249 29               [ 8]  575 	add	hl, hl
+    0000024A 29               [ 8]  576 	add	hl, hl
+    0000024B 29               [ 8]  577 	add	hl, hl
+    0000024C 29               [ 8]  578 	add	hl, hl
+    0000024D 4D               [ 4]  579 	ld	c, l
+    0000024E 44               [ 4]  580 	ld	b, h
+    0000024F 79               [ 4]  581 	ld	a, c
+    00000250 21r05r00         [12]  582 	ld	hl, #_gbprinter_print_image_img_10000_183
+    00000253 86               [ 8]  583 	add	a, (hl)
+    00000254 23               [ 8]  584 	inc	hl
+    00000255 4F               [ 4]  585 	ld	c, a
+    00000256 78               [ 4]  586 	ld	a, b
+    00000257 8E               [ 8]  587 	adc	a, (hl)
+    00000258 47               [ 4]  588 	ld	b, a
+    00000259 11 10 00         [12]  589 	ld	de, #0x0010
+    0000025C D5               [16]  590 	push	de
+    0000025D 21 04 00         [12]  591 	ld	hl, #4
+    00000260 39               [ 8]  592 	add	hl, sp
+    00000261 5D               [ 4]  593 	ld	e, l
+    00000262 54               [ 4]  594 	ld	d, h
+    00000263 CDr00r00         [24]  595 	call	_memcpy
+    00000266 18 12            [12]  596 	jr	00105$
+    00000268                        597 00104$:
+                                    598 ;src/gbprinter.c:117: memset(tile_data, 0, sizeof(tile_data));
+    00000268 21 02 00         [12]  599 	ld	hl, #2
+    0000026B 39               [ 8]  600 	add	hl, sp
+    0000026C 11 10 00         [12]  601 	ld	de, #0x0010
+    0000026F D5               [16]  602 	push	de
+    00000270 11 00 00         [12]  603 	ld	de, #0x0000
+    00000273 D5               [16]  604 	push	de
+    00000274 E5               [16]  605 	push	hl
+    00000275 CDr00r00         [24]  606 	call	_memset
+    00000278 E8 06            [16]  607 	add	sp, #6
+    0000027A                        608 00105$:
+                                    609 ;src/gbprinter.c:120: if (printer_print_tile(tile_data)) {
+    0000027A 21 02 00         [12]  610 	ld	hl, #2
+    0000027D 39               [ 8]  611 	add	hl, sp
+    0000027E 5D               [ 4]  612 	ld	e, l
+    0000027F 54               [ 4]  613 	ld	d, h
+    00000280 CDr68r00         [24]  614 	call	_printer_print_tile
+    00000283 B7               [ 4]  615 	or	a, a
+    00000284 28 17            [12]  616 	jr	Z, 00111$
+                                    617 ;src/gbprinter.c:121: pkt_count++;
+    00000286 F8 1D            [12]  618 	ldhl	sp,	#29
+    00000288 34               [12]  619 	inc	(hl)
+                                    620 ;src/gbprinter.c:122: if (printer_check_cancel()) {
+    00000289 CDr00r00         [24]  621 	call	_printer_check_cancel
+    0000028C CB 47            [ 8]  622 	bit	0,a
+    0000028E 28 0D            [12]  623 	jr	Z, 00111$
+                                    624 ;src/gbprinter.c:123: PRINTER_SEND_COMMAND(PRN_PKT_CANCEL);
+    00000290 3E 0A            [ 8]  625 	ld	a, #0x0a
+    00000292 11r2Cr00         [12]  626 	ld	de, #_PRN_PKT_CANCEL
+    00000295 CDr47r00         [24]  627 	call	_printer_send_command
+                                    628 ;src/gbprinter.c:124: return PRN_STATUS_CANCELLED;
+    00000298 3E 40            [ 8]  629 	ld	a, #0x40
+    0000029A C3rBEr03         [16]  630 	jp	00138$
+    0000029D                        631 00111$:
+                                    632 ;src/gbprinter.c:127: if (pkt_count == 9) {
+    0000029D F8 1D            [12]  633 	ldhl	sp,	#29
+    0000029F 7E               [ 8]  634 	ld	a, (hl)
+    000002A0 D6 09            [ 8]  635 	sub	a, #0x09
+    000002A2 C2r4Ar03         [16]  636 	jp	NZ, 00134$
+                                    637 ;src/gbprinter.c:128: pkt_count = 0;
+    000002A5 F8 1D            [12]  638 	ldhl	sp,	#29
+    000002A7 36 00            [12]  639 	ld	(hl), #0x00
+                                    640 ;src/gbprinter.c:129: PRINTER_SEND_COMMAND(PRN_PKT_EOF);
+    000002A9 3E 0A            [ 8]  641 	ld	a, #0x0a
+    000002AB 11r22r00         [12]  642 	ld	de, #_PRN_PKT_EOF
+    000002AE CDr47r00         [24]  643 	call	_printer_send_command
+                                    644 ;src/gbprinter.c:131: gbprinter_set_print_params((y == (rows - 1)) ? PRN_FINAL_MARGIN : PRN_NO_MARGINS, PRN_PALETTE_NORMAL, PRN_EXPOSURE_DARK);
+    000002B1 F8 12            [12]  645 	ldhl	sp,	#18
+    000002B3 4E               [ 8]  646 	ld	c, (hl)
+    000002B4 AF               [ 4]  647 	xor	a, a
+    000002B5 47               [ 4]  648 	ld	b, a
+    000002B6 0B               [ 8]  649 	dec	bc
+    000002B7 F8 1E            [12]  650 	ldhl	sp,	#30
+    000002B9 5E               [ 8]  651 	ld	e, (hl)
+    000002BA 16 00            [ 8]  652 	ld	d, #0x00
+    000002BC 7B               [ 4]  653 	ld	a, e
+    000002BD 91               [ 4]  654 	sub	a, c
+    000002BE 20 06            [12]  655 	jr	NZ, 00283$
+    000002C0 7A               [ 4]  656 	ld	a, d
+    000002C1 90               [ 4]  657 	sub	a, b
+    000002C2 3E 01            [ 8]  658 	ld	a, #0x01
+    000002C4 28 01            [12]  659 	jr	Z, 00284$
+    000002C6                        660 00283$:
+    000002C6 AF               [ 4]  661 	xor	a, a
+    000002C7                        662 00284$:
+    000002C7 F8 16            [12]  663 	ldhl	sp,	#22
+    000002C9 77               [ 8]  664 	ld	(hl), a
+    000002CA B7               [ 4]  665 	or	a, a
+    000002CB 0E 03            [ 8]  666 	ld	c, #0x03
+    000002CD 20 02            [12]  667 	jr	NZ, 00141$
+    000002CF 0E 00            [ 8]  668 	ld	c, #0x00
+    000002D1                        669 00141$:
+                                    670 ;src/gbprinter.h:138: PRN_PKT_START.crc = ((PRN_CMD_PRINT + 0x04u + 0x01u) + (PRN_PKT_START.margins = margins) + (PRN_PKT_START.palette = palette) + (PRN_PKT_START.exposure = exposure));
+    000002D1 21r07r00         [12]  671 	ld	hl, #(_PRN_PKT_START + 7)
+    000002D4 79               [ 4]  672 	ld	a, c
+    000002D5 22               [ 8]  673 	ld	(hl+), a
+    000002D6 06 00            [ 8]  674 	ld	b, #0x00
+    000002D8 36 E4            [12]  675 	ld	(hl), #0xe4
+    000002DA 21r09r00         [12]  676 	ld	hl, #_PRN_PKT_START + 9
+    000002DD 36 7F            [12]  677 	ld	(hl), #0x7f
+    000002DF 21 6A 01         [12]  678 	ld	hl, #0x016a
+    000002E2 09               [ 8]  679 	add	hl, bc
+    000002E3 4D               [ 4]  680 	ld	c, l
+    000002E4 7C               [ 4]  681 	ld	a, h
+    000002E5 F8 17            [12]  682 	ldhl	sp,	#23
+    000002E7 71               [ 8]  683 	ld	(hl), c
+    000002E8 23               [ 8]  684 	inc	hl
+    000002E9 32               [ 8]  685 	ld	(hl-), a
+    000002EA 11r0Ar00         [12]  686 	ld	de, #(_PRN_PKT_START + 10)
+    000002ED 2A               [ 8]  687 	ld	a, (hl+)
+    000002EE 12               [ 8]  688 	ld	(de), a
+    000002EF 13               [ 8]  689 	inc	de
+    000002F0 7E               [ 8]  690 	ld	a, (hl)
+    000002F1 12               [ 8]  691 	ld	(de), a
+                                    692 ;src/gbprinter.c:132: PRINTER_SEND_COMMAND(PRN_PKT_START);
+    000002F2 3E 0E            [ 8]  693 	ld	a, #0x0e
+    000002F4 11r00r00         [12]  694 	ld	de, #_PRN_PKT_START
+    000002F7 CDr47r00         [24]  695 	call	_printer_send_command
+                                    696 ;src/gbprinter.c:134: if ((error = printer_wait(PRN_BUSY_TIMEOUT, PRN_STATUS_BUSY, PRN_STATUS_BUSY)) & PRN_STATUS_MASK_ERRORS) return error;
+    000002FA 3E 02            [ 8]  697 	ld	a, #0x02
+    000002FC F5               [16]  698 	push	af
+    000002FD 33               [ 8]  699 	inc	sp
+    000002FE 3E 02            [ 8]  700 	ld	a, #0x02
+    00000300 11 78 00         [12]  701 	ld	de, #0x0078
+    00000303 CDrF5r00         [24]  702 	call	_printer_wait
+    00000306 EAr07r00         [16]  703 	ld	(#_gbprinter_print_image_error_10000_183),a
+    00000309 E6 F0            [ 8]  704 	and	a, #0xf0
+    0000030B 28 06            [12]  705 	jr	Z, 00113$
+    0000030D FAr07r00         [16]  706 	ld	a, (_gbprinter_print_image_error_10000_183)
+    00000310 C3rBEr03         [16]  707 	jp	00138$
+    00000313                        708 00113$:
+                                    709 ;src/gbprinter.c:135: if ((error = printer_wait(PRN_COMPLETION_TIMEOUT, PRN_STATUS_BUSY, 0)) & PRN_STATUS_MASK_ERRORS) return error;
+    00000313 AF               [ 4]  710 	xor	a, a
+    00000314 F5               [16]  711 	push	af
+    00000315 33               [ 8]  712 	inc	sp
+    00000316 3E 02            [ 8]  713 	ld	a, #0x02
+    00000318 11 B0 04         [12]  714 	ld	de, #0x04b0
+    0000031B CDrF5r00         [24]  715 	call	_printer_wait
+    0000031E EAr07r00         [16]  716 	ld	(#_gbprinter_print_image_error_10000_183),a
+    00000321 E6 F0            [ 8]  717 	and	a, #0xf0
+    00000323 28 06            [12]  718 	jr	Z, 00115$
+    00000325 FAr07r00         [16]  719 	ld	a, (_gbprinter_print_image_error_10000_183)
+    00000328 C3rBEr03         [16]  720 	jp	00138$
+    0000032B                        721 00115$:
+                                    722 ;src/gbprinter.c:138: if (y != (rows - 1)) {
+    0000032B F8 16            [12]  723 	ldhl	sp,	#22
+    0000032D CB 46            [12]  724 	bit	0, (hl)
+    0000032F 20 19            [12]  725 	jr	NZ, 00134$
+                                    726 ;src/gbprinter.c:139: PRINTER_SEND_COMMAND(PRN_PKT_INIT);
+    00000331 3E 0A            [ 8]  727 	ld	a, #0x0a
+    00000333 11r0Er00         [12]  728 	ld	de, #_PRN_PKT_INIT
+    00000336 CDr47r00         [24]  729 	call	_printer_send_command
+                                    730 ;src/gbprinter.c:140: if (error = printer_wait(PRN_SEIKO_RESET_TIMEOUT, PRN_STATUS_MASK_ANY, PRN_STATUS_OK)) return error;
+    00000339 AF               [ 4]  731 	xor	a, a
+    0000033A F5               [16]  732 	push	af
+    0000033B 33               [ 8]  733 	inc	sp
+    0000033C 3E FF            [ 8]  734 	ld	a, #0xff
+    0000033E 11 0A 00         [12]  735 	ld	de, #0x000a
+    00000341 CDrF5r00         [24]  736 	call	_printer_wait
+    00000344 EAr07r00         [16]  737 	ld	(#_gbprinter_print_image_error_10000_183),a
+    00000347 B7               [ 4]  738 	or	a,a
+    00000348 20 74            [12]  739 	jr	NZ, 00138$
+    0000034A                        740 00134$:
+                                    741 ;src/gbprinter.c:111: for (int16_t x = 0; x != PRN_TILE_WIDTH; x++) {
+    0000034A F8 1F            [12]  742 	ldhl	sp,	#31
+    0000034C 34               [12]  743 	inc	(hl)
+    0000034D C2rBCr01         [16]  744 	jp	NZ, 00133$
+    00000350 23               [ 8]  745 	inc	hl
+    00000351 34               [12]  746 	inc	(hl)
+    00000352 C3rBCr01         [16]  747 	jp	00133$
+    00000355                        748 00137$:
+                                    749 ;src/gbprinter.c:110: for (uint8_t y = 0; y != rows; y++) {
+    00000355 F8 1E            [12]  750 	ldhl	sp,	#30
+    00000357 34               [12]  751 	inc	(hl)
+    00000358 C3r94r01         [16]  752 	jp	00136$
+    0000035B                        753 00123$:
+                                    754 ;src/gbprinter.c:146: if (pkt_count) {
+    0000035B F8 1D            [12]  755 	ldhl	sp,	#29
+    0000035D 7E               [ 8]  756 	ld	a, (hl)
+    0000035E B7               [ 4]  757 	or	a, a
+    0000035F 28 52            [12]  758 	jr	Z, 00129$
+                                    759 ;src/gbprinter.c:147: PRINTER_SEND_COMMAND(PRN_PKT_EOF);
+    00000361 3E 0A            [ 8]  760 	ld	a, #0x0a
+    00000363 11r22r00         [12]  761 	ld	de, #_PRN_PKT_EOF
+    00000366 CDr47r00         [24]  762 	call	_printer_send_command
+                                    763 ;src/gbprinter.h:138: PRN_PKT_START.crc = ((PRN_CMD_PRINT + 0x04u + 0x01u) + (PRN_PKT_START.margins = margins) + (PRN_PKT_START.palette = palette) + (PRN_PKT_START.exposure = exposure));
+    00000369 21r07r00         [12]  764 	ld	hl, #_PRN_PKT_START + 7
+    0000036C 36 03            [12]  765 	ld	(hl), #0x03
+    0000036E 21r08r00         [12]  766 	ld	hl, #(_PRN_PKT_START + 8)
+    00000371 3E E4            [ 8]  767 	ld	a, #0xe4
+    00000373 22               [ 8]  768 	ld	(hl+), a
+    00000374 3E 7F            [ 8]  769 	ld	a, #0x7f
+    00000376 22               [ 8]  770 	ld	(hl+), a
+    00000377 3E 6D            [ 8]  771 	ld	a, #0x6d
+    00000379 22               [ 8]  772 	ld	(hl+), a
+    0000037A 36 01            [12]  773 	ld	(hl), #0x01
+                                    774 ;src/gbprinter.c:150: PRINTER_SEND_COMMAND(PRN_PKT_START);
+    0000037C 3E 0E            [ 8]  775 	ld	a, #0x0e
+    0000037E 11r00r00         [12]  776 	ld	de, #_PRN_PKT_START
+    00000381 CDr47r00         [24]  777 	call	_printer_send_command
+                                    778 ;src/gbprinter.c:152: if ((error = printer_wait(PRN_BUSY_TIMEOUT, PRN_STATUS_BUSY, PRN_STATUS_BUSY)) & PRN_STATUS_MASK_ERRORS) return error;
+    00000384 3E 02            [ 8]  779 	ld	a, #0x02
+    00000386 F5               [16]  780 	push	af
+    00000387 33               [ 8]  781 	inc	sp
+    00000388 3E 02            [ 8]  782 	ld	a, #0x02
+    0000038A 11 78 00         [12]  783 	ld	de, #0x0078
+    0000038D CDrF5r00         [24]  784 	call	_printer_wait
+    00000390 EAr07r00         [16]  785 	ld	(#_gbprinter_print_image_error_10000_183),a
+    00000393 E6 F0            [ 8]  786 	and	a, #0xf0
+    00000395 28 05            [12]  787 	jr	Z, 00125$
+    00000397 FAr07r00         [16]  788 	ld	a, (_gbprinter_print_image_error_10000_183)
+    0000039A 18 22            [12]  789 	jr	00138$
+    0000039C                        790 00125$:
+                                    791 ;src/gbprinter.c:153: if ((error = printer_wait(PRN_COMPLETION_TIMEOUT, PRN_STATUS_BUSY, 0)) & PRN_STATUS_MASK_ERRORS) return error;
+    0000039C AF               [ 4]  792 	xor	a, a
+    0000039D F5               [16]  793 	push	af
+    0000039E 33               [ 8]  794 	inc	sp
+    0000039F 3E 02            [ 8]  795 	ld	a, #0x02
+    000003A1 11 B0 04         [12]  796 	ld	de, #0x04b0
+    000003A4 CDrF5r00         [24]  797 	call	_printer_wait
+    000003A7 EAr07r00         [16]  798 	ld	(#_gbprinter_print_image_error_10000_183),a
+    000003AA E6 F0            [ 8]  799 	and	a, #0xf0
+    000003AC 28 05            [12]  800 	jr	Z, 00129$
+    000003AE FAr07r00         [16]  801 	ld	a, (_gbprinter_print_image_error_10000_183)
+    000003B1 18 0B            [12]  802 	jr	00138$
+    000003B3                        803 00129$:
+                                    804 ;src/gbprinter.c:155: return PRINTER_SEND_COMMAND(PRN_PKT_STATUS);
+    000003B3 3E 0A            [ 8]  805 	ld	a, #0x0a
+    000003B5 11r18r00         [12]  806 	ld	de, #_PRN_PKT_STATUS
+    000003B8 CDr47r00         [24]  807 	call	_printer_send_command
+    000003BB F8 20            [12]  808 	ldhl	sp,#32
+    000003BD 77               [ 8]  809 	ld	(hl), a
+    000003BE                        810 00138$:
+                                    811 ;src/gbprinter.c:156: }
+    000003BE E8 21            [16]  812 	add	sp, #33
+    000003C0 E1               [12]  813 	pop	hl
+    000003C1 E8 03            [16]  814 	add	sp, #3
+    000003C3 E9               [ 4]  815 	jp	(hl)
+                                    816 	.area _CODE
+                                    817 	.area _INITIALIZER
+    00000000                        818 __xinit__PRN_PKT_START:
+    00000000 88 33                  819 	.dw #0x3388
+    00000002 02 00                  820 	.dw #0x0002
+    00000004 04 00                  821 	.dw #0x0004
+    00000006 01                     822 	.db #0x01	; 1
+    00000007 00                     823 	.db #0x00	; 0
+    00000008 E4                     824 	.db #0xe4	; 228
+    00000009 7F                     825 	.db #0x7f	; 127
+    0000000A 00 00                  826 	.dw #0x0000
+    0000000C 00 00                  827 	.dw #0x0000
+                                    828 	.area _CABS (ABS)

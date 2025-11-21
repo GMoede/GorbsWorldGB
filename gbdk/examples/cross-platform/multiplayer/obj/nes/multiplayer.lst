@@ -1,0 +1,564 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module multiplayer
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _sprite_data
+                                     22 	.globl _main
+                                     23 	.globl _scroll_sprite
+                                     24 	.globl _move_sprite
+                                     25 	.globl _set_sprite_tile
+                                     26 	.globl _set_sprite_data
+                                     27 	.globl _vsync
+                                     28 	.globl _joypad_ex
+                                     29 	.globl _joypad_init
+                                     30 	.globl _joypads
+                                     31 	.globl _OAMDMA
+                                     32 	.globl _PPUDATA
+                                     33 	.globl _PPUADDR
+                                     34 	.globl _PPUSCROLL
+                                     35 	.globl _OAMDATA
+                                     36 	.globl _OAMADDR
+                                     37 	.globl _PPUSTATUS
+                                     38 	.globl _PPUMASK
+                                     39 	.globl _PPUCTRL
+                                     40 ;--------------------------------------------------------
+                                     41 ; ZP ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _ZP      (PAG)
+                                     44 ;--------------------------------------------------------
+                                     45 ; overlayable items in ram
+                                     46 ;--------------------------------------------------------
+                                     47 	.area	OSEG    (PAG, OVR)
+    00000000                         48 _main_sloc0_1_0:
+    00000000                         49 	.ds 1
+                                     50 ;--------------------------------------------------------
+                                     51 ; uninitialized external ram data
+                                     52 ;--------------------------------------------------------
+                                     53 	.area _BSS
+                         00002000    54 _PPUCTRL	=	0x2000
+                         00002001    55 _PPUMASK	=	0x2001
+                         00002002    56 _PPUSTATUS	=	0x2002
+                         00002003    57 _OAMADDR	=	0x2003
+                         00002004    58 _OAMDATA	=	0x2004
+                         00002005    59 _PPUSCROLL	=	0x2005
+                         00002006    60 _PPUADDR	=	0x2006
+                         00002007    61 _PPUDATA	=	0x2007
+                         00004014    62 _OAMDMA	=	0x4014
+    00000000                         63 _joypads::
+    00000000                         64 	.ds 5
+    00000005                         65 _main_joy_40000_106:
+    00000005                         66 	.ds 1
+                                     67 ;--------------------------------------------------------
+                                     68 ; absolute external ram data
+                                     69 ;--------------------------------------------------------
+                                     70 	.area _DABS    (ABS)
+                                     71 ;--------------------------------------------------------
+                                     72 ; initialized external ram data
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _DATA
+                                     75 ;--------------------------------------------------------
+                                     76 ; global & static initialisations
+                                     77 ;--------------------------------------------------------
+                                     78 	.area _HOME
+                                     79 	.area _GSINIT
+                                     80 	.area _GSFINAL
+                                     81 	.area _GSINIT
+                                     82 ;--------------------------------------------------------
+                                     83 ; Home
+                                     84 ;--------------------------------------------------------
+                                     85 	.area _HOME
+                                     86 	.area _HOME
+                                     87 ;--------------------------------------------------------
+                                     88 ; code
+                                     89 ;--------------------------------------------------------
+                                     90 	.area _CODE
+                                     91 ;------------------------------------------------------------
+                                     92 ;Allocation info for local variables in function 'main'
+                                     93 ;------------------------------------------------------------
+                                     94 ;i             Allocated to registers 
+                                     95 ;i             Allocated to registers 
+                                     96 ;i             Allocated to registers 
+                                     97 ;joy           Allocated with name '_main_joy_40000_106'
+                                     98 ;i             Allocated to registers 
+                                     99 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                    100 ;------------------------------------------------------------
+                                    101 ;	src/multiplayer.c: 14: void main(void) {
+                                    102 ;	genLabel
+                                    103 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    104 ;	-----------------------------------------
+                                    105 ;	 function main
+                                    106 ;	-----------------------------------------
+                                    107 ;	Register assignment is optimal.
+                                    108 ;	Stack space usage: 0 bytes.
+    00000000                        109 _main:
+                                    110 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    111 ;	src/multiplayer.c: 15: set_sprite_data(0, 4, sprite_data);
+                                    112 ;	skipping iCode since result will be rematerialized
+                                    113 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    114 ;	genCast
+                                    115 ;	genCopy
+    00000000 A9s00            [ 2]  116 	lda	#>_sprite_data
+    00000002 8Dr01r00         [ 4]  117 	sta	(_set_sprite_data_PARM_3 + 1)
+    00000005 A9rFE            [ 2]  118 	lda	#_sprite_data
+    00000007 8Dr00r00         [ 4]  119 	sta	_set_sprite_data_PARM_3
+                                    120 ;	Raw cost for generated ic 3 : (10, 12.000000) count=1.000000
+                                    121 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    122 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    123 ;	genCall
+                                    124 ;	genSend
+    0000000A A9 00            [ 2]  125 	lda	#0x00
+    0000000C A2 04            [ 2]  126 	ldx	#0x04
+    0000000E 20r00r00         [ 6]  127 	jsr	_set_sprite_data
+                                    128 ;	Raw cost for generated ic 7 : (7, 10.000000) count=1.000000
+                                    129 ;	src/multiplayer.c: 16: for (uint8_t i = 0; i < 4; i++) {
+                                    130 ;	genAssign
+                                    131 ;	genAssignLit
+    00000011 A2 00            [ 2]  132 	ldx	#0x00
+    00000013 86*00            [ 3]  133 	stx	*_main_sloc0_1_0
+                                    134 ;	Raw cost for generated ic 155 : (4, 5.000000) count=1.000000
+                                    135 ;	genLabel
+    00000015                        136 00119$:
+                                    137 ;	Raw cost for generated ic 9 : (0, 0.000000) count=3.999997
+                                    138 ;	genCmp
+    00000015 A5*00            [ 3]  139 	lda	*_main_sloc0_1_0
+    00000017 C9 04            [ 2]  140 	cmp	#0x04
+    00000019 B0 1F            [ 4]  141 	bcs	00101$
+                                    142 ;	Raw cost for generated ic 10 : (9, 10.600000) count=3.999997
+                                    143 ;	skipping generated iCode
+                                    144 ;	Raw cost for generated ic 11 : (0, 0.000000) count=3.999997
+                                    145 ;	src/multiplayer.c: 17: set_sprite_tile(i, i);
+                                    146 ;	Raw cost for generated ic 14 : (0, 0.000000) count=2.999997
+                                    147 ;	Raw cost for generated ic 15 : (0, 0.000000) count=2.999997
+                                    148 ;	genCall
+                                    149 ;	genSend
+    0000001B A5*00            [ 3]  150 	lda	*_main_sloc0_1_0
+    0000001D A6*00            [ 3]  151 	ldx	*_main_sloc0_1_0
+    0000001F 20r00r00         [ 6]  152 	jsr	_set_sprite_tile
+                                    153 ;	Raw cost for generated ic 16 : (7, 12.000000) count=2.999997
+                                    154 ;	src/multiplayer.c: 19: DEVICE_SPRITE_PX_OFFSET_X + (i << 3) + ((DEVICE_SCREEN_PX_WIDTH - (4 * 8)) / 2), 
+                                    155 ;	genLeftShift
+                                    156 ;	genLeftShiftLiteral
+                                    157 ;	genlshOne
+    00000022 A5*00            [ 3]  158 	lda	*_main_sloc0_1_0
+    00000024 0A               [ 2]  159 	asl	a
+    00000025 0A               [ 2]  160 	asl	a
+    00000026 0A               [ 2]  161 	asl	a
+                                    162 ;	Raw cost for generated ic 17 : (5, 9.000000) count=2.999997
+                                    163 ;	genCast
+                                    164 ;	genCopy
+                                    165 ;	Raw cost for generated ic 18 : (0, 0.000000) count=2.999997
+                                    166 ;	genPlus
+                                    167 ;	genPlusIncr
+    00000027 18               [ 2]  168 	clc
+    00000028 69 70            [ 2]  169 	adc	#0x70
+                                    170 ;	Raw cost for generated ic 19 : (3, 4.000000) count=2.999997
+                                    171 ;	src/multiplayer.c: 20: DEVICE_SPRITE_PX_OFFSET_Y + ((DEVICE_SCREEN_PX_HEIGHT - 8) / 2));
+                                    172 ;	genAssign
+                                    173 ;	genAssignLit
+    0000002A A2 73            [ 2]  174 	ldx	#0x73
+    0000002C 8Er00r00         [ 4]  175 	stx	_move_sprite_PARM_3
+                                    176 ;	Raw cost for generated ic 22 : (5, 6.000000) count=2.999997
+                                    177 ;	Raw cost for generated ic 20 : (0, 0.000000) count=2.999997
+                                    178 ;	Raw cost for generated ic 21 : (0, 0.000000) count=2.999997
+                                    179 ;	genCall
+                                    180 ;	genSend
+    0000002F AA               [ 2]  181 	tax
+    00000030 A5*00            [ 3]  182 	lda	*_main_sloc0_1_0
+    00000032 20r00r00         [ 6]  183 	jsr	_move_sprite
+                                    184 ;	Raw cost for generated ic 23 : (6, 11.000000) count=2.999997
+                                    185 ;	src/multiplayer.c: 16: for (uint8_t i = 0; i < 4; i++) {
+                                    186 ;	genPlus
+                                    187 ;	genPlusIncr
+    00000035 E6*00            [ 5]  188 	inc	*_main_sloc0_1_0
+                                    189 ;	Raw cost for generated ic 26 : (2, 5.000000) count=2.999997
+                                    190 ;	genGoto
+    00000037 4Cr15r00         [ 3]  191 	jmp	00119$
+                                    192 ;	Raw cost for generated ic 28 : (3, 3.000000) count=2.999997
+                                    193 ;	genLabel
+    0000003A                        194 00101$:
+                                    195 ;	Raw cost for generated ic 29 : (0, 0.000000) count=0.999999
+                                    196 ;	src/multiplayer.c: 22: SHOW_SPRITES;
+                                    197 ;	genOr
+    0000003A ADr00r00         [ 4]  198 	lda	_shadow_PPUMASK
+    0000003D 09 10            [ 2]  199 	ora	#0x10
+    0000003F 8Dr00r00         [ 4]  200 	sta	_shadow_PPUMASK
+                                    201 ;	Raw cost for generated ic 30 : (8, 10.000000) count=0.999999
+                                    202 ;	src/multiplayer.c: 26: for (uint8_t i = 4; i != 0; i--) vsync();
+                                    203 ;	genAssign
+                                    204 ;	genAssignLit
+                                    205 ;	genCopy
+    00000042 A9 04            [ 2]  206 	lda	#0x04
+                                    207 ;	Raw cost for generated ic 158 : (2, 2.000000) count=0.999999
+                                    208 ;	genLabel
+    00000044                        209 00122$:
+                                    210 ;	Raw cost for generated ic 33 : (0, 0.000000) count=3.999993
+                                    211 ;	genIfx
+    00000044 C9 00            [ 2]  212 	cmp	#0x00
+                                    213 ;	genIfxJump : z
+    00000046 F0 0B            [ 4]  214 	beq	00102$
+                                    215 ;	Raw cost for generated ic 34 : (7, 7.600000) count=3.999993
+                                    216 ;	genCall
+    00000048 48               [ 3]  217 	pha
+    00000049 20r00r00         [ 6]  218 	jsr	_vsync
+    0000004C 68               [ 4]  219 	pla
+                                    220 ;	Raw cost for generated ic 37 : (5, 13.000000) count=2.999994
+                                    221 ;	genMinus
+                                    222 ;	genMinusDec
+    0000004D 38               [ 2]  223 	sec
+    0000004E E9 01            [ 2]  224 	sbc	#0x01
+                                    225 ;	Raw cost for generated ic 40 : (3, 4.000000) count=2.999994
+                                    226 ;	genGoto
+    00000050 4Cr44r00         [ 3]  227 	jmp	00122$
+                                    228 ;	Raw cost for generated ic 42 : (3, 3.000000) count=2.999994
+                                    229 ;	genLabel
+    00000053                        230 00102$:
+                                    231 ;	Raw cost for generated ic 43 : (0, 0.000000) count=0.999998
+                                    232 ;	src/multiplayer.c: 29: joypad_init(4, &joypads);
+                                    233 ;	skipping iCode since result will be rematerialized
+                                    234 ;	Raw cost for generated ic 44 : (0, 0.000000) count=0.999998
+                                    235 ;	genCast
+                                    236 ;	genCopy
+    00000053 A9s00            [ 2]  237 	lda	#>_joypads
+    00000055 8Dr01r00         [ 4]  238 	sta	(_joypad_init_PARM_2 + 1)
+    00000058 A9r00            [ 2]  239 	lda	#_joypads
+    0000005A 8Dr00r00         [ 4]  240 	sta	_joypad_init_PARM_2
+                                    241 ;	Raw cost for generated ic 45 : (10, 12.000000) count=0.999998
+                                    242 ;	Raw cost for generated ic 46 : (0, 0.000000) count=0.999998
+                                    243 ;	genCall
+                                    244 ;	genSend
+    0000005D A9 04            [ 2]  245 	lda	#0x04
+    0000005F 20r00r00         [ 6]  246 	jsr	_joypad_init
+                                    247 ;	Raw cost for generated ic 48 : (5, 8.000000) count=0.999998
+                                    248 ;	src/multiplayer.c: 31: while(1) {
+                                    249 ;	genLabel
+    00000062                        250 00116$:
+                                    251 ;	Raw cost for generated ic 51 : (0, 0.000000) count=11.249851
+                                    252 ;	src/multiplayer.c: 33: joypad_ex(&joypads);
+                                    253 ;	skipping iCode since result will be rematerialized
+                                    254 ;	Raw cost for generated ic 53 : (0, 0.000000) count=11.249851
+                                    255 ;	Raw cost for generated ic 54 : (0, 0.000000) count=11.249851
+                                    256 ;	genCall
+                                    257 ;	genSend
+    00000062 A2s00            [ 2]  258 	ldx	#>_joypads
+    00000064 A9r00            [ 2]  259 	lda	#_joypads
+    00000066 20r00r00         [ 6]  260 	jsr	_joypad_ex
+                                    261 ;	Raw cost for generated ic 55 : (7, 10.000000) count=11.249851
+                                    262 ;	src/multiplayer.c: 35: for (uint8_t i = 0; i < joypads.npads; i++) {
+                                    263 ;	skipping iCode since result will be rematerialized
+                                    264 ;	Raw cost for generated ic 66 : (0, 0.000000) count=11.249851
+                                    265 ;	genAssign
+                                    266 ;	genAssignLit
+    00000069 A2 00            [ 2]  267 	ldx	#0x00
+    0000006B 86*00            [ 3]  268 	stx	*_main_sloc0_1_0
+                                    269 ;	Raw cost for generated ic 161 : (4, 5.000000) count=11.249851
+                                    270 ;	genLabel
+    0000006D                        271 00125$:
+                                    272 ;	Raw cost for generated ic 57 : (0, 0.000000) count=43.079407
+                                    273 ;	genPointerGet
+                                    274 ;	genDataPointerGet
+    0000006D ADr00r00         [ 4]  275 	lda	_joypads
+                                    276 ;	Raw cost for generated ic 60 : (3, 4.000000) count=43.079407
+                                    277 ;	genCmp
+    00000070 C5*00            [ 3]  278 	cmp	*_main_sloc0_1_0
+    00000072 F0 55            [ 4]  279 	beq	00111$
+    00000074 90 53            [ 4]  280 	bcc	00111$
+                                    281 ;	Raw cost for generated ic 61 : (9, 11.200000) count=43.079407
+                                    282 ;	skipping generated iCode
+                                    283 ;	Raw cost for generated ic 62 : (0, 0.000000) count=43.079407
+                                    284 ;	src/multiplayer.c: 36: uint8_t joy = joypads.joypads[i];
+                                    285 ;	genAssign
+                                    286 ;	genAssignLit
+                                    287 ;	genCopy
+    00000076 A2 00            [ 2]  288 	ldx	#0x00
+    00000078 A5*00            [ 3]  289 	lda	*_main_sloc0_1_0
+                                    290 ;	Raw cost for generated ic 68 : (4, 5.000000) count=32.309555
+                                    291 ;	genPointerGet
+    0000007A A8               [ 2]  292 	tay
+    0000007B B9r01r00         [ 5]  293 	lda	((_joypads + 0x0001)+0+0x0000),y
+                                    294 ;	Raw cost for generated ic 69 : (4, 6.000000) count=32.309555
+                                    295 ;	genCast
+                                    296 ;	genCopy
+                                    297 ;	Raw cost for generated ic 70 : (3, 4.000000) count=32.309555
+                                    298 ;	src/multiplayer.c: 37: if (joy & J_LEFT) scroll_sprite(i, -1, 0);
+                                    299 ;	genAnd
+    0000007E 8Dr05r00         [ 4]  300 	sta	_main_joy_40000_106
+    00000081 29 02            [ 2]  301 	and	#0x02
+                                    302 ;	genIfxJump : z
+    00000083 F0 09            [ 4]  303 	beq	00104$
+                                    304 ;	Raw cost for generated ic 72 : (10, 11.600000) count=32.309555
+                                    305 ;	skipping generated iCode
+                                    306 ;	Raw cost for generated ic 73 : (0, 0.000000) count=32.309555
+                                    307 ;	genAssign
+                                    308 ;	genAssignLit
+    00000085 8Er00r00         [ 4]  309 	stx	_scroll_sprite_PARM_3
+                                    310 ;	Raw cost for generated ic 78 : (3, 4.000000) count=24.232166
+                                    311 ;	Raw cost for generated ic 76 : (0, 0.000000) count=24.232166
+                                    312 ;	Raw cost for generated ic 77 : (0, 0.000000) count=24.232166
+                                    313 ;	genCall
+                                    314 ;	genSend
+    00000088 A5*00            [ 3]  315 	lda	*_main_sloc0_1_0
+    0000008A CA               [ 2]  316 	dex
+    0000008B 20r00r00         [ 6]  317 	jsr	_scroll_sprite
+                                    318 ;	Raw cost for generated ic 79 : (6, 11.000000) count=24.232166
+                                    319 ;	genLabel
+    0000008E                        320 00104$:
+                                    321 ;	Raw cost for generated ic 80 : (0, 0.000000) count=32.309555
+                                    322 ;	src/multiplayer.c: 38: if (joy & J_RIGHT) scroll_sprite(i, 1, 0);
+                                    323 ;	genAnd
+    0000008E ADr05r00         [ 4]  324 	lda	_main_joy_40000_106
+    00000091 29 01            [ 2]  325 	and	#0x01
+                                    326 ;	genIfxJump : z
+    00000093 F0 0B            [ 4]  327 	beq	00106$
+                                    328 ;	Raw cost for generated ic 82 : (10, 11.600000) count=32.309555
+                                    329 ;	skipping generated iCode
+                                    330 ;	Raw cost for generated ic 83 : (0, 0.000000) count=32.309555
+                                    331 ;	genAssign
+                                    332 ;	genAssignLit
+    00000095 A2 00            [ 2]  333 	ldx	#0x00
+    00000097 8Er00r00         [ 4]  334 	stx	_scroll_sprite_PARM_3
+                                    335 ;	Raw cost for generated ic 88 : (5, 6.000000) count=24.232166
+                                    336 ;	Raw cost for generated ic 86 : (0, 0.000000) count=24.232166
+                                    337 ;	Raw cost for generated ic 87 : (0, 0.000000) count=24.232166
+                                    338 ;	genCall
+                                    339 ;	genSend
+    0000009A A5*00            [ 3]  340 	lda	*_main_sloc0_1_0
+    0000009C E8               [ 2]  341 	inx
+    0000009D 20r00r00         [ 6]  342 	jsr	_scroll_sprite
+                                    343 ;	Raw cost for generated ic 89 : (6, 11.000000) count=24.232166
+                                    344 ;	genLabel
+    000000A0                        345 00106$:
+                                    346 ;	Raw cost for generated ic 90 : (0, 0.000000) count=32.309555
+                                    347 ;	src/multiplayer.c: 39: if (joy & J_UP) scroll_sprite(i, 0, -1);
+                                    348 ;	genAnd
+    000000A0 ADr05r00         [ 4]  349 	lda	_main_joy_40000_106
+    000000A3 29 08            [ 2]  350 	and	#0x08
+                                    351 ;	genIfxJump : z
+    000000A5 F0 0B            [ 4]  352 	beq	00108$
+                                    353 ;	Raw cost for generated ic 92 : (10, 11.600000) count=32.309555
+                                    354 ;	skipping generated iCode
+                                    355 ;	Raw cost for generated ic 93 : (0, 0.000000) count=32.309555
+                                    356 ;	genAssign
+                                    357 ;	genAssignLit
+    000000A7 A2 FF            [ 2]  358 	ldx	#0xff
+    000000A9 8Er00r00         [ 4]  359 	stx	_scroll_sprite_PARM_3
+                                    360 ;	Raw cost for generated ic 98 : (5, 6.000000) count=24.232166
+                                    361 ;	Raw cost for generated ic 96 : (0, 0.000000) count=24.232166
+                                    362 ;	Raw cost for generated ic 97 : (0, 0.000000) count=24.232166
+                                    363 ;	genCall
+                                    364 ;	genSend
+    000000AC A5*00            [ 3]  365 	lda	*_main_sloc0_1_0
+    000000AE E8               [ 2]  366 	inx
+    000000AF 20r00r00         [ 6]  367 	jsr	_scroll_sprite
+                                    368 ;	Raw cost for generated ic 99 : (6, 11.000000) count=24.232166
+                                    369 ;	genLabel
+    000000B2                        370 00108$:
+                                    371 ;	Raw cost for generated ic 100 : (0, 0.000000) count=32.309555
+                                    372 ;	src/multiplayer.c: 40: if (joy & J_DOWN) scroll_sprite(i, 0, 1);
+                                    373 ;	genAnd
+    000000B2 ADr05r00         [ 4]  374 	lda	_main_joy_40000_106
+    000000B5 29 04            [ 2]  375 	and	#0x04
+                                    376 ;	genIfxJump : z
+    000000B7 F0 0B            [ 4]  377 	beq	00126$
+                                    378 ;	Raw cost for generated ic 102 : (10, 11.600000) count=32.309555
+                                    379 ;	skipping generated iCode
+                                    380 ;	Raw cost for generated ic 103 : (0, 0.000000) count=32.309555
+                                    381 ;	genAssign
+                                    382 ;	genAssignLit
+    000000B9 A2 01            [ 2]  383 	ldx	#0x01
+    000000BB 8Er00r00         [ 4]  384 	stx	_scroll_sprite_PARM_3
+                                    385 ;	Raw cost for generated ic 108 : (5, 6.000000) count=24.232166
+                                    386 ;	Raw cost for generated ic 106 : (0, 0.000000) count=24.232166
+                                    387 ;	Raw cost for generated ic 107 : (0, 0.000000) count=24.232166
+                                    388 ;	genCall
+                                    389 ;	genSend
+    000000BE A5*00            [ 3]  390 	lda	*_main_sloc0_1_0
+    000000C0 CA               [ 2]  391 	dex
+    000000C1 20r00r00         [ 6]  392 	jsr	_scroll_sprite
+                                    393 ;	Raw cost for generated ic 109 : (6, 11.000000) count=24.232166
+                                    394 ;	genLabel
+    000000C4                        395 00126$:
+                                    396 ;	Raw cost for generated ic 111 : (0, 0.000000) count=32.309555
+                                    397 ;	src/multiplayer.c: 35: for (uint8_t i = 0; i < joypads.npads; i++) {
+                                    398 ;	genPlus
+                                    399 ;	genPlusIncr
+    000000C4 E6*00            [ 5]  400 	inc	*_main_sloc0_1_0
+                                    401 ;	Raw cost for generated ic 113 : (2, 5.000000) count=32.309555
+                                    402 ;	genGoto
+    000000C6 4Cr6Dr00         [ 3]  403 	jmp	00125$
+                                    404 ;	Raw cost for generated ic 115 : (3, 3.000000) count=32.309555
+                                    405 ;	genLabel
+    000000C9                        406 00111$:
+                                    407 ;	Raw cost for generated ic 116 : (0, 0.000000) count=10.769852
+                                    408 ;	src/multiplayer.c: 43: if (joypads.joy0 & J_START) {
+                                    409 ;	skipping iCode since result will be rematerialized
+                                    410 ;	Raw cost for generated ic 118 : (0, 0.000000) count=10.769852
+                                    411 ;	genPointerGet
+                                    412 ;	genDataPointerGet
+    000000C9 ADr01r00         [ 4]  413 	lda	(_joypads + 0x0001)
+                                    414 ;	Raw cost for generated ic 119 : (3, 4.000000) count=10.769852
+                                    415 ;	genAnd
+    000000CC 29 10            [ 2]  416 	and	#0x10
+                                    417 ;	genIfxJump : z
+    000000CE F0 27            [ 4]  418 	beq	00114$
+                                    419 ;	Raw cost for generated ic 121 : (7, 7.600000) count=10.769852
+                                    420 ;	skipping generated iCode
+                                    421 ;	Raw cost for generated ic 122 : (0, 0.000000) count=10.769852
+                                    422 ;	src/multiplayer.c: 44: for (uint8_t i = 0; i < 4; i++) move_sprite(i, (i << 3) + 64, 64);
+                                    423 ;	genAssign
+                                    424 ;	genAssignLit
+                                    425 ;	genCopy
+    000000D0 A0 00            [ 2]  426 	ldy	#0x00
+                                    427 ;	Raw cost for generated ic 164 : (2, 2.000000) count=8.077389
+                                    428 ;	genLabel
+    000000D2                        429 00128$:
+                                    430 ;	Raw cost for generated ic 126 : (0, 0.000000) count=30.869558
+                                    431 ;	genCmp
+    000000D2 C0 04            [ 2]  432 	cpy	#0x04
+    000000D4 B0 21            [ 4]  433 	bcs	00114$
+                                    434 ;	Raw cost for generated ic 127 : (7, 7.600000) count=30.869558
+                                    435 ;	skipping generated iCode
+                                    436 ;	Raw cost for generated ic 128 : (0, 0.000000) count=30.869558
+                                    437 ;	genLeftShift
+                                    438 ;	genLeftShiftLiteral
+                                    439 ;	genlshOne
+    000000D6 98               [ 2]  440 	tya
+    000000D7 0A               [ 2]  441 	asl	a
+    000000D8 0A               [ 2]  442 	asl	a
+    000000D9 0A               [ 2]  443 	asl	a
+                                    444 ;	Raw cost for generated ic 131 : (4, 8.000000) count=23.152168
+                                    445 ;	genCast
+                                    446 ;	genCopy
+                                    447 ;	Raw cost for generated ic 132 : (0, 0.000000) count=23.152168
+                                    448 ;	genPlus
+                                    449 ;	genPlusIncr
+    000000DA 18               [ 2]  450 	clc
+    000000DB 69 40            [ 2]  451 	adc	#0x40
+                                    452 ;	Raw cost for generated ic 133 : (3, 4.000000) count=23.152168
+                                    453 ;	genAssign
+                                    454 ;	genAssignLit
+    000000DD A2 40            [ 2]  455 	ldx	#0x40
+    000000DF 8Er00r00         [ 4]  456 	stx	_move_sprite_PARM_3
+                                    457 ;	Raw cost for generated ic 136 : (5, 6.000000) count=23.152168
+                                    458 ;	Raw cost for generated ic 134 : (0, 0.000000) count=23.152168
+                                    459 ;	Raw cost for generated ic 135 : (0, 0.000000) count=23.152168
+                                    460 ;	genCall
+    000000E2 85*00            [ 3]  461 	sta	*(REGTEMP+0)
+    000000E4 98               [ 2]  462 	tya
+    000000E5 48               [ 3]  463 	pha
+    000000E6 A5*00            [ 3]  464 	lda	*(REGTEMP+0)
+                                    465 ;	genSend
+    000000E8 AA               [ 2]  466 	tax
+    000000E9 98               [ 2]  467 	tya
+    000000EA 20r00r00         [ 6]  468 	jsr	_move_sprite
+    000000ED 85*00            [ 3]  469 	sta	*(REGTEMP+0)
+    000000EF 68               [ 4]  470 	pla
+    000000F0 A8               [ 2]  471 	tay
+    000000F1 A5*00            [ 3]  472 	lda	*(REGTEMP+0)
+                                    473 ;	Raw cost for generated ic 137 : (17, 33.000000) count=23.152168
+                                    474 ;	genPlus
+                                    475 ;	genPlusIncr
+    000000F3 C8               [ 2]  476 	iny
+                                    477 ;	Raw cost for generated ic 140 : (1, 2.000000) count=23.152168
+                                    478 ;	genGoto
+    000000F4 4CrD2r00         [ 3]  479 	jmp	00128$
+                                    480 ;	Raw cost for generated ic 142 : (3, 3.000000) count=23.152168
+                                    481 ;	genLabel
+    000000F7                        482 00114$:
+                                    483 ;	Raw cost for generated ic 144 : (0, 0.000000) count=10.409852
+                                    484 ;	src/multiplayer.c: 46: vsync();
+                                    485 ;	genCall
+    000000F7 20r00r00         [ 6]  486 	jsr	_vsync
+                                    487 ;	Raw cost for generated ic 145 : (3, 6.000000) count=10.409852
+                                    488 ;	genGoto
+    000000FA 4Cr62r00         [ 3]  489 	jmp	00116$
+                                    490 ;	Raw cost for generated ic 146 : (3, 3.000000) count=10.409852
+                                    491 ;	genLabel
+                                    492 ;	Raw cost for generated ic 148 : (0, 0.000000) count=0.000000
+                                    493 ;	src/multiplayer.c: 48: }
+                                    494 ;	genEndFunction
+    000000FD 60               [ 6]  495 	rts
+                                    496 ;	Raw cost for generated ic 149 : (1, 6.000000) count=0.000000
+                                    497 	.area _CODE
+    000000FE                        498 _sprite_data:
+    000000FE 3C                     499 	.db #0x3c	; 60
+    000000FF 3C                     500 	.db #0x3c	; 60
+    00000100 42                     501 	.db #0x42	; 66	'B'
+    00000101 7E                     502 	.db #0x7e	; 126
+    00000102 99                     503 	.db #0x99	; 153
+    00000103 FF                     504 	.db #0xff	; 255
+    00000104 A9                     505 	.db #0xa9	; 169
+    00000105 FF                     506 	.db #0xff	; 255
+    00000106 89                     507 	.db #0x89	; 137
+    00000107 FF                     508 	.db #0xff	; 255
+    00000108 89                     509 	.db #0x89	; 137
+    00000109 FF                     510 	.db #0xff	; 255
+    0000010A 42                     511 	.db #0x42	; 66	'B'
+    0000010B 7E                     512 	.db #0x7e	; 126
+    0000010C 3C                     513 	.db #0x3c	; 60
+    0000010D 3C                     514 	.db #0x3c	; 60
+    0000010E 3C                     515 	.db #0x3c	; 60
+    0000010F 3C                     516 	.db #0x3c	; 60
+    00000110 42                     517 	.db #0x42	; 66	'B'
+    00000111 7E                     518 	.db #0x7e	; 126
+    00000112 B9                     519 	.db #0xb9	; 185
+    00000113 FF                     520 	.db #0xff	; 255
+    00000114 89                     521 	.db #0x89	; 137
+    00000115 FF                     522 	.db #0xff	; 255
+    00000116 91                     523 	.db #0x91	; 145
+    00000117 FF                     524 	.db #0xff	; 255
+    00000118 B9                     525 	.db #0xb9	; 185
+    00000119 FF                     526 	.db #0xff	; 255
+    0000011A 42                     527 	.db #0x42	; 66	'B'
+    0000011B 7E                     528 	.db #0x7e	; 126
+    0000011C 3C                     529 	.db #0x3c	; 60
+    0000011D 3C                     530 	.db #0x3c	; 60
+    0000011E 3C                     531 	.db #0x3c	; 60
+    0000011F 3C                     532 	.db #0x3c	; 60
+    00000120 42                     533 	.db #0x42	; 66	'B'
+    00000121 7E                     534 	.db #0x7e	; 126
+    00000122 99                     535 	.db #0x99	; 153
+    00000123 FF                     536 	.db #0xff	; 255
+    00000124 89                     537 	.db #0x89	; 137
+    00000125 FF                     538 	.db #0xff	; 255
+    00000126 99                     539 	.db #0x99	; 153
+    00000127 FF                     540 	.db #0xff	; 255
+    00000128 89                     541 	.db #0x89	; 137
+    00000129 FF                     542 	.db #0xff	; 255
+    0000012A 5A                     543 	.db #0x5a	; 90	'Z'
+    0000012B 7E                     544 	.db #0x7e	; 126
+    0000012C 3C                     545 	.db #0x3c	; 60
+    0000012D 3C                     546 	.db #0x3c	; 60
+    0000012E 3C                     547 	.db #0x3c	; 60
+    0000012F 3C                     548 	.db #0x3c	; 60
+    00000130 42                     549 	.db #0x42	; 66	'B'
+    00000131 7E                     550 	.db #0x7e	; 126
+    00000132 A9                     551 	.db #0xa9	; 169
+    00000133 FF                     552 	.db #0xff	; 255
+    00000134 A9                     553 	.db #0xa9	; 169
+    00000135 FF                     554 	.db #0xff	; 255
+    00000136 B9                     555 	.db #0xb9	; 185
+    00000137 FF                     556 	.db #0xff	; 255
+    00000138 89                     557 	.db #0x89	; 137
+    00000139 FF                     558 	.db #0xff	; 255
+    0000013A 42                     559 	.db #0x42	; 66	'B'
+    0000013B 7E                     560 	.db #0x7e	; 126
+    0000013C 3C                     561 	.db #0x3c	; 60
+    0000013D 3C                     562 	.db #0x3c	; 60
+                                    563 	.area _XINIT
+                                    564 	.area _CABS    (ABS)

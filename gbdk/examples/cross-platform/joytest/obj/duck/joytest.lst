@@ -1,0 +1,909 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module joytest
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _reset_object_pos
+                                     12 	.globl _draw_disabled
+                                     13 	.globl _draw_buttons
+                                     14 	.globl _sgb_check
+                                     15 	.globl _fill_bkg_rect
+                                     16 	.globl _set_sprite_data
+                                     17 	.globl _set_bkg_tiles
+                                     18 	.globl _set_bkg_data
+                                     19 	.globl _vsync
+                                     20 	.globl _joypad_ex
+                                     21 	.globl _joypad_init
+                                     22 	.globl _joypad
+                                     23 	.globl _joy
+                                     24 	.globl _old_joy
+                                     25 	.globl _isSGB
+                                     26 	.globl _toggle
+                                     27 	.globl _joypads
+                                     28 	.globl _old_joypads
+                                     29 ;--------------------------------------------------------
+                                     30 ; special function registers
+                                     31 ;--------------------------------------------------------
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _DATA
+    00000000                         36 _old_joypads::
+    00000000                         37 	.ds 5
+    00000005                         38 _joypads::
+    00000005                         39 	.ds 5
+                                     40 ;--------------------------------------------------------
+                                     41 ; ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _INITIALIZED
+    00000000                         44 _toggle::
+    00000000                         45 	.ds 1
+    00000001                         46 _isSGB::
+    00000001                         47 	.ds 1
+    00000002                         48 _old_joy::
+    00000002                         49 	.ds 1
+    00000003                         50 _joy::
+    00000003                         51 	.ds 1
+                                     52 ;--------------------------------------------------------
+                                     53 ; absolute external ram data
+                                     54 ;--------------------------------------------------------
+                                     55 	.area _DABS (ABS)
+                                     56 ;--------------------------------------------------------
+                                     57 ; global & static initialisations
+                                     58 ;--------------------------------------------------------
+                                     59 	.area _HOME
+                                     60 	.area _GSINIT
+                                     61 	.area _GSFINAL
+                                     62 	.area _GSINIT
+                                     63 ;--------------------------------------------------------
+                                     64 ; Home
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _HOME
+                                     67 	.area _HOME
+                                     68 ;--------------------------------------------------------
+                                     69 ; code
+                                     70 ;--------------------------------------------------------
+                                     71 	.area _CODE
+                                     72 ;src/joytest.c:13: void draw_buttons(uint8_t state, uint8_t x, uint8_t y) {
+                                     73 ;	---------------------------------
+                                     74 ; Function draw_buttons
+                                     75 ; ---------------------------------
+    00000000                         76 _draw_buttons::
+    00000000 3B               [ 8]   77 	dec	sp
+    00000001 4F               [ 4]   78 	ld	c, a
+    00000002 43               [ 4]   79 	ld	b, e
+                                     80 ;src/joytest.c:14: set_bkg_based_tiles(x,      y, 2, 2, (state & J_UP)     ? pressed_buttons[0] : normal_buttons[0], 1);
+    00000003 CB 51            [ 8]   81 	bit	2, c
+    00000005 28 05            [12]   82 	jr	Z, 00111$
+    00000007 11r00r00         [12]   83 	ld	de, #_pressed_buttons+0
+    0000000A 18 03            [12]   84 	jr	00112$
+    0000000C                         85 00111$:
+    0000000C 11r00r00         [12]   86 	ld	de, #_normal_buttons+0
+    0000000F                         87 00112$:
+    0000000F F8 03            [12]   88 	ldhl	sp,	#3
+    00000011 7E               [ 8]   89 	ld	a, (hl)
+    00000012 F8 00            [12]   90 	ldhl	sp,	#0
+    00000014 77               [ 8]   91 	ld	(hl), a
+                                     92 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    00000015 21r00r00         [12]   93 	ld	hl, #__map_tile_offset
+    00000018 36 01            [12]   94 	ld	(hl), #0x01
+                                     95 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    0000001A D5               [16]   96 	push	de
+    0000001B 21 02 02         [12]   97 	ld	hl, #0x202
+    0000001E E5               [16]   98 	push	hl
+    0000001F F8 04            [12]   99 	ldhl	sp,	#4
+    00000021 7E               [ 8]  100 	ld	a, (hl)
+    00000022 F5               [16]  101 	push	af
+    00000023 33               [ 8]  102 	inc	sp
+    00000024 C5               [16]  103 	push	bc
+    00000025 33               [ 8]  104 	inc	sp
+    00000026 CDr00r00         [24]  105 	call	_set_bkg_tiles
+    00000029 E8 06            [16]  106 	add	sp, #6
+                                    107 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    0000002B AF               [ 4]  108 	xor	a, a
+    0000002C EAr00r00         [16]  109 	ld	(#__map_tile_offset),a
+                                    110 ;src/joytest.c:15: set_bkg_based_tiles(x + 2,  y, 2, 2, (state & J_DOWN)   ? pressed_buttons[1] : normal_buttons[1], 1);
+    0000002F CB 59            [ 8]  111 	bit	3, c
+    00000031 28 05            [12]  112 	jr	Z, 00113$
+    00000033 11r04r00         [12]  113 	ld	de, #_pressed_buttons+4
+    00000036 18 03            [12]  114 	jr	00114$
+    00000038                        115 00113$:
+    00000038 11r04r00         [12]  116 	ld	de, #_normal_buttons+4
+    0000003B                        117 00114$:
+    0000003B 78               [ 4]  118 	ld	a, b
+    0000003C 3C               [ 4]  119 	inc	a
+    0000003D 3C               [ 4]  120 	inc	a
+                                    121 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    0000003E 21r00r00         [12]  122 	ld	hl, #__map_tile_offset
+    00000041 36 01            [12]  123 	ld	(hl), #0x01
+                                    124 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000043 D5               [16]  125 	push	de
+    00000044 26 02            [ 8]  126 	ld	h, #0x02
+    00000046 E5               [16]  127 	push	hl
+    00000047 33               [ 8]  128 	inc	sp
+    00000048 26 02            [ 8]  129 	ld	h, #0x02
+    0000004A E5               [16]  130 	push	hl
+    0000004B 33               [ 8]  131 	inc	sp
+    0000004C F8 04            [12]  132 	ldhl	sp,	#4
+    0000004E 66               [ 8]  133 	ld	h, (hl)
+    0000004F E5               [16]  134 	push	hl
+    00000050 33               [ 8]  135 	inc	sp
+    00000051 F5               [16]  136 	push	af
+    00000052 33               [ 8]  137 	inc	sp
+    00000053 CDr00r00         [24]  138 	call	_set_bkg_tiles
+    00000056 E8 06            [16]  139 	add	sp, #6
+                                    140 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    00000058 AF               [ 4]  141 	xor	a, a
+    00000059 EAr00r00         [16]  142 	ld	(#__map_tile_offset),a
+                                    143 ;src/joytest.c:16: set_bkg_based_tiles(x + 4,  y, 2, 2, (state & J_LEFT)   ? pressed_buttons[2] : normal_buttons[2], 1);
+    0000005C CB 49            [ 8]  144 	bit	1, c
+    0000005E 28 05            [12]  145 	jr	Z, 00115$
+    00000060 11r08r00         [12]  146 	ld	de, #_pressed_buttons+8
+    00000063 18 03            [12]  147 	jr	00116$
+    00000065                        148 00115$:
+    00000065 11r08r00         [12]  149 	ld	de, #_normal_buttons+8
+    00000068                        150 00116$:
+    00000068 78               [ 4]  151 	ld	a, b
+    00000069 3C               [ 4]  152 	inc	a
+    0000006A 3C               [ 4]  153 	inc	a
+    0000006B 3C               [ 4]  154 	inc	a
+    0000006C 3C               [ 4]  155 	inc	a
+                                    156 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    0000006D 21r00r00         [12]  157 	ld	hl, #__map_tile_offset
+    00000070 36 01            [12]  158 	ld	(hl), #0x01
+                                    159 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000072 D5               [16]  160 	push	de
+    00000073 26 02            [ 8]  161 	ld	h, #0x02
+    00000075 E5               [16]  162 	push	hl
+    00000076 33               [ 8]  163 	inc	sp
+    00000077 26 02            [ 8]  164 	ld	h, #0x02
+    00000079 E5               [16]  165 	push	hl
+    0000007A 33               [ 8]  166 	inc	sp
+    0000007B F8 04            [12]  167 	ldhl	sp,	#4
+    0000007D 66               [ 8]  168 	ld	h, (hl)
+    0000007E E5               [16]  169 	push	hl
+    0000007F 33               [ 8]  170 	inc	sp
+    00000080 F5               [16]  171 	push	af
+    00000081 33               [ 8]  172 	inc	sp
+    00000082 CDr00r00         [24]  173 	call	_set_bkg_tiles
+    00000085 E8 06            [16]  174 	add	sp, #6
+                                    175 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    00000087 AF               [ 4]  176 	xor	a, a
+    00000088 EAr00r00         [16]  177 	ld	(#__map_tile_offset),a
+                                    178 ;src/joytest.c:17: set_bkg_based_tiles(x + 6,  y, 2, 2, (state & J_RIGHT)  ? pressed_buttons[3] : normal_buttons[3], 1);
+    0000008B CB 41            [ 8]  179 	bit	0, c
+    0000008D 28 05            [12]  180 	jr	Z, 00117$
+    0000008F 11r0Cr00         [12]  181 	ld	de, #_pressed_buttons+12
+    00000092 18 03            [12]  182 	jr	00118$
+    00000094                        183 00117$:
+    00000094 11r0Cr00         [12]  184 	ld	de, #_normal_buttons+12
+    00000097                        185 00118$:
+    00000097 78               [ 4]  186 	ld	a, b
+    00000098 C6 06            [ 8]  187 	add	a, #0x06
+                                    188 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    0000009A 21r00r00         [12]  189 	ld	hl, #__map_tile_offset
+    0000009D 36 01            [12]  190 	ld	(hl), #0x01
+                                    191 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    0000009F D5               [16]  192 	push	de
+    000000A0 26 02            [ 8]  193 	ld	h, #0x02
+    000000A2 E5               [16]  194 	push	hl
+    000000A3 33               [ 8]  195 	inc	sp
+    000000A4 26 02            [ 8]  196 	ld	h, #0x02
+    000000A6 E5               [16]  197 	push	hl
+    000000A7 33               [ 8]  198 	inc	sp
+    000000A8 F8 04            [12]  199 	ldhl	sp,	#4
+    000000AA 66               [ 8]  200 	ld	h, (hl)
+    000000AB E5               [16]  201 	push	hl
+    000000AC 33               [ 8]  202 	inc	sp
+    000000AD F5               [16]  203 	push	af
+    000000AE 33               [ 8]  204 	inc	sp
+    000000AF CDr00r00         [24]  205 	call	_set_bkg_tiles
+    000000B2 E8 06            [16]  206 	add	sp, #6
+                                    207 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    000000B4 AF               [ 4]  208 	xor	a, a
+    000000B5 EAr00r00         [16]  209 	ld	(#__map_tile_offset),a
+                                    210 ;src/joytest.c:18: set_bkg_based_tiles(x + 8,  y, 2, 2, (state & J_A)      ? pressed_buttons[4] : normal_buttons[4], 1);
+    000000B8 CB 61            [ 8]  211 	bit	4, c
+    000000BA 28 05            [12]  212 	jr	Z, 00119$
+    000000BC 11r10r00         [12]  213 	ld	de, #_pressed_buttons+16
+    000000BF 18 03            [12]  214 	jr	00120$
+    000000C1                        215 00119$:
+    000000C1 11r10r00         [12]  216 	ld	de, #_normal_buttons+16
+    000000C4                        217 00120$:
+    000000C4 78               [ 4]  218 	ld	a, b
+    000000C5 C6 08            [ 8]  219 	add	a, #0x08
+                                    220 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    000000C7 21r00r00         [12]  221 	ld	hl, #__map_tile_offset
+    000000CA 36 01            [12]  222 	ld	(hl), #0x01
+                                    223 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    000000CC D5               [16]  224 	push	de
+    000000CD 26 02            [ 8]  225 	ld	h, #0x02
+    000000CF E5               [16]  226 	push	hl
+    000000D0 33               [ 8]  227 	inc	sp
+    000000D1 26 02            [ 8]  228 	ld	h, #0x02
+    000000D3 E5               [16]  229 	push	hl
+    000000D4 33               [ 8]  230 	inc	sp
+    000000D5 F8 04            [12]  231 	ldhl	sp,	#4
+    000000D7 66               [ 8]  232 	ld	h, (hl)
+    000000D8 E5               [16]  233 	push	hl
+    000000D9 33               [ 8]  234 	inc	sp
+    000000DA F5               [16]  235 	push	af
+    000000DB 33               [ 8]  236 	inc	sp
+    000000DC CDr00r00         [24]  237 	call	_set_bkg_tiles
+    000000DF E8 06            [16]  238 	add	sp, #6
+                                    239 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    000000E1 AF               [ 4]  240 	xor	a, a
+    000000E2 EAr00r00         [16]  241 	ld	(#__map_tile_offset),a
+                                    242 ;src/joytest.c:19: set_bkg_based_tiles(x + 10, y, 2, 2, (state & J_B)      ? pressed_buttons[5] : normal_buttons[5], 1);
+    000000E5 CB 69            [ 8]  243 	bit	5, c
+    000000E7 28 05            [12]  244 	jr	Z, 00121$
+    000000E9 11r14r00         [12]  245 	ld	de, #_pressed_buttons+20
+    000000EC 18 03            [12]  246 	jr	00122$
+    000000EE                        247 00121$:
+    000000EE 11r14r00         [12]  248 	ld	de, #_normal_buttons+20
+    000000F1                        249 00122$:
+    000000F1 78               [ 4]  250 	ld	a, b
+    000000F2 C6 0A            [ 8]  251 	add	a, #0x0a
+                                    252 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    000000F4 21r00r00         [12]  253 	ld	hl, #__map_tile_offset
+    000000F7 36 01            [12]  254 	ld	(hl), #0x01
+                                    255 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    000000F9 D5               [16]  256 	push	de
+    000000FA 26 02            [ 8]  257 	ld	h, #0x02
+    000000FC E5               [16]  258 	push	hl
+    000000FD 33               [ 8]  259 	inc	sp
+    000000FE 26 02            [ 8]  260 	ld	h, #0x02
+    00000100 E5               [16]  261 	push	hl
+    00000101 33               [ 8]  262 	inc	sp
+    00000102 F8 04            [12]  263 	ldhl	sp,	#4
+    00000104 66               [ 8]  264 	ld	h, (hl)
+    00000105 E5               [16]  265 	push	hl
+    00000106 33               [ 8]  266 	inc	sp
+    00000107 F5               [16]  267 	push	af
+    00000108 33               [ 8]  268 	inc	sp
+    00000109 CDr00r00         [24]  269 	call	_set_bkg_tiles
+    0000010C E8 06            [16]  270 	add	sp, #6
+                                    271 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    0000010E AF               [ 4]  272 	xor	a, a
+    0000010F EAr00r00         [16]  273 	ld	(#__map_tile_offset),a
+                                    274 ;src/joytest.c:20: set_bkg_based_tiles(x + 12, y, 2, 2, (state & J_START)  ? pressed_buttons[6] : normal_buttons[6], 1);
+    00000112 CB 79            [ 8]  275 	bit	7, c
+    00000114 28 05            [12]  276 	jr	Z, 00123$
+    00000116 11r18r00         [12]  277 	ld	de, #_pressed_buttons+24
+    00000119 18 03            [12]  278 	jr	00124$
+    0000011B                        279 00123$:
+    0000011B 11r18r00         [12]  280 	ld	de, #_normal_buttons+24
+    0000011E                        281 00124$:
+    0000011E 78               [ 4]  282 	ld	a, b
+    0000011F C6 0C            [ 8]  283 	add	a, #0x0c
+                                    284 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    00000121 21r00r00         [12]  285 	ld	hl, #__map_tile_offset
+    00000124 36 01            [12]  286 	ld	(hl), #0x01
+                                    287 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000126 D5               [16]  288 	push	de
+    00000127 26 02            [ 8]  289 	ld	h, #0x02
+    00000129 E5               [16]  290 	push	hl
+    0000012A 33               [ 8]  291 	inc	sp
+    0000012B 26 02            [ 8]  292 	ld	h, #0x02
+    0000012D E5               [16]  293 	push	hl
+    0000012E 33               [ 8]  294 	inc	sp
+    0000012F F8 04            [12]  295 	ldhl	sp,	#4
+    00000131 66               [ 8]  296 	ld	h, (hl)
+    00000132 E5               [16]  297 	push	hl
+    00000133 33               [ 8]  298 	inc	sp
+    00000134 F5               [16]  299 	push	af
+    00000135 33               [ 8]  300 	inc	sp
+    00000136 CDr00r00         [24]  301 	call	_set_bkg_tiles
+    00000139 E8 06            [16]  302 	add	sp, #6
+                                    303 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    0000013B AF               [ 4]  304 	xor	a, a
+    0000013C EAr00r00         [16]  305 	ld	(#__map_tile_offset),a
+                                    306 ;src/joytest.c:21: set_bkg_based_tiles(x + 14, y, 2, 2, (state & J_SELECT) ? pressed_buttons[7] : normal_buttons[7], 1);
+    0000013F CB 71            [ 8]  307 	bit	6, c
+    00000141 28 05            [12]  308 	jr	Z, 00125$
+    00000143 11r1Cr00         [12]  309 	ld	de, #_pressed_buttons+28
+    00000146 18 03            [12]  310 	jr	00126$
+    00000148                        311 00125$:
+    00000148 11r1Cr00         [12]  312 	ld	de, #_normal_buttons+28
+    0000014B                        313 00126$:
+    0000014B 78               [ 4]  314 	ld	a, b
+    0000014C C6 0E            [ 8]  315 	add	a, #0x0e
+                                    316 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    0000014E 21r00r00         [12]  317 	ld	hl, #__map_tile_offset
+    00000151 36 01            [12]  318 	ld	(hl), #0x01
+                                    319 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000153 D5               [16]  320 	push	de
+    00000154 26 02            [ 8]  321 	ld	h, #0x02
+    00000156 E5               [16]  322 	push	hl
+    00000157 33               [ 8]  323 	inc	sp
+    00000158 26 02            [ 8]  324 	ld	h, #0x02
+    0000015A E5               [16]  325 	push	hl
+    0000015B 33               [ 8]  326 	inc	sp
+    0000015C F8 04            [12]  327 	ldhl	sp,	#4
+    0000015E 66               [ 8]  328 	ld	h, (hl)
+    0000015F E5               [16]  329 	push	hl
+    00000160 33               [ 8]  330 	inc	sp
+    00000161 F5               [16]  331 	push	af
+    00000162 33               [ 8]  332 	inc	sp
+    00000163 CDr00r00         [24]  333 	call	_set_bkg_tiles
+    00000166 E8 06            [16]  334 	add	sp, #6
+                                    335 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    00000168 AF               [ 4]  336 	xor	a, a
+    00000169 EAr00r00         [16]  337 	ld	(#__map_tile_offset),a
+                                    338 ;src/joytest.c:21: set_bkg_based_tiles(x + 14, y, 2, 2, (state & J_SELECT) ? pressed_buttons[7] : normal_buttons[7], 1);
+                                    339 ;src/joytest.c:22: }
+    0000016C 33               [ 8]  340 	inc	sp
+    0000016D E1               [12]  341 	pop	hl
+    0000016E 33               [ 8]  342 	inc	sp
+    0000016F E9               [ 4]  343 	jp	(hl)
+                                    344 ;src/joytest.c:24: void draw_disabled(uint8_t x, uint8_t y) {
+                                    345 ;	---------------------------------
+                                    346 ; Function draw_disabled
+                                    347 ; ---------------------------------
+    00000170                        348 _draw_disabled::
+    00000170 4F               [ 4]  349 	ld	c, a
+    00000171 43               [ 4]  350 	ld	b, e
+                                    351 ;src/joytest.c:25: set_bkg_based_tiles(x,      y, 2, 2, disabled_buttons[0], 1);
+                                    352 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    00000172 21r00r00         [12]  353 	ld	hl, #__map_tile_offset
+    00000175 36 01            [12]  354 	ld	(hl), #0x01
+                                    355 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000177 11r00r00         [12]  356 	ld	de, #_disabled_buttons
+    0000017A D5               [16]  357 	push	de
+    0000017B 21 02 02         [12]  358 	ld	hl, #0x202
+    0000017E E5               [16]  359 	push	hl
+    0000017F C5               [16]  360 	push	bc
+    00000180 33               [ 8]  361 	inc	sp
+    00000181 79               [ 4]  362 	ld	a, c
+    00000182 F5               [16]  363 	push	af
+    00000183 33               [ 8]  364 	inc	sp
+    00000184 CDr00r00         [24]  365 	call	_set_bkg_tiles
+    00000187 E8 06            [16]  366 	add	sp, #6
+                                    367 ;src/joytest.c:26: set_bkg_based_tiles(x + 2,  y, 2, 2, disabled_buttons[1], 1);
+    00000189 11r04r00         [12]  368 	ld	de, #_disabled_buttons + 4
+    0000018C 79               [ 4]  369 	ld	a, c
+    0000018D 3C               [ 4]  370 	inc	a
+    0000018E 3C               [ 4]  371 	inc	a
+                                    372 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    0000018F 21r00r00         [12]  373 	ld	hl, #__map_tile_offset
+    00000192 36 01            [12]  374 	ld	(hl), #0x01
+                                    375 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000194 D5               [16]  376 	push	de
+    00000195 26 02            [ 8]  377 	ld	h, #0x02
+    00000197 E5               [16]  378 	push	hl
+    00000198 33               [ 8]  379 	inc	sp
+    00000199 26 02            [ 8]  380 	ld	h, #0x02
+    0000019B 68               [ 4]  381 	ld	l, b
+    0000019C E5               [16]  382 	push	hl
+    0000019D F5               [16]  383 	push	af
+    0000019E 33               [ 8]  384 	inc	sp
+    0000019F CDr00r00         [24]  385 	call	_set_bkg_tiles
+    000001A2 E8 06            [16]  386 	add	sp, #6
+                                    387 ;src/joytest.c:27: set_bkg_based_tiles(x + 4,  y, 2, 2, disabled_buttons[2], 1);
+    000001A4 11r08r00         [12]  388 	ld	de, #_disabled_buttons + 8
+    000001A7 79               [ 4]  389 	ld	a, c
+    000001A8 3C               [ 4]  390 	inc	a
+    000001A9 3C               [ 4]  391 	inc	a
+    000001AA 3C               [ 4]  392 	inc	a
+    000001AB 3C               [ 4]  393 	inc	a
+                                    394 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    000001AC 21r00r00         [12]  395 	ld	hl, #__map_tile_offset
+    000001AF 36 01            [12]  396 	ld	(hl), #0x01
+                                    397 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    000001B1 D5               [16]  398 	push	de
+    000001B2 26 02            [ 8]  399 	ld	h, #0x02
+    000001B4 E5               [16]  400 	push	hl
+    000001B5 33               [ 8]  401 	inc	sp
+    000001B6 26 02            [ 8]  402 	ld	h, #0x02
+    000001B8 68               [ 4]  403 	ld	l, b
+    000001B9 E5               [16]  404 	push	hl
+    000001BA F5               [16]  405 	push	af
+    000001BB 33               [ 8]  406 	inc	sp
+    000001BC CDr00r00         [24]  407 	call	_set_bkg_tiles
+    000001BF E8 06            [16]  408 	add	sp, #6
+                                    409 ;src/joytest.c:28: set_bkg_based_tiles(x + 6,  y, 2, 2, disabled_buttons[3], 1);
+    000001C1 11r0Cr00         [12]  410 	ld	de, #_disabled_buttons + 12
+    000001C4 79               [ 4]  411 	ld	a, c
+    000001C5 C6 06            [ 8]  412 	add	a, #0x06
+                                    413 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    000001C7 21r00r00         [12]  414 	ld	hl, #__map_tile_offset
+    000001CA 36 01            [12]  415 	ld	(hl), #0x01
+                                    416 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    000001CC D5               [16]  417 	push	de
+    000001CD 26 02            [ 8]  418 	ld	h, #0x02
+    000001CF E5               [16]  419 	push	hl
+    000001D0 33               [ 8]  420 	inc	sp
+    000001D1 26 02            [ 8]  421 	ld	h, #0x02
+    000001D3 68               [ 4]  422 	ld	l, b
+    000001D4 E5               [16]  423 	push	hl
+    000001D5 F5               [16]  424 	push	af
+    000001D6 33               [ 8]  425 	inc	sp
+    000001D7 CDr00r00         [24]  426 	call	_set_bkg_tiles
+    000001DA E8 06            [16]  427 	add	sp, #6
+                                    428 ;src/joytest.c:29: set_bkg_based_tiles(x + 8,  y, 2, 2, disabled_buttons[4], 1);
+    000001DC 11r10r00         [12]  429 	ld	de, #_disabled_buttons + 16
+    000001DF 79               [ 4]  430 	ld	a, c
+    000001E0 C6 08            [ 8]  431 	add	a, #0x08
+                                    432 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    000001E2 21r00r00         [12]  433 	ld	hl, #__map_tile_offset
+    000001E5 36 01            [12]  434 	ld	(hl), #0x01
+                                    435 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    000001E7 D5               [16]  436 	push	de
+    000001E8 26 02            [ 8]  437 	ld	h, #0x02
+    000001EA E5               [16]  438 	push	hl
+    000001EB 33               [ 8]  439 	inc	sp
+    000001EC 26 02            [ 8]  440 	ld	h, #0x02
+    000001EE 68               [ 4]  441 	ld	l, b
+    000001EF E5               [16]  442 	push	hl
+    000001F0 F5               [16]  443 	push	af
+    000001F1 33               [ 8]  444 	inc	sp
+    000001F2 CDr00r00         [24]  445 	call	_set_bkg_tiles
+    000001F5 E8 06            [16]  446 	add	sp, #6
+                                    447 ;src/joytest.c:30: set_bkg_based_tiles(x + 10, y, 2, 2, disabled_buttons[5], 1);
+    000001F7 11r14r00         [12]  448 	ld	de, #_disabled_buttons + 20
+    000001FA 79               [ 4]  449 	ld	a, c
+    000001FB C6 0A            [ 8]  450 	add	a, #0x0a
+                                    451 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    000001FD 21r00r00         [12]  452 	ld	hl, #__map_tile_offset
+    00000200 36 01            [12]  453 	ld	(hl), #0x01
+                                    454 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000202 D5               [16]  455 	push	de
+    00000203 26 02            [ 8]  456 	ld	h, #0x02
+    00000205 E5               [16]  457 	push	hl
+    00000206 33               [ 8]  458 	inc	sp
+    00000207 26 02            [ 8]  459 	ld	h, #0x02
+    00000209 68               [ 4]  460 	ld	l, b
+    0000020A E5               [16]  461 	push	hl
+    0000020B F5               [16]  462 	push	af
+    0000020C 33               [ 8]  463 	inc	sp
+    0000020D CDr00r00         [24]  464 	call	_set_bkg_tiles
+    00000210 E8 06            [16]  465 	add	sp, #6
+                                    466 ;src/joytest.c:31: set_bkg_based_tiles(x + 12, y, 2, 2, disabled_buttons[6], 1);
+    00000212 11r18r00         [12]  467 	ld	de, #_disabled_buttons + 24
+    00000215 79               [ 4]  468 	ld	a, c
+    00000216 C6 0C            [ 8]  469 	add	a, #0x0c
+                                    470 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    00000218 21r00r00         [12]  471 	ld	hl, #__map_tile_offset
+    0000021B 36 01            [12]  472 	ld	(hl), #0x01
+                                    473 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    0000021D D5               [16]  474 	push	de
+    0000021E 26 02            [ 8]  475 	ld	h, #0x02
+    00000220 E5               [16]  476 	push	hl
+    00000221 33               [ 8]  477 	inc	sp
+    00000222 26 02            [ 8]  478 	ld	h, #0x02
+    00000224 68               [ 4]  479 	ld	l, b
+    00000225 E5               [16]  480 	push	hl
+    00000226 F5               [16]  481 	push	af
+    00000227 33               [ 8]  482 	inc	sp
+    00000228 CDr00r00         [24]  483 	call	_set_bkg_tiles
+    0000022B E8 06            [16]  484 	add	sp, #6
+                                    485 ;src/joytest.c:32: set_bkg_based_tiles(x + 14, y, 2, 2, disabled_buttons[7], 1);
+    0000022D 11r1Cr00         [12]  486 	ld	de, #_disabled_buttons + 28
+    00000230 79               [ 4]  487 	ld	a, c
+    00000231 C6 0E            [ 8]  488 	add	a, #0x0e
+                                    489 ;../../../include/gb/gb.h:1182: _map_tile_offset = base_tile;
+    00000233 21r00r00         [12]  490 	ld	hl, #__map_tile_offset
+    00000236 36 01            [12]  491 	ld	(hl), #0x01
+                                    492 ;../../../include/gb/gb.h:1183: set_bkg_tiles(x, y, w, h, tiles);
+    00000238 D5               [16]  493 	push	de
+    00000239 26 02            [ 8]  494 	ld	h, #0x02
+    0000023B E5               [16]  495 	push	hl
+    0000023C 33               [ 8]  496 	inc	sp
+    0000023D 26 02            [ 8]  497 	ld	h, #0x02
+    0000023F 68               [ 4]  498 	ld	l, b
+    00000240 E5               [16]  499 	push	hl
+    00000241 F5               [16]  500 	push	af
+    00000242 33               [ 8]  501 	inc	sp
+    00000243 CDr00r00         [24]  502 	call	_set_bkg_tiles
+    00000246 E8 06            [16]  503 	add	sp, #6
+                                    504 ;../../../include/gb/gb.h:1184: _map_tile_offset = 0;
+    00000248 AF               [ 4]  505 	xor	a, a
+    00000249 EAr00r00         [16]  506 	ld	(#__map_tile_offset),a
+                                    507 ;src/joytest.c:32: set_bkg_based_tiles(x + 14, y, 2, 2, disabled_buttons[7], 1);
+                                    508 ;src/joytest.c:33: }
+    0000024C C9               [16]  509 	ret
+                                    510 ;src/joytest.c:35: void reset_object_pos(void) {
+                                    511 ;	---------------------------------
+                                    512 ; Function reset_object_pos
+                                    513 ; ---------------------------------
+    0000024D                        514 _reset_object_pos::
+    0000024D 3B               [ 8]  515 	dec	sp
+                                    516 ;src/joytest.c:36: for (uint8_t i = 0; i < 4; i++) {
+    0000024E 0E 00            [ 8]  517 	ld	c, #0x00
+    00000250                        518 00105$:
+    00000250 79               [ 4]  519 	ld	a, c
+    00000251 D6 04            [ 8]  520 	sub	a, #0x04
+    00000253 30 26            [12]  521 	jr	NC, 00107$
+                                    522 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000255 69               [ 4]  523 	ld	l, c
+    00000256 26 00            [ 8]  524 	ld	h, #0x00
+    00000258 29               [ 8]  525 	add	hl, hl
+    00000259 29               [ 8]  526 	add	hl, hl
+    0000025A 5D               [ 4]  527 	ld	e, l
+    0000025B 54               [ 4]  528 	ld	d, h
+    0000025C 21r01r00         [12]  529 	ld	hl,#_shadow_OAM + 1
+    0000025F 19               [ 8]  530 	add	hl,de
+    00000260 23               [ 8]  531 	inc	hl
+    00000261 71               [ 8]  532 	ld	(hl), c
+                                    533 ;src/joytest.c:39: DEVICE_SPRITE_PX_OFFSET_X + (i << 3) + ((DEVICE_SCREEN_PX_WIDTH - (4 * 8)) >> 1), 
+    00000262 79               [ 4]  534 	ld	a, c
+    00000263 87               [ 4]  535 	add	a, a
+    00000264 87               [ 4]  536 	add	a, a
+    00000265 87               [ 4]  537 	add	a, a
+    00000266 C6 48            [ 8]  538 	add	a, #0x48
+    00000268 F8 00            [12]  539 	ldhl	sp,	#0
+    0000026A 77               [ 8]  540 	ld	(hl), a
+                                    541 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000026B 21r00r00         [12]  542 	ld	hl, #_shadow_OAM
+    0000026E 19               [ 8]  543 	add	hl, de
+                                    544 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    0000026F 3E 84            [ 8]  545 	ld	a, #0x84
+    00000271 22               [ 8]  546 	ld	(hl+), a
+    00000272 5D               [ 4]  547 	ld	e, l
+    00000273 54               [ 4]  548 	ld	d, h
+    00000274 F8 00            [12]  549 	ldhl	sp,	#0
+    00000276 7E               [ 8]  550 	ld	a, (hl)
+    00000277 12               [ 8]  551 	ld	(de), a
+                                    552 ;src/joytest.c:36: for (uint8_t i = 0; i < 4; i++) {
+    00000278 0C               [ 4]  553 	inc	c
+    00000279 18 D5            [12]  554 	jr	00105$
+    0000027B                        555 00107$:
+                                    556 ;src/joytest.c:43: }
+    0000027B 33               [ 8]  557 	inc	sp
+    0000027C C9               [16]  558 	ret
+                                    559 ;src/joytest.c:51: void main(void) {
+                                    560 ;	---------------------------------
+                                    561 ; Function main
+                                    562 ; ---------------------------------
+    0000027D                        563 _main::
+    0000027D E8 FC            [16]  564 	add	sp, #-4
+                                    565 ;src/joytest.c:54: for (uint8_t i = 4; i != 0; i--) vsync();
+    0000027F 0E 04            [ 8]  566 	ld	c, #0x04
+    00000281                        567 00139$:
+    00000281 79               [ 4]  568 	ld	a, c
+    00000282 B7               [ 4]  569 	or	a, a
+    00000283 28 06            [12]  570 	jr	Z, 00101$
+    00000285 CDr00r00         [24]  571 	call	_vsync
+    00000288 0D               [ 4]  572 	dec	c
+    00000289 18 F6            [12]  573 	jr	00139$
+    0000028B                        574 00101$:
+                                    575 ;src/joytest.c:57: isSGB = sgb_check();
+    0000028B CDr00r00         [24]  576 	call	_sgb_check
+    0000028E AF               [ 4]  577 	xor	a, a
+    0000028F BB               [ 4]  578 	cp	a, e
+    00000290 17               [ 4]  579 	rla
+    00000291 EAr01r00         [16]  580 	ld	(#_isSGB),a
+                                    581 ;src/joytest.c:60: joypad_init(4, &joypads);
+    00000294 11r05r00         [12]  582 	ld	de, #_joypads
+    00000297 D5               [16]  583 	push	de
+    00000298 3E 04            [ 8]  584 	ld	a, #0x04
+    0000029A F5               [16]  585 	push	af
+    0000029B 33               [ 8]  586 	inc	sp
+    0000029C CDr00r00         [24]  587 	call	_joypad_init
+    0000029F E8 03            [16]  588 	add	sp, #3
+                                    589 ;src/joytest.c:62: set_sprite_data(0, sizeof(sprite_data) >> 4, sprite_data);
+    000002A1 11r00r00         [12]  590 	ld	de, #_sprite_data
+    000002A4 D5               [16]  591 	push	de
+    000002A5 21 00 04         [12]  592 	ld	hl, #0x400
+    000002A8 E5               [16]  593 	push	hl
+    000002A9 CDr00r00         [24]  594 	call	_set_sprite_data
+    000002AC E8 04            [16]  595 	add	sp, #4
+                                    596 ;src/joytest.c:63: set_bkg_data(1, sizeof(tiles_data) >> 4, tiles_data);
+    000002AE 11r00r00         [12]  597 	ld	de, #_tiles_data
+    000002B1 D5               [16]  598 	push	de
+    000002B2 21 01 5D         [12]  599 	ld	hl, #0x5d01
+    000002B5 E5               [16]  600 	push	hl
+    000002B6 CDr00r00         [24]  601 	call	_set_bkg_data
+    000002B9 E8 04            [16]  602 	add	sp, #4
+                                    603 ;src/joytest.c:64: fill_bkg_rect(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, 0);
+    000002BB AF               [ 4]  604 	xor	a, a
+    000002BC 67               [ 4]  605 	ld	h, a
+    000002BD 2E 12            [ 8]  606 	ld	l, #0x12
+    000002BF E5               [16]  607 	push	hl
+    000002C0 3E 14            [ 8]  608 	ld	a, #0x14
+    000002C2 F5               [16]  609 	push	af
+    000002C3 33               [ 8]  610 	inc	sp
+    000002C4 AF               [ 4]  611 	xor	a, a
+    000002C5 0F               [ 4]  612 	rrca
+    000002C6 F5               [16]  613 	push	af
+    000002C7 CDr00r00         [24]  614 	call	_fill_bkg_rect
+    000002CA E8 05            [16]  615 	add	sp, #5
+                                    616 ;src/joytest.c:66: if (isSGB) draw_disabled(0, 0); else draw_buttons(joy, 0, 0);
+    000002CC 21r01r00         [12]  617 	ld	hl, #_isSGB
+    000002CF CB 46            [12]  618 	bit	0, (hl)
+    000002D1 28 07            [12]  619 	jr	Z, 00103$
+    000002D3 AF               [ 4]  620 	xor	a, a
+    000002D4 5F               [ 4]  621 	ld	e, a
+    000002D5 CDr70r01         [24]  622 	call	_draw_disabled
+    000002D8 18 0B            [12]  623 	jr	00154$
+    000002DA                        624 00103$:
+    000002DA AF               [ 4]  625 	xor	a, a
+    000002DB F5               [16]  626 	push	af
+    000002DC 33               [ 8]  627 	inc	sp
+    000002DD 1E 00            [ 8]  628 	ld	e, #0x00
+    000002DF FAr03r00         [16]  629 	ld	a, (_joy)
+    000002E2 CDr00r00         [24]  630 	call	_draw_buttons
+                                    631 ;src/joytest.c:68: for (uint8_t i = 0; i != 4; i++) {
+    000002E5                        632 00154$:
+    000002E5 F8 03            [12]  633 	ldhl	sp,	#3
+    000002E7 36 00            [12]  634 	ld	(hl), #0x00
+    000002E9                        635 00142$:
+    000002E9 F8 03            [12]  636 	ldhl	sp,	#3
+    000002EB 7E               [ 8]  637 	ld	a, (hl)
+    000002EC D6 04            [ 8]  638 	sub	a, #0x04
+    000002EE 28 53            [12]  639 	jr	Z, 00108$
+                                    640 ;src/joytest.c:69: if (i <= (joypads.npads - 1)) {
+    000002F0 21r05r00         [12]  641 	ld	hl, #_joypads
+    000002F3 4E               [ 8]  642 	ld	c, (hl)
+    000002F4 AF               [ 4]  643 	xor	a, a
+    000002F5 47               [ 4]  644 	ld	b, a
+    000002F6 0B               [ 8]  645 	dec	bc
+    000002F7 F8 03            [12]  646 	ldhl	sp,	#3
+    000002F9 7E               [ 8]  647 	ld	a, (hl)
+    000002FA F8 00            [12]  648 	ldhl	sp,	#0
+    000002FC 22               [ 8]  649 	ld	(hl+), a
+                                    650 ;src/joytest.c:70: draw_buttons(joypads.joypads[i], 0, 4 + (i << 1)); 
+    000002FD AF               [ 4]  651 	xor	a, a
+    000002FE 22               [ 8]  652 	ld	(hl+), a
+    000002FF 23               [ 8]  653 	inc	hl
+    00000300 3A               [ 8]  654 	ld	a, (hl-)
+    00000301 87               [ 4]  655 	add	a, a
+    00000302 C6 04            [ 8]  656 	add	a, #0x04
+                                    657 ;src/joytest.c:69: if (i <= (joypads.npads - 1)) {
+    00000304 32               [ 8]  658 	ld	(hl-), a
+    00000305 2B               [ 8]  659 	dec	hl
+    00000306 79               [ 4]  660 	ld	a, c
+    00000307 96               [ 8]  661 	sub	a, (hl)
+    00000308 23               [ 8]  662 	inc	hl
+    00000309 78               [ 4]  663 	ld	a, b
+    0000030A 9E               [ 8]  664 	sbc	a, (hl)
+    0000030B 78               [ 4]  665 	ld	a, b
+    0000030C 57               [ 4]  666 	ld	d, a
+    0000030D CB 7E            [12]  667 	bit	7, (hl)
+    0000030F 28 07            [12]  668 	jr	Z, 00286$
+    00000311 CB 7A            [ 8]  669 	bit	7, d
+    00000313 20 08            [12]  670 	jr	NZ, 00287$
+    00000315 BF               [ 4]  671 	cp	a, a
+    00000316 18 05            [12]  672 	jr	00287$
+    00000318                        673 00286$:
+    00000318 CB 7A            [ 8]  674 	bit	7, d
+    0000031A 28 01            [12]  675 	jr	Z, 00287$
+    0000031C 37               [ 4]  676 	scf
+    0000031D                        677 00287$:
+    0000031D 38 18            [12]  678 	jr	C, 00106$
+                                    679 ;src/joytest.c:70: draw_buttons(joypads.joypads[i], 0, 4 + (i << 1)); 
+    0000031F 11r06r00         [12]  680 	ld	de, #(_joypads + 1)
+    00000322 F8 03            [12]  681 	ldhl	sp,	#3
+    00000324 6E               [ 8]  682 	ld	l, (hl)
+    00000325 26 00            [ 8]  683 	ld	h, #0x00
+    00000327 19               [ 8]  684 	add	hl, de
+    00000328 4D               [ 4]  685 	ld	c, l
+    00000329 44               [ 4]  686 	ld	b, h
+    0000032A 0A               [ 8]  687 	ld	a, (bc)
+    0000032B F8 02            [12]  688 	ldhl	sp,	#2
+    0000032D 66               [ 8]  689 	ld	h, (hl)
+    0000032E E5               [16]  690 	push	hl
+    0000032F 33               [ 8]  691 	inc	sp
+    00000330 1E 00            [ 8]  692 	ld	e, #0x00
+    00000332 CDr00r00         [24]  693 	call	_draw_buttons
+    00000335 18 07            [12]  694 	jr	00143$
+    00000337                        695 00106$:
+                                    696 ;src/joytest.c:72: draw_disabled(0, 4 + (i << 1));
+    00000337 F8 02            [12]  697 	ldhl	sp,	#2
+    00000339 5E               [ 8]  698 	ld	e, (hl)
+    0000033A AF               [ 4]  699 	xor	a, a
+    0000033B CDr70r01         [24]  700 	call	_draw_disabled
+    0000033E                        701 00143$:
+                                    702 ;src/joytest.c:68: for (uint8_t i = 0; i != 4; i++) {
+    0000033E F8 03            [12]  703 	ldhl	sp,	#3
+    00000340 34               [12]  704 	inc	(hl)
+    00000341 18 A6            [12]  705 	jr	00142$
+    00000343                        706 00108$:
+                                    707 ;src/joytest.c:76: reset_object_pos();
+    00000343 CDr4Dr02         [24]  708 	call	_reset_object_pos
+                                    709 ;src/joytest.c:77: SHOW_SPRITES; SHOW_BKG;
+    00000346 F0r00            [12]  710 	ldh	a, (_LCDC_REG + 0)
+    00000348 F6 01            [ 8]  711 	or	a, #0x01
+    0000034A E0r00            [12]  712 	ldh	(_LCDC_REG + 0), a
+    0000034C F0r00            [12]  713 	ldh	a, (_LCDC_REG + 0)
+    0000034E F6 40            [ 8]  714 	or	a, #0x40
+    00000350 E0r00            [12]  715 	ldh	(_LCDC_REG + 0), a
+                                    716 ;src/joytest.c:79: while(TRUE) {
+    00000352                        717 00132$:
+                                    718 ;src/joytest.c:81: if (toggle = !toggle) {
+    00000352 FAr00r00         [16]  719 	ld	a, (#_toggle)
+    00000355 EE 01            [ 8]  720 	xor	a, #0x01
+    00000357 6F               [ 4]  721 	ld	l, a
+    00000358 EAr00r00         [16]  722 	ld	(_toggle), a
+    0000035B CB 45            [ 8]  723 	bit	0, l
+    0000035D 28 34            [12]  724 	jr	Z, 00129$
+                                    725 ;src/joytest.c:83: if (!isSGB) {
+    0000035F 21r01r00         [12]  726 	ld	hl, #_isSGB
+    00000362 CB 46            [12]  727 	bit	0, (hl)
+    00000364 C2r31r04         [16]  728 	jp	NZ, 00130$
+                                    729 ;src/joytest.c:84: old_joy = joy, joy = joypad();
+    00000367 FAr03r00         [16]  730 	ld	a, (#_joy)
+    0000036A EAr02r00         [16]  731 	ld	(#_old_joy),a
+    0000036D CDr00r00         [24]  732 	call	_joypad
+    00000370 21r03r00         [12]  733 	ld	hl, #_joy
+    00000373 77               [ 8]  734 	ld	(hl), a
+                                    735 ;src/joytest.c:87: if (joy != old_joy) draw_buttons(joy, 0, 0);
+    00000374 7E               [ 8]  736 	ld	a, (hl)
+    00000375 21r02r00         [12]  737 	ld	hl, #_old_joy
+    00000378 96               [ 8]  738 	sub	a, (hl)
+    00000379 28 0B            [12]  739 	jr	Z, 00110$
+    0000037B AF               [ 4]  740 	xor	a, a
+    0000037C F5               [16]  741 	push	af
+    0000037D 33               [ 8]  742 	inc	sp
+    0000037E 1E 00            [ 8]  743 	ld	e, #0x00
+    00000380 FAr03r00         [16]  744 	ld	a, (_joy)
+    00000383 CDr00r00         [24]  745 	call	_draw_buttons
+    00000386                        746 00110$:
+                                    747 ;src/joytest.c:90: if (joy & J_START) reset_object_pos();
+    00000386 FAr03r00         [16]  748 	ld	a, (_joy)
+    00000389 07               [ 4]  749 	rlca
+    0000038A D2r31r04         [16]  750 	jp	NC, 00130$
+    0000038D CDr4Dr02         [24]  751 	call	_reset_object_pos
+    00000390 C3r31r04         [16]  752 	jp	00130$
+    00000393                        753 00129$:
+                                    754 ;src/joytest.c:93: old_joypads = joypads;
+    00000393 11 05 00         [12]  755 	ld	de, #0x0005
+    00000396 D5               [16]  756 	push	de
+    00000397 01r05r00         [12]  757 	ld	bc, #_joypads
+    0000039A 11r00r00         [12]  758 	ld	de, #_old_joypads
+    0000039D CDr00r00         [24]  759 	call	___memcpy
+                                    760 ;src/joytest.c:94: joypad_ex(&joypads);
+    000003A0 11r05r00         [12]  761 	ld	de, #_joypads
+    000003A3 CDr00r00         [24]  762 	call	_joypad_ex
+                                    763 ;src/joytest.c:96: for (uint8_t i = 0; i < joypads.npads; i++) {
+    000003A6 0E 00            [ 8]  764 	ld	c, #0x00
+    000003A8                        765 00145$:
+    000003A8 21r05r00         [12]  766 	ld	hl, #_joypads
+    000003AB 79               [ 4]  767 	ld	a, c
+    000003AC 96               [ 8]  768 	sub	a, (hl)
+    000003AD D2r31r04         [16]  769 	jp	NC, 00130$
+                                    770 ;src/joytest.c:97: uint8_t j = joypads.joypads[i];
+    000003B0 21r06r00         [12]  771 	ld	hl, #(_joypads + 1)
+    000003B3 06 00            [ 8]  772 	ld	b, #0x00
+    000003B5 09               [ 8]  773 	add	hl, bc
+    000003B6 46               [ 8]  774 	ld	b, (hl)
+                                    775 ;src/joytest.c:100: if (old_joypads.joypads[i] != j) draw_buttons(j, 0, 4 + (i << 1));
+    000003B7 3Er01            [ 8]  776 	ld	a, #<((_old_joypads + 1))
+    000003B9 81               [ 4]  777 	add	a, c
+    000003BA 6F               [ 4]  778 	ld	l, a
+    000003BB 3Es00            [ 8]  779 	ld	a, #>((_old_joypads + 1))
+    000003BD CE 00            [ 8]  780 	adc	a, #0x00
+    000003BF 67               [ 4]  781 	ld	h, a
+    000003C0 7E               [ 8]  782 	ld	a, (hl)
+    000003C1 90               [ 4]  783 	sub	a, b
+    000003C2 28 0E            [12]  784 	jr	Z, 00116$
+    000003C4 79               [ 4]  785 	ld	a, c
+    000003C5 87               [ 4]  786 	add	a, a
+    000003C6 C6 04            [ 8]  787 	add	a, #0x04
+    000003C8 C5               [16]  788 	push	bc
+    000003C9 F5               [16]  789 	push	af
+    000003CA 33               [ 8]  790 	inc	sp
+    000003CB 1E 00            [ 8]  791 	ld	e, #0x00
+    000003CD 78               [ 4]  792 	ld	a, b
+    000003CE CDr00r00         [24]  793 	call	_draw_buttons
+    000003D1 C1               [12]  794 	pop	bc
+    000003D2                        795 00116$:
+                                    796 ;src/joytest.c:103: if (j & J_LEFT)  scroll_sprite(i, -1, 0);
+    000003D2 CB 48            [ 8]  797 	bit	1, b
+    000003D4 28 10            [12]  798 	jr	Z, 00118$
+                                    799 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    000003D6 11r00r00         [12]  800 	ld	de, #_shadow_OAM+0
+    000003D9 69               [ 4]  801 	ld	l, c
+    000003DA AF               [ 4]  802 	xor	a, a
+    000003DB 67               [ 4]  803 	ld	h, a
+    000003DC 29               [ 8]  804 	add	hl, hl
+    000003DD 29               [ 8]  805 	add	hl, hl
+    000003DE 19               [ 8]  806 	add	hl, de
+                                    807 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    000003DF 5D               [ 4]  808 	ld	e, l
+    000003E0 54               [ 4]  809 	ld	d, h
+    000003E1 23               [ 8]  810 	inc	hl
+    000003E2 1A               [ 8]  811 	ld	a, (de)
+    000003E3 12               [ 8]  812 	ld	(de), a
+    000003E4 35               [12]  813 	dec	(hl)
+    000003E5 7E               [ 8]  814 	ld	a, (hl)
+                                    815 ;src/joytest.c:103: if (j & J_LEFT)  scroll_sprite(i, -1, 0);
+    000003E6                        816 00118$:
+                                    817 ;src/joytest.c:104: if (j & J_RIGHT) scroll_sprite(i, 1, 0);
+    000003E6 CB 40            [ 8]  818 	bit	0, b
+    000003E8 28 10            [12]  819 	jr	Z, 00120$
+                                    820 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    000003EA 11r00r00         [12]  821 	ld	de, #_shadow_OAM+0
+    000003ED 69               [ 4]  822 	ld	l, c
+    000003EE AF               [ 4]  823 	xor	a, a
+    000003EF 67               [ 4]  824 	ld	h, a
+    000003F0 29               [ 8]  825 	add	hl, hl
+    000003F1 29               [ 8]  826 	add	hl, hl
+    000003F2 19               [ 8]  827 	add	hl, de
+                                    828 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    000003F3 5D               [ 4]  829 	ld	e, l
+    000003F4 54               [ 4]  830 	ld	d, h
+    000003F5 23               [ 8]  831 	inc	hl
+    000003F6 1A               [ 8]  832 	ld	a, (de)
+    000003F7 12               [ 8]  833 	ld	(de), a
+    000003F8 34               [12]  834 	inc	(hl)
+    000003F9 7E               [ 8]  835 	ld	a, (hl)
+                                    836 ;src/joytest.c:104: if (j & J_RIGHT) scroll_sprite(i, 1, 0);
+    000003FA                        837 00120$:
+                                    838 ;src/joytest.c:105: if (j & J_UP)    scroll_sprite(i, 0, -1);
+    000003FA CB 50            [ 8]  839 	bit	2, b
+    000003FC 28 11            [12]  840 	jr	Z, 00122$
+                                    841 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    000003FE 11r00r00         [12]  842 	ld	de, #_shadow_OAM+0
+    00000401 69               [ 4]  843 	ld	l, c
+    00000402 AF               [ 4]  844 	xor	a, a
+    00000403 67               [ 4]  845 	ld	h, a
+    00000404 29               [ 8]  846 	add	hl, hl
+    00000405 29               [ 8]  847 	add	hl, hl
+    00000406 19               [ 8]  848 	add	hl, de
+                                    849 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    00000407 5D               [ 4]  850 	ld	e, l
+    00000408 54               [ 4]  851 	ld	d, h
+    00000409 23               [ 8]  852 	inc	hl
+    0000040A 1A               [ 8]  853 	ld	a, (de)
+    0000040B 3D               [ 4]  854 	dec	a
+    0000040C 12               [ 8]  855 	ld	(de), a
+    0000040D 7E               [ 8]  856 	ld	a, (hl)
+    0000040E 77               [ 8]  857 	ld	(hl), a
+                                    858 ;src/joytest.c:105: if (j & J_UP)    scroll_sprite(i, 0, -1);
+    0000040F                        859 00122$:
+                                    860 ;src/joytest.c:106: if (j & J_DOWN)  scroll_sprite(i, 0, 1);
+    0000040F CB 58            [ 8]  861 	bit	3, b
+    00000411 28 11            [12]  862 	jr	Z, 00124$
+                                    863 ;../../../include/gb/gb.h:1989: OAM_item_t * itm = &shadow_OAM[nb];
+    00000413 11r00r00         [12]  864 	ld	de, #_shadow_OAM+0
+    00000416 69               [ 4]  865 	ld	l, c
+    00000417 AF               [ 4]  866 	xor	a, a
+    00000418 67               [ 4]  867 	ld	h, a
+    00000419 29               [ 8]  868 	add	hl, hl
+    0000041A 29               [ 8]  869 	add	hl, hl
+    0000041B 19               [ 8]  870 	add	hl, de
+                                    871 ;../../../include/gb/gb.h:1990: itm->y+=y, itm->x+=x;
+    0000041C 5D               [ 4]  872 	ld	e, l
+    0000041D 54               [ 4]  873 	ld	d, h
+    0000041E 23               [ 8]  874 	inc	hl
+    0000041F 1A               [ 8]  875 	ld	a, (de)
+    00000420 3C               [ 4]  876 	inc	a
+    00000421 12               [ 8]  877 	ld	(de), a
+    00000422 7E               [ 8]  878 	ld	a, (hl)
+    00000423 77               [ 8]  879 	ld	(hl), a
+                                    880 ;src/joytest.c:106: if (j & J_DOWN)  scroll_sprite(i, 0, 1);
+    00000424                        881 00124$:
+                                    882 ;src/joytest.c:109: if (j & J_START) reset_object_pos();
+    00000424 CB 78            [ 8]  883 	bit	7, b
+    00000426 28 05            [12]  884 	jr	Z, 00146$
+    00000428 C5               [16]  885 	push	bc
+    00000429 CDr4Dr02         [24]  886 	call	_reset_object_pos
+    0000042C C1               [12]  887 	pop	bc
+    0000042D                        888 00146$:
+                                    889 ;src/joytest.c:96: for (uint8_t i = 0; i < joypads.npads; i++) {
+    0000042D 0C               [ 4]  890 	inc	c
+    0000042E C3rA8r03         [16]  891 	jp	00145$
+    00000431                        892 00130$:
+                                    893 ;src/joytest.c:113: vsync();
+    00000431 CDr00r00         [24]  894 	call	_vsync
+    00000434 C3r52r03         [16]  895 	jp	00132$
+                                    896 ;src/joytest.c:115: }
+    00000437 E8 04            [16]  897 	add	sp, #4
+    00000439 C9               [16]  898 	ret
+                                    899 	.area _CODE
+                                    900 	.area _INITIALIZER
+    00000000                        901 __xinit__toggle:
+    00000000 00                     902 	.db #0x00	;  0
+    00000001                        903 __xinit__isSGB:
+    00000001 00                     904 	.db #0x00	;  0
+    00000002                        905 __xinit__old_joy:
+    00000002 FF                     906 	.db #0xff	; 255
+    00000003                        907 __xinit__joy:
+    00000003 00                     908 	.db #0x00	; 0
+                                    909 	.area _CABS (ABS)

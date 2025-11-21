@@ -1,0 +1,1572 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module banks_nonintrinsic
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _hello_code
+                                     22 	.globl _main
+                                     23 	.globl _set_RAM_bank1
+                                     24 	.globl _set_RAM_bank0
+                                     25 	.globl _set_ROM_bank2
+                                     26 	.globl _set_ROM_bank1
+                                     27 	.globl _printf
+                                     28 	.globl _putchar
+                                     29 	.globl __switch_prg0
+                                     30 	.globl _add_num_wram
+                                     31 	.globl _data
+                                     32 	.globl __current_ram_bank
+                                     33 	.globl ___dummy_variable
+                                     34 	.globl _OAMDMA
+                                     35 	.globl _PPUDATA
+                                     36 	.globl _PPUADDR
+                                     37 	.globl _PPUSCROLL
+                                     38 	.globl _OAMDATA
+                                     39 	.globl _OAMADDR
+                                     40 	.globl _PPUSTATUS
+                                     41 	.globl _PPUMASK
+                                     42 	.globl _PPUCTRL
+                                     43 	.globl _add_num__ptr
+                                     44 	.globl _hello_rom_1
+                                     45 	.globl _hello_rom_2
+                                     46 	.globl _add_num_sram_0
+                                     47 	.globl _hello_sram_0
+                                     48 	.globl _add_num_sram_1b
+                                     49 	.globl _add_num_sram_1a
+                                     50 	.globl _hello_sram_1
+                                     51 ;--------------------------------------------------------
+                                     52 ; ZP ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _ZP      (PAG)
+    00000000                         55 _main_sloc0_1_0:
+    00000000                         56 	.ds 1
+    00000001                         57 _main_sloc1_1_0:
+    00000001                         58 	.ds 2
+    00000003                         59 _main_sloc2_1_0:
+    00000003                         60 	.ds 1
+    00000004                         61 _main_sloc3_1_0:
+    00000004                         62 	.ds 2
+                                     63 ;--------------------------------------------------------
+                                     64 ; DATA_1 ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _DATA_1
+    00000000                         67 _hello_sram_1::
+    00000000                         68 	.ds 20
+    00000014                         69 _add_num_sram_1a::
+    00000014                         70 	.ds 2
+    00000016                         71 _add_num_sram_1b::
+    00000016                         72 	.ds 2
+                                     73 ;--------------------------------------------------------
+                                     74 ; DATA_0 ram data
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _DATA_0
+    00000000                         77 _hello_sram_0::
+    00000000                         78 	.ds 20
+    00000014                         79 _add_num_sram_0::
+    00000014                         80 	.ds 2
+                                     81 ;--------------------------------------------------------
+                                     82 ; CODE_2 rom data
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _CODE_2
+    00000000                         85 _hello_rom_2:
+    00000000 68 65 6C 6C 6F 20 66    86 	.ascii "hello from CODE_2"
+             72 6F 6D 20 43 4F 44
+             45 5F 32
+    00000011 0A                      87 	.db 0x0a
+    00000012 00                      88 	.db 0x00
+                                     89 ;--------------------------------------------------------
+                                     90 ; CODE_1 rom data
+                                     91 ;--------------------------------------------------------
+                                     92 	.area _CODE_1
+    00000000                         93 _hello_rom_1:
+    00000000 68 65 6C 6C 6F 20 66    94 	.ascii "hello from CODE_1"
+             72 6F 6D 20 43 4F 44
+             45 5F 31
+    00000011 0A                      95 	.db 0x0a
+    00000012 00                      96 	.db 0x00
+    00000013                         97 _add_num__ptr:
+    00000013r14r00                   98 	.dw _add_num_sram_1a
+    00000015r16r00                   99 	.dw _add_num_sram_1b
+                                    100 ;--------------------------------------------------------
+                                    101 ; overlayable items in ram
+                                    102 ;--------------------------------------------------------
+                                    103 ;--------------------------------------------------------
+                                    104 ; uninitialized external ram data
+                                    105 ;--------------------------------------------------------
+                                    106 	.area _BSS
+                         00002000   107 _PPUCTRL	=	0x2000
+                         00002001   108 _PPUMASK	=	0x2001
+                         00002002   109 _PPUSTATUS	=	0x2002
+                         00002003   110 _OAMADDR	=	0x2003
+                         00002004   111 _OAMDATA	=	0x2004
+                         00002005   112 _PPUSCROLL	=	0x2005
+                         00002006   113 _PPUADDR	=	0x2006
+                         00002007   114 _PPUDATA	=	0x2007
+                         00004014   115 _OAMDMA	=	0x4014
+    00000000                        116 ___dummy_variable::
+    00000000                        117 	.ds 1
+                                    118 ;--------------------------------------------------------
+                                    119 ; absolute external ram data
+                                    120 ;--------------------------------------------------------
+                                    121 	.area _DABS    (ABS)
+                                    122 ;--------------------------------------------------------
+                                    123 ; initialized external ram data
+                                    124 ;--------------------------------------------------------
+                                    125 	.area _DATA
+    00000000                        126 __current_ram_bank::
+    00000000                        127 	.ds 1
+    00000001                        128 _data::
+    00000001                        129 	.ds 20
+    00000015                        130 _add_num_wram::
+    00000015                        131 	.ds 2
+                                    132 ;--------------------------------------------------------
+                                    133 ; global & static initialisations
+                                    134 ;--------------------------------------------------------
+                                    135 	.area _HOME
+                                    136 	.area _GSINIT
+                                    137 	.area _GSFINAL
+                                    138 	.area _GSINIT
+                                    139 ;--------------------------------------------------------
+                                    140 ; Home
+                                    141 ;--------------------------------------------------------
+                                    142 	.area _HOME
+                                    143 ;	src/banks_nonintrinsic.c: 21: void set_ROM_bank1(void) NONBANKED { SWITCH_ROM(1); }
+                                    144 ;	genLabel
+                                    145 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    146 ;	-----------------------------------------
+                                    147 ;	 function set_ROM_bank1
+                                    148 ;	-----------------------------------------
+                                    149 ;	Register assignment is optimal.
+                                    150 ;	Stack space usage: 0 bytes.
+    00000000                        151 _set_ROM_bank1:
+                                    152 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    153 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    154 ;	genCall
+                                    155 ;	genSend
+    00000000 A9 01            [ 2]  156 	lda	#0x01
+                                    157 ;	Raw cost for generated ic 3 : (5, 8.000000) count=1.000000
+                                    158 ;	genLabel
+                                    159 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    160 ;	genEndFunction
+    00000002 4Cr00r00         [ 3]  161 	jmp	__switch_prg0
+                                    162 ;	Raw cost for generated ic 5 : (1, 6.000000) count=1.000000
+                                    163 ;	src/banks_nonintrinsic.c: 22: void set_ROM_bank2(void) NONBANKED { SWITCH_ROM(2); }
+                                    164 ;	genLabel
+                                    165 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    166 ;	-----------------------------------------
+                                    167 ;	 function set_ROM_bank2
+                                    168 ;	-----------------------------------------
+                                    169 ;	Register assignment is optimal.
+                                    170 ;	Stack space usage: 0 bytes.
+    00000005                        171 _set_ROM_bank2:
+                                    172 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    173 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    174 ;	genCall
+                                    175 ;	genSend
+    00000005 A9 02            [ 2]  176 	lda	#0x02
+                                    177 ;	Raw cost for generated ic 3 : (5, 8.000000) count=1.000000
+                                    178 ;	genLabel
+                                    179 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    180 ;	genEndFunction
+    00000007 4Cr00r00         [ 3]  181 	jmp	__switch_prg0
+                                    182 ;	Raw cost for generated ic 5 : (1, 6.000000) count=1.000000
+                                    183 ;	src/banks_nonintrinsic.c: 31: void set_RAM_bank0(void) NONBANKED { SWITCH_RAM_BANK(0); }
+                                    184 ;	genLabel
+                                    185 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    186 ;	-----------------------------------------
+                                    187 ;	 function set_RAM_bank0
+                                    188 ;	-----------------------------------------
+                                    189 ;	Register assignment is optimal.
+                                    190 ;	Stack space usage: 0 bytes.
+    0000000A                        191 _set_RAM_bank0:
+                                    192 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    193 ;	genAssign
+                                    194 ;	genAssignLit
+    0000000A A2 00            [ 2]  195 	ldx	#0x00
+    0000000C 8Er00r00         [ 4]  196 	stx	__current_ram_bank
+                                    197 ;	Raw cost for generated ic 3 : (5, 6.000000) count=1.000000
+                                    198 ;	genLabel
+                                    199 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    200 ;	genEndFunction
+    0000000F 60               [ 6]  201 	rts
+                                    202 ;	Raw cost for generated ic 5 : (1, 6.000000) count=1.000000
+                                    203 ;	src/banks_nonintrinsic.c: 32: void set_RAM_bank1(void) NONBANKED { SWITCH_RAM_BANK(1); }
+                                    204 ;	genLabel
+                                    205 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    206 ;	-----------------------------------------
+                                    207 ;	 function set_RAM_bank1
+                                    208 ;	-----------------------------------------
+                                    209 ;	Register assignment is optimal.
+                                    210 ;	Stack space usage: 0 bytes.
+    00000010                        211 _set_RAM_bank1:
+                                    212 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    213 ;	genAssign
+                                    214 ;	genAssignLit
+    00000010 A2 01            [ 2]  215 	ldx	#0x01
+    00000012 8Er00r00         [ 4]  216 	stx	__current_ram_bank
+                                    217 ;	Raw cost for generated ic 3 : (5, 6.000000) count=1.000000
+                                    218 ;	genLabel
+                                    219 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    220 ;	genEndFunction
+    00000015 60               [ 6]  221 	rts
+                                    222 ;	Raw cost for generated ic 5 : (1, 6.000000) count=1.000000
+                                    223 	.area _HOME
+                                    224 ;--------------------------------------------------------
+                                    225 ; code
+                                    226 ;--------------------------------------------------------
+                                    227 	.area _CODE
+                                    228 ;------------------------------------------------------------
+                                    229 ;Allocation info for local variables in function 'set_ROM_bank1'
+                                    230 ;------------------------------------------------------------
+                                    231 ;------------------------------------------------------------
+                                    232 ;Allocation info for local variables in function 'set_ROM_bank2'
+                                    233 ;------------------------------------------------------------
+                                    234 ;------------------------------------------------------------
+                                    235 ;Allocation info for local variables in function 'set_RAM_bank0'
+                                    236 ;------------------------------------------------------------
+                                    237 ;------------------------------------------------------------
+                                    238 ;Allocation info for local variables in function 'set_RAM_bank1'
+                                    239 ;------------------------------------------------------------
+                                    240 ;------------------------------------------------------------
+                                    241 ;Allocation info for local variables in function 'main'
+                                    242 ;------------------------------------------------------------
+                                    243 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                    244 ;sloc1         Allocated with name '_main_sloc1_1_0'
+                                    245 ;sloc2         Allocated with name '_main_sloc2_1_0'
+                                    246 ;sloc3         Allocated with name '_main_sloc3_1_0'
+                                    247 ;i             Allocated to registers 
+                                    248 ;i             Allocated to registers 
+                                    249 ;i             Allocated to registers 
+                                    250 ;i             Allocated to registers 
+                                    251 ;i             Allocated to registers 
+                                    252 ;i             Allocated to registers 
+                                    253 ;i             Allocated to registers 
+                                    254 ;i             Allocated to registers 
+                                    255 ;i             Allocated to registers 
+                                    256 ;i             Allocated to registers 
+                                    257 ;i             Allocated to registers 
+                                    258 ;i             Allocated to registers 
+                                    259 ;i             Allocated to registers 
+                                    260 ;i             Allocated to registers 
+                                    261 ;------------------------------------------------------------
+                                    262 ;	src/banks_nonintrinsic.c: 50: void main(void) {
+                                    263 ;	genLabel
+                                    264 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    265 ;	-----------------------------------------
+                                    266 ;	 function main
+                                    267 ;	-----------------------------------------
+                                    268 ;	Register assignment is optimal.
+                                    269 ;	Stack space usage: 0 bytes.
+    00000000                        270 _main:
+                                    271 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    272 ;	src/banks_nonintrinsic.c: 53: add_num_sram_0 = 2;
+                                    273 ;	genCall
+    00000000 20r0Ar00         [ 6]  274 	jsr	_set_RAM_bank0
+                                    275 ;	Raw cost for generated ic 472 : (3, 6.000000) count=1.000000
+                                    276 ;	genAssign
+                                    277 ;	genAssignLit
+    00000003 A2 02            [ 2]  278 	ldx	#0x02
+    00000005 8Er14r00         [ 4]  279 	stx	_add_num_sram_0
+    00000008 A2 00            [ 2]  280 	ldx	#0x00
+    0000000A 8Er15r00         [ 4]  281 	stx	(_add_num_sram_0 + 1)
+                                    282 ;	Raw cost for generated ic 3 : (10, 12.000000) count=1.000000
+                                    283 ;	src/banks_nonintrinsic.c: 54: add_num_sram_1a = 4;
+                                    284 ;	genCall
+    0000000D 20r10r00         [ 6]  285 	jsr	_set_RAM_bank1
+                                    286 ;	Raw cost for generated ic 473 : (3, 6.000000) count=1.000000
+                                    287 ;	genAssign
+                                    288 ;	genAssignLit
+    00000010 A2 04            [ 2]  289 	ldx	#0x04
+    00000012 8Er14r00         [ 4]  290 	stx	_add_num_sram_1a
+    00000015 A2 00            [ 2]  291 	ldx	#0x00
+    00000017 8Er15r00         [ 4]  292 	stx	(_add_num_sram_1a + 1)
+                                    293 ;	Raw cost for generated ic 5 : (10, 12.000000) count=1.000000
+                                    294 ;	src/banks_nonintrinsic.c: 55: add_num_sram_1b = 8;
+                                    295 ;	genAssign
+                                    296 ;	genAssignLit
+    0000001A A2 08            [ 2]  297 	ldx	#0x08
+    0000001C 8Er16r00         [ 4]  298 	stx	_add_num_sram_1b
+    0000001F A2 00            [ 2]  299 	ldx	#0x00
+    00000021 8Er17r00         [ 4]  300 	stx	(_add_num_sram_1b + 1)
+                                    301 ;	Raw cost for generated ic 7 : (10, 12.000000) count=1.000000
+                                    302 ;	src/banks_nonintrinsic.c: 58: for (int8_t i = 0; (hello_code[i]); i++) putchar(hello_code[i]);
+                                    303 ;	skipping iCode since result will be rematerialized
+                                    304 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    305 ;	genAssign
+                                    306 ;	genAssignLit
+    00000024 86*00            [ 3]  307 	stx	*_main_sloc0_1_0
+                                    308 ;	Raw cost for generated ic 400 : (2, 3.000000) count=1.000000
+                                    309 ;	genLabel
+    00000026                        310 00119$:
+                                    311 ;	Raw cost for generated ic 9 : (0, 0.000000) count=3.999997
+                                    312 ;	genCast
+                                    313 ;	genCopy
+    00000026 A2 00            [ 2]  314 	ldx	#0x00
+    00000028 A5*00            [ 3]  315 	lda	*_main_sloc0_1_0
+    0000002A 10 01            [ 4]  316 	bpl	00350$
+    0000002C CA               [ 2]  317 	dex
+    0000002D                        318 00350$:
+                                    319 ;	Raw cost for generated ic 11 : (7, 9.600000) count=3.999997
+                                    320 ;	genAssign
+                                    321 ;	genAssignLit
+                                    322 ;	genCopy
+                                    323 ;	Raw cost for generated ic 12 : (0, 0.000000) count=3.999997
+                                    324 ;	genPointerGet
+                                    325 ;	setupDPTR
+    0000002D 18               [ 2]  326 	clc
+    0000002E 69rF0            [ 2]  327 	adc	#<(_hello_code+0)
+    00000030 85*00            [ 3]  328 	sta	*(DPTR+0)
+    00000032 8A               [ 2]  329 	txa
+    00000033 69s03            [ 2]  330 	adc	#>(_hello_code+0)
+    00000035 85*01            [ 3]  331 	sta	*(DPTR+1)
+    00000037 A0 00            [ 2]  332 	ldy	#0x00
+    00000039 B1*00            [ 6]  333 	lda	[DPTR],y
+                                    334 ;	Raw cost for generated ic 13 : (14, 21.000000) count=3.999997
+                                    335 ;	genIfx
+                                    336 ;	genIfxJump : z
+    0000003B F0 08            [ 4]  337 	beq	00101$
+                                    338 ;	Raw cost for generated ic 14 : (5, 5.600000) count=3.999997
+                                    339 ;	Raw cost for generated ic 21 : (0, 0.000000) count=2.999997
+                                    340 ;	genCall
+                                    341 ;	genSend
+    0000003D 20r00r00         [ 6]  342 	jsr	_putchar
+                                    343 ;	Raw cost for generated ic 22 : (3, 6.000000) count=2.999997
+                                    344 ;	genPlus
+                                    345 ;	genPlusIncr
+    00000040 E6*00            [ 5]  346 	inc	*_main_sloc0_1_0
+                                    347 ;	Raw cost for generated ic 25 : (2, 5.000000) count=2.999997
+                                    348 ;	genGoto
+    00000042 4Cr26r00         [ 3]  349 	jmp	00119$
+                                    350 ;	Raw cost for generated ic 27 : (3, 3.000000) count=2.999997
+                                    351 ;	genLabel
+    00000045                        352 00101$:
+                                    353 ;	Raw cost for generated ic 28 : (0, 0.000000) count=0.999999
+                                    354 ;	src/banks_nonintrinsic.c: 59: for (int8_t i = 0; (hello_rom_1[i]); i++) putchar(hello_rom_1[i]);
+                                    355 ;	skipping iCode since result will be rematerialized
+                                    356 ;	Raw cost for generated ic 31 : (0, 0.000000) count=0.999999
+                                    357 ;	genAssign
+                                    358 ;	genAssignLit
+    00000045 A2 00            [ 2]  359 	ldx	#0x00
+    00000047 86*00            [ 3]  360 	stx	*_main_sloc0_1_0
+                                    361 ;	Raw cost for generated ic 403 : (4, 5.000000) count=0.999999
+                                    362 ;	genLabel
+    00000049                        363 00122$:
+                                    364 ;	Raw cost for generated ic 30 : (0, 0.000000) count=3.999993
+                                    365 ;	genCast
+                                    366 ;	genCopy
+    00000049 A2 00            [ 2]  367 	ldx	#0x00
+    0000004B A5*00            [ 3]  368 	lda	*_main_sloc0_1_0
+    0000004D 10 01            [ 4]  369 	bpl	00353$
+    0000004F CA               [ 2]  370 	dex
+    00000050                        371 00353$:
+                                    372 ;	Raw cost for generated ic 32 : (7, 9.600000) count=3.999993
+                                    373 ;	genCall
+    00000050 48               [ 3]  374 	pha
+    00000051 85*00            [ 3]  375 	sta	*(REGTEMP+0)
+    00000053 8A               [ 2]  376 	txa
+    00000054 48               [ 3]  377 	pha
+    00000055 A5*00            [ 3]  378 	lda	*(REGTEMP+0)
+    00000057 20r00r00         [ 6]  379 	jsr	_set_ROM_bank1
+    0000005A 68               [ 4]  380 	pla
+    0000005B AA               [ 2]  381 	tax
+    0000005C 68               [ 4]  382 	pla
+                                    383 ;	Raw cost for generated ic 474 : (13, 30.000000) count=3.999993
+                                    384 ;	genAssign
+                                    385 ;	genAssignLit
+                                    386 ;	genCopy
+                                    387 ;	Raw cost for generated ic 33 : (0, 0.000000) count=3.999993
+                                    388 ;	genPointerGet
+                                    389 ;	setupDPTR
+    0000005D 18               [ 2]  390 	clc
+    0000005E 69r00            [ 2]  391 	adc	#<(_hello_rom_1+0)
+    00000060 85*00            [ 3]  392 	sta	*(DPTR+0)
+    00000062 8A               [ 2]  393 	txa
+    00000063 69s00            [ 2]  394 	adc	#>(_hello_rom_1+0)
+    00000065 85*01            [ 3]  395 	sta	*(DPTR+1)
+    00000067 A0 00            [ 2]  396 	ldy	#0x00
+    00000069 B1*00            [ 6]  397 	lda	[DPTR],y
+                                    398 ;	Raw cost for generated ic 34 : (14, 21.000000) count=3.999993
+                                    399 ;	genIfx
+                                    400 ;	genIfxJump : z
+    0000006B F0 08            [ 4]  401 	beq	00102$
+                                    402 ;	Raw cost for generated ic 35 : (5, 5.600000) count=3.999993
+                                    403 ;	Raw cost for generated ic 42 : (0, 0.000000) count=2.999994
+                                    404 ;	genCall
+                                    405 ;	genSend
+    0000006D 20r00r00         [ 6]  406 	jsr	_putchar
+                                    407 ;	Raw cost for generated ic 43 : (3, 6.000000) count=2.999994
+                                    408 ;	genPlus
+                                    409 ;	genPlusIncr
+    00000070 E6*00            [ 5]  410 	inc	*_main_sloc0_1_0
+                                    411 ;	Raw cost for generated ic 46 : (2, 5.000000) count=2.999994
+                                    412 ;	genGoto
+    00000072 4Cr49r00         [ 3]  413 	jmp	00122$
+                                    414 ;	Raw cost for generated ic 48 : (3, 3.000000) count=2.999994
+                                    415 ;	genLabel
+    00000075                        416 00102$:
+                                    417 ;	Raw cost for generated ic 49 : (0, 0.000000) count=0.999998
+                                    418 ;	src/banks_nonintrinsic.c: 60: for (int8_t i = 0; (hello_rom_2[i]); i++) putchar(hello_rom_2[i]);
+                                    419 ;	skipping iCode since result will be rematerialized
+                                    420 ;	Raw cost for generated ic 52 : (0, 0.000000) count=0.999998
+                                    421 ;	genAssign
+                                    422 ;	genAssignLit
+    00000075 A2 00            [ 2]  423 	ldx	#0x00
+    00000077 86*00            [ 3]  424 	stx	*_main_sloc0_1_0
+                                    425 ;	Raw cost for generated ic 406 : (4, 5.000000) count=0.999998
+                                    426 ;	genLabel
+    00000079                        427 00125$:
+                                    428 ;	Raw cost for generated ic 51 : (0, 0.000000) count=3.999983
+                                    429 ;	genCast
+                                    430 ;	genCopy
+    00000079 A2 00            [ 2]  431 	ldx	#0x00
+    0000007B A5*00            [ 3]  432 	lda	*_main_sloc0_1_0
+    0000007D 10 01            [ 4]  433 	bpl	00356$
+    0000007F CA               [ 2]  434 	dex
+    00000080                        435 00356$:
+                                    436 ;	Raw cost for generated ic 53 : (7, 9.600000) count=3.999983
+                                    437 ;	genCall
+    00000080 48               [ 3]  438 	pha
+    00000081 85*00            [ 3]  439 	sta	*(REGTEMP+0)
+    00000083 8A               [ 2]  440 	txa
+    00000084 48               [ 3]  441 	pha
+    00000085 A5*00            [ 3]  442 	lda	*(REGTEMP+0)
+    00000087 20r05r00         [ 6]  443 	jsr	_set_ROM_bank2
+    0000008A 68               [ 4]  444 	pla
+    0000008B AA               [ 2]  445 	tax
+    0000008C 68               [ 4]  446 	pla
+                                    447 ;	Raw cost for generated ic 475 : (13, 30.000000) count=3.999983
+                                    448 ;	genAssign
+                                    449 ;	genAssignLit
+                                    450 ;	genCopy
+                                    451 ;	Raw cost for generated ic 54 : (0, 0.000000) count=3.999983
+                                    452 ;	genPointerGet
+                                    453 ;	setupDPTR
+    0000008D 18               [ 2]  454 	clc
+    0000008E 69r00            [ 2]  455 	adc	#<(_hello_rom_2+0)
+    00000090 85*00            [ 3]  456 	sta	*(DPTR+0)
+    00000092 8A               [ 2]  457 	txa
+    00000093 69s00            [ 2]  458 	adc	#>(_hello_rom_2+0)
+    00000095 85*01            [ 3]  459 	sta	*(DPTR+1)
+    00000097 A0 00            [ 2]  460 	ldy	#0x00
+    00000099 B1*00            [ 6]  461 	lda	[DPTR],y
+                                    462 ;	Raw cost for generated ic 55 : (14, 21.000000) count=3.999983
+                                    463 ;	genIfx
+                                    464 ;	genIfxJump : z
+    0000009B F0 08            [ 4]  465 	beq	00103$
+                                    466 ;	Raw cost for generated ic 56 : (5, 5.600000) count=3.999983
+                                    467 ;	Raw cost for generated ic 63 : (0, 0.000000) count=2.999987
+                                    468 ;	genCall
+                                    469 ;	genSend
+    0000009D 20r00r00         [ 6]  470 	jsr	_putchar
+                                    471 ;	Raw cost for generated ic 64 : (3, 6.000000) count=2.999987
+                                    472 ;	genPlus
+                                    473 ;	genPlusIncr
+    000000A0 E6*00            [ 5]  474 	inc	*_main_sloc0_1_0
+                                    475 ;	Raw cost for generated ic 67 : (2, 5.000000) count=2.999987
+                                    476 ;	genGoto
+    000000A2 4Cr79r00         [ 3]  477 	jmp	00125$
+                                    478 ;	Raw cost for generated ic 69 : (3, 3.000000) count=2.999987
+                                    479 ;	genLabel
+    000000A5                        480 00103$:
+                                    481 ;	Raw cost for generated ic 70 : (0, 0.000000) count=0.999996
+                                    482 ;	src/banks_nonintrinsic.c: 63: for (int8_t i = 0; (i < sizeof(hello_rom_1)); i++) hello_sram_0[i] = hello_rom_1[i];
+                                    483 ;	skipping iCode since result will be rematerialized
+                                    484 ;	Raw cost for generated ic 77 : (0, 0.000000) count=0.999996
+                                    485 ;	genAssign
+                                    486 ;	genAssignLit
+    000000A5 A2 00            [ 2]  487 	ldx	#0x00
+    000000A7 86*00            [ 3]  488 	stx	*_main_sloc0_1_0
+                                    489 ;	Raw cost for generated ic 409 : (4, 5.000000) count=0.999996
+                                    490 ;	genLabel
+    000000A9                        491 00128$:
+                                    492 ;	Raw cost for generated ic 72 : (0, 0.000000) count=3.999950
+                                    493 ;	genCmp
+    000000A9 A5*00            [ 3]  494 	lda	*_main_sloc0_1_0
+    000000AB 38               [ 2]  495 	sec
+    000000AC E9 13            [ 2]  496 	sbc	#0x13
+    000000AE 50 04            [ 4]  497 	bvc	00361$
+    000000B0 10 09            [ 4]  498 	bpl	00359$
+    000000B2 30 02            [ 4]  499 	bmi	00362$
+    000000B4                        500 00361$:
+    000000B4 30 05            [ 4]  501 	bmi	00359$
+    000000B6                        502 00362$:
+    000000B6 A9 00            [ 2]  503 	lda	#0x00
+    000000B8 4CrBDr00         [ 3]  504 	jmp	00360$
+    000000BB                        505 00359$:
+    000000BB A9 01            [ 2]  506 	lda	#0x01
+    000000BD                        507 00360$:
+                                    508 ;	Raw cost for generated ic 73 : (20, 24.400002) count=3.999950
+                                    509 ;	genCall
+    000000BD 48               [ 3]  510 	pha
+    000000BE 20r00r00         [ 6]  511 	jsr	_set_ROM_bank1
+    000000C1 68               [ 4]  512 	pla
+                                    513 ;	Raw cost for generated ic 476 : (5, 13.000000) count=3.999950
+                                    514 ;	genIfx
+                                    515 ;	genIfxJump : z
+    000000C2 F0 29            [ 4]  516 	beq	00104$
+                                    517 ;	Raw cost for generated ic 74 : (5, 5.600000) count=3.999950
+                                    518 ;	genCast
+                                    519 ;	genCopy
+    000000C4 A5*00            [ 3]  520 	lda	*_main_sloc0_1_0
+                                    521 ;	Raw cost for generated ic 78 : (2, 3.000000) count=2.999963
+                                    522 ;	genAssign
+                                    523 ;	genAssignLit
+                                    524 ;	genCopy
+    000000C6 A2 00            [ 2]  525 	ldx	#0x00
+    000000C8 86*02            [ 3]  526 	stx	*(_main_sloc1_1_0 + 1)
+    000000CA 85*01            [ 3]  527 	sta	*_main_sloc1_1_0
+                                    528 ;	Raw cost for generated ic 79 : (6, 8.000000) count=2.999963
+                                    529 ;	genAssign
+                                    530 ;	genAssignLit
+                                    531 ;	genCopy
+                                    532 ;	Raw cost for generated ic 82 : (0, 0.000000) count=2.999963
+                                    533 ;	genPointerGet
+    000000CC A8               [ 2]  534 	tay
+    000000CD B9r00r00         [ 5]  535 	lda	(_hello_rom_1+0+0x0000),y
+    000000D0 85*03            [ 3]  536 	sta	*_main_sloc2_1_0
+                                    537 ;	Raw cost for generated ic 83 : (6, 9.000000) count=2.999963
+                                    538 ;	genCall
+    000000D2 20r0Ar00         [ 6]  539 	jsr	_set_RAM_bank0
+                                    540 ;	Raw cost for generated ic 477 : (3, 6.000000) count=2.999963
+                                    541 ;	genPointerSet
+                                    542 ;	setupDPTR
+    000000D5 18               [ 2]  543 	clc
+    000000D6 A5*01            [ 3]  544 	lda	*_main_sloc1_1_0
+    000000D8 69r00            [ 2]  545 	adc	#<(_hello_sram_0+0)
+    000000DA 85*00            [ 3]  546 	sta	*(DPTR+0)
+    000000DC A5*02            [ 3]  547 	lda	*(_main_sloc1_1_0 + 1)
+    000000DE 69s00            [ 2]  548 	adc	#>(_hello_sram_0+0)
+    000000E0 85*01            [ 3]  549 	sta	*(DPTR+1)
+    000000E2 A5*03            [ 3]  550 	lda	*_main_sloc2_1_0
+    000000E4 A0 00            [ 2]  551 	ldy	#0x00
+    000000E6 91*00            [ 6]  552 	sta	[DPTR],y
+                                    553 ;	Raw cost for generated ic 84 : (19, 29.000000) count=2.999963
+                                    554 ;	genPlus
+                                    555 ;	genPlusIncr
+    000000E8 E6*00            [ 5]  556 	inc	*_main_sloc0_1_0
+                                    557 ;	Raw cost for generated ic 87 : (2, 5.000000) count=2.999963
+                                    558 ;	genGoto
+    000000EA 4CrA9r00         [ 3]  559 	jmp	00128$
+                                    560 ;	Raw cost for generated ic 89 : (3, 3.000000) count=2.999963
+                                    561 ;	genLabel
+    000000ED                        562 00104$:
+                                    563 ;	Raw cost for generated ic 90 : (0, 0.000000) count=0.999987
+                                    564 ;	src/banks_nonintrinsic.c: 64: for (int8_t i = 0; (i < 4); i++) hello_sram_0[i + 11] = data[i];
+                                    565 ;	skipping iCode since result will be rematerialized
+                                    566 ;	Raw cost for generated ic 97 : (0, 0.000000) count=0.999987
+                                    567 ;	skipping iCode since result will be rematerialized
+                                    568 ;	Raw cost for generated ic 101 : (0, 0.000000) count=0.999987
+                                    569 ;	genAssign
+                                    570 ;	genAssignLit
+    000000ED A2 00            [ 2]  571 	ldx	#0x00
+    000000EF 86*03            [ 3]  572 	stx	*_main_sloc2_1_0
+                                    573 ;	Raw cost for generated ic 412 : (4, 5.000000) count=0.999987
+                                    574 ;	genCall
+    000000F1 20r0Ar00         [ 6]  575 	jsr	_set_RAM_bank0
+                                    576 ;	Raw cost for generated ic 478 : (3, 6.000000) count=0.999987
+                                    577 ;	genLabel
+    000000F4                        578 00131$:
+                                    579 ;	Raw cost for generated ic 92 : (0, 0.000000) count=3.999868
+                                    580 ;	genCmp
+    000000F4 A5*03            [ 3]  581 	lda	*_main_sloc2_1_0
+    000000F6 38               [ 2]  582 	sec
+    000000F7 E9 04            [ 2]  583 	sbc	#0x04
+    000000F9 50 04            [ 4]  584 	bvc	00366$
+    000000FB 10 04            [ 4]  585 	bpl	00365$
+    000000FD 30 2D            [ 4]  586 	bmi	00105$
+    000000FF                        587 00366$:
+    000000FF 10 2B            [ 4]  588 	bpl	00105$
+    00000101                        589 00365$:
+                                    590 ;	Raw cost for generated ic 93 : (16, 20.400002) count=3.999868
+                                    591 ;	skipping generated iCode
+                                    592 ;	Raw cost for generated ic 94 : (0, 0.000000) count=3.999868
+                                    593 ;	genPlus
+                                    594 ;	genPlusIncr
+    00000101 A5*03            [ 3]  595 	lda	*_main_sloc2_1_0
+    00000103 18               [ 2]  596 	clc
+    00000104 69 0B            [ 2]  597 	adc	#0x0b
+                                    598 ;	Raw cost for generated ic 98 : (5, 7.000000) count=2.999901
+                                    599 ;	genCast
+                                    600 ;	genCopy
+                                    601 ;	Raw cost for generated ic 99 : (0, 0.000000) count=2.999901
+                                    602 ;	genAssign
+                                    603 ;	genAssignLit
+                                    604 ;	genCopy
+    00000106 A2 00            [ 2]  605 	ldx	#0x00
+    00000108 86*02            [ 3]  606 	stx	*(_main_sloc1_1_0 + 1)
+    0000010A 85*01            [ 3]  607 	sta	*_main_sloc1_1_0
+                                    608 ;	Raw cost for generated ic 100 : (6, 8.000000) count=2.999901
+                                    609 ;	genCast
+                                    610 ;	genCopy
+    0000010C A5*03            [ 3]  611 	lda	*_main_sloc2_1_0
+                                    612 ;	Raw cost for generated ic 102 : (2, 3.000000) count=2.999901
+                                    613 ;	genAssign
+                                    614 ;	genAssignLit
+                                    615 ;	genCopy
+                                    616 ;	Raw cost for generated ic 103 : (0, 0.000000) count=2.999901
+                                    617 ;	genPointerGet
+    0000010E A8               [ 2]  618 	tay
+    0000010F B9r01r00         [ 5]  619 	lda	(_data+0+0x0000),y
+                                    620 ;	Raw cost for generated ic 104 : (4, 6.000000) count=2.999901
+                                    621 ;	genPointerSet
+    00000112 85*00            [ 3]  622 	sta	*(REGTEMP+0)
+                                    623 ;	setupDPTR
+    00000114 18               [ 2]  624 	clc
+    00000115 A5*01            [ 3]  625 	lda	*_main_sloc1_1_0
+    00000117 69r00            [ 2]  626 	adc	#<(_hello_sram_0+0)
+    00000119 85*00            [ 3]  627 	sta	*(DPTR+0)
+    0000011B A5*02            [ 3]  628 	lda	*(_main_sloc1_1_0 + 1)
+    0000011D 69s00            [ 2]  629 	adc	#>(_hello_sram_0+0)
+    0000011F 85*01            [ 3]  630 	sta	*(DPTR+1)
+    00000121 A5*00            [ 3]  631 	lda	*(REGTEMP+0)
+    00000123 A0 00            [ 2]  632 	ldy	#0x00
+    00000125 91*00            [ 6]  633 	sta	[DPTR],y
+                                    634 ;	Raw cost for generated ic 105 : (21, 32.000000) count=2.999901
+                                    635 ;	genPlus
+                                    636 ;	genPlusIncr
+    00000127 E6*03            [ 5]  637 	inc	*_main_sloc2_1_0
+                                    638 ;	Raw cost for generated ic 108 : (2, 5.000000) count=2.999901
+                                    639 ;	genGoto
+    00000129 4CrF4r00         [ 3]  640 	jmp	00131$
+                                    641 ;	Raw cost for generated ic 110 : (3, 3.000000) count=2.999901
+                                    642 ;	genLabel
+    0000012C                        643 00105$:
+                                    644 ;	Raw cost for generated ic 111 : (0, 0.000000) count=0.999967
+                                    645 ;	src/banks_nonintrinsic.c: 65: for (int8_t i = 0; (hello_sram_0[i]); i++) putchar(hello_sram_0[i]);
+                                    646 ;	skipping iCode since result will be rematerialized
+                                    647 ;	Raw cost for generated ic 114 : (0, 0.000000) count=0.999967
+                                    648 ;	genAssign
+                                    649 ;	genAssignLit
+    0000012C A2 00            [ 2]  650 	ldx	#0x00
+    0000012E 86*03            [ 3]  651 	stx	*_main_sloc2_1_0
+                                    652 ;	Raw cost for generated ic 415 : (4, 5.000000) count=0.999967
+                                    653 ;	genLabel
+    00000130                        654 00134$:
+                                    655 ;	Raw cost for generated ic 113 : (0, 0.000000) count=3.999663
+                                    656 ;	genCast
+                                    657 ;	genCopy
+    00000130 A2 00            [ 2]  658 	ldx	#0x00
+    00000132 A5*03            [ 3]  659 	lda	*_main_sloc2_1_0
+    00000134 10 01            [ 4]  660 	bpl	00368$
+    00000136 CA               [ 2]  661 	dex
+    00000137                        662 00368$:
+                                    663 ;	Raw cost for generated ic 115 : (7, 9.600000) count=3.999663
+                                    664 ;	genAssign
+                                    665 ;	genAssignLit
+                                    666 ;	genCopy
+                                    667 ;	Raw cost for generated ic 116 : (0, 0.000000) count=3.999663
+                                    668 ;	genPointerGet
+                                    669 ;	setupDPTR
+    00000137 18               [ 2]  670 	clc
+    00000138 69r00            [ 2]  671 	adc	#<(_hello_sram_0+0)
+    0000013A 85*00            [ 3]  672 	sta	*(DPTR+0)
+    0000013C 8A               [ 2]  673 	txa
+    0000013D 69s00            [ 2]  674 	adc	#>(_hello_sram_0+0)
+    0000013F 85*01            [ 3]  675 	sta	*(DPTR+1)
+    00000141 A0 00            [ 2]  676 	ldy	#0x00
+    00000143 B1*00            [ 6]  677 	lda	[DPTR],y
+                                    678 ;	Raw cost for generated ic 117 : (14, 21.000000) count=3.999663
+                                    679 ;	genIfx
+                                    680 ;	genIfxJump : z
+    00000145 F0 0B            [ 4]  681 	beq	00106$
+                                    682 ;	Raw cost for generated ic 118 : (5, 5.600000) count=3.999663
+                                    683 ;	Raw cost for generated ic 125 : (0, 0.000000) count=2.999747
+                                    684 ;	genCall
+                                    685 ;	genSend
+    00000147 20r00r00         [ 6]  686 	jsr	_putchar
+                                    687 ;	Raw cost for generated ic 126 : (3, 6.000000) count=2.999747
+                                    688 ;	genCall
+    0000014A 20r0Ar00         [ 6]  689 	jsr	_set_RAM_bank0
+                                    690 ;	Raw cost for generated ic 479 : (3, 6.000000) count=2.999747
+                                    691 ;	genPlus
+                                    692 ;	genPlusIncr
+    0000014D E6*03            [ 5]  693 	inc	*_main_sloc2_1_0
+                                    694 ;	Raw cost for generated ic 129 : (2, 5.000000) count=2.999747
+                                    695 ;	genGoto
+    0000014F 4Cr30r01         [ 3]  696 	jmp	00134$
+                                    697 ;	Raw cost for generated ic 131 : (3, 3.000000) count=2.999747
+                                    698 ;	genLabel
+    00000152                        699 00106$:
+                                    700 ;	Raw cost for generated ic 132 : (0, 0.000000) count=0.999916
+                                    701 ;	src/banks_nonintrinsic.c: 68: for (int8_t i = 0; (i < sizeof(hello_rom_2)); i++) hello_sram_1[i] = hello_rom_2[i];
+                                    702 ;	skipping iCode since result will be rematerialized
+                                    703 ;	Raw cost for generated ic 139 : (0, 0.000000) count=0.999916
+                                    704 ;	genAssign
+                                    705 ;	genAssignLit
+    00000152 A2 00            [ 2]  706 	ldx	#0x00
+    00000154 86*03            [ 3]  707 	stx	*_main_sloc2_1_0
+                                    708 ;	Raw cost for generated ic 418 : (4, 5.000000) count=0.999916
+                                    709 ;	genLabel
+    00000156                        710 00137$:
+                                    711 ;	Raw cost for generated ic 134 : (0, 0.000000) count=3.999177
+                                    712 ;	genCmp
+    00000156 A5*03            [ 3]  713 	lda	*_main_sloc2_1_0
+    00000158 38               [ 2]  714 	sec
+    00000159 E9 13            [ 2]  715 	sbc	#0x13
+    0000015B 50 04            [ 4]  716 	bvc	00373$
+    0000015D 10 09            [ 4]  717 	bpl	00371$
+    0000015F 30 02            [ 4]  718 	bmi	00374$
+    00000161                        719 00373$:
+    00000161 30 05            [ 4]  720 	bmi	00371$
+    00000163                        721 00374$:
+    00000163 A9 00            [ 2]  722 	lda	#0x00
+    00000165 4Cr6Ar01         [ 3]  723 	jmp	00372$
+    00000168                        724 00371$:
+    00000168 A9 01            [ 2]  725 	lda	#0x01
+    0000016A                        726 00372$:
+                                    727 ;	Raw cost for generated ic 135 : (20, 24.400002) count=3.999177
+                                    728 ;	genCall
+    0000016A 48               [ 3]  729 	pha
+    0000016B 20r05r00         [ 6]  730 	jsr	_set_ROM_bank2
+    0000016E 68               [ 4]  731 	pla
+                                    732 ;	Raw cost for generated ic 480 : (5, 13.000000) count=3.999177
+                                    733 ;	genIfx
+                                    734 ;	genIfxJump : z
+    0000016F F0 29            [ 4]  735 	beq	00107$
+                                    736 ;	Raw cost for generated ic 136 : (5, 5.600000) count=3.999177
+                                    737 ;	genCast
+                                    738 ;	genCopy
+    00000171 A5*03            [ 3]  739 	lda	*_main_sloc2_1_0
+                                    740 ;	Raw cost for generated ic 140 : (2, 3.000000) count=2.999383
+                                    741 ;	genAssign
+                                    742 ;	genAssignLit
+                                    743 ;	genCopy
+    00000173 A2 00            [ 2]  744 	ldx	#0x00
+    00000175 86*02            [ 3]  745 	stx	*(_main_sloc1_1_0 + 1)
+    00000177 85*01            [ 3]  746 	sta	*_main_sloc1_1_0
+                                    747 ;	Raw cost for generated ic 141 : (6, 8.000000) count=2.999383
+                                    748 ;	genAssign
+                                    749 ;	genAssignLit
+                                    750 ;	genCopy
+                                    751 ;	Raw cost for generated ic 144 : (0, 0.000000) count=2.999383
+                                    752 ;	genPointerGet
+    00000179 A8               [ 2]  753 	tay
+    0000017A B9r00r00         [ 5]  754 	lda	(_hello_rom_2+0+0x0000),y
+    0000017D 85*00            [ 3]  755 	sta	*_main_sloc0_1_0
+                                    756 ;	Raw cost for generated ic 145 : (6, 9.000000) count=2.999383
+                                    757 ;	genCall
+    0000017F 20r10r00         [ 6]  758 	jsr	_set_RAM_bank1
+                                    759 ;	Raw cost for generated ic 481 : (3, 6.000000) count=2.999383
+                                    760 ;	genPointerSet
+                                    761 ;	setupDPTR
+    00000182 18               [ 2]  762 	clc
+    00000183 A5*01            [ 3]  763 	lda	*_main_sloc1_1_0
+    00000185 69r00            [ 2]  764 	adc	#<(_hello_sram_1+0)
+    00000187 85*00            [ 3]  765 	sta	*(DPTR+0)
+    00000189 A5*02            [ 3]  766 	lda	*(_main_sloc1_1_0 + 1)
+    0000018B 69s00            [ 2]  767 	adc	#>(_hello_sram_1+0)
+    0000018D 85*01            [ 3]  768 	sta	*(DPTR+1)
+    0000018F A5*00            [ 3]  769 	lda	*_main_sloc0_1_0
+    00000191 A0 00            [ 2]  770 	ldy	#0x00
+    00000193 91*00            [ 6]  771 	sta	[DPTR],y
+                                    772 ;	Raw cost for generated ic 146 : (19, 29.000000) count=2.999383
+                                    773 ;	genPlus
+                                    774 ;	genPlusIncr
+    00000195 E6*03            [ 5]  775 	inc	*_main_sloc2_1_0
+                                    776 ;	Raw cost for generated ic 149 : (2, 5.000000) count=2.999383
+                                    777 ;	genGoto
+    00000197 4Cr56r01         [ 3]  778 	jmp	00137$
+                                    779 ;	Raw cost for generated ic 151 : (3, 3.000000) count=2.999383
+                                    780 ;	genLabel
+    0000019A                        781 00107$:
+                                    782 ;	Raw cost for generated ic 152 : (0, 0.000000) count=0.999794
+                                    783 ;	src/banks_nonintrinsic.c: 69: for (int8_t i = 0; (i < 4); i++) hello_sram_1[i + 11] = data[i];
+                                    784 ;	skipping iCode since result will be rematerialized
+                                    785 ;	Raw cost for generated ic 159 : (0, 0.000000) count=0.999794
+                                    786 ;	skipping iCode since result will be rematerialized
+                                    787 ;	Raw cost for generated ic 163 : (0, 0.000000) count=0.999794
+                                    788 ;	genAssign
+                                    789 ;	genAssignLit
+    0000019A A2 00            [ 2]  790 	ldx	#0x00
+    0000019C 86*03            [ 3]  791 	stx	*_main_sloc2_1_0
+                                    792 ;	Raw cost for generated ic 421 : (4, 5.000000) count=0.999794
+                                    793 ;	genCall
+    0000019E 20r10r00         [ 6]  794 	jsr	_set_RAM_bank1
+                                    795 ;	Raw cost for generated ic 482 : (3, 6.000000) count=0.999794
+                                    796 ;	genLabel
+    000001A1                        797 00140$:
+                                    798 ;	Raw cost for generated ic 154 : (0, 0.000000) count=3.998088
+                                    799 ;	genCmp
+    000001A1 A5*03            [ 3]  800 	lda	*_main_sloc2_1_0
+    000001A3 38               [ 2]  801 	sec
+    000001A4 E9 04            [ 2]  802 	sbc	#0x04
+    000001A6 50 04            [ 4]  803 	bvc	00378$
+    000001A8 10 04            [ 4]  804 	bpl	00377$
+    000001AA 30 2D            [ 4]  805 	bmi	00108$
+    000001AC                        806 00378$:
+    000001AC 10 2B            [ 4]  807 	bpl	00108$
+    000001AE                        808 00377$:
+                                    809 ;	Raw cost for generated ic 155 : (16, 20.400002) count=3.998088
+                                    810 ;	skipping generated iCode
+                                    811 ;	Raw cost for generated ic 156 : (0, 0.000000) count=3.998088
+                                    812 ;	genPlus
+                                    813 ;	genPlusIncr
+    000001AE A5*03            [ 3]  814 	lda	*_main_sloc2_1_0
+    000001B0 18               [ 2]  815 	clc
+    000001B1 69 0B            [ 2]  816 	adc	#0x0b
+                                    817 ;	Raw cost for generated ic 160 : (5, 7.000000) count=2.998566
+                                    818 ;	genCast
+                                    819 ;	genCopy
+                                    820 ;	Raw cost for generated ic 161 : (0, 0.000000) count=2.998566
+                                    821 ;	genAssign
+                                    822 ;	genAssignLit
+                                    823 ;	genCopy
+    000001B3 A2 00            [ 2]  824 	ldx	#0x00
+    000001B5 86*02            [ 3]  825 	stx	*(_main_sloc1_1_0 + 1)
+    000001B7 85*01            [ 3]  826 	sta	*_main_sloc1_1_0
+                                    827 ;	Raw cost for generated ic 162 : (6, 8.000000) count=2.998566
+                                    828 ;	genCast
+                                    829 ;	genCopy
+    000001B9 A5*03            [ 3]  830 	lda	*_main_sloc2_1_0
+                                    831 ;	Raw cost for generated ic 164 : (2, 3.000000) count=2.998566
+                                    832 ;	genAssign
+                                    833 ;	genAssignLit
+                                    834 ;	genCopy
+                                    835 ;	Raw cost for generated ic 165 : (0, 0.000000) count=2.998566
+                                    836 ;	genPointerGet
+    000001BB A8               [ 2]  837 	tay
+    000001BC B9r01r00         [ 5]  838 	lda	(_data+0+0x0000),y
+                                    839 ;	Raw cost for generated ic 166 : (4, 6.000000) count=2.998566
+                                    840 ;	genPointerSet
+    000001BF 85*00            [ 3]  841 	sta	*(REGTEMP+0)
+                                    842 ;	setupDPTR
+    000001C1 18               [ 2]  843 	clc
+    000001C2 A5*01            [ 3]  844 	lda	*_main_sloc1_1_0
+    000001C4 69r00            [ 2]  845 	adc	#<(_hello_sram_1+0)
+    000001C6 85*00            [ 3]  846 	sta	*(DPTR+0)
+    000001C8 A5*02            [ 3]  847 	lda	*(_main_sloc1_1_0 + 1)
+    000001CA 69s00            [ 2]  848 	adc	#>(_hello_sram_1+0)
+    000001CC 85*01            [ 3]  849 	sta	*(DPTR+1)
+    000001CE A5*00            [ 3]  850 	lda	*(REGTEMP+0)
+    000001D0 A0 00            [ 2]  851 	ldy	#0x00
+    000001D2 91*00            [ 6]  852 	sta	[DPTR],y
+                                    853 ;	Raw cost for generated ic 167 : (21, 32.000000) count=2.998566
+                                    854 ;	genPlus
+                                    855 ;	genPlusIncr
+    000001D4 E6*03            [ 5]  856 	inc	*_main_sloc2_1_0
+                                    857 ;	Raw cost for generated ic 170 : (2, 5.000000) count=2.998566
+                                    858 ;	genGoto
+    000001D6 4CrA1r01         [ 3]  859 	jmp	00140$
+                                    860 ;	Raw cost for generated ic 172 : (3, 3.000000) count=2.998566
+                                    861 ;	genLabel
+    000001D9                        862 00108$:
+                                    863 ;	Raw cost for generated ic 173 : (0, 0.000000) count=0.999522
+                                    864 ;	src/banks_nonintrinsic.c: 70: for (int8_t i = 0; (hello_sram_1[i]); i++) putchar(hello_sram_1[i]);
+                                    865 ;	skipping iCode since result will be rematerialized
+                                    866 ;	Raw cost for generated ic 176 : (0, 0.000000) count=0.999522
+                                    867 ;	genAssign
+                                    868 ;	genAssignLit
+    000001D9 A2 00            [ 2]  869 	ldx	#0x00
+    000001DB 86*03            [ 3]  870 	stx	*_main_sloc2_1_0
+                                    871 ;	Raw cost for generated ic 424 : (4, 5.000000) count=0.999522
+                                    872 ;	genLabel
+    000001DD                        873 00143$:
+                                    874 ;	Raw cost for generated ic 175 : (0, 0.000000) count=3.995788
+                                    875 ;	genCast
+                                    876 ;	genCopy
+    000001DD A2 00            [ 2]  877 	ldx	#0x00
+    000001DF A5*03            [ 3]  878 	lda	*_main_sloc2_1_0
+    000001E1 10 01            [ 4]  879 	bpl	00380$
+    000001E3 CA               [ 2]  880 	dex
+    000001E4                        881 00380$:
+                                    882 ;	Raw cost for generated ic 177 : (7, 9.600000) count=3.995788
+                                    883 ;	genAssign
+                                    884 ;	genAssignLit
+                                    885 ;	genCopy
+                                    886 ;	Raw cost for generated ic 178 : (0, 0.000000) count=3.995788
+                                    887 ;	genPointerGet
+                                    888 ;	setupDPTR
+    000001E4 18               [ 2]  889 	clc
+    000001E5 69r00            [ 2]  890 	adc	#<(_hello_sram_1+0)
+    000001E7 85*00            [ 3]  891 	sta	*(DPTR+0)
+    000001E9 8A               [ 2]  892 	txa
+    000001EA 69s00            [ 2]  893 	adc	#>(_hello_sram_1+0)
+    000001EC 85*01            [ 3]  894 	sta	*(DPTR+1)
+    000001EE A0 00            [ 2]  895 	ldy	#0x00
+    000001F0 B1*00            [ 6]  896 	lda	[DPTR],y
+                                    897 ;	Raw cost for generated ic 179 : (14, 21.000000) count=3.995788
+                                    898 ;	genIfx
+                                    899 ;	genIfxJump : z
+    000001F2 F0 0B            [ 4]  900 	beq	00109$
+                                    901 ;	Raw cost for generated ic 180 : (5, 5.600000) count=3.995788
+                                    902 ;	Raw cost for generated ic 187 : (0, 0.000000) count=2.996841
+                                    903 ;	genCall
+                                    904 ;	genSend
+    000001F4 20r00r00         [ 6]  905 	jsr	_putchar
+                                    906 ;	Raw cost for generated ic 188 : (3, 6.000000) count=2.996841
+                                    907 ;	genCall
+    000001F7 20r10r00         [ 6]  908 	jsr	_set_RAM_bank1
+                                    909 ;	Raw cost for generated ic 483 : (3, 6.000000) count=2.996841
+                                    910 ;	genPlus
+                                    911 ;	genPlusIncr
+    000001FA E6*03            [ 5]  912 	inc	*_main_sloc2_1_0
+                                    913 ;	Raw cost for generated ic 191 : (2, 5.000000) count=2.996841
+                                    914 ;	genGoto
+    000001FC 4CrDDr01         [ 3]  915 	jmp	00143$
+                                    916 ;	Raw cost for generated ic 193 : (3, 3.000000) count=2.996841
+                                    917 ;	genLabel
+    000001FF                        918 00109$:
+                                    919 ;	Raw cost for generated ic 194 : (0, 0.000000) count=0.998947
+                                    920 ;	src/banks_nonintrinsic.c: 72: printf("once more...\n");
+                                    921 ;	skipping iCode since result will be rematerialized
+                                    922 ;	Raw cost for generated ic 195 : (0, 0.000000) count=0.998947
+                                    923 ;	skipping iCode since result will be rematerialized
+                                    924 ;	Raw cost for generated ic 196 : (0, 0.000000) count=0.998947
+                                    925 ;	genIpush
+    000001FF A9s04            [ 2]  926 	lda	#>___str_0
+    00000201 48               [ 3]  927 	pha
+    00000202 A9r01            [ 2]  928 	lda	#___str_0
+    00000204 48               [ 3]  929 	pha
+                                    930 ;	Raw cost for generated ic 197 : (6, 10.000000) count=0.998947
+                                    931 ;	genCall
+    00000205 20r00r00         [ 6]  932 	jsr	_printf
+    00000208 68               [ 4]  933 	pla
+    00000209 68               [ 4]  934 	pla
+                                    935 ;	Raw cost for generated ic 198 : (5, 14.000000) count=0.998947
+                                    936 ;	src/banks_nonintrinsic.c: 74: for (int8_t i = 0; (hello_code[i]); i++) putchar(hello_code[i]);
+                                    937 ;	genAssign
+                                    938 ;	genAssignLit
+    0000020A A2 00            [ 2]  939 	ldx	#0x00
+    0000020C 86*03            [ 3]  940 	stx	*_main_sloc2_1_0
+                                    941 ;	Raw cost for generated ic 427 : (4, 5.000000) count=0.998947
+                                    942 ;	genLabel
+    0000020E                        943 00146$:
+                                    944 ;	Raw cost for generated ic 200 : (0, 0.000000) count=3.991214
+                                    945 ;	genCast
+                                    946 ;	genCopy
+    0000020E A2 00            [ 2]  947 	ldx	#0x00
+    00000210 A5*03            [ 3]  948 	lda	*_main_sloc2_1_0
+    00000212 10 01            [ 4]  949 	bpl	00383$
+    00000214 CA               [ 2]  950 	dex
+    00000215                        951 00383$:
+                                    952 ;	Raw cost for generated ic 202 : (7, 9.600000) count=3.991214
+                                    953 ;	genAssign
+                                    954 ;	genAssignLit
+                                    955 ;	genCopy
+                                    956 ;	Raw cost for generated ic 203 : (0, 0.000000) count=3.991214
+                                    957 ;	genPointerGet
+                                    958 ;	setupDPTR
+    00000215 18               [ 2]  959 	clc
+    00000216 69rF0            [ 2]  960 	adc	#<(_hello_code+0)
+    00000218 85*00            [ 3]  961 	sta	*(DPTR+0)
+    0000021A 8A               [ 2]  962 	txa
+    0000021B 69s03            [ 2]  963 	adc	#>(_hello_code+0)
+    0000021D 85*01            [ 3]  964 	sta	*(DPTR+1)
+    0000021F A0 00            [ 2]  965 	ldy	#0x00
+    00000221 B1*00            [ 6]  966 	lda	[DPTR],y
+                                    967 ;	Raw cost for generated ic 204 : (14, 21.000000) count=3.991214
+                                    968 ;	genIfx
+                                    969 ;	genIfxJump : z
+    00000223 F0 08            [ 4]  970 	beq	00110$
+                                    971 ;	Raw cost for generated ic 205 : (5, 5.600000) count=3.991214
+                                    972 ;	Raw cost for generated ic 212 : (0, 0.000000) count=2.993410
+                                    973 ;	genCall
+                                    974 ;	genSend
+    00000225 20r00r00         [ 6]  975 	jsr	_putchar
+                                    976 ;	Raw cost for generated ic 213 : (3, 6.000000) count=2.993410
+                                    977 ;	genPlus
+                                    978 ;	genPlusIncr
+    00000228 E6*03            [ 5]  979 	inc	*_main_sloc2_1_0
+                                    980 ;	Raw cost for generated ic 216 : (2, 5.000000) count=2.993410
+                                    981 ;	genGoto
+    0000022A 4Cr0Er02         [ 3]  982 	jmp	00146$
+                                    983 ;	Raw cost for generated ic 218 : (3, 3.000000) count=2.993410
+                                    984 ;	genLabel
+    0000022D                        985 00110$:
+                                    986 ;	Raw cost for generated ic 219 : (0, 0.000000) count=0.997803
+                                    987 ;	src/banks_nonintrinsic.c: 75: for (int8_t i = 0; (hello_rom_1[i]); i++) putchar(hello_rom_1[i]);
+                                    988 ;	genAssign
+                                    989 ;	genAssignLit
+    0000022D A2 00            [ 2]  990 	ldx	#0x00
+    0000022F 86*03            [ 3]  991 	stx	*_main_sloc2_1_0
+                                    992 ;	Raw cost for generated ic 430 : (4, 5.000000) count=0.997803
+                                    993 ;	genLabel
+    00000231                        994 00149$:
+                                    995 ;	Raw cost for generated ic 221 : (0, 0.000000) count=3.982671
+                                    996 ;	genCast
+                                    997 ;	genCopy
+    00000231 A2 00            [ 2]  998 	ldx	#0x00
+    00000233 A5*03            [ 3]  999 	lda	*_main_sloc2_1_0
+    00000235 10 01            [ 4] 1000 	bpl	00386$
+    00000237 CA               [ 2] 1001 	dex
+    00000238                       1002 00386$:
+                                   1003 ;	Raw cost for generated ic 223 : (7, 9.600000) count=3.982671
+                                   1004 ;	genCall
+    00000238 48               [ 3] 1005 	pha
+    00000239 85*00            [ 3] 1006 	sta	*(REGTEMP+0)
+    0000023B 8A               [ 2] 1007 	txa
+    0000023C 48               [ 3] 1008 	pha
+    0000023D A5*00            [ 3] 1009 	lda	*(REGTEMP+0)
+    0000023F 20r00r00         [ 6] 1010 	jsr	_set_ROM_bank1
+    00000242 68               [ 4] 1011 	pla
+    00000243 AA               [ 2] 1012 	tax
+    00000244 68               [ 4] 1013 	pla
+                                   1014 ;	Raw cost for generated ic 484 : (13, 30.000000) count=3.982671
+                                   1015 ;	genAssign
+                                   1016 ;	genAssignLit
+                                   1017 ;	genCopy
+                                   1018 ;	Raw cost for generated ic 224 : (0, 0.000000) count=3.982671
+                                   1019 ;	genPointerGet
+                                   1020 ;	setupDPTR
+    00000245 18               [ 2] 1021 	clc
+    00000246 69r00            [ 2] 1022 	adc	#<(_hello_rom_1+0)
+    00000248 85*00            [ 3] 1023 	sta	*(DPTR+0)
+    0000024A 8A               [ 2] 1024 	txa
+    0000024B 69s00            [ 2] 1025 	adc	#>(_hello_rom_1+0)
+    0000024D 85*01            [ 3] 1026 	sta	*(DPTR+1)
+    0000024F A0 00            [ 2] 1027 	ldy	#0x00
+    00000251 B1*00            [ 6] 1028 	lda	[DPTR],y
+                                   1029 ;	Raw cost for generated ic 225 : (14, 21.000000) count=3.982671
+                                   1030 ;	genIfx
+                                   1031 ;	genIfxJump : z
+    00000253 F0 08            [ 4] 1032 	beq	00111$
+                                   1033 ;	Raw cost for generated ic 226 : (5, 5.600000) count=3.982671
+                                   1034 ;	Raw cost for generated ic 233 : (0, 0.000000) count=2.987004
+                                   1035 ;	genCall
+                                   1036 ;	genSend
+    00000255 20r00r00         [ 6] 1037 	jsr	_putchar
+                                   1038 ;	Raw cost for generated ic 234 : (3, 6.000000) count=2.987004
+                                   1039 ;	genPlus
+                                   1040 ;	genPlusIncr
+    00000258 E6*03            [ 5] 1041 	inc	*_main_sloc2_1_0
+                                   1042 ;	Raw cost for generated ic 237 : (2, 5.000000) count=2.987004
+                                   1043 ;	genGoto
+    0000025A 4Cr31r02         [ 3] 1044 	jmp	00149$
+                                   1045 ;	Raw cost for generated ic 239 : (3, 3.000000) count=2.987004
+                                   1046 ;	genLabel
+    0000025D                       1047 00111$:
+                                   1048 ;	Raw cost for generated ic 240 : (0, 0.000000) count=0.995668
+                                   1049 ;	src/banks_nonintrinsic.c: 76: for (int8_t i = 0; (hello_rom_2[i]); i++) putchar(hello_rom_2[i]);
+                                   1050 ;	genAssign
+                                   1051 ;	genAssignLit
+    0000025D A2 00            [ 2] 1052 	ldx	#0x00
+    0000025F 86*03            [ 3] 1053 	stx	*_main_sloc2_1_0
+                                   1054 ;	Raw cost for generated ic 433 : (4, 5.000000) count=0.995668
+                                   1055 ;	genLabel
+    00000261                       1056 00152$:
+                                   1057 ;	Raw cost for generated ic 242 : (0, 0.000000) count=3.967657
+                                   1058 ;	genCast
+                                   1059 ;	genCopy
+    00000261 A2 00            [ 2] 1060 	ldx	#0x00
+    00000263 A5*03            [ 3] 1061 	lda	*_main_sloc2_1_0
+    00000265 10 01            [ 4] 1062 	bpl	00389$
+    00000267 CA               [ 2] 1063 	dex
+    00000268                       1064 00389$:
+                                   1065 ;	Raw cost for generated ic 244 : (7, 9.600000) count=3.967657
+                                   1066 ;	genCall
+    00000268 48               [ 3] 1067 	pha
+    00000269 85*00            [ 3] 1068 	sta	*(REGTEMP+0)
+    0000026B 8A               [ 2] 1069 	txa
+    0000026C 48               [ 3] 1070 	pha
+    0000026D A5*00            [ 3] 1071 	lda	*(REGTEMP+0)
+    0000026F 20r05r00         [ 6] 1072 	jsr	_set_ROM_bank2
+    00000272 68               [ 4] 1073 	pla
+    00000273 AA               [ 2] 1074 	tax
+    00000274 68               [ 4] 1075 	pla
+                                   1076 ;	Raw cost for generated ic 485 : (13, 30.000000) count=3.967657
+                                   1077 ;	genAssign
+                                   1078 ;	genAssignLit
+                                   1079 ;	genCopy
+                                   1080 ;	Raw cost for generated ic 245 : (0, 0.000000) count=3.967657
+                                   1081 ;	genPointerGet
+                                   1082 ;	setupDPTR
+    00000275 18               [ 2] 1083 	clc
+    00000276 69r00            [ 2] 1084 	adc	#<(_hello_rom_2+0)
+    00000278 85*00            [ 3] 1085 	sta	*(DPTR+0)
+    0000027A 8A               [ 2] 1086 	txa
+    0000027B 69s00            [ 2] 1087 	adc	#>(_hello_rom_2+0)
+    0000027D 85*01            [ 3] 1088 	sta	*(DPTR+1)
+    0000027F A0 00            [ 2] 1089 	ldy	#0x00
+    00000281 B1*00            [ 6] 1090 	lda	[DPTR],y
+                                   1091 ;	Raw cost for generated ic 246 : (14, 21.000000) count=3.967657
+                                   1092 ;	genIfx
+                                   1093 ;	genIfxJump : z
+    00000283 F0 08            [ 4] 1094 	beq	00112$
+                                   1095 ;	Raw cost for generated ic 247 : (5, 5.600000) count=3.967657
+                                   1096 ;	Raw cost for generated ic 254 : (0, 0.000000) count=2.975743
+                                   1097 ;	genCall
+                                   1098 ;	genSend
+    00000285 20r00r00         [ 6] 1099 	jsr	_putchar
+                                   1100 ;	Raw cost for generated ic 255 : (3, 6.000000) count=2.975743
+                                   1101 ;	genPlus
+                                   1102 ;	genPlusIncr
+    00000288 E6*03            [ 5] 1103 	inc	*_main_sloc2_1_0
+                                   1104 ;	Raw cost for generated ic 258 : (2, 5.000000) count=2.975743
+                                   1105 ;	genGoto
+    0000028A 4Cr61r02         [ 3] 1106 	jmp	00152$
+                                   1107 ;	Raw cost for generated ic 260 : (3, 3.000000) count=2.975743
+                                   1108 ;	genLabel
+    0000028D                       1109 00112$:
+                                   1110 ;	Raw cost for generated ic 261 : (0, 0.000000) count=0.991914
+                                   1111 ;	src/banks_nonintrinsic.c: 77: for (int8_t i = 0; (hello_sram_0[i]); i++) putchar(hello_sram_0[i]);
+                                   1112 ;	genAssign
+                                   1113 ;	genAssignLit
+    0000028D A2 00            [ 2] 1114 	ldx	#0x00
+    0000028F 86*03            [ 3] 1115 	stx	*_main_sloc2_1_0
+                                   1116 ;	Raw cost for generated ic 436 : (4, 5.000000) count=0.991914
+                                   1117 ;	genLabel
+    00000291                       1118 00155$:
+                                   1119 ;	Raw cost for generated ic 263 : (0, 0.000000) count=3.942775
+                                   1120 ;	genCast
+                                   1121 ;	genCopy
+    00000291 A2 00            [ 2] 1122 	ldx	#0x00
+    00000293 A5*03            [ 3] 1123 	lda	*_main_sloc2_1_0
+    00000295 10 01            [ 4] 1124 	bpl	00392$
+    00000297 CA               [ 2] 1125 	dex
+    00000298                       1126 00392$:
+                                   1127 ;	Raw cost for generated ic 265 : (7, 9.600000) count=3.942775
+                                   1128 ;	genCall
+    00000298 48               [ 3] 1129 	pha
+    00000299 85*00            [ 3] 1130 	sta	*(REGTEMP+0)
+    0000029B 8A               [ 2] 1131 	txa
+    0000029C 48               [ 3] 1132 	pha
+    0000029D A5*00            [ 3] 1133 	lda	*(REGTEMP+0)
+    0000029F 20r0Ar00         [ 6] 1134 	jsr	_set_RAM_bank0
+    000002A2 68               [ 4] 1135 	pla
+    000002A3 AA               [ 2] 1136 	tax
+    000002A4 68               [ 4] 1137 	pla
+                                   1138 ;	Raw cost for generated ic 486 : (13, 30.000000) count=3.942775
+                                   1139 ;	genAssign
+                                   1140 ;	genAssignLit
+                                   1141 ;	genCopy
+                                   1142 ;	Raw cost for generated ic 266 : (0, 0.000000) count=3.942775
+                                   1143 ;	genPointerGet
+                                   1144 ;	setupDPTR
+    000002A5 18               [ 2] 1145 	clc
+    000002A6 69r00            [ 2] 1146 	adc	#<(_hello_sram_0+0)
+    000002A8 85*00            [ 3] 1147 	sta	*(DPTR+0)
+    000002AA 8A               [ 2] 1148 	txa
+    000002AB 69s00            [ 2] 1149 	adc	#>(_hello_sram_0+0)
+    000002AD 85*01            [ 3] 1150 	sta	*(DPTR+1)
+    000002AF A0 00            [ 2] 1151 	ldy	#0x00
+    000002B1 B1*00            [ 6] 1152 	lda	[DPTR],y
+                                   1153 ;	Raw cost for generated ic 267 : (14, 21.000000) count=3.942775
+                                   1154 ;	genIfx
+                                   1155 ;	genIfxJump : z
+    000002B3 F0 08            [ 4] 1156 	beq	00113$
+                                   1157 ;	Raw cost for generated ic 268 : (5, 5.600000) count=3.942775
+                                   1158 ;	Raw cost for generated ic 275 : (0, 0.000000) count=2.957082
+                                   1159 ;	genCall
+                                   1160 ;	genSend
+    000002B5 20r00r00         [ 6] 1161 	jsr	_putchar
+                                   1162 ;	Raw cost for generated ic 276 : (3, 6.000000) count=2.957082
+                                   1163 ;	genPlus
+                                   1164 ;	genPlusIncr
+    000002B8 E6*03            [ 5] 1165 	inc	*_main_sloc2_1_0
+                                   1166 ;	Raw cost for generated ic 279 : (2, 5.000000) count=2.957082
+                                   1167 ;	genGoto
+    000002BA 4Cr91r02         [ 3] 1168 	jmp	00155$
+                                   1169 ;	Raw cost for generated ic 281 : (3, 3.000000) count=2.957082
+                                   1170 ;	genLabel
+    000002BD                       1171 00113$:
+                                   1172 ;	Raw cost for generated ic 282 : (0, 0.000000) count=0.985694
+                                   1173 ;	src/banks_nonintrinsic.c: 78: for (int8_t i = 0; (hello_sram_1[i]); i++) putchar(hello_sram_1[i]);
+                                   1174 ;	genAssign
+                                   1175 ;	genAssignLit
+    000002BD A2 00            [ 2] 1176 	ldx	#0x00
+    000002BF 86*03            [ 3] 1177 	stx	*_main_sloc2_1_0
+                                   1178 ;	Raw cost for generated ic 439 : (4, 5.000000) count=0.985694
+                                   1179 ;	genLabel
+    000002C1                       1180 00158$:
+                                   1181 ;	Raw cost for generated ic 284 : (0, 0.000000) count=3.903811
+                                   1182 ;	genCast
+                                   1183 ;	genCopy
+    000002C1 A2 00            [ 2] 1184 	ldx	#0x00
+    000002C3 A5*03            [ 3] 1185 	lda	*_main_sloc2_1_0
+    000002C5 10 01            [ 4] 1186 	bpl	00395$
+    000002C7 CA               [ 2] 1187 	dex
+    000002C8                       1188 00395$:
+                                   1189 ;	Raw cost for generated ic 286 : (7, 9.600000) count=3.903811
+                                   1190 ;	genCall
+    000002C8 48               [ 3] 1191 	pha
+    000002C9 85*00            [ 3] 1192 	sta	*(REGTEMP+0)
+    000002CB 8A               [ 2] 1193 	txa
+    000002CC 48               [ 3] 1194 	pha
+    000002CD A5*00            [ 3] 1195 	lda	*(REGTEMP+0)
+    000002CF 20r10r00         [ 6] 1196 	jsr	_set_RAM_bank1
+    000002D2 68               [ 4] 1197 	pla
+    000002D3 AA               [ 2] 1198 	tax
+    000002D4 68               [ 4] 1199 	pla
+                                   1200 ;	Raw cost for generated ic 487 : (13, 30.000000) count=3.903811
+                                   1201 ;	genAssign
+                                   1202 ;	genAssignLit
+                                   1203 ;	genCopy
+                                   1204 ;	Raw cost for generated ic 287 : (0, 0.000000) count=3.903811
+                                   1205 ;	genPointerGet
+                                   1206 ;	setupDPTR
+    000002D5 18               [ 2] 1207 	clc
+    000002D6 69r00            [ 2] 1208 	adc	#<(_hello_sram_1+0)
+    000002D8 85*00            [ 3] 1209 	sta	*(DPTR+0)
+    000002DA 8A               [ 2] 1210 	txa
+    000002DB 69s00            [ 2] 1211 	adc	#>(_hello_sram_1+0)
+    000002DD 85*01            [ 3] 1212 	sta	*(DPTR+1)
+    000002DF A0 00            [ 2] 1213 	ldy	#0x00
+    000002E1 B1*00            [ 6] 1214 	lda	[DPTR],y
+                                   1215 ;	Raw cost for generated ic 288 : (14, 21.000000) count=3.903811
+                                   1216 ;	genIfx
+                                   1217 ;	genIfxJump : z
+    000002E3 F0 08            [ 4] 1218 	beq	00114$
+                                   1219 ;	Raw cost for generated ic 289 : (5, 5.600000) count=3.903811
+                                   1220 ;	Raw cost for generated ic 296 : (0, 0.000000) count=2.927858
+                                   1221 ;	genCall
+                                   1222 ;	genSend
+    000002E5 20r00r00         [ 6] 1223 	jsr	_putchar
+                                   1224 ;	Raw cost for generated ic 297 : (3, 6.000000) count=2.927858
+                                   1225 ;	genPlus
+                                   1226 ;	genPlusIncr
+    000002E8 E6*03            [ 5] 1227 	inc	*_main_sloc2_1_0
+                                   1228 ;	Raw cost for generated ic 300 : (2, 5.000000) count=2.927858
+                                   1229 ;	genGoto
+    000002EA 4CrC1r02         [ 3] 1230 	jmp	00158$
+                                   1231 ;	Raw cost for generated ic 302 : (3, 3.000000) count=2.927858
+                                   1232 ;	genLabel
+    000002ED                       1233 00114$:
+                                   1234 ;	Raw cost for generated ic 303 : (0, 0.000000) count=0.975953
+                                   1235 ;	src/banks_nonintrinsic.c: 80: printf("once more...\n");
+                                   1236 ;	skipping iCode since result will be rematerialized
+                                   1237 ;	Raw cost for generated ic 305 : (0, 0.000000) count=0.975953
+                                   1238 ;	genIpush
+    000002ED A9s04            [ 2] 1239 	lda	#>___str_0
+    000002EF 48               [ 3] 1240 	pha
+    000002F0 A9r01            [ 2] 1241 	lda	#___str_0
+    000002F2 48               [ 3] 1242 	pha
+                                   1243 ;	Raw cost for generated ic 306 : (6, 10.000000) count=0.975953
+                                   1244 ;	genCall
+    000002F3 20r00r00         [ 6] 1245 	jsr	_printf
+    000002F6 68               [ 4] 1246 	pla
+    000002F7 68               [ 4] 1247 	pla
+                                   1248 ;	Raw cost for generated ic 307 : (5, 14.000000) count=0.975953
+                                   1249 ;	src/banks_nonintrinsic.c: 82: printf("%s", hello_code);
+                                   1250 ;	skipping iCode since result will be rematerialized
+                                   1251 ;	Raw cost for generated ic 309 : (0, 0.000000) count=0.975953
+                                   1252 ;	skipping iCode since result will be rematerialized
+                                   1253 ;	Raw cost for generated ic 310 : (0, 0.000000) count=0.975953
+                                   1254 ;	skipping iCode since result will be rematerialized
+                                   1255 ;	Raw cost for generated ic 311 : (0, 0.000000) count=0.975953
+                                   1256 ;	genIpush
+    000002F8 A9s03            [ 2] 1257 	lda	#>_hello_code
+    000002FA 48               [ 3] 1258 	pha
+    000002FB A9rF0            [ 2] 1259 	lda	#_hello_code
+    000002FD 48               [ 3] 1260 	pha
+                                   1261 ;	Raw cost for generated ic 312 : (6, 10.000000) count=0.975953
+                                   1262 ;	genIpush
+    000002FE A9s04            [ 2] 1263 	lda	#>___str_1
+    00000300 48               [ 3] 1264 	pha
+    00000301 A9r0F            [ 2] 1265 	lda	#___str_1
+    00000303 48               [ 3] 1266 	pha
+                                   1267 ;	Raw cost for generated ic 313 : (6, 10.000000) count=0.975953
+                                   1268 ;	genCall
+    00000304 20r00r00         [ 6] 1269 	jsr	_printf
+    00000307 68               [ 4] 1270 	pla
+    00000308 68               [ 4] 1271 	pla
+    00000309 68               [ 4] 1272 	pla
+    0000030A 68               [ 4] 1273 	pla
+                                   1274 ;	Raw cost for generated ic 314 : (7, 22.000000) count=0.975953
+                                   1275 ;	src/banks_nonintrinsic.c: 83: printf("%s", switch_to(hello_rom_1));
+                                   1276 ;	genCall
+    0000030B 20r00r00         [ 6] 1277 	jsr	_set_ROM_bank1
+                                   1278 ;	Raw cost for generated ic 488 : (3, 6.000000) count=0.975953
+                                   1279 ;	genPointerGet
+                                   1280 ;	genDataPointerGet
+    0000030E ADr00r00         [ 4] 1281 	lda	_hello_rom_1
+    00000311 8Dr00r00         [ 4] 1282 	sta	___dummy_variable
+                                   1283 ;	Raw cost for generated ic 316 : (6, 8.000000) count=0.975953
+                                   1284 ;	skipping iCode since result will be rematerialized
+                                   1285 ;	Raw cost for generated ic 319 : (0, 0.000000) count=0.975953
+                                   1286 ;	skipping iCode since result will be rematerialized
+                                   1287 ;	Raw cost for generated ic 321 : (0, 0.000000) count=0.975953
+                                   1288 ;	skipping iCode since result will be rematerialized
+                                   1289 ;	Raw cost for generated ic 323 : (0, 0.000000) count=0.975953
+                                   1290 ;	genIpush
+    00000314 A9s00            [ 2] 1291 	lda	#>_hello_rom_1
+    00000316 48               [ 3] 1292 	pha
+    00000317 A9r00            [ 2] 1293 	lda	#_hello_rom_1
+    00000319 48               [ 3] 1294 	pha
+                                   1295 ;	Raw cost for generated ic 324 : (6, 10.000000) count=0.975953
+                                   1296 ;	genIpush
+    0000031A A9s04            [ 2] 1297 	lda	#>___str_1
+    0000031C 48               [ 3] 1298 	pha
+    0000031D A9r0F            [ 2] 1299 	lda	#___str_1
+    0000031F 48               [ 3] 1300 	pha
+                                   1301 ;	Raw cost for generated ic 325 : (6, 10.000000) count=0.975953
+                                   1302 ;	genCall
+    00000320 20r00r00         [ 6] 1303 	jsr	_printf
+    00000323 68               [ 4] 1304 	pla
+    00000324 68               [ 4] 1305 	pla
+    00000325 68               [ 4] 1306 	pla
+    00000326 68               [ 4] 1307 	pla
+                                   1308 ;	Raw cost for generated ic 326 : (7, 22.000000) count=0.975953
+                                   1309 ;	src/banks_nonintrinsic.c: 84: printf("%s", switch_to(hello_rom_2));
+                                   1310 ;	genCall
+    00000327 20r05r00         [ 6] 1311 	jsr	_set_ROM_bank2
+                                   1312 ;	Raw cost for generated ic 489 : (3, 6.000000) count=0.975953
+                                   1313 ;	genPointerGet
+                                   1314 ;	genDataPointerGet
+    0000032A ADr00r00         [ 4] 1315 	lda	_hello_rom_2
+    0000032D 8Dr00r00         [ 4] 1316 	sta	___dummy_variable
+                                   1317 ;	Raw cost for generated ic 328 : (6, 8.000000) count=0.975953
+                                   1318 ;	skipping iCode since result will be rematerialized
+                                   1319 ;	Raw cost for generated ic 331 : (0, 0.000000) count=0.975953
+                                   1320 ;	skipping iCode since result will be rematerialized
+                                   1321 ;	Raw cost for generated ic 333 : (0, 0.000000) count=0.975953
+                                   1322 ;	skipping iCode since result will be rematerialized
+                                   1323 ;	Raw cost for generated ic 335 : (0, 0.000000) count=0.975953
+                                   1324 ;	genIpush
+    00000330 A9s00            [ 2] 1325 	lda	#>_hello_rom_2
+    00000332 48               [ 3] 1326 	pha
+    00000333 A9r00            [ 2] 1327 	lda	#_hello_rom_2
+    00000335 48               [ 3] 1328 	pha
+                                   1329 ;	Raw cost for generated ic 336 : (6, 10.000000) count=0.975953
+                                   1330 ;	genIpush
+    00000336 A9s04            [ 2] 1331 	lda	#>___str_1
+    00000338 48               [ 3] 1332 	pha
+    00000339 A9r0F            [ 2] 1333 	lda	#___str_1
+    0000033B 48               [ 3] 1334 	pha
+                                   1335 ;	Raw cost for generated ic 337 : (6, 10.000000) count=0.975953
+                                   1336 ;	genCall
+    0000033C 20r00r00         [ 6] 1337 	jsr	_printf
+    0000033F 68               [ 4] 1338 	pla
+    00000340 68               [ 4] 1339 	pla
+    00000341 68               [ 4] 1340 	pla
+    00000342 68               [ 4] 1341 	pla
+                                   1342 ;	Raw cost for generated ic 338 : (7, 22.000000) count=0.975953
+                                   1343 ;	src/banks_nonintrinsic.c: 85: printf("%s", switch_to(hello_sram_0));
+                                   1344 ;	genCall
+    00000343 20r0Ar00         [ 6] 1345 	jsr	_set_RAM_bank0
+                                   1346 ;	Raw cost for generated ic 490 : (3, 6.000000) count=0.975953
+                                   1347 ;	genPointerGet
+                                   1348 ;	genDataPointerGet
+    00000346 ADr00r00         [ 4] 1349 	lda	_hello_sram_0
+    00000349 8Dr00r00         [ 4] 1350 	sta	___dummy_variable
+                                   1351 ;	Raw cost for generated ic 340 : (6, 8.000000) count=0.975953
+                                   1352 ;	skipping iCode since result will be rematerialized
+                                   1353 ;	Raw cost for generated ic 343 : (0, 0.000000) count=0.975953
+                                   1354 ;	skipping iCode since result will be rematerialized
+                                   1355 ;	Raw cost for generated ic 345 : (0, 0.000000) count=0.975953
+                                   1356 ;	skipping iCode since result will be rematerialized
+                                   1357 ;	Raw cost for generated ic 347 : (0, 0.000000) count=0.975953
+                                   1358 ;	genIpush
+    0000034C A9s00            [ 2] 1359 	lda	#>_hello_sram_0
+    0000034E 48               [ 3] 1360 	pha
+    0000034F A9r00            [ 2] 1361 	lda	#_hello_sram_0
+    00000351 48               [ 3] 1362 	pha
+                                   1363 ;	Raw cost for generated ic 348 : (6, 10.000000) count=0.975953
+                                   1364 ;	genIpush
+    00000352 A9s04            [ 2] 1365 	lda	#>___str_1
+    00000354 48               [ 3] 1366 	pha
+    00000355 A9r0F            [ 2] 1367 	lda	#___str_1
+    00000357 48               [ 3] 1368 	pha
+                                   1369 ;	Raw cost for generated ic 349 : (6, 10.000000) count=0.975953
+                                   1370 ;	genCall
+    00000358 20r00r00         [ 6] 1371 	jsr	_printf
+    0000035B 68               [ 4] 1372 	pla
+    0000035C 68               [ 4] 1373 	pla
+    0000035D 68               [ 4] 1374 	pla
+    0000035E 68               [ 4] 1375 	pla
+                                   1376 ;	Raw cost for generated ic 350 : (7, 22.000000) count=0.975953
+                                   1377 ;	src/banks_nonintrinsic.c: 86: printf("%s", switch_to(hello_sram_1));
+                                   1378 ;	genCall
+    0000035F 20r10r00         [ 6] 1379 	jsr	_set_RAM_bank1
+                                   1380 ;	Raw cost for generated ic 491 : (3, 6.000000) count=0.975953
+                                   1381 ;	genPointerGet
+                                   1382 ;	genDataPointerGet
+    00000362 ADr00r00         [ 4] 1383 	lda	_hello_sram_1
+    00000365 8Dr00r00         [ 4] 1384 	sta	___dummy_variable
+                                   1385 ;	Raw cost for generated ic 352 : (6, 8.000000) count=0.975953
+                                   1386 ;	skipping iCode since result will be rematerialized
+                                   1387 ;	Raw cost for generated ic 355 : (0, 0.000000) count=0.975953
+                                   1388 ;	skipping iCode since result will be rematerialized
+                                   1389 ;	Raw cost for generated ic 357 : (0, 0.000000) count=0.975953
+                                   1390 ;	skipping iCode since result will be rematerialized
+                                   1391 ;	Raw cost for generated ic 359 : (0, 0.000000) count=0.975953
+                                   1392 ;	genIpush
+    00000368 A9s00            [ 2] 1393 	lda	#>_hello_sram_1
+    0000036A 48               [ 3] 1394 	pha
+    0000036B A9r00            [ 2] 1395 	lda	#_hello_sram_1
+    0000036D 48               [ 3] 1396 	pha
+                                   1397 ;	Raw cost for generated ic 360 : (6, 10.000000) count=0.975953
+                                   1398 ;	genIpush
+    0000036E A9s04            [ 2] 1399 	lda	#>___str_1
+    00000370 48               [ 3] 1400 	pha
+    00000371 A9r0F            [ 2] 1401 	lda	#___str_1
+    00000373 48               [ 3] 1402 	pha
+                                   1403 ;	Raw cost for generated ic 361 : (6, 10.000000) count=0.975953
+                                   1404 ;	genCall
+    00000374 20r00r00         [ 6] 1405 	jsr	_printf
+    00000377 68               [ 4] 1406 	pla
+    00000378 68               [ 4] 1407 	pla
+    00000379 68               [ 4] 1408 	pla
+    0000037A 68               [ 4] 1409 	pla
+                                   1410 ;	Raw cost for generated ic 362 : (7, 22.000000) count=0.975953
+                                   1411 ;	src/banks_nonintrinsic.c: 89: printf("1+2+4+8=0x%x", (int)(add_num_wram + add_num_sram_0 + (*add_num__ptr[0]) + (*add_num__ptr[1])));
+                                   1412 ;	genCall
+    0000037B 20r0Ar00         [ 6] 1413 	jsr	_set_RAM_bank0
+                                   1414 ;	Raw cost for generated ic 492 : (3, 6.000000) count=0.975953
+                                   1415 ;	genPlus
+                                   1416 ;	genPlusIncr
+    0000037E ADr15r00         [ 4] 1417 	lda	_add_num_wram
+    00000381 18               [ 2] 1418 	clc
+    00000382 6Dr14r00         [ 4] 1419 	adc	_add_num_sram_0
+    00000385 85*01            [ 3] 1420 	sta	*_main_sloc1_1_0
+    00000387 ADr16r00         [ 4] 1421 	lda	(_add_num_wram + 1)
+    0000038A 6Dr15r00         [ 4] 1422 	adc	(_add_num_sram_0 + 1)
+    0000038D 85*02            [ 3] 1423 	sta	*(_main_sloc1_1_0 + 1)
+                                   1424 ;	Raw cost for generated ic 363 : (17, 24.000000) count=0.975953
+                                   1425 ;	genCall
+    0000038F 20r00r00         [ 6] 1426 	jsr	_set_ROM_bank1
+                                   1427 ;	Raw cost for generated ic 493 : (3, 6.000000) count=0.975953
+                                   1428 ;	skipping iCode since result will be rematerialized
+                                   1429 ;	Raw cost for generated ic 364 : (0, 0.000000) count=0.975953
+                                   1430 ;	genPointerGet
+                                   1431 ;	genDataPointerGet
+    00000392 ADr14r00         [ 4] 1432 	lda	(_add_num__ptr + 1)
+    00000395 85*05            [ 3] 1433 	sta	*(_main_sloc3_1_0 + 1)
+    00000397 ADr13r00         [ 4] 1434 	lda	_add_num__ptr
+    0000039A 85*04            [ 3] 1435 	sta	*_main_sloc3_1_0
+                                   1436 ;	Raw cost for generated ic 365 : (10, 14.000000) count=0.975953
+                                   1437 ;	genCall
+    0000039C 20r10r00         [ 6] 1438 	jsr	_set_RAM_bank1
+                                   1439 ;	Raw cost for generated ic 494 : (3, 6.000000) count=0.975953
+                                   1440 ;	genPointerGet
+    0000039F A0 01            [ 2] 1441 	ldy	#0x01
+    000003A1 B1*04            [ 6] 1442 	lda	[*_main_sloc3_1_0],y
+    000003A3 48               [ 3] 1443 	pha
+    000003A4 88               [ 2] 1444 	dey
+    000003A5 B1*04            [ 6] 1445 	lda	[*_main_sloc3_1_0],y
+    000003A7 85*04            [ 3] 1446 	sta	*_main_sloc3_1_0
+    000003A9 68               [ 4] 1447 	pla
+    000003AA 85*05            [ 3] 1448 	sta	*(_main_sloc3_1_0 + 1)
+                                   1449 ;	Raw cost for generated ic 366 : (13, 27.000000) count=0.975953
+                                   1450 ;	genCall
+    000003AC 20r00r00         [ 6] 1451 	jsr	_set_ROM_bank1
+                                   1452 ;	Raw cost for generated ic 495 : (3, 6.000000) count=0.975953
+                                   1453 ;	genPlus
+                                   1454 ;	genPlusIncr
+    000003AF A5*01            [ 3] 1455 	lda	*_main_sloc1_1_0
+    000003B1 18               [ 2] 1456 	clc
+    000003B2 65*04            [ 3] 1457 	adc	*_main_sloc3_1_0
+    000003B4 85*04            [ 3] 1458 	sta	*_main_sloc3_1_0
+    000003B6 A5*02            [ 3] 1459 	lda	*(_main_sloc1_1_0 + 1)
+    000003B8 65*05            [ 3] 1460 	adc	*(_main_sloc3_1_0 + 1)
+    000003BA 85*05            [ 3] 1461 	sta	*(_main_sloc3_1_0 + 1)
+                                   1462 ;	Raw cost for generated ic 367 : (13, 20.000000) count=0.975953
+                                   1463 ;	skipping iCode since result will be rematerialized
+                                   1464 ;	Raw cost for generated ic 369 : (0, 0.000000) count=0.975953
+                                   1465 ;	genPointerGet
+                                   1466 ;	genDataPointerGet
+    000003BC ADr16r00         [ 4] 1467 	lda	((_add_num__ptr + 0x0002) + 1)
+    000003BF 85*02            [ 3] 1468 	sta	*(_main_sloc1_1_0 + 1)
+    000003C1 ADr15r00         [ 4] 1469 	lda	(_add_num__ptr + 0x0002)
+    000003C4 85*01            [ 3] 1470 	sta	*_main_sloc1_1_0
+                                   1471 ;	Raw cost for generated ic 370 : (10, 14.000000) count=0.975953
+                                   1472 ;	genCall
+    000003C6 20r10r00         [ 6] 1473 	jsr	_set_RAM_bank1
+                                   1474 ;	Raw cost for generated ic 496 : (3, 6.000000) count=0.975953
+                                   1475 ;	genPointerGet
+    000003C9 A0 01            [ 2] 1476 	ldy	#0x01
+    000003CB B1*01            [ 6] 1477 	lda	[*_main_sloc1_1_0],y
+    000003CD AA               [ 2] 1478 	tax
+    000003CE 88               [ 2] 1479 	dey
+    000003CF B1*01            [ 6] 1480 	lda	[*_main_sloc1_1_0],y
+                                   1481 ;	Raw cost for generated ic 371 : (8, 16.000000) count=0.975953
+                                   1482 ;	genPlus
+                                   1483 ;	genPlusIncr
+    000003D1 18               [ 2] 1484 	clc
+    000003D2 65*04            [ 3] 1485 	adc	*_main_sloc3_1_0
+    000003D4 85*04            [ 3] 1486 	sta	*_main_sloc3_1_0
+    000003D6 8A               [ 2] 1487 	txa
+    000003D7 65*05            [ 3] 1488 	adc	*(_main_sloc3_1_0 + 1)
+                                   1489 ;	Raw cost for generated ic 372 : (10, 16.000000) count=0.975953
+                                   1490 ;	skipping iCode since result will be rematerialized
+                                   1491 ;	Raw cost for generated ic 373 : (0, 0.000000) count=0.975953
+                                   1492 ;	skipping iCode since result will be rematerialized
+                                   1493 ;	Raw cost for generated ic 374 : (0, 0.000000) count=0.975953
+                                   1494 ;	genIpush
+    000003D9 85*05            [ 3] 1495 	sta	*(_main_sloc3_1_0 + 1)
+    000003DB 48               [ 3] 1496 	pha
+    000003DC A5*04            [ 3] 1497 	lda	*_main_sloc3_1_0
+    000003DE 48               [ 3] 1498 	pha
+                                   1499 ;	Raw cost for generated ic 375 : (6, 12.000000) count=0.975953
+                                   1500 ;	genIpush
+    000003DF A9s04            [ 2] 1501 	lda	#>___str_2
+    000003E1 48               [ 3] 1502 	pha
+    000003E2 A9r12            [ 2] 1503 	lda	#___str_2
+    000003E4 48               [ 3] 1504 	pha
+                                   1505 ;	Raw cost for generated ic 376 : (6, 10.000000) count=0.975953
+                                   1506 ;	genCall
+    000003E5 20r00r00         [ 6] 1507 	jsr	_printf
+    000003E8 68               [ 4] 1508 	pla
+    000003E9 68               [ 4] 1509 	pla
+    000003EA 68               [ 4] 1510 	pla
+    000003EB 68               [ 4] 1511 	pla
+                                   1512 ;	Raw cost for generated ic 377 : (7, 22.000000) count=0.975953
+                                   1513 ;	src/banks_nonintrinsic.c: 92: while(1);
+                                   1514 ;	genLabel
+    000003EC                       1515 00116$:
+                                   1516 ;	Raw cost for generated ic 380 : (0, 0.000000) count=30.018684
+                                   1517 ;	genGoto
+    000003EC 4CrECr03         [ 3] 1518 	jmp	00116$
+                                   1519 ;	Raw cost for generated ic 381 : (3, 3.000000) count=30.018684
+                                   1520 ;	genLabel
+                                   1521 ;	Raw cost for generated ic 383 : (0, 0.000000) count=0.000000
+                                   1522 ;	src/banks_nonintrinsic.c: 93: }
+                                   1523 ;	genEndFunction
+    000003EF 60               [ 6] 1524 	rts
+                                   1525 ;	Raw cost for generated ic 384 : (1, 6.000000) count=0.000000
+                                   1526 	.area _CODE
+    000003F0                       1527 _hello_code:
+    000003F0 68 65 6C 6C 6F 20 66  1528 	.ascii "hello from CODE"
+             72 6F 6D 20 43 4F 44
+             45
+    000003FF 0A                    1529 	.db 0x0a
+    00000400 00                    1530 	.db 0x00
+    00000401                       1531 ___str_0:
+    00000401 6F 6E 63 65 20 6D 6F  1532 	.ascii "once more..."
+             72 65 2E 2E 2E
+    0000040D 0A                    1533 	.db 0x0a
+    0000040E 00                    1534 	.db 0x00
+    0000040F                       1535 ___str_1:
+    0000040F 25 73                 1536 	.ascii "%s"
+    00000411 00                    1537 	.db 0x00
+    00000412                       1538 ___str_2:
+    00000412 31 2B 32 2B 34 2B 38  1539 	.ascii "1+2+4+8=0x%x"
+             3D 30 78 25 78
+    0000041E 00                    1540 	.db 0x00
+                                   1541 	.area _XINIT
+    00000000                       1542 __xinit___current_ram_bank:
+    00000000 00                    1543 	.db #0x00	; 0
+    00000001                       1544 __xinit__data:
+    00000001 44 41 54 41           1545 	.ascii "DATA"
+    00000005 00                    1546 	.db 0x00
+    00000006 00                    1547 	.db 0x00
+    00000007 00                    1548 	.db 0x00
+    00000008 00                    1549 	.db 0x00
+    00000009 00                    1550 	.db 0x00
+    0000000A 00                    1551 	.db 0x00
+    0000000B 00                    1552 	.db 0x00
+    0000000C 00                    1553 	.db 0x00
+    0000000D 00                    1554 	.db 0x00
+    0000000E 00                    1555 	.db 0x00
+    0000000F 00                    1556 	.db 0x00
+    00000010 00                    1557 	.db 0x00
+    00000011 00                    1558 	.db 0x00
+    00000012 00                    1559 	.db 0x00
+    00000013 00                    1560 	.db 0x00
+    00000014 00                    1561 	.db 0x00
+    00000015                       1562 __xinit__add_num_wram:
+    00000015 01 00                 1563 	.dw #0x0001
+                                   1564 	.area _CABS    (ABS)

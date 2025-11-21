@@ -1,0 +1,117 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _fill_bkg_rect
+                                     12 	.globl _set_bkg_tiles
+                                     13 	.globl _set_bkg_data
+                                     14 	.globl _display_off
+                                     15 	.globl _vsync
+                                     16 ;--------------------------------------------------------
+                                     17 ; special function registers
+                                     18 ;--------------------------------------------------------
+                                     19 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area _DATA
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area _INITIALIZED
+                                     27 ;--------------------------------------------------------
+                                     28 ; absolute external ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DABS (ABS)
+                                     31 ;--------------------------------------------------------
+                                     32 ; global & static initialisations
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _HOME
+                                     35 	.area _GSINIT
+                                     36 	.area _GSFINAL
+                                     37 	.area _GSINIT
+                                     38 ;--------------------------------------------------------
+                                     39 ; Home
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _HOME
+                                     42 	.area _HOME
+                                     43 ;--------------------------------------------------------
+                                     44 ; code
+                                     45 ;--------------------------------------------------------
+                                     46 	.area _CODE
+                                     47 ;src/main.c:5: void main(void) {
+                                     48 ;	---------------------------------
+                                     49 ; Function main
+                                     50 ; ---------------------------------
+    00000000                         51 _main::
+                                     52 ;src/main.c:6: DISPLAY_OFF;
+    00000000 CDr00r00         [24]   53 	call	_display_off
+                                     54 ;src/main.c:7: fill_bkg_rect(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, 0);
+    00000003 AF               [ 4]   55 	xor	a, a
+    00000004 67               [ 4]   56 	ld	h, a
+    00000005 2E 12            [ 8]   57 	ld	l, #0x12
+    00000007 E5               [16]   58 	push	hl
+    00000008 3E 14            [ 8]   59 	ld	a, #0x14
+    0000000A F5               [16]   60 	push	af
+    0000000B 33               [ 8]   61 	inc	sp
+    0000000C AF               [ 4]   62 	xor	a, a
+    0000000D 0F               [ 4]   63 	rrca
+    0000000E F5               [16]   64 	push	af
+    0000000F CDr00r00         [24]   65 	call	_fill_bkg_rect
+    00000012 E8 05            [16]   66 	add	sp, #5
+                                     67 ;src/main.c:19: set_bkg_native_data(0, GBDK_2020_logo_TILE_COUNT, GBDK_2020_logo_tiles);
+                                     68 ;../../../include/gb/gb.h:2168: set_bkg_data(first_tile, nb_tiles, data);
+    00000014 11r00r00         [12]   69 	ld	de, #_GBDK_2020_logo_tiles
+    00000017 D5               [16]   70 	push	de
+    00000018 21 00 27         [12]   71 	ld	hl, #0x2700
+    0000001B E5               [16]   72 	push	hl
+    0000001C CDr00r00         [24]   73 	call	_set_bkg_data
+    0000001F E8 04            [16]   74 	add	sp, #4
+                                     75 ;src/main.c:25: GBDK_2020_logo_map_attributes);
+    00000021 01r00r00         [12]   76 	ld	bc, #_GBDK_2020_logo_map+0
+    00000024 59               [ 4]   77 	ld	e, c
+    00000025 50               [ 4]   78 	ld	d, b
+                                     79 ;../../../include/gb/gb.h:1238: VBK_REG = VBK_ATTRIBUTES;
+    00000026 3E 01            [ 8]   80 	ld	a, #0x01
+    00000028 E0r00            [12]   81 	ldh	(_VBK_REG + 0), a
+                                     82 ;../../../include/gb/gb.h:1239: set_bkg_tiles(x, y, w, h, tiles);
+    0000002A D5               [16]   83 	push	de
+    0000002B 21 14 12         [12]   84 	ld	hl, #0x1214
+    0000002E E5               [16]   85 	push	hl
+    0000002F AF               [ 4]   86 	xor	a, a
+    00000030 0F               [ 4]   87 	rrca
+    00000031 F5               [16]   88 	push	af
+    00000032 CDr00r00         [24]   89 	call	_set_bkg_tiles
+    00000035 E8 06            [16]   90 	add	sp, #6
+                                     91 ;../../../include/gb/gb.h:1240: VBK_REG = VBK_TILES;
+    00000037 AF               [ 4]   92 	xor	a, a
+    00000038 E0r00            [12]   93 	ldh	(_VBK_REG + 0), a
+                                     94 ;src/main.c:27: set_tile_map((DEVICE_SCREEN_WIDTH - (GBDK_2020_logo_WIDTH >> 3)) >> 1,
+    0000003A C5               [16]   95 	push	bc
+    0000003B 21 14 12         [12]   96 	ld	hl, #0x1214
+    0000003E E5               [16]   97 	push	hl
+    0000003F AF               [ 4]   98 	xor	a, a
+    00000040 0F               [ 4]   99 	rrca
+    00000041 F5               [16]  100 	push	af
+    00000042 CDr00r00         [24]  101 	call	_set_bkg_tiles
+    00000045 E8 06            [16]  102 	add	sp, #6
+                                    103 ;src/main.c:33: vsync();
+    00000047 CDr00r00         [24]  104 	call	_vsync
+                                    105 ;src/main.c:34: SHOW_BKG;
+    0000004A F0r00            [12]  106 	ldh	a, (_LCDC_REG + 0)
+    0000004C F6 80            [ 8]  107 	or	a, #0x80
+    0000004E E0r00            [12]  108 	ldh	(_LCDC_REG + 0), a
+                                    109 ;src/main.c:35: DISPLAY_ON;
+    00000050 F0r00            [12]  110 	ldh	a, (_LCDC_REG + 0)
+    00000052 F6 01            [ 8]  111 	or	a, #0x01
+    00000054 E0r00            [12]  112 	ldh	(_LCDC_REG + 0), a
+                                    113 ;src/main.c:36: }
+    00000056 C9               [16]  114 	ret
+                                    115 	.area _CODE
+                                    116 	.area _INITIALIZER
+                                    117 	.area _CABS (ABS)

@@ -1,0 +1,2247 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module large_map
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _init_camera
+                                     23 	.globl _set_camera
+                                     24 	.globl _set_bkg_native_data
+                                     25 	.globl _set_bkg_submap
+                                     26 	.globl _set_bkg_submap_attributes_nes16x16
+                                     27 	.globl _display_off
+                                     28 	.globl _display_on
+                                     29 	.globl _vsync
+                                     30 	.globl _joypad
+                                     31 	.globl _set_bkg_palette
+                                     32 	.globl _redraw
+                                     33 	.globl _old_map_pos_y
+                                     34 	.globl _old_map_pos_x
+                                     35 	.globl _map_pos_y
+                                     36 	.globl _map_pos_x
+                                     37 	.globl _old_camera_y
+                                     38 	.globl _old_camera_x
+                                     39 	.globl _camera_y
+                                     40 	.globl _camera_x
+                                     41 	.globl _joy
+                                     42 	.globl _OAMDMA
+                                     43 	.globl _PPUDATA
+                                     44 	.globl _PPUADDR
+                                     45 	.globl _PPUSCROLL
+                                     46 	.globl _OAMDATA
+                                     47 	.globl _OAMADDR
+                                     48 	.globl _PPUSTATUS
+                                     49 	.globl _PPUMASK
+                                     50 	.globl _PPUCTRL
+                                     51 ;--------------------------------------------------------
+                                     52 ; ZP ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _ZP      (PAG)
+    00000000                         55 _set_camera_sloc0_1_0:
+    00000000                         56 	.ds 2
+    00000002                         57 _init_camera_sloc0_1_0:
+    00000002                         58 	.ds 1
+    00000003                         59 _init_camera_sloc1_1_0:
+    00000003                         60 	.ds 1
+                                     61 ;--------------------------------------------------------
+                                     62 ; overlayable items in ram
+                                     63 ;--------------------------------------------------------
+                                     64 ;--------------------------------------------------------
+                                     65 ; uninitialized external ram data
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _BSS
+                         00002000    68 _PPUCTRL	=	0x2000
+                         00002001    69 _PPUMASK	=	0x2001
+                         00002002    70 _PPUSTATUS	=	0x2002
+                         00002003    71 _OAMADDR	=	0x2003
+                         00002004    72 _OAMDATA	=	0x2004
+                         00002005    73 _PPUSCROLL	=	0x2005
+                         00002006    74 _PPUADDR	=	0x2006
+                         00002007    75 _PPUDATA	=	0x2007
+                         00004014    76 _OAMDMA	=	0x4014
+    00000000                         77 _joy::
+    00000000                         78 	.ds 1
+    00000001                         79 _camera_x::
+    00000001                         80 	.ds 2
+    00000003                         81 _camera_y::
+    00000003                         82 	.ds 2
+    00000005                         83 _old_camera_x::
+    00000005                         84 	.ds 2
+    00000007                         85 _old_camera_y::
+    00000007                         86 	.ds 2
+    00000009                         87 _map_pos_x::
+    00000009                         88 	.ds 1
+    0000000A                         89 _map_pos_y::
+    0000000A                         90 	.ds 1
+    0000000B                         91 _old_map_pos_x::
+    0000000B                         92 	.ds 1
+    0000000C                         93 _old_map_pos_y::
+    0000000C                         94 	.ds 1
+    0000000D                         95 _redraw::
+    0000000D                         96 	.ds 1
+    0000000E                         97 _init_camera_y_10000_189:
+    0000000E                         98 	.ds 1
+                                     99 ;--------------------------------------------------------
+                                    100 ; absolute external ram data
+                                    101 ;--------------------------------------------------------
+                                    102 	.area _DABS    (ABS)
+                                    103 ;--------------------------------------------------------
+                                    104 ; initialized external ram data
+                                    105 ;--------------------------------------------------------
+                                    106 	.area _DATA
+                                    107 ;--------------------------------------------------------
+                                    108 ; global & static initialisations
+                                    109 ;--------------------------------------------------------
+                                    110 	.area _HOME
+                                    111 	.area _GSINIT
+                                    112 	.area _GSFINAL
+                                    113 	.area _GSINIT
+                                    114 ;--------------------------------------------------------
+                                    115 ; Home
+                                    116 ;--------------------------------------------------------
+                                    117 	.area _HOME
+                                    118 	.area _HOME
+                                    119 ;--------------------------------------------------------
+                                    120 ; code
+                                    121 ;--------------------------------------------------------
+                                    122 	.area _CODE
+                                    123 ;------------------------------------------------------------
+                                    124 ;Allocation info for local variables in function 'set_camera'
+                                    125 ;------------------------------------------------------------
+                                    126 ;sloc0         Allocated with name '_set_camera_sloc0_1_0'
+                                    127 ;__200000009   Allocated to registers 
+                                    128 ;__200000010   Allocated to registers a 
+                                    129 ;x             Allocated to registers 
+                                    130 ;y             Allocated to registers 
+                                    131 ;__600000012   Allocated to registers y 
+                                    132 ;__600000013   Allocated to registers 
+                                    133 ;map_pos_y     Allocated to registers 
+                                    134 ;__600000022   Allocated to registers y 
+                                    135 ;__600000015   Allocated to registers 
+                                    136 ;__600000016   Allocated to registers 
+                                    137 ;__600000017   Allocated to registers x 
+                                    138 ;__600000018   Allocated to registers 
+                                    139 ;__600000019   Allocated to registers 
+                                    140 ;__600000020   Allocated to registers 
+                                    141 ;__700000023   Allocated to registers 
+                                    142 ;map_pos_y     Allocated to registers 
+                                    143 ;x             Allocated to registers 
+                                    144 ;y             Allocated to registers 
+                                    145 ;w             Allocated to registers 
+                                    146 ;h             Allocated to registers 
+                                    147 ;attributes    Allocated to registers 
+                                    148 ;map_w         Allocated to registers 
+                                    149 ;__800000025   Allocated to registers y 
+                                    150 ;__800000026   Allocated to registers 
+                                    151 ;map_pos_y     Allocated to registers 
+                                    152 ;__800000035   Allocated to registers a 
+                                    153 ;__800000028   Allocated to registers 
+                                    154 ;__800000029   Allocated to registers 
+                                    155 ;__800000030   Allocated to registers x 
+                                    156 ;__800000031   Allocated to registers 
+                                    157 ;__800000032   Allocated to registers 
+                                    158 ;__800000033   Allocated to registers 
+                                    159 ;__900000036   Allocated to registers 
+                                    160 ;map_pos_y     Allocated to registers 
+                                    161 ;x             Allocated to registers 
+                                    162 ;y             Allocated to registers 
+                                    163 ;w             Allocated to registers 
+                                    164 ;h             Allocated to registers 
+                                    165 ;attributes    Allocated to registers 
+                                    166 ;map_w         Allocated to registers 
+                                    167 ;__600000038   Allocated to registers y 
+                                    168 ;__600000039   Allocated to registers 
+                                    169 ;map_pos_x     Allocated to registers 
+                                    170 ;__600000048   Allocated to registers y 
+                                    171 ;__600000041   Allocated to registers 
+                                    172 ;__600000042   Allocated to registers 
+                                    173 ;__600000043   Allocated to registers 
+                                    174 ;__600000044   Allocated to registers x 
+                                    175 ;__600000045   Allocated to registers 
+                                    176 ;__600000046   Allocated to registers 
+                                    177 ;__700000049   Allocated to registers 
+                                    178 ;map_pos_x     Allocated to registers 
+                                    179 ;x             Allocated to registers 
+                                    180 ;y             Allocated to registers 
+                                    181 ;w             Allocated to registers 
+                                    182 ;h             Allocated to registers 
+                                    183 ;attributes    Allocated to registers 
+                                    184 ;map_w         Allocated to registers 
+                                    185 ;__800000051   Allocated to registers y 
+                                    186 ;__800000052   Allocated to registers 
+                                    187 ;map_pos_x     Allocated to registers 
+                                    188 ;__800000061   Allocated to registers a 
+                                    189 ;__800000054   Allocated to registers 
+                                    190 ;__800000055   Allocated to registers 
+                                    191 ;__800000056   Allocated to registers 
+                                    192 ;__800000057   Allocated to registers x 
+                                    193 ;__800000058   Allocated to registers 
+                                    194 ;__800000059   Allocated to registers 
+                                    195 ;__900000062   Allocated to registers 
+                                    196 ;map_pos_x     Allocated to registers 
+                                    197 ;x             Allocated to registers 
+                                    198 ;y             Allocated to registers 
+                                    199 ;w             Allocated to registers 
+                                    200 ;h             Allocated to registers 
+                                    201 ;attributes    Allocated to registers 
+                                    202 ;map_w         Allocated to registers 
+                                    203 ;------------------------------------------------------------
+                                    204 ;	src/large_map.c: 77: void set_camera(void)
+                                    205 ;	genLabel
+                                    206 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    207 ;	-----------------------------------------
+                                    208 ;	 function set_camera
+                                    209 ;	-----------------------------------------
+                                    210 ;	Register assignment might be sub-optimal.
+                                    211 ;	Stack space usage: 0 bytes.
+    00000000                        212 _set_camera:
+                                    213 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    214 ;	src/large_map.c: 80: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+                                    215 ;	genCast
+                                    216 ;	genCopy
+    00000000 AEr04r00         [ 4]  217 	ldx	(_camera_y + 1)
+    00000003 ADr03r00         [ 4]  218 	lda	_camera_y
+                                    219 ;	Raw cost for generated ic 2 : (6, 8.000000) count=1.000000
+                                    220 ;	genPlus
+                                    221 ;	genPlusIncr
+    00000006 18               [ 2]  222 	clc
+    00000007 69 04            [ 2]  223 	adc	#0x04
+    00000009 90 01            [ 4]  224 	bcc	00234$
+    0000000B E8               [ 2]  225 	inx
+    0000000C                        226 00234$:
+                                    227 ;	Raw cost for generated ic 3 : (6, 8.600000) count=1.000000
+                                    228 ;	genAssign
+                                    229 ;	genAssignLit
+    0000000C A0 F0            [ 2]  230 	ldy	#0xf0
+    0000000E 8Cr00r00         [ 4]  231 	sty	__moduint_PARM_2
+    00000011 A0 00            [ 2]  232 	ldy	#0x00
+    00000013 8Cr01r00         [ 4]  233 	sty	(__moduint_PARM_2 + 1)
+                                    234 ;	Raw cost for generated ic 394 : (10, 12.000000) count=1.000000
+                                    235 ;	Raw cost for generated ic 393 : (0, 0.000000) count=1.000000
+                                    236 ;	genCall
+                                    237 ;	genSend
+    00000016 20r00r00         [ 6]  238 	jsr	__moduint
+                                    239 ;	assignResultValue
+                                    240 ;	Raw cost for generated ic 395 : (3, 6.000000) count=1.000000
+                                    241 ;	genCast
+                                    242 ;	genCopy
+                                    243 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    244 ;	genCast
+                                    245 ;	genCopy
+    00000019 AEr01r00         [ 4]  246 	ldx	_camera_x
+    0000001C 8Er00r00         [ 4]  247 	stx	_bkg_scroll_x
+                                    248 ;	Raw cost for generated ic 7 : (6, 9.000000) count=1.000000
+                                    249 ;	../../../include/nes/nes.h: 976: bkg_scroll_y = (uint8_t)(y >= 240 ? (y - 240) : y);
+                                    250 ;	genAssign
+                                    251 ;	genAssignLit
+                                    252 ;	genCopy
+                                    253 ;	Raw cost for generated ic 20 : (0, 0.000000) count=1.000000
+                                    254 ;	genCast
+                                    255 ;	genCopy
+    0000001F 8Dr00r00         [ 4]  256 	sta	_bkg_scroll_y
+                                    257 ;	Raw cost for generated ic 22 : (3, 5.000000) count=1.000000
+                                    258 ;	src/large_map.c: 82: map_pos_y = (uint8_t)(camera_y >> 3u);
+                                    259 ;	genRightShift
+                                    260 ;	genRightShiftLiteral
+                                    261 ;	genrshTwo
+    00000022 AEr04r00         [ 4]  262 	ldx	(_camera_y + 1)
+    00000025 ADr03r00         [ 4]  263 	lda	_camera_y
+    00000028 86*00            [ 3]  264 	stx	*(REGTEMP+0)
+    0000002A 46*00            [ 5]  265 	lsr	*(REGTEMP+0)
+    0000002C 6A               [ 2]  266 	ror	a
+    0000002D 46*00            [ 5]  267 	lsr	*(REGTEMP+0)
+    0000002F 6A               [ 2]  268 	ror	a
+    00000030 46*00            [ 5]  269 	lsr	*(REGTEMP+0)
+    00000032 6A               [ 2]  270 	ror	a
+    00000033 A6*00            [ 3]  271 	ldx	*(REGTEMP+0)
+                                    272 ;	Raw cost for generated ic 25 : (19, 35.000000) count=1.000000
+                                    273 ;	genCast
+                                    274 ;	genCopy
+    00000035 A8               [ 2]  275 	tay
+                                    276 ;	Raw cost for generated ic 26 : (1, 2.000000) count=1.000000
+                                    277 ;	genAssign
+                                    278 ;	genAssignLit
+                                    279 ;	genCopy
+    00000036 8Cr0Ar00         [ 4]  280 	sty	_map_pos_y
+                                    281 ;	Raw cost for generated ic 28 : (3, 5.000000) count=1.000000
+                                    282 ;	src/large_map.c: 83: if (map_pos_y != old_map_pos_y)
+                                    283 ;	genCmpEQorNE
+    00000039 CCr0Cr00         [ 4]  284 	cpy	_old_map_pos_y
+    0000003C D0 03            [ 4]  285 	bne	00235$
+    0000003E 4CrDFr01         [ 3]  286 	jmp	00107$
+    00000041                        287 00235$:
+                                    288 ;	Raw cost for generated ic 29 : (8, 9.600000) count=1.000000
+                                    289 ;	skipping generated iCode
+                                    290 ;	Raw cost for generated ic 30 : (0, 0.000000) count=1.000000
+                                    291 ;	src/large_map.c: 85: if (camera_y < old_camera_y)
+                                    292 ;	genCmp
+    00000041 ADr03r00         [ 4]  293 	lda	_camera_y
+    00000044 38               [ 2]  294 	sec
+    00000045 EDr07r00         [ 4]  295 	sbc	_old_camera_y
+    00000048 ADr04r00         [ 4]  296 	lda	(_camera_y + 1)
+    0000004B EDr08r00         [ 4]  297 	sbc	(_old_camera_y + 1)
+    0000004E 90 03            [ 4]  298 	bcc	00236$
+    00000050 4Cr12r01         [ 3]  299 	jmp	00104$
+    00000053                        300 00236$:
+                                    301 ;	Raw cost for generated ic 33 : (18, 23.600000) count=0.750000
+                                    302 ;	skipping generated iCode
+                                    303 ;	Raw cost for generated ic 34 : (0, 0.000000) count=0.750000
+                                    304 ;	src/large_map.c: 66: return map_pos_y + 1;
+                                    305 ;	genCast
+                                    306 ;	genCopy
+                                    307 ;	Raw cost for generated ic 39 : (0, 0.000000) count=0.562500
+                                    308 ;	genPlus
+                                    309 ;	genPlusIncr
+    00000053 C8               [ 2]  310 	iny
+                                    311 ;	Raw cost for generated ic 40 : (1, 2.000000) count=0.562500
+                                    312 ;	src/large_map.c: 87: set_submap_indices(
+                                    313 ;	genCast
+                                    314 ;	genCopy
+    00000054 A2 00            [ 2]  315 	ldx	#0x00
+    00000056 ADr09r00         [ 4]  316 	lda	_map_pos_x
+                                    317 ;	Raw cost for generated ic 44 : (5, 6.000000) count=0.562500
+                                    318 ;	genMinus
+                                    319 ;	genMinusDec
+    00000059 85*00            [ 3]  320 	sta	*(REGTEMP+0)
+    0000005B A9 9C            [ 2]  321 	lda	#0x9c
+    0000005D 38               [ 2]  322 	sec
+    0000005E E5*00            [ 3]  323 	sbc	*(REGTEMP+0)
+    00000060 85*00            [ 3]  324 	sta	*_set_camera_sloc0_1_0
+    00000062 8A               [ 2]  325 	txa
+    00000063 E9 00            [ 2]  326 	sbc	#0x00
+    00000065 85*01            [ 3]  327 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                    328 ;	Raw cost for generated ic 45 : (14, 20.000000) count=0.562500
+                                    329 ;	genCmp
+    00000067 A9 21            [ 2]  330 	lda	#0x21
+    00000069 38               [ 2]  331 	sec
+    0000006A E5*00            [ 3]  332 	sbc	*_set_camera_sloc0_1_0
+    0000006C 8A               [ 2]  333 	txa
+    0000006D E5*01            [ 3]  334 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    0000006F 50 04            [ 4]  335 	bvc	00238$
+    00000071 10 04            [ 4]  336 	bpl	00237$
+    00000073 30 07            [ 4]  337 	bmi	00132$
+    00000075                        338 00238$:
+    00000075 10 05            [ 4]  339 	bpl	00132$
+    00000077                        340 00237$:
+                                    341 ;	Raw cost for generated ic 46 : (19, 25.400002) count=0.562500
+                                    342 ;	skipping generated iCode
+                                    343 ;	Raw cost for generated ic 47 : (0, 0.000000) count=0.562500
+                                    344 ;	genAssign
+                                    345 ;	genAssignLit
+                                    346 ;	genCopy
+    00000077 A9 21            [ 2]  347 	lda	#0x21
+                                    348 ;	Raw cost for generated ic 48 : (2, 2.000000) count=0.421875
+                                    349 ;	genGoto
+    00000079 4Cr82r00         [ 3]  350 	jmp	00133$
+                                    351 ;	Raw cost for generated ic 49 : (3, 3.000000) count=0.421875
+                                    352 ;	genLabel
+    0000007C                        353 00132$:
+                                    354 ;	Raw cost for generated ic 50 : (0, 0.000000) count=0.140625
+                                    355 ;	genMinus
+                                    356 ;	genMinusDec
+    0000007C A9 9C            [ 2]  357 	lda	#0x9c
+    0000007E 38               [ 2]  358 	sec
+    0000007F EDr09r00         [ 4]  359 	sbc	_map_pos_x
+                                    360 ;	Raw cost for generated ic 51 : (6, 8.000000) count=0.140625
+                                    361 ;	genLabel
+    00000082                        362 00133$:
+                                    363 ;	Raw cost for generated ic 53 : (0, 0.000000) count=0.562500
+                                    364 ;	skipping iCode since result will be rematerialized
+                                    365 ;	Raw cost for generated ic 54 : (0, 0.000000) count=0.562500
+                                    366 ;	genCast
+                                    367 ;	genCopy
+    00000082 A2s00            [ 2]  368 	ldx	#>_bigmap_map
+    00000084 8Er01r00         [ 4]  369 	stx	(_set_bkg_submap_PARM_5 + 1)
+    00000087 A2r00            [ 2]  370 	ldx	#_bigmap_map
+    00000089 8Er00r00         [ 4]  371 	stx	_set_bkg_submap_PARM_5
+                                    372 ;	Raw cost for generated ic 55 : (10, 12.000000) count=0.562500
+                                    373 ;	genAssign
+                                    374 ;	genAssignLit
+                                    375 ;	genCopy
+    0000008C 8Dr00r00         [ 4]  376 	sta	_set_bkg_submap_PARM_3
+                                    377 ;	Raw cost for generated ic 58 : (3, 4.000000) count=0.562500
+                                    378 ;	genAssign
+                                    379 ;	genAssignLit
+    0000008F A2 01            [ 2]  380 	ldx	#0x01
+    00000091 8Er00r00         [ 4]  381 	stx	_set_bkg_submap_PARM_4
+                                    382 ;	Raw cost for generated ic 59 : (5, 6.000000) count=0.562500
+                                    383 ;	genAssign
+                                    384 ;	genAssignLit
+    00000094 A2 9C            [ 2]  385 	ldx	#0x9c
+    00000096 8Er00r00         [ 4]  386 	stx	_set_bkg_submap_PARM_6
+                                    387 ;	Raw cost for generated ic 61 : (5, 6.000000) count=0.562500
+                                    388 ;	Raw cost for generated ic 56 : (0, 0.000000) count=0.562500
+                                    389 ;	Raw cost for generated ic 57 : (0, 0.000000) count=0.562500
+                                    390 ;	genCall
+                                    391 ;	genSend
+    00000099 ADr09r00         [ 4]  392 	lda	_map_pos_x
+    0000009C 84*00            [ 3]  393 	sty	*(REGTEMP+0)
+    0000009E A6*00            [ 3]  394 	ldx	*(REGTEMP+0)
+    000000A0 20r00r00         [ 6]  395 	jsr	_set_bkg_submap
+                                    396 ;	Raw cost for generated ic 62 : (10, 16.000000) count=0.562500
+                                    397 ;	src/large_map.c: 94: set_submap_attributes(
+                                    398 ;	skipping iCode since result will be rematerialized
+                                    399 ;	Raw cost for generated ic 64 : (0, 0.000000) count=0.562500
+                                    400 ;	skipping iCode since result will be rematerialized
+                                    401 ;	Raw cost for generated ic 65 : (0, 0.000000) count=0.562500
+                                    402 ;	genCast
+                                    403 ;	genCopy
+    000000A3 A2 00            [ 2]  404 	ldx	#0x00
+    000000A5 ADr09r00         [ 4]  405 	lda	_map_pos_x
+                                    406 ;	Raw cost for generated ic 68 : (5, 6.000000) count=0.562500
+                                    407 ;	genMinus
+                                    408 ;	genMinusDec
+    000000A8 85*00            [ 3]  409 	sta	*(REGTEMP+0)
+    000000AA A9 9C            [ 2]  410 	lda	#0x9c
+    000000AC 38               [ 2]  411 	sec
+    000000AD E5*00            [ 3]  412 	sbc	*(REGTEMP+0)
+    000000AF 85*00            [ 3]  413 	sta	*_set_camera_sloc0_1_0
+    000000B1 8A               [ 2]  414 	txa
+    000000B2 E9 00            [ 2]  415 	sbc	#0x00
+    000000B4 85*01            [ 3]  416 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                    417 ;	Raw cost for generated ic 69 : (14, 20.000000) count=0.562500
+                                    418 ;	genCmp
+    000000B6 A9 21            [ 2]  419 	lda	#0x21
+    000000B8 38               [ 2]  420 	sec
+    000000B9 E5*00            [ 3]  421 	sbc	*_set_camera_sloc0_1_0
+    000000BB 8A               [ 2]  422 	txa
+    000000BC E5*01            [ 3]  423 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    000000BE 50 04            [ 4]  424 	bvc	00241$
+    000000C0 10 04            [ 4]  425 	bpl	00240$
+    000000C2 30 07            [ 4]  426 	bmi	00134$
+    000000C4                        427 00241$:
+    000000C4 10 05            [ 4]  428 	bpl	00134$
+    000000C6                        429 00240$:
+                                    430 ;	Raw cost for generated ic 70 : (19, 25.400002) count=0.562500
+                                    431 ;	skipping generated iCode
+                                    432 ;	Raw cost for generated ic 71 : (0, 0.000000) count=0.562500
+                                    433 ;	genAssign
+                                    434 ;	genAssignLit
+                                    435 ;	genCopy
+    000000C6 A2 21            [ 2]  436 	ldx	#0x21
+                                    437 ;	Raw cost for generated ic 72 : (2, 2.000000) count=0.421875
+                                    438 ;	genGoto
+    000000C8 4CrD2r00         [ 3]  439 	jmp	00135$
+                                    440 ;	Raw cost for generated ic 73 : (3, 3.000000) count=0.421875
+                                    441 ;	genLabel
+    000000CB                        442 00134$:
+                                    443 ;	Raw cost for generated ic 74 : (0, 0.000000) count=0.140625
+                                    444 ;	genMinus
+                                    445 ;	genMinusDec
+    000000CB A9 9C            [ 2]  446 	lda	#0x9c
+    000000CD 38               [ 2]  447 	sec
+    000000CE EDr09r00         [ 4]  448 	sbc	_map_pos_x
+    000000D1 AA               [ 2]  449 	tax
+                                    450 ;	Raw cost for generated ic 75 : (7, 10.000000) count=0.140625
+                                    451 ;	genLabel
+    000000D2                        452 00135$:
+                                    453 ;	Raw cost for generated ic 77 : (0, 0.000000) count=0.562500
+                                    454 ;	genAssign
+                                    455 ;	genAssignLit
+                                    456 ;	genCopy
+                                    457 ;	Raw cost for generated ic 78 : (0, 0.000000) count=0.562500
+                                    458 ;	src/large_map.c: 66: return map_pos_y + 1;
+                                    459 ;	genCast
+                                    460 ;	genCopy
+    000000D2 ACr0Ar00         [ 4]  461 	ldy	_map_pos_y
+                                    462 ;	Raw cost for generated ic 81 : (3, 4.000000) count=0.562500
+                                    463 ;	genPlus
+                                    464 ;	genPlusIncr
+    000000D5 C8               [ 2]  465 	iny
+                                    466 ;	Raw cost for generated ic 82 : (1, 2.000000) count=0.562500
+                                    467 ;	../../../include/nes/nes.h: 821: set_bkg_submap_attributes_nes16x16(x >> 1, y >> 1, (w + 1) >> 1, (h + 1) >> 1, attributes, (map_w + 1) >> 1);
+                                    468 ;	genRightShift
+                                    469 ;	genRightShiftLiteral
+                                    470 ;	genrshOne
+    000000D6 ADr09r00         [ 4]  471 	lda	_map_pos_x
+    000000D9 4A               [ 2]  472 	lsr	a
+    000000DA 85*00            [ 3]  473 	sta	*_set_camera_sloc0_1_0
+                                    474 ;	Raw cost for generated ic 94 : (6, 9.000000) count=0.562500
+                                    475 ;	genRightShift
+                                    476 ;	genRightShiftLiteral
+                                    477 ;	genrshOne
+    000000DC 98               [ 2]  478 	tya
+    000000DD 4A               [ 2]  479 	lsr	a
+    000000DE A8               [ 2]  480 	tay
+                                    481 ;	Raw cost for generated ic 95 : (3, 6.000000) count=0.562500
+                                    482 ;	genCast
+                                    483 ;	genCopy
+    000000DF 8A               [ 2]  484 	txa
+    000000E0 A2 00            [ 2]  485 	ldx	#0x00
+                                    486 ;	Raw cost for generated ic 96 : (3, 4.000000) count=0.562500
+                                    487 ;	genPlus
+                                    488 ;	genPlusIncr
+    000000E2 18               [ 2]  489 	clc
+    000000E3 69 01            [ 2]  490 	adc	#0x01
+    000000E5 90 01            [ 4]  491 	bcc	00243$
+    000000E7 E8               [ 2]  492 	inx
+    000000E8                        493 00243$:
+                                    494 ;	Raw cost for generated ic 97 : (6, 8.600000) count=0.562500
+                                    495 ;	genRightShift
+                                    496 ;	genRightShiftLiteral
+                                    497 ;	genrshTwo
+    000000E8 86*00            [ 3]  498 	stx	*(REGTEMP+0)
+    000000EA E0 80            [ 2]  499 	cpx	#0x80
+    000000EC 66*00            [ 5]  500 	ror	*(REGTEMP+0)
+    000000EE 6A               [ 2]  501 	ror	a
+                                    502 ;	Raw cost for generated ic 98 : (9, 15.000000) count=0.562500
+                                    503 ;	genCast
+                                    504 ;	genCopy
+                                    505 ;	Raw cost for generated ic 99 : (3, 4.000000) count=0.562500
+                                    506 ;	genAssign
+                                    507 ;	genAssignLit
+    000000EF 8Dr00r00         [ 4]  508 	sta	_set_bkg_submap_attributes_nes16x16_PARM_3
+    000000F2 A2 01            [ 2]  509 	ldx	#0x01
+    000000F4 8Er00r00         [ 4]  510 	stx	_set_bkg_submap_attributes_nes16x16_PARM_4
+                                    511 ;	Raw cost for generated ic 111 : (5, 6.000000) count=0.562500
+                                    512 ;	genAssign
+                                    513 ;	genAssignLit
+                                    514 ;	genCopy
+    000000F7 A9s00            [ 2]  515 	lda	#>_bigmap_map_attributes
+    000000F9 8Dr01r00         [ 4]  516 	sta	(_set_bkg_submap_attributes_nes16x16_PARM_5 + 1)
+    000000FC A9r00            [ 2]  517 	lda	#_bigmap_map_attributes
+    000000FE 8Dr00r00         [ 4]  518 	sta	_set_bkg_submap_attributes_nes16x16_PARM_5
+                                    519 ;	Raw cost for generated ic 112 : (10, 12.000000) count=0.562500
+                                    520 ;	genAssign
+                                    521 ;	genAssignLit
+    00000101 A2 4E            [ 2]  522 	ldx	#0x4e
+    00000103 8Er00r00         [ 4]  523 	stx	_set_bkg_submap_attributes_nes16x16_PARM_6
+                                    524 ;	Raw cost for generated ic 113 : (5, 6.000000) count=0.562500
+                                    525 ;	Raw cost for generated ic 108 : (0, 0.000000) count=0.562500
+                                    526 ;	Raw cost for generated ic 109 : (0, 0.000000) count=0.562500
+                                    527 ;	genCall
+                                    528 ;	genSend
+    00000106 A5*00            [ 3]  529 	lda	*_set_camera_sloc0_1_0
+    00000108 84*00            [ 3]  530 	sty	*(REGTEMP+0)
+    0000010A A6*00            [ 3]  531 	ldx	*(REGTEMP+0)
+    0000010C 20r00r00         [ 6]  532 	jsr	_set_bkg_submap_attributes_nes16x16
+                                    533 ;	Raw cost for generated ic 114 : (9, 15.000000) count=0.562500
+                                    534 ;	src/large_map.c: 94: set_submap_attributes(
+                                    535 ;	genGoto
+    0000010F 4CrD9r01         [ 3]  536 	jmp	00105$
+                                    537 ;	Raw cost for generated ic 116 : (3, 3.000000) count=0.562500
+                                    538 ;	genLabel
+    00000112                        539 00104$:
+                                    540 ;	Raw cost for generated ic 117 : (0, 0.000000) count=0.187500
+                                    541 ;	src/large_map.c: 104: if ((bigmap_mapHeight - DEVICE_SCREEN_HEIGHT) > map_pos_y)
+                                    542 ;	genCmp
+    00000112 C0 24            [ 2]  543 	cpy	#0x24
+    00000114 90 03            [ 4]  544 	bcc	00244$
+    00000116 4CrD9r01         [ 3]  545 	jmp	00105$
+    00000119                        546 00244$:
+                                    547 ;	Raw cost for generated ic 118 : (7, 7.600000) count=0.187500
+                                    548 ;	skipping generated iCode
+                                    549 ;	Raw cost for generated ic 119 : (0, 0.000000) count=0.187500
+                                    550 ;	src/large_map.c: 74: return map_pos_y + DEVICE_SCREEN_HEIGHT;
+                                    551 ;	genCast
+                                    552 ;	genCopy
+    00000119 98               [ 2]  553 	tya
+                                    554 ;	Raw cost for generated ic 124 : (1, 2.000000) count=0.140625
+                                    555 ;	genPlus
+                                    556 ;	genPlusIncr
+    0000011A 18               [ 2]  557 	clc
+    0000011B 69 1E            [ 2]  558 	adc	#0x1e
+    0000011D A8               [ 2]  559 	tay
+                                    560 ;	Raw cost for generated ic 125 : (4, 6.000000) count=0.140625
+                                    561 ;	src/large_map.c: 106: set_submap_indices(
+                                    562 ;	genCast
+                                    563 ;	genCopy
+    0000011E A2 00            [ 2]  564 	ldx	#0x00
+    00000120 ADr09r00         [ 4]  565 	lda	_map_pos_x
+                                    566 ;	Raw cost for generated ic 129 : (5, 6.000000) count=0.140625
+                                    567 ;	genMinus
+                                    568 ;	genMinusDec
+    00000123 85*00            [ 3]  569 	sta	*(REGTEMP+0)
+    00000125 A9 9C            [ 2]  570 	lda	#0x9c
+    00000127 38               [ 2]  571 	sec
+    00000128 E5*00            [ 3]  572 	sbc	*(REGTEMP+0)
+    0000012A 85*00            [ 3]  573 	sta	*_set_camera_sloc0_1_0
+    0000012C 8A               [ 2]  574 	txa
+    0000012D E9 00            [ 2]  575 	sbc	#0x00
+    0000012F 85*01            [ 3]  576 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                    577 ;	Raw cost for generated ic 130 : (14, 20.000000) count=0.140625
+                                    578 ;	genCmp
+    00000131 A9 21            [ 2]  579 	lda	#0x21
+    00000133 38               [ 2]  580 	sec
+    00000134 E5*00            [ 3]  581 	sbc	*_set_camera_sloc0_1_0
+    00000136 8A               [ 2]  582 	txa
+    00000137 E5*01            [ 3]  583 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    00000139 50 04            [ 4]  584 	bvc	00246$
+    0000013B 10 04            [ 4]  585 	bpl	00245$
+    0000013D 30 07            [ 4]  586 	bmi	00136$
+    0000013F                        587 00246$:
+    0000013F 10 05            [ 4]  588 	bpl	00136$
+    00000141                        589 00245$:
+                                    590 ;	Raw cost for generated ic 131 : (19, 25.400002) count=0.140625
+                                    591 ;	skipping generated iCode
+                                    592 ;	Raw cost for generated ic 132 : (0, 0.000000) count=0.140625
+                                    593 ;	genAssign
+                                    594 ;	genAssignLit
+                                    595 ;	genCopy
+    00000141 A9 21            [ 2]  596 	lda	#0x21
+                                    597 ;	Raw cost for generated ic 133 : (2, 2.000000) count=0.105469
+                                    598 ;	genGoto
+    00000143 4Cr4Cr01         [ 3]  599 	jmp	00137$
+                                    600 ;	Raw cost for generated ic 134 : (3, 3.000000) count=0.105469
+                                    601 ;	genLabel
+    00000146                        602 00136$:
+                                    603 ;	Raw cost for generated ic 135 : (0, 0.000000) count=0.035156
+                                    604 ;	genMinus
+                                    605 ;	genMinusDec
+    00000146 A9 9C            [ 2]  606 	lda	#0x9c
+    00000148 38               [ 2]  607 	sec
+    00000149 EDr09r00         [ 4]  608 	sbc	_map_pos_x
+                                    609 ;	Raw cost for generated ic 136 : (6, 8.000000) count=0.035156
+                                    610 ;	genLabel
+    0000014C                        611 00137$:
+                                    612 ;	Raw cost for generated ic 138 : (0, 0.000000) count=0.140625
+                                    613 ;	skipping iCode since result will be rematerialized
+                                    614 ;	Raw cost for generated ic 139 : (0, 0.000000) count=0.140625
+                                    615 ;	genCast
+                                    616 ;	genCopy
+    0000014C A2s00            [ 2]  617 	ldx	#>_bigmap_map
+    0000014E 8Er01r00         [ 4]  618 	stx	(_set_bkg_submap_PARM_5 + 1)
+    00000151 A2r00            [ 2]  619 	ldx	#_bigmap_map
+    00000153 8Er00r00         [ 4]  620 	stx	_set_bkg_submap_PARM_5
+                                    621 ;	Raw cost for generated ic 140 : (10, 12.000000) count=0.140625
+                                    622 ;	genAssign
+                                    623 ;	genAssignLit
+                                    624 ;	genCopy
+    00000156 8Dr00r00         [ 4]  625 	sta	_set_bkg_submap_PARM_3
+                                    626 ;	Raw cost for generated ic 143 : (3, 4.000000) count=0.140625
+                                    627 ;	genAssign
+                                    628 ;	genAssignLit
+    00000159 A2 01            [ 2]  629 	ldx	#0x01
+    0000015B 8Er00r00         [ 4]  630 	stx	_set_bkg_submap_PARM_4
+                                    631 ;	Raw cost for generated ic 144 : (5, 6.000000) count=0.140625
+                                    632 ;	genAssign
+                                    633 ;	genAssignLit
+    0000015E A2 9C            [ 2]  634 	ldx	#0x9c
+    00000160 8Er00r00         [ 4]  635 	stx	_set_bkg_submap_PARM_6
+                                    636 ;	Raw cost for generated ic 146 : (5, 6.000000) count=0.140625
+                                    637 ;	Raw cost for generated ic 141 : (0, 0.000000) count=0.140625
+                                    638 ;	Raw cost for generated ic 142 : (0, 0.000000) count=0.140625
+                                    639 ;	genCall
+                                    640 ;	genSend
+    00000163 ADr09r00         [ 4]  641 	lda	_map_pos_x
+    00000166 84*00            [ 3]  642 	sty	*(REGTEMP+0)
+    00000168 A6*00            [ 3]  643 	ldx	*(REGTEMP+0)
+    0000016A 20r00r00         [ 6]  644 	jsr	_set_bkg_submap
+                                    645 ;	Raw cost for generated ic 147 : (10, 16.000000) count=0.140625
+                                    646 ;	src/large_map.c: 113: set_submap_attributes(
+                                    647 ;	skipping iCode since result will be rematerialized
+                                    648 ;	Raw cost for generated ic 149 : (0, 0.000000) count=0.140625
+                                    649 ;	skipping iCode since result will be rematerialized
+                                    650 ;	Raw cost for generated ic 150 : (0, 0.000000) count=0.140625
+                                    651 ;	genCast
+                                    652 ;	genCopy
+    0000016D A2 00            [ 2]  653 	ldx	#0x00
+    0000016F ADr09r00         [ 4]  654 	lda	_map_pos_x
+                                    655 ;	Raw cost for generated ic 153 : (5, 6.000000) count=0.140625
+                                    656 ;	genMinus
+                                    657 ;	genMinusDec
+    00000172 85*00            [ 3]  658 	sta	*(REGTEMP+0)
+    00000174 A9 9C            [ 2]  659 	lda	#0x9c
+    00000176 38               [ 2]  660 	sec
+    00000177 E5*00            [ 3]  661 	sbc	*(REGTEMP+0)
+    00000179 85*00            [ 3]  662 	sta	*_set_camera_sloc0_1_0
+    0000017B 8A               [ 2]  663 	txa
+    0000017C E9 00            [ 2]  664 	sbc	#0x00
+    0000017E 85*01            [ 3]  665 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                    666 ;	Raw cost for generated ic 154 : (14, 20.000000) count=0.140625
+                                    667 ;	genCmp
+    00000180 A9 21            [ 2]  668 	lda	#0x21
+    00000182 38               [ 2]  669 	sec
+    00000183 E5*00            [ 3]  670 	sbc	*_set_camera_sloc0_1_0
+    00000185 8A               [ 2]  671 	txa
+    00000186 E5*01            [ 3]  672 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    00000188 50 04            [ 4]  673 	bvc	00249$
+    0000018A 10 04            [ 4]  674 	bpl	00248$
+    0000018C 30 07            [ 4]  675 	bmi	00138$
+    0000018E                        676 00249$:
+    0000018E 10 05            [ 4]  677 	bpl	00138$
+    00000190                        678 00248$:
+                                    679 ;	Raw cost for generated ic 155 : (19, 25.400002) count=0.140625
+                                    680 ;	skipping generated iCode
+                                    681 ;	Raw cost for generated ic 156 : (0, 0.000000) count=0.140625
+                                    682 ;	genAssign
+                                    683 ;	genAssignLit
+                                    684 ;	genCopy
+    00000190 A2 21            [ 2]  685 	ldx	#0x21
+                                    686 ;	Raw cost for generated ic 157 : (2, 2.000000) count=0.105469
+                                    687 ;	genGoto
+    00000192 4Cr9Cr01         [ 3]  688 	jmp	00139$
+                                    689 ;	Raw cost for generated ic 158 : (3, 3.000000) count=0.105469
+                                    690 ;	genLabel
+    00000195                        691 00138$:
+                                    692 ;	Raw cost for generated ic 159 : (0, 0.000000) count=0.035156
+                                    693 ;	genMinus
+                                    694 ;	genMinusDec
+    00000195 A9 9C            [ 2]  695 	lda	#0x9c
+    00000197 38               [ 2]  696 	sec
+    00000198 EDr09r00         [ 4]  697 	sbc	_map_pos_x
+    0000019B AA               [ 2]  698 	tax
+                                    699 ;	Raw cost for generated ic 160 : (7, 10.000000) count=0.035156
+                                    700 ;	genLabel
+    0000019C                        701 00139$:
+                                    702 ;	Raw cost for generated ic 162 : (0, 0.000000) count=0.140625
+                                    703 ;	genAssign
+                                    704 ;	genAssignLit
+                                    705 ;	genCopy
+                                    706 ;	Raw cost for generated ic 163 : (0, 0.000000) count=0.140625
+                                    707 ;	src/large_map.c: 74: return map_pos_y + DEVICE_SCREEN_HEIGHT;
+                                    708 ;	genCast
+                                    709 ;	genCopy
+    0000019C ADr0Ar00         [ 4]  710 	lda	_map_pos_y
+                                    711 ;	Raw cost for generated ic 166 : (3, 4.000000) count=0.140625
+                                    712 ;	genPlus
+                                    713 ;	genPlusIncr
+    0000019F 18               [ 2]  714 	clc
+    000001A0 69 1E            [ 2]  715 	adc	#0x1e
+                                    716 ;	Raw cost for generated ic 167 : (3, 4.000000) count=0.140625
+                                    717 ;	../../../include/nes/nes.h: 821: set_bkg_submap_attributes_nes16x16(x >> 1, y >> 1, (w + 1) >> 1, (h + 1) >> 1, attributes, (map_w + 1) >> 1);
+                                    718 ;	genRightShift
+                                    719 ;	genRightShiftLiteral
+                                    720 ;	genrshOne
+    000001A2 48               [ 3]  721 	pha
+    000001A3 ADr09r00         [ 4]  722 	lda	_map_pos_x
+    000001A6 4A               [ 2]  723 	lsr	a
+    000001A7 A8               [ 2]  724 	tay
+    000001A8 68               [ 4]  725 	pla
+                                    726 ;	Raw cost for generated ic 179 : (7, 15.000000) count=0.140625
+                                    727 ;	genRightShift
+                                    728 ;	genRightShiftLiteral
+                                    729 ;	genrshOne
+    000001A9 4A               [ 2]  730 	lsr	a
+    000001AA 85*00            [ 3]  731 	sta	*_set_camera_sloc0_1_0
+                                    732 ;	Raw cost for generated ic 180 : (3, 5.000000) count=0.140625
+                                    733 ;	genCast
+                                    734 ;	genCopy
+    000001AC 8A               [ 2]  735 	txa
+    000001AD A2 00            [ 2]  736 	ldx	#0x00
+                                    737 ;	Raw cost for generated ic 181 : (3, 4.000000) count=0.140625
+                                    738 ;	genPlus
+                                    739 ;	genPlusIncr
+    000001AF 18               [ 2]  740 	clc
+    000001B0 69 01            [ 2]  741 	adc	#0x01
+    000001B2 90 01            [ 4]  742 	bcc	00251$
+    000001B4 E8               [ 2]  743 	inx
+    000001B5                        744 00251$:
+                                    745 ;	Raw cost for generated ic 182 : (6, 8.600000) count=0.140625
+                                    746 ;	genRightShift
+                                    747 ;	genRightShiftLiteral
+                                    748 ;	genrshTwo
+    000001B5 86*00            [ 3]  749 	stx	*(REGTEMP+0)
+    000001B7 E0 80            [ 2]  750 	cpx	#0x80
+    000001B9 66*00            [ 5]  751 	ror	*(REGTEMP+0)
+    000001BB 6A               [ 2]  752 	ror	a
+                                    753 ;	Raw cost for generated ic 183 : (9, 15.000000) count=0.140625
+                                    754 ;	genCast
+                                    755 ;	genCopy
+                                    756 ;	Raw cost for generated ic 184 : (3, 4.000000) count=0.140625
+                                    757 ;	genAssign
+                                    758 ;	genAssignLit
+    000001BC 8Dr00r00         [ 4]  759 	sta	_set_bkg_submap_attributes_nes16x16_PARM_3
+    000001BF A2 01            [ 2]  760 	ldx	#0x01
+    000001C1 8Er00r00         [ 4]  761 	stx	_set_bkg_submap_attributes_nes16x16_PARM_4
+                                    762 ;	Raw cost for generated ic 196 : (5, 6.000000) count=0.140625
+                                    763 ;	genAssign
+                                    764 ;	genAssignLit
+                                    765 ;	genCopy
+    000001C4 A9s00            [ 2]  766 	lda	#>_bigmap_map_attributes
+    000001C6 8Dr01r00         [ 4]  767 	sta	(_set_bkg_submap_attributes_nes16x16_PARM_5 + 1)
+    000001C9 A9r00            [ 2]  768 	lda	#_bigmap_map_attributes
+    000001CB 8Dr00r00         [ 4]  769 	sta	_set_bkg_submap_attributes_nes16x16_PARM_5
+                                    770 ;	Raw cost for generated ic 197 : (10, 12.000000) count=0.140625
+                                    771 ;	genAssign
+                                    772 ;	genAssignLit
+    000001CE A2 4E            [ 2]  773 	ldx	#0x4e
+    000001D0 8Er00r00         [ 4]  774 	stx	_set_bkg_submap_attributes_nes16x16_PARM_6
+                                    775 ;	Raw cost for generated ic 198 : (5, 6.000000) count=0.140625
+                                    776 ;	Raw cost for generated ic 193 : (0, 0.000000) count=0.140625
+                                    777 ;	Raw cost for generated ic 194 : (0, 0.000000) count=0.140625
+                                    778 ;	genCall
+                                    779 ;	genSend
+    000001D3 98               [ 2]  780 	tya
+    000001D4 A6*00            [ 3]  781 	ldx	*_set_camera_sloc0_1_0
+    000001D6 20r00r00         [ 6]  782 	jsr	_set_bkg_submap_attributes_nes16x16
+                                    783 ;	Raw cost for generated ic 199 : (6, 11.000000) count=0.140625
+                                    784 ;	src/large_map.c: 113: set_submap_attributes(
+                                    785 ;	genLabel
+    000001D9                        786 00105$:
+                                    787 ;	Raw cost for generated ic 202 : (0, 0.000000) count=0.750000
+                                    788 ;	src/large_map.c: 122: old_map_pos_y = map_pos_y; 
+                                    789 ;	genAssign
+                                    790 ;	genAssignLit
+                                    791 ;	genCopy
+    000001D9 ADr0Ar00         [ 4]  792 	lda	_map_pos_y
+    000001DC 8Dr0Cr00         [ 4]  793 	sta	_old_map_pos_y
+                                    794 ;	Raw cost for generated ic 203 : (6, 9.000000) count=0.750000
+                                    795 ;	genLabel
+    000001DF                        796 00107$:
+                                    797 ;	Raw cost for generated ic 205 : (0, 0.000000) count=1.000000
+                                    798 ;	src/large_map.c: 125: map_pos_x = (uint8_t)(camera_x >> 3u);
+                                    799 ;	genRightShift
+                                    800 ;	genRightShiftLiteral
+                                    801 ;	genrshTwo
+    000001DF AEr02r00         [ 4]  802 	ldx	(_camera_x + 1)
+    000001E2 ADr01r00         [ 4]  803 	lda	_camera_x
+    000001E5 86*00            [ 3]  804 	stx	*(REGTEMP+0)
+    000001E7 46*00            [ 5]  805 	lsr	*(REGTEMP+0)
+    000001E9 6A               [ 2]  806 	ror	a
+    000001EA 46*00            [ 5]  807 	lsr	*(REGTEMP+0)
+    000001EC 6A               [ 2]  808 	ror	a
+    000001ED 46*00            [ 5]  809 	lsr	*(REGTEMP+0)
+    000001EF 6A               [ 2]  810 	ror	a
+    000001F0 A6*00            [ 3]  811 	ldx	*(REGTEMP+0)
+                                    812 ;	Raw cost for generated ic 206 : (19, 35.000000) count=1.000000
+                                    813 ;	genCast
+                                    814 ;	genCopy
+    000001F2 A8               [ 2]  815 	tay
+                                    816 ;	Raw cost for generated ic 207 : (1, 2.000000) count=1.000000
+                                    817 ;	genAssign
+                                    818 ;	genAssignLit
+                                    819 ;	genCopy
+    000001F3 8Cr09r00         [ 4]  820 	sty	_map_pos_x
+                                    821 ;	Raw cost for generated ic 209 : (3, 5.000000) count=1.000000
+                                    822 ;	src/large_map.c: 126: if (map_pos_x != old_map_pos_x)
+                                    823 ;	genCmpEQorNE
+    000001F6 CCr0Br00         [ 4]  824 	cpy	_old_map_pos_x
+    000001F9 D0 03            [ 4]  825 	bne	00252$
+    000001FB 4Cr91r03         [ 3]  826 	jmp	00114$
+    000001FE                        827 00252$:
+                                    828 ;	Raw cost for generated ic 210 : (8, 9.600000) count=1.000000
+                                    829 ;	skipping generated iCode
+                                    830 ;	Raw cost for generated ic 211 : (0, 0.000000) count=1.000000
+                                    831 ;	src/large_map.c: 128: if (camera_x < old_camera_x)
+                                    832 ;	genCmp
+    000001FE ADr01r00         [ 4]  833 	lda	_camera_x
+    00000201 38               [ 2]  834 	sec
+    00000202 EDr05r00         [ 4]  835 	sbc	_old_camera_x
+    00000205 ADr02r00         [ 4]  836 	lda	(_camera_x + 1)
+    00000208 EDr06r00         [ 4]  837 	sbc	(_old_camera_x + 1)
+    0000020B 90 03            [ 4]  838 	bcc	00253$
+    0000020D 4CrC9r02         [ 3]  839 	jmp	00111$
+    00000210                        840 00253$:
+                                    841 ;	Raw cost for generated ic 214 : (18, 23.600000) count=0.750000
+                                    842 ;	skipping generated iCode
+                                    843 ;	Raw cost for generated ic 215 : (0, 0.000000) count=0.750000
+                                    844 ;	src/large_map.c: 52: return map_pos_x + 1;
+                                    845 ;	genCast
+                                    846 ;	genCopy
+                                    847 ;	Raw cost for generated ic 220 : (0, 0.000000) count=0.562500
+                                    848 ;	genPlus
+                                    849 ;	genPlusIncr
+    00000210 C8               [ 2]  850 	iny
+                                    851 ;	Raw cost for generated ic 221 : (1, 2.000000) count=0.562500
+                                    852 ;	src/large_map.c: 130: set_submap_indices(
+                                    853 ;	genCast
+                                    854 ;	genCopy
+    00000211 A2 00            [ 2]  855 	ldx	#0x00
+    00000213 ADr0Ar00         [ 4]  856 	lda	_map_pos_y
+                                    857 ;	Raw cost for generated ic 225 : (5, 6.000000) count=0.562500
+                                    858 ;	genMinus
+                                    859 ;	genMinusDec
+    00000216 85*00            [ 3]  860 	sta	*(REGTEMP+0)
+    00000218 A9 42            [ 2]  861 	lda	#0x42
+    0000021A 38               [ 2]  862 	sec
+    0000021B E5*00            [ 3]  863 	sbc	*(REGTEMP+0)
+    0000021D 85*00            [ 3]  864 	sta	*_set_camera_sloc0_1_0
+    0000021F 8A               [ 2]  865 	txa
+    00000220 E9 00            [ 2]  866 	sbc	#0x00
+    00000222 85*01            [ 3]  867 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                    868 ;	Raw cost for generated ic 226 : (14, 20.000000) count=0.562500
+                                    869 ;	genCmp
+    00000224 A9 1F            [ 2]  870 	lda	#0x1f
+    00000226 38               [ 2]  871 	sec
+    00000227 E5*00            [ 3]  872 	sbc	*_set_camera_sloc0_1_0
+    00000229 8A               [ 2]  873 	txa
+    0000022A E5*01            [ 3]  874 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    0000022C 50 04            [ 4]  875 	bvc	00255$
+    0000022E 10 04            [ 4]  876 	bpl	00254$
+    00000230 30 07            [ 4]  877 	bmi	00140$
+    00000232                        878 00255$:
+    00000232 10 05            [ 4]  879 	bpl	00140$
+    00000234                        880 00254$:
+                                    881 ;	Raw cost for generated ic 227 : (19, 25.400002) count=0.562500
+                                    882 ;	skipping generated iCode
+                                    883 ;	Raw cost for generated ic 228 : (0, 0.000000) count=0.562500
+                                    884 ;	genAssign
+                                    885 ;	genAssignLit
+                                    886 ;	genCopy
+    00000234 A9 1F            [ 2]  887 	lda	#0x1f
+                                    888 ;	Raw cost for generated ic 229 : (2, 2.000000) count=0.421875
+                                    889 ;	genGoto
+    00000236 4Cr3Fr02         [ 3]  890 	jmp	00141$
+                                    891 ;	Raw cost for generated ic 230 : (3, 3.000000) count=0.421875
+                                    892 ;	genLabel
+    00000239                        893 00140$:
+                                    894 ;	Raw cost for generated ic 231 : (0, 0.000000) count=0.140625
+                                    895 ;	genMinus
+                                    896 ;	genMinusDec
+    00000239 A9 42            [ 2]  897 	lda	#0x42
+    0000023B 38               [ 2]  898 	sec
+    0000023C EDr0Ar00         [ 4]  899 	sbc	_map_pos_y
+                                    900 ;	Raw cost for generated ic 232 : (6, 8.000000) count=0.140625
+                                    901 ;	genLabel
+    0000023F                        902 00141$:
+                                    903 ;	Raw cost for generated ic 234 : (0, 0.000000) count=0.562500
+                                    904 ;	skipping iCode since result will be rematerialized
+                                    905 ;	Raw cost for generated ic 235 : (0, 0.000000) count=0.562500
+                                    906 ;	genCast
+                                    907 ;	genCopy
+    0000023F A2s00            [ 2]  908 	ldx	#>_bigmap_map
+    00000241 8Er01r00         [ 4]  909 	stx	(_set_bkg_submap_PARM_5 + 1)
+    00000244 A2r00            [ 2]  910 	ldx	#_bigmap_map
+    00000246 8Er00r00         [ 4]  911 	stx	_set_bkg_submap_PARM_5
+                                    912 ;	Raw cost for generated ic 236 : (10, 12.000000) count=0.562500
+                                    913 ;	genAssign
+                                    914 ;	genAssignLit
+    00000249 A2 01            [ 2]  915 	ldx	#0x01
+    0000024B 8Er00r00         [ 4]  916 	stx	_set_bkg_submap_PARM_3
+                                    917 ;	Raw cost for generated ic 239 : (5, 6.000000) count=0.562500
+                                    918 ;	genAssign
+                                    919 ;	genAssignLit
+                                    920 ;	genCopy
+    0000024E 8Dr00r00         [ 4]  921 	sta	_set_bkg_submap_PARM_4
+                                    922 ;	Raw cost for generated ic 240 : (3, 4.000000) count=0.562500
+                                    923 ;	genAssign
+                                    924 ;	genAssignLit
+    00000251 A2 9C            [ 2]  925 	ldx	#0x9c
+    00000253 8Er00r00         [ 4]  926 	stx	_set_bkg_submap_PARM_6
+                                    927 ;	Raw cost for generated ic 242 : (5, 6.000000) count=0.562500
+                                    928 ;	Raw cost for generated ic 237 : (0, 0.000000) count=0.562500
+                                    929 ;	Raw cost for generated ic 238 : (0, 0.000000) count=0.562500
+                                    930 ;	genCall
+                                    931 ;	genSend
+    00000256 98               [ 2]  932 	tya
+    00000257 AEr0Ar00         [ 4]  933 	ldx	_map_pos_y
+    0000025A 20r00r00         [ 6]  934 	jsr	_set_bkg_submap
+                                    935 ;	Raw cost for generated ic 243 : (7, 12.000000) count=0.562500
+                                    936 ;	src/large_map.c: 137: set_submap_attributes(
+                                    937 ;	skipping iCode since result will be rematerialized
+                                    938 ;	Raw cost for generated ic 245 : (0, 0.000000) count=0.562500
+                                    939 ;	skipping iCode since result will be rematerialized
+                                    940 ;	Raw cost for generated ic 246 : (0, 0.000000) count=0.562500
+                                    941 ;	genCast
+                                    942 ;	genCopy
+    0000025D A2 00            [ 2]  943 	ldx	#0x00
+    0000025F ADr0Ar00         [ 4]  944 	lda	_map_pos_y
+                                    945 ;	Raw cost for generated ic 248 : (5, 6.000000) count=0.562500
+                                    946 ;	genMinus
+                                    947 ;	genMinusDec
+    00000262 85*00            [ 3]  948 	sta	*(REGTEMP+0)
+    00000264 A9 42            [ 2]  949 	lda	#0x42
+    00000266 38               [ 2]  950 	sec
+    00000267 E5*00            [ 3]  951 	sbc	*(REGTEMP+0)
+    00000269 85*00            [ 3]  952 	sta	*_set_camera_sloc0_1_0
+    0000026B 8A               [ 2]  953 	txa
+    0000026C E9 00            [ 2]  954 	sbc	#0x00
+    0000026E 85*01            [ 3]  955 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                    956 ;	Raw cost for generated ic 249 : (14, 20.000000) count=0.562500
+                                    957 ;	genCmp
+    00000270 A9 1F            [ 2]  958 	lda	#0x1f
+    00000272 38               [ 2]  959 	sec
+    00000273 E5*00            [ 3]  960 	sbc	*_set_camera_sloc0_1_0
+    00000275 8A               [ 2]  961 	txa
+    00000276 E5*01            [ 3]  962 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    00000278 50 04            [ 4]  963 	bvc	00258$
+    0000027A 10 04            [ 4]  964 	bpl	00257$
+    0000027C 30 07            [ 4]  965 	bmi	00142$
+    0000027E                        966 00258$:
+    0000027E 10 05            [ 4]  967 	bpl	00142$
+    00000280                        968 00257$:
+                                    969 ;	Raw cost for generated ic 250 : (19, 25.400002) count=0.562500
+                                    970 ;	skipping generated iCode
+                                    971 ;	Raw cost for generated ic 251 : (0, 0.000000) count=0.562500
+                                    972 ;	genAssign
+                                    973 ;	genAssignLit
+                                    974 ;	genCopy
+    00000280 A2 1F            [ 2]  975 	ldx	#0x1f
+                                    976 ;	Raw cost for generated ic 252 : (2, 2.000000) count=0.421875
+                                    977 ;	genGoto
+    00000282 4Cr8Cr02         [ 3]  978 	jmp	00143$
+                                    979 ;	Raw cost for generated ic 253 : (3, 3.000000) count=0.421875
+                                    980 ;	genLabel
+    00000285                        981 00142$:
+                                    982 ;	Raw cost for generated ic 254 : (0, 0.000000) count=0.140625
+                                    983 ;	genMinus
+                                    984 ;	genMinusDec
+    00000285 A9 42            [ 2]  985 	lda	#0x42
+    00000287 38               [ 2]  986 	sec
+    00000288 EDr0Ar00         [ 4]  987 	sbc	_map_pos_y
+    0000028B AA               [ 2]  988 	tax
+                                    989 ;	Raw cost for generated ic 255 : (7, 10.000000) count=0.140625
+                                    990 ;	genLabel
+    0000028C                        991 00143$:
+                                    992 ;	Raw cost for generated ic 257 : (0, 0.000000) count=0.562500
+                                    993 ;	genAssign
+                                    994 ;	genAssignLit
+                                    995 ;	genCopy
+                                    996 ;	Raw cost for generated ic 258 : (0, 0.000000) count=0.562500
+                                    997 ;	src/large_map.c: 52: return map_pos_x + 1;
+                                    998 ;	genCast
+                                    999 ;	genCopy
+    0000028C ACr09r00         [ 4] 1000 	ldy	_map_pos_x
+                                   1001 ;	Raw cost for generated ic 263 : (3, 4.000000) count=0.562500
+                                   1002 ;	genPlus
+                                   1003 ;	genPlusIncr
+    0000028F C8               [ 2] 1004 	iny
+                                   1005 ;	Raw cost for generated ic 264 : (1, 2.000000) count=0.562500
+                                   1006 ;	../../../include/nes/nes.h: 821: set_bkg_submap_attributes_nes16x16(x >> 1, y >> 1, (w + 1) >> 1, (h + 1) >> 1, attributes, (map_w + 1) >> 1);
+                                   1007 ;	genRightShift
+                                   1008 ;	genRightShiftLiteral
+                                   1009 ;	genrshOne
+    00000290 98               [ 2] 1010 	tya
+    00000291 4A               [ 2] 1011 	lsr	a
+    00000292 A8               [ 2] 1012 	tay
+                                   1013 ;	Raw cost for generated ic 275 : (3, 6.000000) count=0.562500
+                                   1014 ;	genRightShift
+                                   1015 ;	genRightShiftLiteral
+                                   1016 ;	genrshOne
+    00000293 ADr0Ar00         [ 4] 1017 	lda	_map_pos_y
+    00000296 4A               [ 2] 1018 	lsr	a
+    00000297 85*00            [ 3] 1019 	sta	*_set_camera_sloc0_1_0
+                                   1020 ;	Raw cost for generated ic 276 : (6, 9.000000) count=0.562500
+                                   1021 ;	genCast
+                                   1022 ;	genCopy
+    00000299 8A               [ 2] 1023 	txa
+    0000029A A2 00            [ 2] 1024 	ldx	#0x00
+                                   1025 ;	Raw cost for generated ic 281 : (3, 4.000000) count=0.562500
+                                   1026 ;	genPlus
+                                   1027 ;	genPlusIncr
+    0000029C 18               [ 2] 1028 	clc
+    0000029D 69 01            [ 2] 1029 	adc	#0x01
+    0000029F 90 01            [ 4] 1030 	bcc	00260$
+    000002A1 E8               [ 2] 1031 	inx
+    000002A2                       1032 00260$:
+                                   1033 ;	Raw cost for generated ic 282 : (6, 8.600000) count=0.562500
+                                   1034 ;	genRightShift
+                                   1035 ;	genRightShiftLiteral
+                                   1036 ;	genrshTwo
+    000002A2 86*00            [ 3] 1037 	stx	*(REGTEMP+0)
+    000002A4 E0 80            [ 2] 1038 	cpx	#0x80
+    000002A6 66*00            [ 5] 1039 	ror	*(REGTEMP+0)
+    000002A8 6A               [ 2] 1040 	ror	a
+                                   1041 ;	Raw cost for generated ic 283 : (9, 15.000000) count=0.562500
+                                   1042 ;	genCast
+                                   1043 ;	genCopy
+                                   1044 ;	Raw cost for generated ic 284 : (3, 4.000000) count=0.562500
+                                   1045 ;	genAssign
+                                   1046 ;	genAssignLit
+    000002A9 8Dr00r00         [ 4] 1047 	sta	_set_bkg_submap_attributes_nes16x16_PARM_4
+    000002AC A2 01            [ 2] 1048 	ldx	#0x01
+    000002AE 8Er00r00         [ 4] 1049 	stx	_set_bkg_submap_attributes_nes16x16_PARM_3
+                                   1050 ;	Raw cost for generated ic 291 : (5, 6.000000) count=0.562500
+                                   1051 ;	genAssign
+                                   1052 ;	genAssignLit
+                                   1053 ;	genCopy
+    000002B1 A9s00            [ 2] 1054 	lda	#>_bigmap_map_attributes
+    000002B3 8Dr01r00         [ 4] 1055 	sta	(_set_bkg_submap_attributes_nes16x16_PARM_5 + 1)
+    000002B6 A9r00            [ 2] 1056 	lda	#_bigmap_map_attributes
+    000002B8 8Dr00r00         [ 4] 1057 	sta	_set_bkg_submap_attributes_nes16x16_PARM_5
+                                   1058 ;	Raw cost for generated ic 293 : (10, 12.000000) count=0.562500
+                                   1059 ;	genAssign
+                                   1060 ;	genAssignLit
+    000002BB A2 4E            [ 2] 1061 	ldx	#0x4e
+    000002BD 8Er00r00         [ 4] 1062 	stx	_set_bkg_submap_attributes_nes16x16_PARM_6
+                                   1063 ;	Raw cost for generated ic 294 : (5, 6.000000) count=0.562500
+                                   1064 ;	Raw cost for generated ic 289 : (0, 0.000000) count=0.562500
+                                   1065 ;	Raw cost for generated ic 290 : (0, 0.000000) count=0.562500
+                                   1066 ;	genCall
+                                   1067 ;	genSend
+    000002C0 98               [ 2] 1068 	tya
+    000002C1 A6*00            [ 3] 1069 	ldx	*_set_camera_sloc0_1_0
+    000002C3 20r00r00         [ 6] 1070 	jsr	_set_bkg_submap_attributes_nes16x16
+                                   1071 ;	Raw cost for generated ic 295 : (6, 11.000000) count=0.562500
+                                   1072 ;	src/large_map.c: 137: set_submap_attributes(
+                                   1073 ;	genGoto
+    000002C6 4Cr8Br03         [ 3] 1074 	jmp	00112$
+                                   1075 ;	Raw cost for generated ic 297 : (3, 3.000000) count=0.562500
+                                   1076 ;	genLabel
+    000002C9                       1077 00111$:
+                                   1078 ;	Raw cost for generated ic 298 : (0, 0.000000) count=0.187500
+                                   1079 ;	src/large_map.c: 147: if ((bigmap_mapWidth - DEVICE_SCREEN_WIDTH) > map_pos_x)
+                                   1080 ;	genCmp
+    000002C9 C0 7C            [ 2] 1081 	cpy	#0x7c
+    000002CB 90 03            [ 4] 1082 	bcc	00261$
+    000002CD 4Cr8Br03         [ 3] 1083 	jmp	00112$
+    000002D0                       1084 00261$:
+                                   1085 ;	Raw cost for generated ic 299 : (7, 7.600000) count=0.187500
+                                   1086 ;	skipping generated iCode
+                                   1087 ;	Raw cost for generated ic 300 : (0, 0.000000) count=0.187500
+                                   1088 ;	src/large_map.c: 60: return map_pos_x + DEVICE_SCREEN_WIDTH;
+                                   1089 ;	genCast
+                                   1090 ;	genCopy
+    000002D0 98               [ 2] 1091 	tya
+                                   1092 ;	Raw cost for generated ic 305 : (1, 2.000000) count=0.140625
+                                   1093 ;	genPlus
+                                   1094 ;	genPlusIncr
+    000002D1 18               [ 2] 1095 	clc
+    000002D2 69 20            [ 2] 1096 	adc	#0x20
+    000002D4 A8               [ 2] 1097 	tay
+                                   1098 ;	Raw cost for generated ic 306 : (4, 6.000000) count=0.140625
+                                   1099 ;	src/large_map.c: 149: set_submap_indices(
+                                   1100 ;	genCast
+                                   1101 ;	genCopy
+    000002D5 A2 00            [ 2] 1102 	ldx	#0x00
+    000002D7 ADr0Ar00         [ 4] 1103 	lda	_map_pos_y
+                                   1104 ;	Raw cost for generated ic 310 : (5, 6.000000) count=0.140625
+                                   1105 ;	genMinus
+                                   1106 ;	genMinusDec
+    000002DA 85*00            [ 3] 1107 	sta	*(REGTEMP+0)
+    000002DC A9 42            [ 2] 1108 	lda	#0x42
+    000002DE 38               [ 2] 1109 	sec
+    000002DF E5*00            [ 3] 1110 	sbc	*(REGTEMP+0)
+    000002E1 85*00            [ 3] 1111 	sta	*_set_camera_sloc0_1_0
+    000002E3 8A               [ 2] 1112 	txa
+    000002E4 E9 00            [ 2] 1113 	sbc	#0x00
+    000002E6 85*01            [ 3] 1114 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                   1115 ;	Raw cost for generated ic 311 : (14, 20.000000) count=0.140625
+                                   1116 ;	genCmp
+    000002E8 A9 1F            [ 2] 1117 	lda	#0x1f
+    000002EA 38               [ 2] 1118 	sec
+    000002EB E5*00            [ 3] 1119 	sbc	*_set_camera_sloc0_1_0
+    000002ED 8A               [ 2] 1120 	txa
+    000002EE E5*01            [ 3] 1121 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    000002F0 50 04            [ 4] 1122 	bvc	00263$
+    000002F2 10 04            [ 4] 1123 	bpl	00262$
+    000002F4 30 07            [ 4] 1124 	bmi	00144$
+    000002F6                       1125 00263$:
+    000002F6 10 05            [ 4] 1126 	bpl	00144$
+    000002F8                       1127 00262$:
+                                   1128 ;	Raw cost for generated ic 312 : (19, 25.400002) count=0.140625
+                                   1129 ;	skipping generated iCode
+                                   1130 ;	Raw cost for generated ic 313 : (0, 0.000000) count=0.140625
+                                   1131 ;	genAssign
+                                   1132 ;	genAssignLit
+                                   1133 ;	genCopy
+    000002F8 A9 1F            [ 2] 1134 	lda	#0x1f
+                                   1135 ;	Raw cost for generated ic 314 : (2, 2.000000) count=0.105469
+                                   1136 ;	genGoto
+    000002FA 4Cr03r03         [ 3] 1137 	jmp	00145$
+                                   1138 ;	Raw cost for generated ic 315 : (3, 3.000000) count=0.105469
+                                   1139 ;	genLabel
+    000002FD                       1140 00144$:
+                                   1141 ;	Raw cost for generated ic 316 : (0, 0.000000) count=0.035156
+                                   1142 ;	genMinus
+                                   1143 ;	genMinusDec
+    000002FD A9 42            [ 2] 1144 	lda	#0x42
+    000002FF 38               [ 2] 1145 	sec
+    00000300 EDr0Ar00         [ 4] 1146 	sbc	_map_pos_y
+                                   1147 ;	Raw cost for generated ic 317 : (6, 8.000000) count=0.035156
+                                   1148 ;	genLabel
+    00000303                       1149 00145$:
+                                   1150 ;	Raw cost for generated ic 319 : (0, 0.000000) count=0.140625
+                                   1151 ;	skipping iCode since result will be rematerialized
+                                   1152 ;	Raw cost for generated ic 320 : (0, 0.000000) count=0.140625
+                                   1153 ;	genCast
+                                   1154 ;	genCopy
+    00000303 A2s00            [ 2] 1155 	ldx	#>_bigmap_map
+    00000305 8Er01r00         [ 4] 1156 	stx	(_set_bkg_submap_PARM_5 + 1)
+    00000308 A2r00            [ 2] 1157 	ldx	#_bigmap_map
+    0000030A 8Er00r00         [ 4] 1158 	stx	_set_bkg_submap_PARM_5
+                                   1159 ;	Raw cost for generated ic 321 : (10, 12.000000) count=0.140625
+                                   1160 ;	genAssign
+                                   1161 ;	genAssignLit
+    0000030D A2 01            [ 2] 1162 	ldx	#0x01
+    0000030F 8Er00r00         [ 4] 1163 	stx	_set_bkg_submap_PARM_3
+                                   1164 ;	Raw cost for generated ic 324 : (5, 6.000000) count=0.140625
+                                   1165 ;	genAssign
+                                   1166 ;	genAssignLit
+                                   1167 ;	genCopy
+    00000312 8Dr00r00         [ 4] 1168 	sta	_set_bkg_submap_PARM_4
+                                   1169 ;	Raw cost for generated ic 325 : (3, 4.000000) count=0.140625
+                                   1170 ;	genAssign
+                                   1171 ;	genAssignLit
+    00000315 A2 9C            [ 2] 1172 	ldx	#0x9c
+    00000317 8Er00r00         [ 4] 1173 	stx	_set_bkg_submap_PARM_6
+                                   1174 ;	Raw cost for generated ic 327 : (5, 6.000000) count=0.140625
+                                   1175 ;	Raw cost for generated ic 322 : (0, 0.000000) count=0.140625
+                                   1176 ;	Raw cost for generated ic 323 : (0, 0.000000) count=0.140625
+                                   1177 ;	genCall
+                                   1178 ;	genSend
+    0000031A 98               [ 2] 1179 	tya
+    0000031B AEr0Ar00         [ 4] 1180 	ldx	_map_pos_y
+    0000031E 20r00r00         [ 6] 1181 	jsr	_set_bkg_submap
+                                   1182 ;	Raw cost for generated ic 328 : (7, 12.000000) count=0.140625
+                                   1183 ;	src/large_map.c: 156: set_submap_attributes(
+                                   1184 ;	skipping iCode since result will be rematerialized
+                                   1185 ;	Raw cost for generated ic 330 : (0, 0.000000) count=0.140625
+                                   1186 ;	skipping iCode since result will be rematerialized
+                                   1187 ;	Raw cost for generated ic 331 : (0, 0.000000) count=0.140625
+                                   1188 ;	genCast
+                                   1189 ;	genCopy
+    00000321 A2 00            [ 2] 1190 	ldx	#0x00
+    00000323 ADr0Ar00         [ 4] 1191 	lda	_map_pos_y
+                                   1192 ;	Raw cost for generated ic 333 : (5, 6.000000) count=0.140625
+                                   1193 ;	genMinus
+                                   1194 ;	genMinusDec
+    00000326 85*00            [ 3] 1195 	sta	*(REGTEMP+0)
+    00000328 A9 42            [ 2] 1196 	lda	#0x42
+    0000032A 38               [ 2] 1197 	sec
+    0000032B E5*00            [ 3] 1198 	sbc	*(REGTEMP+0)
+    0000032D 85*00            [ 3] 1199 	sta	*_set_camera_sloc0_1_0
+    0000032F 8A               [ 2] 1200 	txa
+    00000330 E9 00            [ 2] 1201 	sbc	#0x00
+    00000332 85*01            [ 3] 1202 	sta	*(_set_camera_sloc0_1_0 + 1)
+                                   1203 ;	Raw cost for generated ic 334 : (14, 20.000000) count=0.140625
+                                   1204 ;	genCmp
+    00000334 A9 1F            [ 2] 1205 	lda	#0x1f
+    00000336 38               [ 2] 1206 	sec
+    00000337 E5*00            [ 3] 1207 	sbc	*_set_camera_sloc0_1_0
+    00000339 8A               [ 2] 1208 	txa
+    0000033A E5*01            [ 3] 1209 	sbc	*(_set_camera_sloc0_1_0 + 1)
+    0000033C 50 04            [ 4] 1210 	bvc	00266$
+    0000033E 10 04            [ 4] 1211 	bpl	00265$
+    00000340 30 07            [ 4] 1212 	bmi	00146$
+    00000342                       1213 00266$:
+    00000342 10 05            [ 4] 1214 	bpl	00146$
+    00000344                       1215 00265$:
+                                   1216 ;	Raw cost for generated ic 335 : (19, 25.400002) count=0.140625
+                                   1217 ;	skipping generated iCode
+                                   1218 ;	Raw cost for generated ic 336 : (0, 0.000000) count=0.140625
+                                   1219 ;	genAssign
+                                   1220 ;	genAssignLit
+                                   1221 ;	genCopy
+    00000344 A2 1F            [ 2] 1222 	ldx	#0x1f
+                                   1223 ;	Raw cost for generated ic 337 : (2, 2.000000) count=0.105469
+                                   1224 ;	genGoto
+    00000346 4Cr50r03         [ 3] 1225 	jmp	00147$
+                                   1226 ;	Raw cost for generated ic 338 : (3, 3.000000) count=0.105469
+                                   1227 ;	genLabel
+    00000349                       1228 00146$:
+                                   1229 ;	Raw cost for generated ic 339 : (0, 0.000000) count=0.035156
+                                   1230 ;	genMinus
+                                   1231 ;	genMinusDec
+    00000349 A9 42            [ 2] 1232 	lda	#0x42
+    0000034B 38               [ 2] 1233 	sec
+    0000034C EDr0Ar00         [ 4] 1234 	sbc	_map_pos_y
+    0000034F AA               [ 2] 1235 	tax
+                                   1236 ;	Raw cost for generated ic 340 : (7, 10.000000) count=0.035156
+                                   1237 ;	genLabel
+    00000350                       1238 00147$:
+                                   1239 ;	Raw cost for generated ic 342 : (0, 0.000000) count=0.140625
+                                   1240 ;	genAssign
+                                   1241 ;	genAssignLit
+                                   1242 ;	genCopy
+                                   1243 ;	Raw cost for generated ic 343 : (0, 0.000000) count=0.140625
+                                   1244 ;	src/large_map.c: 60: return map_pos_x + DEVICE_SCREEN_WIDTH;
+                                   1245 ;	genCast
+                                   1246 ;	genCopy
+    00000350 ADr09r00         [ 4] 1247 	lda	_map_pos_x
+                                   1248 ;	Raw cost for generated ic 348 : (3, 4.000000) count=0.140625
+                                   1249 ;	genPlus
+                                   1250 ;	genPlusIncr
+    00000353 18               [ 2] 1251 	clc
+    00000354 69 20            [ 2] 1252 	adc	#0x20
+                                   1253 ;	Raw cost for generated ic 349 : (3, 4.000000) count=0.140625
+                                   1254 ;	../../../include/nes/nes.h: 821: set_bkg_submap_attributes_nes16x16(x >> 1, y >> 1, (w + 1) >> 1, (h + 1) >> 1, attributes, (map_w + 1) >> 1);
+                                   1255 ;	genRightShift
+                                   1256 ;	genRightShiftLiteral
+                                   1257 ;	genrshOne
+    00000356 4A               [ 2] 1258 	lsr	a
+    00000357 A8               [ 2] 1259 	tay
+                                   1260 ;	Raw cost for generated ic 360 : (2, 4.000000) count=0.140625
+                                   1261 ;	genRightShift
+                                   1262 ;	genRightShiftLiteral
+                                   1263 ;	genrshOne
+    00000358 ADr0Ar00         [ 4] 1264 	lda	_map_pos_y
+    0000035B 4A               [ 2] 1265 	lsr	a
+    0000035C 85*00            [ 3] 1266 	sta	*_set_camera_sloc0_1_0
+                                   1267 ;	Raw cost for generated ic 361 : (6, 9.000000) count=0.140625
+                                   1268 ;	genCast
+                                   1269 ;	genCopy
+    0000035E 8A               [ 2] 1270 	txa
+    0000035F A2 00            [ 2] 1271 	ldx	#0x00
+                                   1272 ;	Raw cost for generated ic 366 : (3, 4.000000) count=0.140625
+                                   1273 ;	genPlus
+                                   1274 ;	genPlusIncr
+    00000361 18               [ 2] 1275 	clc
+    00000362 69 01            [ 2] 1276 	adc	#0x01
+    00000364 90 01            [ 4] 1277 	bcc	00268$
+    00000366 E8               [ 2] 1278 	inx
+    00000367                       1279 00268$:
+                                   1280 ;	Raw cost for generated ic 367 : (6, 8.600000) count=0.140625
+                                   1281 ;	genRightShift
+                                   1282 ;	genRightShiftLiteral
+                                   1283 ;	genrshTwo
+    00000367 86*00            [ 3] 1284 	stx	*(REGTEMP+0)
+    00000369 E0 80            [ 2] 1285 	cpx	#0x80
+    0000036B 66*00            [ 5] 1286 	ror	*(REGTEMP+0)
+    0000036D 6A               [ 2] 1287 	ror	a
+                                   1288 ;	Raw cost for generated ic 368 : (9, 15.000000) count=0.140625
+                                   1289 ;	genCast
+                                   1290 ;	genCopy
+                                   1291 ;	Raw cost for generated ic 369 : (3, 4.000000) count=0.140625
+                                   1292 ;	genAssign
+                                   1293 ;	genAssignLit
+    0000036E 8Dr00r00         [ 4] 1294 	sta	_set_bkg_submap_attributes_nes16x16_PARM_4
+    00000371 A2 01            [ 2] 1295 	ldx	#0x01
+    00000373 8Er00r00         [ 4] 1296 	stx	_set_bkg_submap_attributes_nes16x16_PARM_3
+                                   1297 ;	Raw cost for generated ic 376 : (5, 6.000000) count=0.140625
+                                   1298 ;	genAssign
+                                   1299 ;	genAssignLit
+                                   1300 ;	genCopy
+    00000376 A9s00            [ 2] 1301 	lda	#>_bigmap_map_attributes
+    00000378 8Dr01r00         [ 4] 1302 	sta	(_set_bkg_submap_attributes_nes16x16_PARM_5 + 1)
+    0000037B A9r00            [ 2] 1303 	lda	#_bigmap_map_attributes
+    0000037D 8Dr00r00         [ 4] 1304 	sta	_set_bkg_submap_attributes_nes16x16_PARM_5
+                                   1305 ;	Raw cost for generated ic 378 : (10, 12.000000) count=0.140625
+                                   1306 ;	genAssign
+                                   1307 ;	genAssignLit
+    00000380 A2 4E            [ 2] 1308 	ldx	#0x4e
+    00000382 8Er00r00         [ 4] 1309 	stx	_set_bkg_submap_attributes_nes16x16_PARM_6
+                                   1310 ;	Raw cost for generated ic 379 : (5, 6.000000) count=0.140625
+                                   1311 ;	Raw cost for generated ic 374 : (0, 0.000000) count=0.140625
+                                   1312 ;	Raw cost for generated ic 375 : (0, 0.000000) count=0.140625
+                                   1313 ;	genCall
+                                   1314 ;	genSend
+    00000385 98               [ 2] 1315 	tya
+    00000386 A6*00            [ 3] 1316 	ldx	*_set_camera_sloc0_1_0
+    00000388 20r00r00         [ 6] 1317 	jsr	_set_bkg_submap_attributes_nes16x16
+                                   1318 ;	Raw cost for generated ic 380 : (6, 11.000000) count=0.140625
+                                   1319 ;	src/large_map.c: 156: set_submap_attributes(
+                                   1320 ;	genLabel
+    0000038B                       1321 00112$:
+                                   1322 ;	Raw cost for generated ic 383 : (0, 0.000000) count=0.750000
+                                   1323 ;	src/large_map.c: 165: old_map_pos_x = map_pos_x;
+                                   1324 ;	genAssign
+                                   1325 ;	genAssignLit
+                                   1326 ;	genCopy
+    0000038B ADr09r00         [ 4] 1327 	lda	_map_pos_x
+    0000038E 8Dr0Br00         [ 4] 1328 	sta	_old_map_pos_x
+                                   1329 ;	Raw cost for generated ic 384 : (6, 9.000000) count=0.750000
+                                   1330 ;	genLabel
+    00000391                       1331 00114$:
+                                   1332 ;	Raw cost for generated ic 386 : (0, 0.000000) count=1.000000
+                                   1333 ;	src/large_map.c: 168: old_camera_x = camera_x, old_camera_y = camera_y;
+                                   1334 ;	genAssign
+                                   1335 ;	genAssignLit
+                                   1336 ;	genCopy
+    00000391 ADr02r00         [ 4] 1337 	lda	(_camera_x + 1)
+    00000394 8Dr06r00         [ 4] 1338 	sta	(_old_camera_x + 1)
+    00000397 ADr01r00         [ 4] 1339 	lda	_camera_x
+    0000039A 8Dr05r00         [ 4] 1340 	sta	_old_camera_x
+                                   1341 ;	Raw cost for generated ic 387 : (12, 17.000000) count=1.000000
+                                   1342 ;	genAssign
+                                   1343 ;	genAssignLit
+                                   1344 ;	genCopy
+    0000039D ADr04r00         [ 4] 1345 	lda	(_camera_y + 1)
+    000003A0 8Dr08r00         [ 4] 1346 	sta	(_old_camera_y + 1)
+    000003A3 ADr03r00         [ 4] 1347 	lda	_camera_y
+    000003A6 8Dr07r00         [ 4] 1348 	sta	_old_camera_y
+                                   1349 ;	Raw cost for generated ic 389 : (12, 17.000000) count=1.000000
+                                   1350 ;	genLabel
+                                   1351 ;	Raw cost for generated ic 391 : (0, 0.000000) count=1.000000
+                                   1352 ;	src/large_map.c: 169: }
+                                   1353 ;	genEndFunction
+    000003A9 60               [ 6] 1354 	rts
+                                   1355 ;	Raw cost for generated ic 392 : (1, 6.000000) count=1.000000
+                                   1356 ;------------------------------------------------------------
+                                   1357 ;Allocation info for local variables in function 'init_camera'
+                                   1358 ;------------------------------------------------------------
+                                   1359 ;sloc0         Allocated with name '_init_camera_sloc0_1_0'
+                                   1360 ;sloc1         Allocated with name '_init_camera_sloc1_1_0'
+                                   1361 ;y             Allocated with name '_init_camera_y_10000_189'
+                                   1362 ;x             Allocated to registers a 
+                                   1363 ;__200000064   Allocated to registers 
+                                   1364 ;__200000065   Allocated to registers 
+                                   1365 ;__200000066   Allocated to registers 
+                                   1366 ;first_tile    Allocated to registers 
+                                   1367 ;nb_tiles      Allocated to registers 
+                                   1368 ;data          Allocated to registers 
+                                   1369 ;__200000068   Allocated to registers 
+                                   1370 ;__200000069   Allocated to registers a 
+                                   1371 ;x             Allocated to registers 
+                                   1372 ;y             Allocated to registers 
+                                   1373 ;__200000071   Allocated to registers 
+                                   1374 ;__200000072   Allocated to registers 
+                                   1375 ;__200000073   Allocated to registers x 
+                                   1376 ;__200000074   Allocated to registers y 
+                                   1377 ;__200000075   Allocated to registers 
+                                   1378 ;__200000076   Allocated to registers 
+                                   1379 ;x             Allocated to registers 
+                                   1380 ;y             Allocated to registers 
+                                   1381 ;w             Allocated to registers 
+                                   1382 ;h             Allocated to registers 
+                                   1383 ;attributes    Allocated to registers 
+                                   1384 ;map_w         Allocated to registers 
+                                   1385 ;__200000078   Allocated to registers 
+                                   1386 ;__200000079   Allocated to registers a 
+                                   1387 ;x             Allocated to registers 
+                                   1388 ;y             Allocated to registers 
+                                   1389 ;------------------------------------------------------------
+                                   1390 ;	src/large_map.c: 172: void init_camera(uint8_t x, uint8_t y) {
+                                   1391 ;	genLabel
+                                   1392 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1393 ;	-----------------------------------------
+                                   1394 ;	 function init_camera
+                                   1395 ;	-----------------------------------------
+                                   1396 ;	Register assignment is optimal.
+                                   1397 ;	Stack space usage: 0 bytes.
+    000003AA                       1398 _init_camera:
+                                   1399 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1400 ;	genReceive
+                                   1401 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                   1402 ;	genReceive
+    000003AA 8Er0Er00         [ 4] 1403 	stx	_init_camera_y_10000_189
+                                   1404 ;	Raw cost for generated ic 3 : (3, 4.000000) count=1.000000
+                                   1405 ;	src/large_map.c: 175: set_native_tile_data(0, bigmap_TILE_COUNT, bigmap_tiles);
+                                   1406 ;	skipping iCode since result will be rematerialized
+                                   1407 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                   1408 ;	genCast
+                                   1409 ;	genCopy
+    000003AD A2s00            [ 2] 1410 	ldx	#>_bigmap_tiles
+    000003AF 8Er01r00         [ 4] 1411 	stx	(_set_bkg_native_data_PARM_3 + 1)
+    000003B2 A2r00            [ 2] 1412 	ldx	#_bigmap_tiles
+    000003B4 8Er00r00         [ 4] 1413 	stx	_set_bkg_native_data_PARM_3
+                                   1414 ;	Raw cost for generated ic 5 : (10, 12.000000) count=1.000000
+                                   1415 ;	../../../include/nes/nes.h: 1277: set_bkg_native_data(first_tile, nb_tiles, data);
+                                   1416 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                   1417 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                   1418 ;	genCall
+    000003B7 48               [ 3] 1419 	pha
+                                   1420 ;	genSend
+    000003B8 A9 00            [ 2] 1421 	lda	#0x00
+    000003BA A2 E1            [ 2] 1422 	ldx	#0xe1
+    000003BC 20r00r00         [ 6] 1423 	jsr	_set_bkg_native_data
+    000003BF 68               [ 4] 1424 	pla
+                                   1425 ;	Raw cost for generated ic 21 : (9, 17.000000) count=1.000000
+                                   1426 ;	src/large_map.c: 187: set_bkg_palette(0, bigmap_PALETTE_COUNT, bigmap_palettes);
+                                   1427 ;	skipping iCode since result will be rematerialized
+                                   1428 ;	Raw cost for generated ic 49 : (0, 0.000000) count=1.000000
+                                   1429 ;	genCast
+                                   1430 ;	genCopy
+    000003C0 A2s00            [ 2] 1431 	ldx	#>_bigmap_palettes
+    000003C2 8Er01r00         [ 4] 1432 	stx	(_set_bkg_palette_PARM_3 + 1)
+    000003C5 A2r00            [ 2] 1433 	ldx	#_bigmap_palettes
+    000003C7 8Er00r00         [ 4] 1434 	stx	_set_bkg_palette_PARM_3
+                                   1435 ;	Raw cost for generated ic 50 : (10, 12.000000) count=1.000000
+                                   1436 ;	Raw cost for generated ic 51 : (0, 0.000000) count=1.000000
+                                   1437 ;	Raw cost for generated ic 52 : (0, 0.000000) count=1.000000
+                                   1438 ;	genCall
+    000003CA 48               [ 3] 1439 	pha
+                                   1440 ;	genSend
+    000003CB A9 00            [ 2] 1441 	lda	#0x00
+    000003CD A2 04            [ 2] 1442 	ldx	#0x04
+    000003CF 20r00r00         [ 6] 1443 	jsr	_set_bkg_palette
+    000003D2 68               [ 4] 1444 	pla
+                                   1445 ;	Raw cost for generated ic 54 : (9, 17.000000) count=1.000000
+                                   1446 ;	src/large_map.c: 192: camera_x = x;
+                                   1447 ;	genCast
+    000003D3 8Dr01r00         [ 4] 1448 	sta	_camera_x
+    000003D6 A2 00            [ 2] 1449 	ldx	#0x00
+    000003D8 8Er02r00         [ 4] 1450 	stx	(_camera_x + 1)
+                                   1451 ;	Raw cost for generated ic 55 : (8, 11.000000) count=1.000000
+                                   1452 ;	src/large_map.c: 193: camera_y = y;
+                                   1453 ;	genCast
+    000003DB ADr0Er00         [ 4] 1454 	lda	_init_camera_y_10000_189
+    000003DE 8Dr03r00         [ 4] 1455 	sta	_camera_y
+    000003E1 8Er04r00         [ 4] 1456 	stx	(_camera_y + 1)
+                                   1457 ;	Raw cost for generated ic 58 : (9, 13.000000) count=1.000000
+                                   1458 ;	src/large_map.c: 197: old_camera_x = camera_x; old_camera_y = camera_y;
+                                   1459 ;	genAssign
+                                   1460 ;	genAssignLit
+                                   1461 ;	genCopy
+                                   1462 ;	Raw cost for generated ic 77 : (0, 0.000000) count=1.000000
+                                   1463 ;	genAssign
+                                   1464 ;	genAssignLit
+                                   1465 ;	genCopy
+    000003E4 ADr02r00         [ 4] 1466 	lda	(_camera_x + 1)
+    000003E7 8Dr06r00         [ 4] 1467 	sta	(_old_camera_x + 1)
+    000003EA ADr01r00         [ 4] 1468 	lda	_camera_x
+    000003ED 8Dr05r00         [ 4] 1469 	sta	_old_camera_x
+                                   1470 ;	Raw cost for generated ic 78 : (12, 17.000000) count=1.000000
+                                   1471 ;	genAssign
+                                   1472 ;	genAssignLit
+                                   1473 ;	genCopy
+                                   1474 ;	Raw cost for generated ic 79 : (0, 0.000000) count=1.000000
+                                   1475 ;	genAssign
+                                   1476 ;	genAssignLit
+                                   1477 ;	genCopy
+    000003F0 ADr04r00         [ 4] 1478 	lda	(_camera_y + 1)
+    000003F3 8Dr08r00         [ 4] 1479 	sta	(_old_camera_y + 1)
+    000003F6 ADr03r00         [ 4] 1480 	lda	_camera_y
+    000003F9 8Dr07r00         [ 4] 1481 	sta	_old_camera_y
+                                   1482 ;	Raw cost for generated ic 80 : (12, 17.000000) count=1.000000
+                                   1483 ;	src/large_map.c: 199: map_pos_x = camera_x >> 3;
+                                   1484 ;	genRightShift
+                                   1485 ;	genRightShiftLiteral
+                                   1486 ;	genrshTwo
+    000003FC AEr02r00         [ 4] 1487 	ldx	(_camera_x + 1)
+    000003FF ADr01r00         [ 4] 1488 	lda	_camera_x
+    00000402 86*00            [ 3] 1489 	stx	*(REGTEMP+0)
+    00000404 46*00            [ 5] 1490 	lsr	*(REGTEMP+0)
+    00000406 6A               [ 2] 1491 	ror	a
+    00000407 46*00            [ 5] 1492 	lsr	*(REGTEMP+0)
+    00000409 6A               [ 2] 1493 	ror	a
+    0000040A 46*00            [ 5] 1494 	lsr	*(REGTEMP+0)
+    0000040C 6A               [ 2] 1495 	ror	a
+    0000040D A6*00            [ 3] 1496 	ldx	*(REGTEMP+0)
+                                   1497 ;	Raw cost for generated ic 81 : (19, 35.000000) count=1.000000
+                                   1498 ;	genCast
+                                   1499 ;	genCopy
+                                   1500 ;	Raw cost for generated ic 82 : (2, 3.000000) count=1.000000
+                                   1501 ;	genAssign
+                                   1502 ;	genAssignLit
+                                   1503 ;	genCopy
+    0000040F 85*02            [ 3] 1504 	sta	*_init_camera_sloc0_1_0
+    00000411 8Dr09r00         [ 4] 1505 	sta	_map_pos_x
+                                   1506 ;	Raw cost for generated ic 84 : (5, 8.000000) count=1.000000
+                                   1507 ;	src/large_map.c: 200: map_pos_y = camera_y >> 3;
+                                   1508 ;	genRightShift
+                                   1509 ;	genRightShiftLiteral
+                                   1510 ;	genrshTwo
+    00000414 AEr04r00         [ 4] 1511 	ldx	(_camera_y + 1)
+    00000417 ADr03r00         [ 4] 1512 	lda	_camera_y
+    0000041A 86*00            [ 3] 1513 	stx	*(REGTEMP+0)
+    0000041C 46*00            [ 5] 1514 	lsr	*(REGTEMP+0)
+    0000041E 6A               [ 2] 1515 	ror	a
+    0000041F 46*00            [ 5] 1516 	lsr	*(REGTEMP+0)
+    00000421 6A               [ 2] 1517 	ror	a
+    00000422 46*00            [ 5] 1518 	lsr	*(REGTEMP+0)
+    00000424 6A               [ 2] 1519 	ror	a
+    00000425 A6*00            [ 3] 1520 	ldx	*(REGTEMP+0)
+                                   1521 ;	Raw cost for generated ic 85 : (19, 35.000000) count=1.000000
+                                   1522 ;	genCast
+                                   1523 ;	genCopy
+                                   1524 ;	Raw cost for generated ic 86 : (2, 3.000000) count=1.000000
+                                   1525 ;	genAssign
+                                   1526 ;	genAssignLit
+                                   1527 ;	genCopy
+    00000427 85*03            [ 3] 1528 	sta	*_init_camera_sloc1_1_0
+    00000429 8Dr0Ar00         [ 4] 1529 	sta	_map_pos_y
+                                   1530 ;	Raw cost for generated ic 88 : (5, 8.000000) count=1.000000
+                                   1531 ;	src/large_map.c: 201: old_map_pos_x = old_map_pos_y = 255;
+                                   1532 ;	genAssign
+                                   1533 ;	genAssignLit
+    0000042C A2 FF            [ 2] 1534 	ldx	#0xff
+    0000042E 8Er0Cr00         [ 4] 1535 	stx	_old_map_pos_y
+                                   1536 ;	Raw cost for generated ic 90 : (5, 7.000000) count=1.000000
+                                   1537 ;	genAssign
+                                   1538 ;	genAssignLit
+    00000431 8Er0Br00         [ 4] 1539 	stx	_old_map_pos_x
+                                   1540 ;	Raw cost for generated ic 92 : (3, 5.000000) count=1.000000
+                                   1541 ;	src/large_map.c: 202: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+                                   1542 ;	genCast
+                                   1543 ;	genCopy
+    00000434 AEr04r00         [ 4] 1544 	ldx	(_camera_y + 1)
+    00000437 ADr03r00         [ 4] 1545 	lda	_camera_y
+                                   1546 ;	Raw cost for generated ic 93 : (6, 8.000000) count=1.000000
+                                   1547 ;	genPlus
+                                   1548 ;	genPlusIncr
+    0000043A 18               [ 2] 1549 	clc
+    0000043B 69 04            [ 2] 1550 	adc	#0x04
+    0000043D 90 01            [ 4] 1551 	bcc	00162$
+    0000043F E8               [ 2] 1552 	inx
+    00000440                       1553 00162$:
+                                   1554 ;	Raw cost for generated ic 94 : (6, 8.600000) count=1.000000
+                                   1555 ;	genAssign
+                                   1556 ;	genAssignLit
+    00000440 A0 F0            [ 2] 1557 	ldy	#0xf0
+    00000442 8Cr00r00         [ 4] 1558 	sty	__moduint_PARM_2
+    00000445 A0 00            [ 2] 1559 	ldy	#0x00
+    00000447 8Cr01r00         [ 4] 1560 	sty	(__moduint_PARM_2 + 1)
+                                   1561 ;	Raw cost for generated ic 235 : (10, 12.000000) count=1.000000
+                                   1562 ;	Raw cost for generated ic 234 : (0, 0.000000) count=1.000000
+                                   1563 ;	genCall
+                                   1564 ;	genSend
+    0000044A 20r00r00         [ 6] 1565 	jsr	__moduint
+                                   1566 ;	assignResultValue
+                                   1567 ;	Raw cost for generated ic 236 : (3, 6.000000) count=1.000000
+                                   1568 ;	genCast
+                                   1569 ;	genCopy
+                                   1570 ;	Raw cost for generated ic 96 : (0, 0.000000) count=1.000000
+                                   1571 ;	genCast
+                                   1572 ;	genCopy
+    0000044D AEr01r00         [ 4] 1573 	ldx	_camera_x
+    00000450 8Er00r00         [ 4] 1574 	stx	_bkg_scroll_x
+                                   1575 ;	Raw cost for generated ic 98 : (6, 9.000000) count=1.000000
+                                   1576 ;	../../../include/nes/nes.h: 976: bkg_scroll_y = (uint8_t)(y >= 240 ? (y - 240) : y);
+                                   1577 ;	genAssign
+                                   1578 ;	genAssignLit
+                                   1579 ;	genCopy
+                                   1580 ;	Raw cost for generated ic 111 : (0, 0.000000) count=1.000000
+                                   1581 ;	genCast
+                                   1582 ;	genCopy
+    00000453 8Dr00r00         [ 4] 1583 	sta	_bkg_scroll_y
+                                   1584 ;	Raw cost for generated ic 113 : (3, 5.000000) count=1.000000
+                                   1585 ;	src/large_map.c: 205: set_submap_indices(
+                                   1586 ;	genCast
+                                   1587 ;	genCopy
+    00000456 A2 00            [ 2] 1588 	ldx	#0x00
+    00000458 A5*02            [ 3] 1589 	lda	*_init_camera_sloc0_1_0
+                                   1590 ;	Raw cost for generated ic 116 : (4, 5.000000) count=1.000000
+                                   1591 ;	genMinus
+                                   1592 ;	genMinusDec
+    0000045A 85*00            [ 3] 1593 	sta	*(REGTEMP+0)
+    0000045C A9 9C            [ 2] 1594 	lda	#0x9c
+    0000045E 38               [ 2] 1595 	sec
+    0000045F E5*00            [ 3] 1596 	sbc	*(REGTEMP+0)
+    00000461 48               [ 3] 1597 	pha
+    00000462 8A               [ 2] 1598 	txa
+    00000463 E9 00            [ 2] 1599 	sbc	#0x00
+    00000465 AA               [ 2] 1600 	tax
+    00000466 68               [ 4] 1601 	pla
+                                   1602 ;	Raw cost for generated ic 117 : (13, 23.000000) count=1.000000
+                                   1603 ;	genCast
+                                   1604 ;	genCopy
+                                   1605 ;	Raw cost for generated ic 118 : (0, 0.000000) count=1.000000
+                                   1606 ;	genCmp
+    00000467 85*00            [ 3] 1607 	sta	*(REGTEMP+0)
+    00000469 A9 21            [ 2] 1608 	lda	#0x21
+    0000046B 38               [ 2] 1609 	sec
+    0000046C E5*00            [ 3] 1610 	sbc	*(REGTEMP+0)
+    0000046E A9 00            [ 2] 1611 	lda	#0x00
+    00000470 86*00            [ 3] 1612 	stx	*(REGTEMP+0)
+    00000472 E5*00            [ 3] 1613 	sbc	*(REGTEMP+0)
+    00000474 B0 05            [ 4] 1614 	bcs	00118$
+                                   1615 ;	Raw cost for generated ic 119 : (18, 23.600000) count=1.000000
+                                   1616 ;	skipping generated iCode
+                                   1617 ;	Raw cost for generated ic 120 : (0, 0.000000) count=1.000000
+                                   1618 ;	genAssign
+                                   1619 ;	genAssignLit
+                                   1620 ;	genCopy
+    00000476 A0 21            [ 2] 1621 	ldy	#0x21
+                                   1622 ;	Raw cost for generated ic 121 : (2, 2.000000) count=0.750000
+                                   1623 ;	genGoto
+    00000478 4Cr81r04         [ 3] 1624 	jmp	00119$
+                                   1625 ;	Raw cost for generated ic 122 : (3, 3.000000) count=0.750000
+                                   1626 ;	genLabel
+    0000047B                       1627 00118$:
+                                   1628 ;	Raw cost for generated ic 123 : (0, 0.000000) count=0.250000
+                                   1629 ;	genMinus
+                                   1630 ;	genMinusDec
+    0000047B A9 9C            [ 2] 1631 	lda	#0x9c
+    0000047D 38               [ 2] 1632 	sec
+    0000047E E5*02            [ 3] 1633 	sbc	*_init_camera_sloc0_1_0
+    00000480 A8               [ 2] 1634 	tay
+                                   1635 ;	Raw cost for generated ic 124 : (6, 9.000000) count=0.250000
+                                   1636 ;	genLabel
+    00000481                       1637 00119$:
+                                   1638 ;	Raw cost for generated ic 126 : (0, 0.000000) count=1.000000
+                                   1639 ;	genCast
+                                   1640 ;	genCopy
+    00000481 A2 00            [ 2] 1641 	ldx	#0x00
+    00000483 A5*03            [ 3] 1642 	lda	*_init_camera_sloc1_1_0
+                                   1643 ;	Raw cost for generated ic 127 : (4, 5.000000) count=1.000000
+                                   1644 ;	genMinus
+                                   1645 ;	genMinusDec
+    00000485 85*00            [ 3] 1646 	sta	*(REGTEMP+0)
+    00000487 A9 42            [ 2] 1647 	lda	#0x42
+    00000489 38               [ 2] 1648 	sec
+    0000048A E5*00            [ 3] 1649 	sbc	*(REGTEMP+0)
+    0000048C 48               [ 3] 1650 	pha
+    0000048D 8A               [ 2] 1651 	txa
+    0000048E E9 00            [ 2] 1652 	sbc	#0x00
+    00000490 AA               [ 2] 1653 	tax
+    00000491 68               [ 4] 1654 	pla
+                                   1655 ;	Raw cost for generated ic 128 : (13, 23.000000) count=1.000000
+                                   1656 ;	genCast
+                                   1657 ;	genCopy
+                                   1658 ;	Raw cost for generated ic 129 : (0, 0.000000) count=1.000000
+                                   1659 ;	genCmp
+    00000492 85*00            [ 3] 1660 	sta	*(REGTEMP+0)
+    00000494 A9 1F            [ 2] 1661 	lda	#0x1f
+    00000496 38               [ 2] 1662 	sec
+    00000497 E5*00            [ 3] 1663 	sbc	*(REGTEMP+0)
+    00000499 A9 00            [ 2] 1664 	lda	#0x00
+    0000049B 86*00            [ 3] 1665 	stx	*(REGTEMP+0)
+    0000049D E5*00            [ 3] 1666 	sbc	*(REGTEMP+0)
+    0000049F B0 05            [ 4] 1667 	bcs	00120$
+                                   1668 ;	Raw cost for generated ic 130 : (18, 23.600000) count=1.000000
+                                   1669 ;	skipping generated iCode
+                                   1670 ;	Raw cost for generated ic 131 : (0, 0.000000) count=1.000000
+                                   1671 ;	genAssign
+                                   1672 ;	genAssignLit
+                                   1673 ;	genCopy
+    000004A1 A9 1F            [ 2] 1674 	lda	#0x1f
+                                   1675 ;	Raw cost for generated ic 132 : (2, 2.000000) count=0.750000
+                                   1676 ;	genGoto
+    000004A3 4CrABr04         [ 3] 1677 	jmp	00121$
+                                   1678 ;	Raw cost for generated ic 133 : (3, 3.000000) count=0.750000
+                                   1679 ;	genLabel
+    000004A6                       1680 00120$:
+                                   1681 ;	Raw cost for generated ic 134 : (0, 0.000000) count=0.250000
+                                   1682 ;	genMinus
+                                   1683 ;	genMinusDec
+    000004A6 A9 42            [ 2] 1684 	lda	#0x42
+    000004A8 38               [ 2] 1685 	sec
+    000004A9 E5*03            [ 3] 1686 	sbc	*_init_camera_sloc1_1_0
+                                   1687 ;	Raw cost for generated ic 135 : (5, 7.000000) count=0.250000
+                                   1688 ;	genLabel
+    000004AB                       1689 00121$:
+                                   1690 ;	Raw cost for generated ic 137 : (0, 0.000000) count=1.000000
+                                   1691 ;	skipping iCode since result will be rematerialized
+                                   1692 ;	Raw cost for generated ic 138 : (0, 0.000000) count=1.000000
+                                   1693 ;	genCast
+                                   1694 ;	genCopy
+    000004AB A2s00            [ 2] 1695 	ldx	#>_bigmap_map
+    000004AD 8Er01r00         [ 4] 1696 	stx	(_set_bkg_submap_PARM_5 + 1)
+    000004B0 A2r00            [ 2] 1697 	ldx	#_bigmap_map
+    000004B2 8Er00r00         [ 4] 1698 	stx	_set_bkg_submap_PARM_5
+                                   1699 ;	Raw cost for generated ic 139 : (10, 12.000000) count=1.000000
+                                   1700 ;	genAssign
+                                   1701 ;	genAssignLit
+                                   1702 ;	genCopy
+    000004B5 8Cr00r00         [ 4] 1703 	sty	_set_bkg_submap_PARM_3
+                                   1704 ;	Raw cost for generated ic 142 : (3, 4.000000) count=1.000000
+                                   1705 ;	genAssign
+                                   1706 ;	genAssignLit
+                                   1707 ;	genCopy
+    000004B8 8Dr00r00         [ 4] 1708 	sta	_set_bkg_submap_PARM_4
+                                   1709 ;	Raw cost for generated ic 143 : (3, 4.000000) count=1.000000
+                                   1710 ;	genAssign
+                                   1711 ;	genAssignLit
+    000004BB A2 9C            [ 2] 1712 	ldx	#0x9c
+    000004BD 8Er00r00         [ 4] 1713 	stx	_set_bkg_submap_PARM_6
+                                   1714 ;	Raw cost for generated ic 145 : (5, 6.000000) count=1.000000
+                                   1715 ;	Raw cost for generated ic 140 : (0, 0.000000) count=1.000000
+                                   1716 ;	Raw cost for generated ic 141 : (0, 0.000000) count=1.000000
+                                   1717 ;	genCall
+                                   1718 ;	genSend
+    000004C0 A5*02            [ 3] 1719 	lda	*_init_camera_sloc0_1_0
+    000004C2 A6*03            [ 3] 1720 	ldx	*_init_camera_sloc1_1_0
+    000004C4 20r00r00         [ 6] 1721 	jsr	_set_bkg_submap
+                                   1722 ;	Raw cost for generated ic 146 : (7, 12.000000) count=1.000000
+                                   1723 ;	src/large_map.c: 213: set_submap_attributes(
+                                   1724 ;	skipping iCode since result will be rematerialized
+                                   1725 ;	Raw cost for generated ic 148 : (0, 0.000000) count=1.000000
+                                   1726 ;	skipping iCode since result will be rematerialized
+                                   1727 ;	Raw cost for generated ic 149 : (0, 0.000000) count=1.000000
+                                   1728 ;	genCast
+                                   1729 ;	genCopy
+    000004C7 A2 00            [ 2] 1730 	ldx	#0x00
+    000004C9 ADr0Ar00         [ 4] 1731 	lda	_map_pos_y
+                                   1732 ;	Raw cost for generated ic 151 : (5, 6.000000) count=1.000000
+                                   1733 ;	genMinus
+                                   1734 ;	genMinusDec
+    000004CC 85*00            [ 3] 1735 	sta	*(REGTEMP+0)
+    000004CE A9 42            [ 2] 1736 	lda	#0x42
+    000004D0 38               [ 2] 1737 	sec
+    000004D1 E5*00            [ 3] 1738 	sbc	*(REGTEMP+0)
+    000004D3 48               [ 3] 1739 	pha
+    000004D4 8A               [ 2] 1740 	txa
+    000004D5 E9 00            [ 2] 1741 	sbc	#0x00
+    000004D7 AA               [ 2] 1742 	tax
+    000004D8 68               [ 4] 1743 	pla
+                                   1744 ;	Raw cost for generated ic 152 : (13, 23.000000) count=1.000000
+                                   1745 ;	genCast
+                                   1746 ;	genCopy
+                                   1747 ;	Raw cost for generated ic 153 : (0, 0.000000) count=1.000000
+                                   1748 ;	genCmp
+    000004D9 85*00            [ 3] 1749 	sta	*(REGTEMP+0)
+    000004DB A9 1F            [ 2] 1750 	lda	#0x1f
+    000004DD 38               [ 2] 1751 	sec
+    000004DE E5*00            [ 3] 1752 	sbc	*(REGTEMP+0)
+    000004E0 A9 00            [ 2] 1753 	lda	#0x00
+    000004E2 86*00            [ 3] 1754 	stx	*(REGTEMP+0)
+    000004E4 E5*00            [ 3] 1755 	sbc	*(REGTEMP+0)
+    000004E6 B0 05            [ 4] 1756 	bcs	00122$
+                                   1757 ;	Raw cost for generated ic 154 : (18, 23.600000) count=1.000000
+                                   1758 ;	skipping generated iCode
+                                   1759 ;	Raw cost for generated ic 155 : (0, 0.000000) count=1.000000
+                                   1760 ;	genAssign
+                                   1761 ;	genAssignLit
+                                   1762 ;	genCopy
+    000004E8 A0 1F            [ 2] 1763 	ldy	#0x1f
+                                   1764 ;	Raw cost for generated ic 156 : (2, 2.000000) count=0.750000
+                                   1765 ;	genGoto
+    000004EA 4CrF4r04         [ 3] 1766 	jmp	00123$
+                                   1767 ;	Raw cost for generated ic 157 : (3, 3.000000) count=0.750000
+                                   1768 ;	genLabel
+    000004ED                       1769 00122$:
+                                   1770 ;	Raw cost for generated ic 158 : (0, 0.000000) count=0.250000
+                                   1771 ;	genMinus
+                                   1772 ;	genMinusDec
+    000004ED A9 42            [ 2] 1773 	lda	#0x42
+    000004EF 38               [ 2] 1774 	sec
+    000004F0 EDr0Ar00         [ 4] 1775 	sbc	_map_pos_y
+    000004F3 A8               [ 2] 1776 	tay
+                                   1777 ;	Raw cost for generated ic 159 : (7, 10.000000) count=0.250000
+                                   1778 ;	genLabel
+    000004F4                       1779 00123$:
+                                   1780 ;	Raw cost for generated ic 161 : (0, 0.000000) count=1.000000
+                                   1781 ;	genAssign
+                                   1782 ;	genAssignLit
+                                   1783 ;	genCopy
+                                   1784 ;	Raw cost for generated ic 162 : (0, 0.000000) count=1.000000
+                                   1785 ;	genCast
+                                   1786 ;	genCopy
+    000004F4 A2 00            [ 2] 1787 	ldx	#0x00
+    000004F6 ADr09r00         [ 4] 1788 	lda	_map_pos_x
+                                   1789 ;	Raw cost for generated ic 163 : (5, 6.000000) count=1.000000
+                                   1790 ;	genMinus
+                                   1791 ;	genMinusDec
+    000004F9 85*00            [ 3] 1792 	sta	*(REGTEMP+0)
+    000004FB A9 9C            [ 2] 1793 	lda	#0x9c
+    000004FD 38               [ 2] 1794 	sec
+    000004FE E5*00            [ 3] 1795 	sbc	*(REGTEMP+0)
+    00000500 48               [ 3] 1796 	pha
+    00000501 8A               [ 2] 1797 	txa
+    00000502 E9 00            [ 2] 1798 	sbc	#0x00
+    00000504 AA               [ 2] 1799 	tax
+    00000505 68               [ 4] 1800 	pla
+                                   1801 ;	Raw cost for generated ic 164 : (13, 23.000000) count=1.000000
+                                   1802 ;	genCast
+                                   1803 ;	genCopy
+                                   1804 ;	Raw cost for generated ic 165 : (0, 0.000000) count=1.000000
+                                   1805 ;	genCmp
+    00000506 85*00            [ 3] 1806 	sta	*(REGTEMP+0)
+    00000508 A9 21            [ 2] 1807 	lda	#0x21
+    0000050A 38               [ 2] 1808 	sec
+    0000050B E5*00            [ 3] 1809 	sbc	*(REGTEMP+0)
+    0000050D A9 00            [ 2] 1810 	lda	#0x00
+    0000050F 86*00            [ 3] 1811 	stx	*(REGTEMP+0)
+    00000511 E5*00            [ 3] 1812 	sbc	*(REGTEMP+0)
+    00000513 B0 05            [ 4] 1813 	bcs	00124$
+                                   1814 ;	Raw cost for generated ic 166 : (18, 23.600000) count=1.000000
+                                   1815 ;	skipping generated iCode
+                                   1816 ;	Raw cost for generated ic 167 : (0, 0.000000) count=1.000000
+                                   1817 ;	genAssign
+                                   1818 ;	genAssignLit
+                                   1819 ;	genCopy
+    00000515 A2 21            [ 2] 1820 	ldx	#0x21
+                                   1821 ;	Raw cost for generated ic 168 : (2, 2.000000) count=0.750000
+                                   1822 ;	genGoto
+    00000517 4Cr21r05         [ 3] 1823 	jmp	00125$
+                                   1824 ;	Raw cost for generated ic 169 : (3, 3.000000) count=0.750000
+                                   1825 ;	genLabel
+    0000051A                       1826 00124$:
+                                   1827 ;	Raw cost for generated ic 170 : (0, 0.000000) count=0.250000
+                                   1828 ;	genMinus
+                                   1829 ;	genMinusDec
+    0000051A A9 9C            [ 2] 1830 	lda	#0x9c
+    0000051C 38               [ 2] 1831 	sec
+    0000051D EDr09r00         [ 4] 1832 	sbc	_map_pos_x
+    00000520 AA               [ 2] 1833 	tax
+                                   1834 ;	Raw cost for generated ic 171 : (7, 10.000000) count=0.250000
+                                   1835 ;	genLabel
+    00000521                       1836 00125$:
+                                   1837 ;	Raw cost for generated ic 173 : (0, 0.000000) count=1.000000
+                                   1838 ;	genAssign
+                                   1839 ;	genAssignLit
+                                   1840 ;	genCopy
+                                   1841 ;	Raw cost for generated ic 174 : (0, 0.000000) count=1.000000
+                                   1842 ;	../../../include/nes/nes.h: 821: set_bkg_submap_attributes_nes16x16(x >> 1, y >> 1, (w + 1) >> 1, (h + 1) >> 1, attributes, (map_w + 1) >> 1);
+                                   1843 ;	genRightShift
+                                   1844 ;	genRightShiftLiteral
+                                   1845 ;	genrshOne
+    00000521 ADr09r00         [ 4] 1846 	lda	_map_pos_x
+    00000524 4A               [ 2] 1847 	lsr	a
+    00000525 85*03            [ 3] 1848 	sta	*_init_camera_sloc1_1_0
+                                   1849 ;	Raw cost for generated ic 183 : (6, 9.000000) count=1.000000
+                                   1850 ;	genRightShift
+                                   1851 ;	genRightShiftLiteral
+                                   1852 ;	genrshOne
+    00000527 ADr0Ar00         [ 4] 1853 	lda	_map_pos_y
+    0000052A 4A               [ 2] 1854 	lsr	a
+    0000052B 85*02            [ 3] 1855 	sta	*_init_camera_sloc0_1_0
+                                   1856 ;	Raw cost for generated ic 184 : (6, 9.000000) count=1.000000
+                                   1857 ;	genCast
+                                   1858 ;	genCopy
+    0000052D 8A               [ 2] 1859 	txa
+    0000052E A2 00            [ 2] 1860 	ldx	#0x00
+                                   1861 ;	Raw cost for generated ic 185 : (3, 4.000000) count=1.000000
+                                   1862 ;	genPlus
+                                   1863 ;	genPlusIncr
+    00000530 18               [ 2] 1864 	clc
+    00000531 69 01            [ 2] 1865 	adc	#0x01
+    00000533 90 01            [ 4] 1866 	bcc	00167$
+    00000535 E8               [ 2] 1867 	inx
+    00000536                       1868 00167$:
+                                   1869 ;	Raw cost for generated ic 186 : (6, 8.600000) count=1.000000
+                                   1870 ;	genRightShift
+                                   1871 ;	genRightShiftLiteral
+                                   1872 ;	genrshTwo
+    00000536 86*00            [ 3] 1873 	stx	*(REGTEMP+0)
+    00000538 E0 80            [ 2] 1874 	cpx	#0x80
+    0000053A 66*00            [ 5] 1875 	ror	*(REGTEMP+0)
+    0000053C 6A               [ 2] 1876 	ror	a
+                                   1877 ;	Raw cost for generated ic 187 : (9, 15.000000) count=1.000000
+                                   1878 ;	genCast
+                                   1879 ;	genCopy
+                                   1880 ;	Raw cost for generated ic 188 : (3, 4.000000) count=1.000000
+                                   1881 ;	genCast
+                                   1882 ;	genCopy
+    0000053D 8Dr00r00         [ 4] 1883 	sta	_set_bkg_submap_attributes_nes16x16_PARM_3
+    00000540 A2 00            [ 2] 1884 	ldx	#0x00
+    00000542 98               [ 2] 1885 	tya
+                                   1886 ;	Raw cost for generated ic 189 : (3, 4.000000) count=1.000000
+                                   1887 ;	genPlus
+                                   1888 ;	genPlusIncr
+    00000543 18               [ 2] 1889 	clc
+    00000544 69 01            [ 2] 1890 	adc	#0x01
+    00000546 90 01            [ 4] 1891 	bcc	00168$
+    00000548 E8               [ 2] 1892 	inx
+    00000549                       1893 00168$:
+                                   1894 ;	Raw cost for generated ic 190 : (6, 8.600000) count=1.000000
+                                   1895 ;	genRightShift
+                                   1896 ;	genRightShiftLiteral
+                                   1897 ;	genrshTwo
+    00000549 86*00            [ 3] 1898 	stx	*(REGTEMP+0)
+    0000054B E0 80            [ 2] 1899 	cpx	#0x80
+    0000054D 66*00            [ 5] 1900 	ror	*(REGTEMP+0)
+    0000054F 6A               [ 2] 1901 	ror	a
+    00000550 A6*00            [ 3] 1902 	ldx	*(REGTEMP+0)
+                                   1903 ;	Raw cost for generated ic 191 : (9, 15.000000) count=1.000000
+                                   1904 ;	genCast
+                                   1905 ;	genCopy
+    00000552 8Dr00r00         [ 4] 1906 	sta	_set_bkg_submap_attributes_nes16x16_PARM_4
+                                   1907 ;	Raw cost for generated ic 192 : (3, 4.000000) count=1.000000
+                                   1908 ;	genAssign
+                                   1909 ;	genAssignLit
+                                   1910 ;	genCopy
+    00000555 A9s00            [ 2] 1911 	lda	#>_bigmap_map_attributes
+    00000557 8Dr01r00         [ 4] 1912 	sta	(_set_bkg_submap_attributes_nes16x16_PARM_5 + 1)
+    0000055A A9r00            [ 2] 1913 	lda	#_bigmap_map_attributes
+    0000055C 8Dr00r00         [ 4] 1914 	sta	_set_bkg_submap_attributes_nes16x16_PARM_5
+                                   1915 ;	Raw cost for generated ic 201 : (10, 12.000000) count=1.000000
+                                   1916 ;	genAssign
+                                   1917 ;	genAssignLit
+    0000055F A2 4E            [ 2] 1918 	ldx	#0x4e
+    00000561 8Er00r00         [ 4] 1919 	stx	_set_bkg_submap_attributes_nes16x16_PARM_6
+                                   1920 ;	Raw cost for generated ic 202 : (5, 6.000000) count=1.000000
+                                   1921 ;	Raw cost for generated ic 197 : (0, 0.000000) count=1.000000
+                                   1922 ;	Raw cost for generated ic 198 : (0, 0.000000) count=1.000000
+                                   1923 ;	genCall
+                                   1924 ;	genSend
+    00000564 A5*03            [ 3] 1925 	lda	*_init_camera_sloc1_1_0
+    00000566 A6*02            [ 3] 1926 	ldx	*_init_camera_sloc0_1_0
+    00000568 20r00r00         [ 6] 1927 	jsr	_set_bkg_submap_attributes_nes16x16
+                                   1928 ;	Raw cost for generated ic 203 : (7, 12.000000) count=1.000000
+                                   1929 ;	src/large_map.c: 221: redraw = FALSE;
+                                   1930 ;	genAssign
+                                   1931 ;	genAssignLit
+    0000056B A2 00            [ 2] 1932 	ldx	#0x00
+    0000056D 8Er0Dr00         [ 4] 1933 	stx	_redraw
+                                   1934 ;	Raw cost for generated ic 206 : (5, 6.000000) count=1.000000
+                                   1935 ;	src/large_map.c: 223: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+                                   1936 ;	genCast
+                                   1937 ;	genCopy
+    00000570 AEr04r00         [ 4] 1938 	ldx	(_camera_y + 1)
+    00000573 ADr03r00         [ 4] 1939 	lda	_camera_y
+                                   1940 ;	Raw cost for generated ic 207 : (6, 8.000000) count=1.000000
+                                   1941 ;	genPlus
+                                   1942 ;	genPlusIncr
+    00000576 18               [ 2] 1943 	clc
+    00000577 69 04            [ 2] 1944 	adc	#0x04
+    00000579 90 01            [ 4] 1945 	bcc	00169$
+    0000057B E8               [ 2] 1946 	inx
+    0000057C                       1947 00169$:
+                                   1948 ;	Raw cost for generated ic 208 : (6, 8.600000) count=1.000000
+                                   1949 ;	genAssign
+                                   1950 ;	genAssignLit
+    0000057C A0 F0            [ 2] 1951 	ldy	#0xf0
+    0000057E 8Cr00r00         [ 4] 1952 	sty	__moduint_PARM_2
+    00000581 A0 00            [ 2] 1953 	ldy	#0x00
+    00000583 8Cr01r00         [ 4] 1954 	sty	(__moduint_PARM_2 + 1)
+                                   1955 ;	Raw cost for generated ic 238 : (10, 12.000000) count=1.000000
+                                   1956 ;	Raw cost for generated ic 237 : (0, 0.000000) count=1.000000
+                                   1957 ;	genCall
+                                   1958 ;	genSend
+    00000586 20r00r00         [ 6] 1959 	jsr	__moduint
+                                   1960 ;	assignResultValue
+                                   1961 ;	Raw cost for generated ic 239 : (3, 6.000000) count=1.000000
+                                   1962 ;	genCast
+                                   1963 ;	genCopy
+                                   1964 ;	Raw cost for generated ic 210 : (0, 0.000000) count=1.000000
+                                   1965 ;	genCast
+                                   1966 ;	genCopy
+    00000589 AEr01r00         [ 4] 1967 	ldx	_camera_x
+    0000058C 8Er00r00         [ 4] 1968 	stx	_bkg_scroll_x
+                                   1969 ;	Raw cost for generated ic 212 : (6, 9.000000) count=1.000000
+                                   1970 ;	../../../include/nes/nes.h: 976: bkg_scroll_y = (uint8_t)(y >= 240 ? (y - 240) : y);
+                                   1971 ;	genAssign
+                                   1972 ;	genAssignLit
+                                   1973 ;	genCopy
+                                   1974 ;	Raw cost for generated ic 225 : (0, 0.000000) count=1.000000
+                                   1975 ;	genCast
+                                   1976 ;	genCopy
+    0000058F 8Dr00r00         [ 4] 1977 	sta	_bkg_scroll_y
+                                   1978 ;	Raw cost for generated ic 227 : (3, 5.000000) count=1.000000
+                                   1979 ;	src/large_map.c: 228: HIDE_LEFT_COLUMN;
+                                   1980 ;	genAnd
+    00000592 ADr00r00         [ 4] 1981 	lda	_shadow_PPUMASK
+    00000595 29 F9            [ 2] 1982 	and	#0xf9
+    00000597 8Dr00r00         [ 4] 1983 	sta	_shadow_PPUMASK
+                                   1984 ;	Raw cost for generated ic 230 : (8, 10.000000) count=1.000000
+                                   1985 ;	genLabel
+                                   1986 ;	Raw cost for generated ic 232 : (0, 0.000000) count=1.000000
+                                   1987 ;	src/large_map.c: 230: }
+                                   1988 ;	genEndFunction
+    0000059A 60               [ 6] 1989 	rts
+                                   1990 ;	Raw cost for generated ic 233 : (1, 6.000000) count=1.000000
+                                   1991 ;------------------------------------------------------------
+                                   1992 ;Allocation info for local variables in function 'main'
+                                   1993 ;------------------------------------------------------------
+                                   1994 ;	src/large_map.c: 232: void main(void){
+                                   1995 ;	genLabel
+                                   1996 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1997 ;	-----------------------------------------
+                                   1998 ;	 function main
+                                   1999 ;	-----------------------------------------
+                                   2000 ;	Register assignment is optimal.
+                                   2001 ;	Stack space usage: 0 bytes.
+    0000059B                       2002 _main:
+                                   2003 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   2004 ;	src/large_map.c: 233: DISPLAY_OFF;
+                                   2005 ;	genCall
+    0000059B 20r00r00         [ 6] 2006 	jsr	_display_off
+                                   2007 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                   2008 ;	src/large_map.c: 234: init_camera(0, 0);
+                                   2009 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                   2010 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                   2011 ;	genCall
+                                   2012 ;	genSend
+    0000059E A9 00            [ 2] 2013 	lda	#0x00
+    000005A0 AA               [ 2] 2014 	tax
+    000005A1 20rAAr03         [ 6] 2015 	jsr	_init_camera
+                                   2016 ;	Raw cost for generated ic 5 : (6, 10.000000) count=1.000000
+                                   2017 ;	src/large_map.c: 236: SHOW_BKG;
+                                   2018 ;	genOr
+    000005A4 ADr00r00         [ 4] 2019 	lda	_shadow_PPUMASK
+    000005A7 09 08            [ 2] 2020 	ora	#0x08
+    000005A9 8Dr00r00         [ 4] 2021 	sta	_shadow_PPUMASK
+                                   2022 ;	Raw cost for generated ic 6 : (8, 10.000000) count=1.000000
+                                   2023 ;	src/large_map.c: 237: DISPLAY_ON;
+                                   2024 ;	genCall
+    000005AC 20r00r00         [ 6] 2025 	jsr	_display_on
+                                   2026 ;	Raw cost for generated ic 8 : (3, 6.000000) count=1.000000
+                                   2027 ;	src/large_map.c: 238: while (TRUE) {
+                                   2028 ;	genLabel
+    000005AF                       2029 00123$:
+                                   2030 ;	Raw cost for generated ic 11 : (0, 0.000000) count=72.000000
+                                   2031 ;	src/large_map.c: 239: joy = joypad();
+                                   2032 ;	genCall
+    000005AF 20r00r00         [ 6] 2033 	jsr	_joypad
+                                   2034 ;	assignResultValue
+    000005B2 AA               [ 2] 2035 	tax
+                                   2036 ;	Raw cost for generated ic 12 : (4, 8.000000) count=72.000000
+                                   2037 ;	genAssign
+                                   2038 ;	genAssignLit
+                                   2039 ;	genCopy
+    000005B3 8Er00r00         [ 4] 2040 	stx	_joy
+                                   2041 ;	Raw cost for generated ic 14 : (3, 5.000000) count=72.000000
+                                   2042 ;	src/large_map.c: 241: if (joy & J_UP) {
+                                   2043 ;	genAnd
+    000005B6 8A               [ 2] 2044 	txa
+    000005B7 29 08            [ 2] 2045 	and	#0x08
+                                   2046 ;	genIfxJump : z
+    000005B9 F0 1E            [ 4] 2047 	beq	00108$
+                                   2048 ;	Raw cost for generated ic 16 : (8, 9.600000) count=72.000000
+                                   2049 ;	skipping generated iCode
+                                   2050 ;	Raw cost for generated ic 17 : (0, 0.000000) count=72.000000
+                                   2051 ;	src/large_map.c: 242: if (camera_y) {
+                                   2052 ;	genIfx
+    000005BB ADr04r00         [ 4] 2053 	lda	(_camera_y + 1)
+    000005BE 0Dr03r00         [ 4] 2054 	ora	_camera_y
+                                   2055 ;	genIfxJump : z
+    000005C1 F0 36            [ 4] 2056 	beq	00109$
+                                   2057 ;	Raw cost for generated ic 20 : (11, 13.600000) count=54.000000
+                                   2058 ;	src/large_map.c: 243: camera_y--;
+                                   2059 ;	genMinus
+                                   2060 ;	genMinusDec
+    000005C3 38               [ 2] 2061 	sec
+    000005C4 ADr03r00         [ 4] 2062 	lda	_camera_y
+    000005C7 E9 01            [ 2] 2063 	sbc	#0x01
+    000005C9 8Dr03r00         [ 4] 2064 	sta	_camera_y
+    000005CC B0 03            [ 4] 2065 	bcs	00191$
+    000005CE CEr04r00         [ 6] 2066 	dec	(_camera_y + 1)
+    000005D1                       2067 00191$:
+                                   2068 ;	Raw cost for generated ic 24 : (14, 21.600000) count=40.500000
+                                   2069 ;	src/large_map.c: 244: redraw = TRUE;
+                                   2070 ;	genAssign
+                                   2071 ;	genAssignLit
+    000005D1 A2 01            [ 2] 2072 	ldx	#0x01
+    000005D3 8Er0Dr00         [ 4] 2073 	stx	_redraw
+                                   2074 ;	Raw cost for generated ic 28 : (5, 6.000000) count=40.500000
+                                   2075 ;	genGoto
+    000005D6 4CrF9r05         [ 3] 2076 	jmp	00109$
+                                   2077 ;	Raw cost for generated ic 30 : (3, 3.000000) count=40.500000
+                                   2078 ;	genLabel
+    000005D9                       2079 00108$:
+                                   2080 ;	Raw cost for generated ic 31 : (0, 0.000000) count=18.000000
+                                   2081 ;	src/large_map.c: 246: } else if (joy & J_DOWN) {
+                                   2082 ;	genAnd
+    000005D9 8A               [ 2] 2083 	txa
+    000005DA 29 04            [ 2] 2084 	and	#0x04
+                                   2085 ;	genIfxJump : z
+    000005DC F0 1B            [ 4] 2086 	beq	00109$
+                                   2087 ;	Raw cost for generated ic 33 : (8, 9.600000) count=18.000000
+                                   2088 ;	skipping generated iCode
+                                   2089 ;	Raw cost for generated ic 34 : (0, 0.000000) count=18.000000
+                                   2090 ;	src/large_map.c: 247: if (camera_y < camera_max_y) {
+                                   2091 ;	genCast
+                                   2092 ;	genCopy
+    000005DE AEr04r00         [ 4] 2093 	ldx	(_camera_y + 1)
+    000005E1 ADr03r00         [ 4] 2094 	lda	_camera_y
+                                   2095 ;	Raw cost for generated ic 37 : (6, 8.000000) count=13.500000
+                                   2096 ;	genCmp
+    000005E4 38               [ 2] 2097 	sec
+    000005E5 E9 20            [ 2] 2098 	sbc	#0x20
+    000005E7 8A               [ 2] 2099 	txa
+    000005E8 E9 01            [ 2] 2100 	sbc	#0x01
+    000005EA B0 0D            [ 4] 2101 	bcs	00109$
+                                   2102 ;	Raw cost for generated ic 38 : (11, 13.600000) count=13.500000
+                                   2103 ;	skipping generated iCode
+                                   2104 ;	Raw cost for generated ic 39 : (0, 0.000000) count=13.500000
+                                   2105 ;	src/large_map.c: 248: camera_y++;
+                                   2106 ;	genPlus
+                                   2107 ;	genPlusIncr
+    000005EC EEr03r00         [ 6] 2108 	inc	_camera_y
+    000005EF D0 03            [ 4] 2109 	bne	00195$
+    000005F1 EEr04r00         [ 6] 2110 	inc	(_camera_y + 1)
+    000005F4                       2111 00195$:
+                                   2112 ;	Raw cost for generated ic 43 : (8, 14.600000) count=10.125000
+                                   2113 ;	src/large_map.c: 249: redraw = TRUE;
+                                   2114 ;	genAssign
+                                   2115 ;	genAssignLit
+    000005F4 A2 01            [ 2] 2116 	ldx	#0x01
+    000005F6 8Er0Dr00         [ 4] 2117 	stx	_redraw
+                                   2118 ;	Raw cost for generated ic 47 : (5, 6.000000) count=10.125000
+                                   2119 ;	genLabel
+    000005F9                       2120 00109$:
+                                   2121 ;	Raw cost for generated ic 50 : (0, 0.000000) count=72.000000
+                                   2122 ;	src/large_map.c: 253: if (joy & J_LEFT) {
+                                   2123 ;	genCast
+                                   2124 ;	genCopy
+    000005F9 AEr00r00         [ 4] 2125 	ldx	_joy
+                                   2126 ;	Raw cost for generated ic 51 : (3, 4.000000) count=72.000000
+                                   2127 ;	genAnd
+    000005FC 8A               [ 2] 2128 	txa
+    000005FD 29 02            [ 2] 2129 	and	#0x02
+                                   2130 ;	genIfxJump : z
+    000005FF F0 1E            [ 4] 2131 	beq	00117$
+                                   2132 ;	Raw cost for generated ic 52 : (8, 9.600000) count=72.000000
+                                   2133 ;	skipping generated iCode
+                                   2134 ;	Raw cost for generated ic 53 : (0, 0.000000) count=72.000000
+                                   2135 ;	src/large_map.c: 254: if (camera_x) {
+                                   2136 ;	genIfx
+    00000601 ADr02r00         [ 4] 2137 	lda	(_camera_x + 1)
+    00000604 0Dr01r00         [ 4] 2138 	ora	_camera_x
+                                   2139 ;	genIfxJump : z
+    00000607 F0 36            [ 4] 2140 	beq	00118$
+                                   2141 ;	Raw cost for generated ic 56 : (11, 13.600000) count=54.000000
+                                   2142 ;	src/large_map.c: 255: camera_x--;
+                                   2143 ;	genMinus
+                                   2144 ;	genMinusDec
+    00000609 38               [ 2] 2145 	sec
+    0000060A ADr01r00         [ 4] 2146 	lda	_camera_x
+    0000060D E9 01            [ 2] 2147 	sbc	#0x01
+    0000060F 8Dr01r00         [ 4] 2148 	sta	_camera_x
+    00000612 B0 03            [ 4] 2149 	bcs	00200$
+    00000614 CEr02r00         [ 6] 2150 	dec	(_camera_x + 1)
+    00000617                       2151 00200$:
+                                   2152 ;	Raw cost for generated ic 60 : (14, 21.600000) count=40.500000
+                                   2153 ;	src/large_map.c: 256: redraw = TRUE;
+                                   2154 ;	genAssign
+                                   2155 ;	genAssignLit
+    00000617 A2 01            [ 2] 2156 	ldx	#0x01
+    00000619 8Er0Dr00         [ 4] 2157 	stx	_redraw
+                                   2158 ;	Raw cost for generated ic 64 : (5, 6.000000) count=40.500000
+                                   2159 ;	genGoto
+    0000061C 4Cr3Fr06         [ 3] 2160 	jmp	00118$
+                                   2161 ;	Raw cost for generated ic 66 : (3, 3.000000) count=40.500000
+                                   2162 ;	genLabel
+    0000061F                       2163 00117$:
+                                   2164 ;	Raw cost for generated ic 67 : (0, 0.000000) count=18.000000
+                                   2165 ;	src/large_map.c: 258: } else if (joy & J_RIGHT) {
+                                   2166 ;	genAnd
+    0000061F 8A               [ 2] 2167 	txa
+    00000620 29 01            [ 2] 2168 	and	#0x01
+                                   2169 ;	genIfxJump : z
+    00000622 F0 1B            [ 4] 2170 	beq	00118$
+                                   2171 ;	Raw cost for generated ic 69 : (8, 9.600000) count=18.000000
+                                   2172 ;	skipping generated iCode
+                                   2173 ;	Raw cost for generated ic 70 : (0, 0.000000) count=18.000000
+                                   2174 ;	src/large_map.c: 259: if (camera_x < camera_max_x) {
+                                   2175 ;	genCast
+                                   2176 ;	genCopy
+    00000624 AEr02r00         [ 4] 2177 	ldx	(_camera_x + 1)
+    00000627 ADr01r00         [ 4] 2178 	lda	_camera_x
+                                   2179 ;	Raw cost for generated ic 73 : (6, 8.000000) count=13.500000
+                                   2180 ;	genCmp
+    0000062A 38               [ 2] 2181 	sec
+    0000062B E9 E0            [ 2] 2182 	sbc	#0xe0
+    0000062D 8A               [ 2] 2183 	txa
+    0000062E E9 03            [ 2] 2184 	sbc	#0x03
+    00000630 B0 0D            [ 4] 2185 	bcs	00118$
+                                   2186 ;	Raw cost for generated ic 74 : (11, 13.600000) count=13.500000
+                                   2187 ;	skipping generated iCode
+                                   2188 ;	Raw cost for generated ic 75 : (0, 0.000000) count=13.500000
+                                   2189 ;	src/large_map.c: 260: camera_x++;
+                                   2190 ;	genPlus
+                                   2191 ;	genPlusIncr
+    00000632 EEr01r00         [ 6] 2192 	inc	_camera_x
+    00000635 D0 03            [ 4] 2193 	bne	00204$
+    00000637 EEr02r00         [ 6] 2194 	inc	(_camera_x + 1)
+    0000063A                       2195 00204$:
+                                   2196 ;	Raw cost for generated ic 79 : (8, 15.600000) count=10.125000
+                                   2197 ;	src/large_map.c: 261: redraw = TRUE;
+                                   2198 ;	genAssign
+                                   2199 ;	genAssignLit
+    0000063A A2 01            [ 2] 2200 	ldx	#0x01
+    0000063C 8Er0Dr00         [ 4] 2201 	stx	_redraw
+                                   2202 ;	Raw cost for generated ic 83 : (5, 6.000000) count=10.125000
+                                   2203 ;	genLabel
+    0000063F                       2204 00118$:
+                                   2205 ;	Raw cost for generated ic 86 : (0, 0.000000) count=72.000000
+                                   2206 ;	src/large_map.c: 264: if (redraw) {
+                                   2207 ;	genIfx
+    0000063F ADr0Dr00         [ 4] 2208 	lda	_redraw
+                                   2209 ;	genIfxJump : z
+    00000642 F0 0E            [ 4] 2210 	beq	00120$
+                                   2211 ;	Raw cost for generated ic 87 : (8, 9.600000) count=72.000000
+                                   2212 ;	src/large_map.c: 265: vsync();
+                                   2213 ;	genCall
+    00000644 20r00r00         [ 6] 2214 	jsr	_vsync
+                                   2215 ;	Raw cost for generated ic 90 : (3, 6.000000) count=54.000000
+                                   2216 ;	src/large_map.c: 266: set_camera();
+                                   2217 ;	genCall
+    00000647 20r00r00         [ 6] 2218 	jsr	_set_camera
+                                   2219 ;	Raw cost for generated ic 91 : (3, 6.000000) count=54.000000
+                                   2220 ;	src/large_map.c: 267: redraw = FALSE;
+                                   2221 ;	genAssign
+                                   2222 ;	genAssignLit
+    0000064A A2 00            [ 2] 2223 	ldx	#0x00
+    0000064C 8Er0Dr00         [ 4] 2224 	stx	_redraw
+                                   2225 ;	Raw cost for generated ic 93 : (5, 6.000000) count=54.000000
+                                   2226 ;	genGoto
+    0000064F 4CrAFr05         [ 3] 2227 	jmp	00123$
+                                   2228 ;	Raw cost for generated ic 94 : (3, 3.000000) count=54.000000
+                                   2229 ;	genLabel
+    00000652                       2230 00120$:
+                                   2231 ;	Raw cost for generated ic 95 : (0, 0.000000) count=18.000000
+                                   2232 ;	src/large_map.c: 268: } else vsync();
+                                   2233 ;	genCall
+    00000652 20r00r00         [ 6] 2234 	jsr	_vsync
+                                   2235 ;	Raw cost for generated ic 96 : (3, 6.000000) count=18.000000
+                                   2236 ;	genGoto
+    00000655 4CrAFr05         [ 3] 2237 	jmp	00123$
+                                   2238 ;	Raw cost for generated ic 98 : (3, 3.000000) count=18.000000
+                                   2239 ;	genLabel
+                                   2240 ;	Raw cost for generated ic 100 : (0, 0.000000) count=0.000000
+                                   2241 ;	src/large_map.c: 270: }
+                                   2242 ;	genEndFunction
+    00000658 60               [ 6] 2243 	rts
+                                   2244 ;	Raw cost for generated ic 101 : (1, 6.000000) count=0.000000
+                                   2245 	.area _CODE
+                                   2246 	.area _XINIT
+                                   2247 	.area _CABS    (ABS)

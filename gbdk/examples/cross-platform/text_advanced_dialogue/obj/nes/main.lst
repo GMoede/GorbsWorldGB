@@ -1,0 +1,2681 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _ClearScreen
+                                     23 	.globl _DrawTextAdvanced
+                                     24 	.globl _vsyncMultiple
+                                     25 	.globl _ResetLoadedCharacters
+                                     26 	.globl _HideDialgoueBox
+                                     27 	.globl _ShowDialgoueBox
+                                     28 	.globl _ClearDialogueBox
+                                     29 	.globl _WaitForAButton
+                                     30 	.globl _BreakLineEarly
+                                     31 	.globl _IsAlphaNumeric
+                                     32 	.globl _GetTileForCharacter
+                                     33 	.globl _MoveWindow
+                                     34 	.globl _fill_bkg_rect
+                                     35 	.globl _set_sprite_native_data
+                                     36 	.globl _set_bkg_native_data
+                                     37 	.globl _set_bkg_tile_xy
+                                     38 	.globl _set_bkg_tiles
+                                     39 	.globl _get_bkg_xy_addr
+                                     40 	.globl _set_vram_byte
+                                     41 	.globl _display_on
+                                     42 	.globl _vsync
+                                     43 	.globl _joypad
+                                     44 	.globl _loadedCharacterCount
+                                     45 	.globl _joypadPrevious
+                                     46 	.globl _joypadCurrent
+                                     47 	.globl _fontTilesStart
+                                     48 	.globl _windowYPosition
+                                     49 	.globl _BreakLineEarly_PARM_3
+                                     50 	.globl _BreakLineEarly_PARM_2
+                                     51 	.globl _loadedCharacters
+                                     52 	.globl _OAMDMA
+                                     53 	.globl _PPUDATA
+                                     54 	.globl _PPUADDR
+                                     55 	.globl _PPUSCROLL
+                                     56 	.globl _OAMDATA
+                                     57 	.globl _OAMADDR
+                                     58 	.globl _PPUSTATUS
+                                     59 	.globl _PPUMASK
+                                     60 	.globl _PPUCTRL
+                                     61 ;--------------------------------------------------------
+                                     62 ; ZP ram data
+                                     63 ;--------------------------------------------------------
+                                     64 	.area _ZP      (PAG)
+    00000000                         65 _BreakLineEarly_sloc0_1_0:
+    00000000                         66 	.ds 2
+    00000002                         67 _BreakLineEarly_sloc1_1_0:
+    00000002                         68 	.ds 2
+    00000004                         69 _BreakLineEarly_sloc2_1_0:
+    00000004                         70 	.ds 2
+    00000006                         71 _DrawTextAdvanced_sloc0_1_0:
+    00000006                         72 	.ds 2
+    00000008                         73 _DrawTextAdvanced_sloc1_1_0:
+    00000008                         74 	.ds 2
+    0000000A                         75 _DrawTextAdvanced_sloc2_1_0:
+    0000000A                         76 	.ds 2
+                                     77 ;--------------------------------------------------------
+                                     78 ; overlayable items in ram
+                                     79 ;--------------------------------------------------------
+                                     80 ;--------------------------------------------------------
+                                     81 ; uninitialized external ram data
+                                     82 ;--------------------------------------------------------
+                                     83 	.area _BSS
+                         00002000    84 _PPUCTRL	=	0x2000
+                         00002001    85 _PPUMASK	=	0x2001
+                         00002002    86 _PPUSTATUS	=	0x2002
+                         00002003    87 _OAMADDR	=	0x2003
+                         00002004    88 _OAMDATA	=	0x2004
+                         00002005    89 _PPUSCROLL	=	0x2005
+                         00002006    90 _PPUADDR	=	0x2006
+                         00002007    91 _PPUDATA	=	0x2007
+                         00004014    92 _OAMDMA	=	0x4014
+    00000000                         93 _loadedCharacters::
+    00000000                         94 	.ds 46
+    0000002E                         95 _IsAlphaNumeric_character_10000_149:
+    0000002E                         96 	.ds 1
+    0000002F                         97 _BreakLineEarly_PARM_2:
+    0000002F                         98 	.ds 1
+    00000030                         99 _BreakLineEarly_PARM_3:
+    00000030                        100 	.ds 2
+    00000032                        101 _BreakLineEarly_index_10000_154:
+    00000032                        102 	.ds 2
+    00000034                        103 _vsyncMultiple_count_10000_177:
+    00000034                        104 	.ds 1
+    00000035                        105 _DrawTextAdvanced_text_10000_181:
+    00000035                        106 	.ds 2
+    00000037                        107 _DrawTextAdvanced_index_10001_183:
+    00000037                        108 	.ds 2
+    00000039                        109 _DrawTextAdvanced_columnSize_10001_183:
+    00000039                        110 	.ds 1
+    0000003A                        111 _DrawTextAdvanced_rowCount_10001_183:
+    0000003A                        112 	.ds 1
+    0000003B                        113 _DrawTextAdvanced_copyBuffer_10001_183:
+    0000003B                        114 	.ds 180
+    000000EF                        115 _DrawTextAdvanced_copyBufferCount_10001_183:
+    000000EF                        116 	.ds 1
+    000000F0                        117 _DrawTextAdvanced_vramAddress_10002_188:
+    000000F0                        118 	.ds 2
+    000000F2                        119 _DrawTextAdvanced_c_10002_188:
+    000000F2                        120 	.ds 1
+    000000F3                        121 _DrawTextAdvanced_vramTile_20002_189:
+    000000F3                        122 	.ds 1
+    000000F4                        123 _DrawTextAdvanced_shiftCount_70002_202:
+    000000F4                        124 	.ds 1
+    000000F5                        125 _main_emptyTile_10001_221:
+    000000F5                        126 	.ds 16
+                                    127 ;--------------------------------------------------------
+                                    128 ; absolute external ram data
+                                    129 ;--------------------------------------------------------
+                                    130 	.area _DABS    (ABS)
+                                    131 ;--------------------------------------------------------
+                                    132 ; initialized external ram data
+                                    133 ;--------------------------------------------------------
+                                    134 	.area _DATA
+    00000000                        135 _windowYPosition::
+    00000000                        136 	.ds 2
+    00000002                        137 _fontTilesStart::
+    00000002                        138 	.ds 1
+    00000003                        139 _joypadCurrent::
+    00000003                        140 	.ds 1
+    00000004                        141 _joypadPrevious::
+    00000004                        142 	.ds 1
+    00000005                        143 _loadedCharacterCount::
+    00000005                        144 	.ds 1
+                                    145 ;--------------------------------------------------------
+                                    146 ; global & static initialisations
+                                    147 ;--------------------------------------------------------
+                                    148 	.area _HOME
+                                    149 	.area _GSINIT
+                                    150 	.area _GSFINAL
+                                    151 	.area _GSINIT
+                                    152 ;--------------------------------------------------------
+                                    153 ; Home
+                                    154 ;--------------------------------------------------------
+                                    155 	.area _HOME
+                                    156 	.area _HOME
+                                    157 ;--------------------------------------------------------
+                                    158 ; code
+                                    159 ;--------------------------------------------------------
+                                    160 	.area _CODE
+                                    161 ;------------------------------------------------------------
+                                    162 ;Allocation info for local variables in function 'MoveWindow'
+                                    163 ;------------------------------------------------------------
+                                    164 ;	src/main.c: 50: void MoveWindow(void){
+                                    165 ;	genLabel
+                                    166 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    167 ;	-----------------------------------------
+                                    168 ;	 function MoveWindow
+                                    169 ;	-----------------------------------------
+                                    170 ;	Register assignment is optimal.
+                                    171 ;	Stack space usage: 0 bytes.
+    00000000                        172 _MoveWindow:
+                                    173 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    174 ;	src/main.c: 57: }
+                                    175 ;	genLabel
+                                    176 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    177 ;	genEndFunction
+    00000000 60               [ 6]  178 	rts
+                                    179 ;	Raw cost for generated ic 3 : (1, 6.000000) count=1.000000
+                                    180 ;------------------------------------------------------------
+                                    181 ;Allocation info for local variables in function 'GetTileForCharacter'
+                                    182 ;------------------------------------------------------------
+                                    183 ;character     Allocated to registers y 
+                                    184 ;vramTile      Allocated to registers x 
+                                    185 ;------------------------------------------------------------
+                                    186 ;	src/main.c: 60: uint8_t GetTileForCharacter(char character) {
+                                    187 ;	genLabel
+                                    188 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    189 ;	-----------------------------------------
+                                    190 ;	 function GetTileForCharacter
+                                    191 ;	-----------------------------------------
+                                    192 ;	Register assignment is optimal.
+                                    193 ;	Stack space usage: 0 bytes.
+    00000001                        194 _GetTileForCharacter:
+                                    195 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    196 ;	genReceive
+    00000001 A8               [ 2]  197 	tay
+                                    198 ;	Raw cost for generated ic 2 : (1, 2.000000) count=1.000000
+                                    199 ;	src/main.c: 62: uint8_t vramTile=0;
+                                    200 ;	genAssign
+                                    201 ;	genAssignLit
+                                    202 ;	genCopy
+    00000002 A2 00            [ 2]  203 	ldx	#0x00
+                                    204 ;	Raw cost for generated ic 3 : (2, 2.000000) count=1.000000
+                                    205 ;	src/main.c: 68: if      (character >= 'a' && character <= 'z') vramTile = (character - 'a') + 1;
+                                    206 ;	genCmp
+    00000004 98               [ 2]  207 	tya
+    00000005 38               [ 2]  208 	sec
+    00000006 E9 61            [ 2]  209 	sbc	#0x61
+    00000008 70 04            [ 4]  210 	bvs	00216$
+    0000000A 10 04            [ 4]  211 	bpl	00215$
+    0000000C 30 19            [ 4]  212 	bmi	00120$
+    0000000E                        213 00216$:
+    0000000E 10 17            [ 4]  214 	bpl	00120$
+    00000010                        215 00215$:
+                                    216 ;	Raw cost for generated ic 4 : (15, 19.400002) count=1.000000
+                                    217 ;	skipping generated iCode
+                                    218 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    219 ;	genCmp
+    00000010 A9 7A            [ 2]  220 	lda	#0x7a
+    00000012 38               [ 2]  221 	sec
+    00000013 84*00            [ 3]  222 	sty	*(REGTEMP+0)
+    00000015 E5*00            [ 3]  223 	sbc	*(REGTEMP+0)
+    00000017 70 04            [ 4]  224 	bvs	00219$
+    00000019 10 04            [ 4]  225 	bpl	00218$
+    0000001B 30 0A            [ 4]  226 	bmi	00120$
+    0000001D                        227 00219$:
+    0000001D 10 08            [ 4]  228 	bpl	00120$
+    0000001F                        229 00218$:
+                                    230 ;	Raw cost for generated ic 8 : (18, 23.400002) count=0.750000
+                                    231 ;	skipping generated iCode
+                                    232 ;	Raw cost for generated ic 9 : (0, 0.000000) count=0.750000
+                                    233 ;	genPlus
+                                    234 ;	genPlusIncr
+    0000001F 98               [ 2]  235 	tya
+    00000020 18               [ 2]  236 	clc
+    00000021 69 A0            [ 2]  237 	adc	#0xa0
+    00000023 AA               [ 2]  238 	tax
+                                    239 ;	Raw cost for generated ic 12 : (5, 8.000000) count=0.562500
+                                    240 ;	genGoto
+    00000024 4CrBEr00         [ 3]  241 	jmp	00121$
+                                    242 ;	Raw cost for generated ic 14 : (3, 3.000000) count=0.562500
+                                    243 ;	genLabel
+    00000027                        244 00120$:
+                                    245 ;	Raw cost for generated ic 15 : (0, 0.000000) count=0.437500
+                                    246 ;	src/main.c: 69: else if (character >= 'A' && character <= 'Z') vramTile = (character - 'A') + 1;
+                                    247 ;	genCmp
+    00000027 98               [ 2]  248 	tya
+    00000028 38               [ 2]  249 	sec
+    00000029 E9 41            [ 2]  250 	sbc	#0x41
+    0000002B 70 04            [ 4]  251 	bvs	00222$
+    0000002D 10 04            [ 4]  252 	bpl	00221$
+    0000002F 30 19            [ 4]  253 	bmi	00116$
+    00000031                        254 00222$:
+    00000031 10 17            [ 4]  255 	bpl	00116$
+    00000033                        256 00221$:
+                                    257 ;	Raw cost for generated ic 16 : (15, 19.400002) count=0.437500
+                                    258 ;	skipping generated iCode
+                                    259 ;	Raw cost for generated ic 17 : (0, 0.000000) count=0.437500
+                                    260 ;	genCmp
+    00000033 A9 5A            [ 2]  261 	lda	#0x5a
+    00000035 38               [ 2]  262 	sec
+    00000036 84*00            [ 3]  263 	sty	*(REGTEMP+0)
+    00000038 E5*00            [ 3]  264 	sbc	*(REGTEMP+0)
+    0000003A 70 04            [ 4]  265 	bvs	00225$
+    0000003C 10 04            [ 4]  266 	bpl	00224$
+    0000003E 30 0A            [ 4]  267 	bmi	00116$
+    00000040                        268 00225$:
+    00000040 10 08            [ 4]  269 	bpl	00116$
+    00000042                        270 00224$:
+                                    271 ;	Raw cost for generated ic 20 : (18, 23.400002) count=0.328125
+                                    272 ;	skipping generated iCode
+                                    273 ;	Raw cost for generated ic 21 : (0, 0.000000) count=0.328125
+                                    274 ;	genPlus
+                                    275 ;	genPlusIncr
+    00000042 98               [ 2]  276 	tya
+    00000043 18               [ 2]  277 	clc
+    00000044 69 C0            [ 2]  278 	adc	#0xc0
+    00000046 AA               [ 2]  279 	tax
+                                    280 ;	Raw cost for generated ic 24 : (5, 8.000000) count=0.246094
+                                    281 ;	genGoto
+    00000047 4CrBEr00         [ 3]  282 	jmp	00121$
+                                    283 ;	Raw cost for generated ic 26 : (3, 3.000000) count=0.246094
+                                    284 ;	genLabel
+    0000004A                        285 00116$:
+                                    286 ;	Raw cost for generated ic 27 : (0, 0.000000) count=0.191406
+                                    287 ;	src/main.c: 70: else if (character >= '0' && character <= '9') vramTile = (character - '0') + 27;
+                                    288 ;	genCmp
+    0000004A 98               [ 2]  289 	tya
+    0000004B 38               [ 2]  290 	sec
+    0000004C E9 30            [ 2]  291 	sbc	#0x30
+    0000004E 70 04            [ 4]  292 	bvs	00228$
+    00000050 10 04            [ 4]  293 	bpl	00227$
+    00000052 30 19            [ 4]  294 	bmi	00112$
+    00000054                        295 00228$:
+    00000054 10 17            [ 4]  296 	bpl	00112$
+    00000056                        297 00227$:
+                                    298 ;	Raw cost for generated ic 28 : (15, 19.400002) count=0.191406
+                                    299 ;	skipping generated iCode
+                                    300 ;	Raw cost for generated ic 29 : (0, 0.000000) count=0.191406
+                                    301 ;	genCmp
+    00000056 A9 39            [ 2]  302 	lda	#0x39
+    00000058 38               [ 2]  303 	sec
+    00000059 84*00            [ 3]  304 	sty	*(REGTEMP+0)
+    0000005B E5*00            [ 3]  305 	sbc	*(REGTEMP+0)
+    0000005D 70 04            [ 4]  306 	bvs	00231$
+    0000005F 10 04            [ 4]  307 	bpl	00230$
+    00000061 30 0A            [ 4]  308 	bmi	00112$
+    00000063                        309 00231$:
+    00000063 10 08            [ 4]  310 	bpl	00112$
+    00000065                        311 00230$:
+                                    312 ;	Raw cost for generated ic 32 : (18, 23.400002) count=0.143555
+                                    313 ;	skipping generated iCode
+                                    314 ;	Raw cost for generated ic 33 : (0, 0.000000) count=0.143555
+                                    315 ;	genPlus
+                                    316 ;	genPlusIncr
+    00000065 98               [ 2]  317 	tya
+    00000066 18               [ 2]  318 	clc
+    00000067 69 EB            [ 2]  319 	adc	#0xeb
+    00000069 AA               [ 2]  320 	tax
+                                    321 ;	Raw cost for generated ic 36 : (5, 8.000000) count=0.107666
+                                    322 ;	genGoto
+    0000006A 4CrBEr00         [ 3]  323 	jmp	00121$
+                                    324 ;	Raw cost for generated ic 38 : (3, 3.000000) count=0.107666
+                                    325 ;	genLabel
+    0000006D                        326 00112$:
+                                    327 ;	Raw cost for generated ic 39 : (0, 0.000000) count=0.083740
+                                    328 ;	src/main.c: 72: switch(character) {
+                                    329 ;	genCmpEQorNE
+    0000006D C0 21            [ 2]  330 	cpy	#0x21
+    0000006F F0 23            [ 4]  331 	beq	00101$
+                                    332 ;	Raw cost for generated ic 40 : (7, 7.600000) count=0.083740
+                                    333 ;	skipping generated iCode
+                                    334 ;	Raw cost for generated ic 41 : (0, 0.000000) count=0.083740
+                                    335 ;	genCmpEQorNE
+    00000071 C0 2C            [ 2]  336 	cpy	#0x2c
+    00000073 F0 38            [ 4]  337 	beq	00106$
+                                    338 ;	Raw cost for generated ic 42 : (7, 7.600000) count=0.062805
+                                    339 ;	skipping generated iCode
+                                    340 ;	Raw cost for generated ic 43 : (0, 0.000000) count=0.062805
+                                    341 ;	genCmpEQorNE
+    00000075 C0 2E            [ 2]  342 	cpy	#0x2e
+    00000077 F0 39            [ 4]  343 	beq	00107$
+                                    344 ;	Raw cost for generated ic 44 : (7, 7.600000) count=0.047104
+                                    345 ;	skipping generated iCode
+                                    346 ;	Raw cost for generated ic 45 : (0, 0.000000) count=0.047104
+                                    347 ;	genCmpEQorNE
+    00000079 C0 2F            [ 2]  348 	cpy	#0x2f
+    0000007B F0 26            [ 4]  349 	beq	00104$
+                                    350 ;	Raw cost for generated ic 46 : (7, 7.600000) count=0.035328
+                                    351 ;	skipping generated iCode
+                                    352 ;	Raw cost for generated ic 47 : (0, 0.000000) count=0.035328
+                                    353 ;	genCmpEQorNE
+    0000007D C0 3A            [ 2]  354 	cpy	#0x3a
+    0000007F F0 18            [ 4]  355 	beq	00102$
+                                    356 ;	Raw cost for generated ic 48 : (7, 7.600000) count=0.026496
+                                    357 ;	skipping generated iCode
+                                    358 ;	Raw cost for generated ic 49 : (0, 0.000000) count=0.026496
+                                    359 ;	genCmpEQorNE
+    00000081 C0 3C            [ 2]  360 	cpy	#0x3c
+    00000083 F0 32            [ 4]  361 	beq	00108$
+                                    362 ;	Raw cost for generated ic 50 : (7, 7.600000) count=0.019872
+                                    363 ;	skipping generated iCode
+                                    364 ;	Raw cost for generated ic 51 : (0, 0.000000) count=0.019872
+                                    365 ;	genCmpEQorNE
+    00000085 C0 3D            [ 2]  366 	cpy	#0x3d
+    00000087 F0 1F            [ 4]  367 	beq	00105$
+                                    368 ;	Raw cost for generated ic 52 : (7, 7.600000) count=0.014904
+                                    369 ;	skipping generated iCode
+                                    370 ;	Raw cost for generated ic 53 : (0, 0.000000) count=0.014904
+                                    371 ;	genCmpEQorNE
+    00000089 C0 3E            [ 2]  372 	cpy	#0x3e
+    0000008B F0 2F            [ 4]  373 	beq	00109$
+                                    374 ;	Raw cost for generated ic 54 : (7, 7.600000) count=0.011178
+                                    375 ;	skipping generated iCode
+                                    376 ;	Raw cost for generated ic 55 : (0, 0.000000) count=0.011178
+                                    377 ;	genCmpEQorNE
+    0000008D C0 3F            [ 2]  378 	cpy	#0x3f
+    0000008F F0 0D            [ 4]  379 	beq	00103$
+                                    380 ;	Raw cost for generated ic 56 : (7, 7.600000) count=0.000000
+                                    381 ;	skipping generated iCode
+                                    382 ;	Raw cost for generated ic 57 : (0, 0.000000) count=0.000000
+                                    383 ;	genGoto
+    00000091 4CrBEr00         [ 3]  384 	jmp	00121$
+                                    385 ;	Raw cost for generated ic 58 : (3, 3.000000) count=0.000000
+                                    386 ;	src/main.c: 73: case '!': vramTile = 37; break;
+                                    387 ;	genLabel
+    00000094                        388 00101$:
+                                    389 ;	Raw cost for generated ic 59 : (0, 0.000000) count=0.020935
+                                    390 ;	genAssign
+                                    391 ;	genAssignLit
+                                    392 ;	genCopy
+    00000094 A2 25            [ 2]  393 	ldx	#0x25
+                                    394 ;	Raw cost for generated ic 60 : (2, 2.000000) count=0.020935
+                                    395 ;	genGoto
+    00000096 4CrBEr00         [ 3]  396 	jmp	00121$
+                                    397 ;	Raw cost for generated ic 61 : (3, 3.000000) count=0.020935
+                                    398 ;	src/main.c: 74: case ':': vramTile = 38; break;
+                                    399 ;	genLabel
+    00000099                        400 00102$:
+                                    401 ;	Raw cost for generated ic 62 : (0, 0.000000) count=0.000000
+                                    402 ;	genAssign
+                                    403 ;	genAssignLit
+                                    404 ;	genCopy
+    00000099 A2 26            [ 2]  405 	ldx	#0x26
+                                    406 ;	Raw cost for generated ic 63 : (2, 2.000000) count=0.000000
+                                    407 ;	genGoto
+    0000009B 4CrBEr00         [ 3]  408 	jmp	00121$
+                                    409 ;	Raw cost for generated ic 64 : (3, 3.000000) count=0.000000
+                                    410 ;	src/main.c: 75: case '?': vramTile = 39; break;
+                                    411 ;	genLabel
+    0000009E                        412 00103$:
+                                    413 ;	Raw cost for generated ic 65 : (0, 0.000000) count=0.000000
+                                    414 ;	genAssign
+                                    415 ;	genAssignLit
+                                    416 ;	genCopy
+    0000009E A2 27            [ 2]  417 	ldx	#0x27
+                                    418 ;	Raw cost for generated ic 66 : (2, 2.000000) count=0.000000
+                                    419 ;	genGoto
+    000000A0 4CrBEr00         [ 3]  420 	jmp	00121$
+                                    421 ;	Raw cost for generated ic 67 : (3, 3.000000) count=0.000000
+                                    422 ;	src/main.c: 76: case '/': vramTile = 40; break;
+                                    423 ;	genLabel
+    000000A3                        424 00104$:
+                                    425 ;	Raw cost for generated ic 68 : (0, 0.000000) count=0.000000
+                                    426 ;	genAssign
+                                    427 ;	genAssignLit
+                                    428 ;	genCopy
+    000000A3 A2 28            [ 2]  429 	ldx	#0x28
+                                    430 ;	Raw cost for generated ic 69 : (2, 2.000000) count=0.000000
+                                    431 ;	genGoto
+    000000A5 4CrBEr00         [ 3]  432 	jmp	00121$
+                                    433 ;	Raw cost for generated ic 70 : (3, 3.000000) count=0.000000
+                                    434 ;	src/main.c: 77: case '=': vramTile = 41; break;
+                                    435 ;	genLabel
+    000000A8                        436 00105$:
+                                    437 ;	Raw cost for generated ic 71 : (0, 0.000000) count=0.011178
+                                    438 ;	genAssign
+                                    439 ;	genAssignLit
+                                    440 ;	genCopy
+    000000A8 A2 29            [ 2]  441 	ldx	#0x29
+                                    442 ;	Raw cost for generated ic 72 : (2, 2.000000) count=0.011178
+                                    443 ;	genGoto
+    000000AA 4CrBEr00         [ 3]  444 	jmp	00121$
+                                    445 ;	Raw cost for generated ic 73 : (3, 3.000000) count=0.011178
+                                    446 ;	src/main.c: 78: case ',': vramTile = 42; break;
+                                    447 ;	genLabel
+    000000AD                        448 00106$:
+                                    449 ;	Raw cost for generated ic 74 : (0, 0.000000) count=0.015701
+                                    450 ;	genAssign
+                                    451 ;	genAssignLit
+                                    452 ;	genCopy
+    000000AD A2 2A            [ 2]  453 	ldx	#0x2a
+                                    454 ;	Raw cost for generated ic 75 : (2, 2.000000) count=0.015701
+                                    455 ;	genGoto
+    000000AF 4CrBEr00         [ 3]  456 	jmp	00121$
+                                    457 ;	Raw cost for generated ic 76 : (3, 3.000000) count=0.015701
+                                    458 ;	src/main.c: 79: case '.': vramTile = 43; break;
+                                    459 ;	genLabel
+    000000B2                        460 00107$:
+                                    461 ;	Raw cost for generated ic 77 : (0, 0.000000) count=0.011776
+                                    462 ;	genAssign
+                                    463 ;	genAssignLit
+                                    464 ;	genCopy
+    000000B2 A2 2B            [ 2]  465 	ldx	#0x2b
+                                    466 ;	Raw cost for generated ic 78 : (2, 2.000000) count=0.011776
+                                    467 ;	genGoto
+    000000B4 4CrBEr00         [ 3]  468 	jmp	00121$
+                                    469 ;	Raw cost for generated ic 79 : (3, 3.000000) count=0.011776
+                                    470 ;	src/main.c: 80: case '<': vramTile = 44; break;
+                                    471 ;	genLabel
+    000000B7                        472 00108$:
+                                    473 ;	Raw cost for generated ic 80 : (0, 0.000000) count=0.014904
+                                    474 ;	genAssign
+                                    475 ;	genAssignLit
+                                    476 ;	genCopy
+    000000B7 A2 2C            [ 2]  477 	ldx	#0x2c
+                                    478 ;	Raw cost for generated ic 81 : (2, 2.000000) count=0.014904
+                                    479 ;	genGoto
+    000000B9 4CrBEr00         [ 3]  480 	jmp	00121$
+                                    481 ;	Raw cost for generated ic 82 : (3, 3.000000) count=0.014904
+                                    482 ;	src/main.c: 81: case '>': vramTile = 45; break;
+                                    483 ;	genLabel
+    000000BC                        484 00109$:
+                                    485 ;	Raw cost for generated ic 83 : (0, 0.000000) count=0.000000
+                                    486 ;	genAssign
+                                    487 ;	genAssignLit
+                                    488 ;	genCopy
+    000000BC A2 2D            [ 2]  489 	ldx	#0x2d
+                                    490 ;	Raw cost for generated ic 84 : (2, 2.000000) count=0.000000
+                                    491 ;	src/main.c: 82: }
+                                    492 ;	genLabel
+    000000BE                        493 00121$:
+                                    494 ;	Raw cost for generated ic 89 : (0, 0.000000) count=0.990754
+                                    495 ;	src/main.c: 85: return vramTile;
+                                    496 ;	genRet
+    000000BE 8A               [ 2]  497 	txa
+                                    498 ;	Raw cost for generated ic 90 : (1, 2.000000) count=0.990754
+                                    499 ;	genLabel
+                                    500 ;	Raw cost for generated ic 91 : (0, 0.000000) count=0.990754
+                                    501 ;	src/main.c: 87: }
+                                    502 ;	genEndFunction
+    000000BF 60               [ 6]  503 	rts
+                                    504 ;	Raw cost for generated ic 92 : (1, 6.000000) count=0.990754
+                                    505 ;------------------------------------------------------------
+                                    506 ;Allocation info for local variables in function 'IsAlphaNumeric'
+                                    507 ;------------------------------------------------------------
+                                    508 ;character     Allocated with name '_IsAlphaNumeric_character_10000_149'
+                                    509 ;------------------------------------------------------------
+                                    510 ;	src/main.c: 89: uint8_t IsAlphaNumeric(char character){
+                                    511 ;	genLabel
+                                    512 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    513 ;	-----------------------------------------
+                                    514 ;	 function IsAlphaNumeric
+                                    515 ;	-----------------------------------------
+                                    516 ;	Register assignment is optimal.
+                                    517 ;	Stack space usage: 0 bytes.
+    000000C0                        518 _IsAlphaNumeric:
+                                    519 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    520 ;	genReceive
+                                    521 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    522 ;	src/main.c: 92: if(character>='a'&&character<='z')return TRUE;
+                                    523 ;	genCmp
+    000000C0 8Dr2Er00         [ 4]  524 	sta	_IsAlphaNumeric_character_10000_149
+    000000C3 38               [ 2]  525 	sec
+    000000C4 E9 61            [ 2]  526 	sbc	#0x61
+    000000C6 70 04            [ 4]  527 	bvs	00151$
+    000000C8 10 04            [ 4]  528 	bpl	00150$
+    000000CA 30 13            [ 4]  529 	bmi	00109$
+    000000CC                        530 00151$:
+    000000CC 10 11            [ 4]  531 	bpl	00109$
+    000000CE                        532 00150$:
+                                    533 ;	Raw cost for generated ic 3 : (17, 21.400002) count=1.000000
+                                    534 ;	skipping generated iCode
+                                    535 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    536 ;	genCmp
+    000000CE A9 7A            [ 2]  537 	lda	#0x7a
+    000000D0 38               [ 2]  538 	sec
+    000000D1 EDr2Er00         [ 4]  539 	sbc	_IsAlphaNumeric_character_10000_149
+    000000D4 70 04            [ 4]  540 	bvs	00154$
+    000000D6 10 04            [ 4]  541 	bpl	00153$
+    000000D8 30 05            [ 4]  542 	bmi	00109$
+    000000DA                        543 00154$:
+    000000DA 10 03            [ 4]  544 	bpl	00109$
+    000000DC                        545 00153$:
+                                    546 ;	Raw cost for generated ic 7 : (17, 21.400002) count=0.750000
+                                    547 ;	skipping generated iCode
+                                    548 ;	Raw cost for generated ic 8 : (0, 0.000000) count=0.750000
+                                    549 ;	genRet
+    000000DC A9 01            [ 2]  550 	lda	#0x01
+    000000DE 60               [ 6]  551 	rts
+                                    552 ;	Raw cost for generated ic 11 : (5, 5.000000) count=0.562500
+                                    553 ;	genLabel
+    000000DF                        554 00109$:
+                                    555 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    556 ;	src/main.c: 93: else if(character>='A'&&character<='Z')return TRUE;
+                                    557 ;	genCmp
+    000000DF ADr2Er00         [ 4]  558 	lda	_IsAlphaNumeric_character_10000_149
+    000000E2 38               [ 2]  559 	sec
+    000000E3 E9 41            [ 2]  560 	sbc	#0x41
+    000000E5 70 04            [ 4]  561 	bvs	00157$
+    000000E7 10 04            [ 4]  562 	bpl	00156$
+    000000E9 30 13            [ 4]  563 	bmi	00105$
+    000000EB                        564 00157$:
+    000000EB 10 11            [ 4]  565 	bpl	00105$
+    000000ED                        566 00156$:
+                                    567 ;	Raw cost for generated ic 14 : (17, 21.400002) count=1.000000
+                                    568 ;	skipping generated iCode
+                                    569 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    570 ;	genCmp
+    000000ED A9 5A            [ 2]  571 	lda	#0x5a
+    000000EF 38               [ 2]  572 	sec
+    000000F0 EDr2Er00         [ 4]  573 	sbc	_IsAlphaNumeric_character_10000_149
+    000000F3 70 04            [ 4]  574 	bvs	00160$
+    000000F5 10 04            [ 4]  575 	bpl	00159$
+    000000F7 30 05            [ 4]  576 	bmi	00105$
+    000000F9                        577 00160$:
+    000000F9 10 03            [ 4]  578 	bpl	00105$
+    000000FB                        579 00159$:
+                                    580 ;	Raw cost for generated ic 18 : (17, 21.400002) count=0.750000
+                                    581 ;	skipping generated iCode
+                                    582 ;	Raw cost for generated ic 19 : (0, 0.000000) count=0.750000
+                                    583 ;	genRet
+    000000FB A9 01            [ 2]  584 	lda	#0x01
+    000000FD 60               [ 6]  585 	rts
+                                    586 ;	Raw cost for generated ic 22 : (5, 5.000000) count=0.562500
+                                    587 ;	genLabel
+    000000FE                        588 00105$:
+                                    589 ;	Raw cost for generated ic 24 : (0, 0.000000) count=1.000000
+                                    590 ;	src/main.c: 94: else if(character>='0'&&character<='9')return TRUE;
+                                    591 ;	genCmp
+    000000FE ADr2Er00         [ 4]  592 	lda	_IsAlphaNumeric_character_10000_149
+    00000101 38               [ 2]  593 	sec
+    00000102 E9 30            [ 2]  594 	sbc	#0x30
+    00000104 70 04            [ 4]  595 	bvs	00163$
+    00000106 10 04            [ 4]  596 	bpl	00162$
+    00000108 30 13            [ 4]  597 	bmi	00110$
+    0000010A                        598 00163$:
+    0000010A 10 11            [ 4]  599 	bpl	00110$
+    0000010C                        600 00162$:
+                                    601 ;	Raw cost for generated ic 25 : (17, 21.400002) count=1.000000
+                                    602 ;	skipping generated iCode
+                                    603 ;	Raw cost for generated ic 26 : (0, 0.000000) count=1.000000
+                                    604 ;	genCmp
+    0000010C A9 39            [ 2]  605 	lda	#0x39
+    0000010E 38               [ 2]  606 	sec
+    0000010F EDr2Er00         [ 4]  607 	sbc	_IsAlphaNumeric_character_10000_149
+    00000112 70 04            [ 4]  608 	bvs	00166$
+    00000114 10 04            [ 4]  609 	bpl	00165$
+    00000116 30 05            [ 4]  610 	bmi	00110$
+    00000118                        611 00166$:
+    00000118 10 03            [ 4]  612 	bpl	00110$
+    0000011A                        613 00165$:
+                                    614 ;	Raw cost for generated ic 29 : (17, 21.400002) count=0.750000
+                                    615 ;	skipping generated iCode
+                                    616 ;	Raw cost for generated ic 30 : (0, 0.000000) count=0.750000
+                                    617 ;	genRet
+    0000011A A9 01            [ 2]  618 	lda	#0x01
+    0000011C 60               [ 6]  619 	rts
+                                    620 ;	Raw cost for generated ic 33 : (5, 5.000000) count=0.562500
+                                    621 ;	genLabel
+    0000011D                        622 00110$:
+                                    623 ;	Raw cost for generated ic 36 : (0, 0.000000) count=1.000000
+                                    624 ;	src/main.c: 96: return FALSE;
+                                    625 ;	genRet
+    0000011D A9 00            [ 2]  626 	lda	#0x00
+                                    627 ;	Raw cost for generated ic 37 : (2, 2.000000) count=1.000000
+                                    628 ;	genLabel
+                                    629 ;	Raw cost for generated ic 38 : (0, 0.000000) count=1.000000
+                                    630 ;	src/main.c: 97: }
+                                    631 ;	genEndFunction
+    0000011F 60               [ 6]  632 	rts
+                                    633 ;	Raw cost for generated ic 39 : (1, 6.000000) count=1.000000
+                                    634 ;------------------------------------------------------------
+                                    635 ;Allocation info for local variables in function 'BreakLineEarly'
+                                    636 ;------------------------------------------------------------
+                                    637 ;sloc0         Allocated with name '_BreakLineEarly_sloc0_1_0'
+                                    638 ;sloc1         Allocated with name '_BreakLineEarly_sloc1_1_0'
+                                    639 ;sloc2         Allocated with name '_BreakLineEarly_sloc2_1_0'
+                                    640 ;columnSize    Allocated with name '_BreakLineEarly_PARM_2'
+                                    641 ;text          Allocated with name '_BreakLineEarly_PARM_3'
+                                    642 ;index         Allocated with name '_BreakLineEarly_index_10000_154'
+                                    643 ;character     Allocated to registers 
+                                    644 ;spaceLeftOnLine Allocated to registers 
+                                    645 ;nextColumnSize Allocated to registers 
+                                    646 ;------------------------------------------------------------
+                                    647 ;	src/main.c: 99: uint8_t BreakLineEarly(uint16_t index, uint8_t columnSize, char* text){
+                                    648 ;	genLabel
+                                    649 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    650 ;	-----------------------------------------
+                                    651 ;	 function BreakLineEarly
+                                    652 ;	-----------------------------------------
+                                    653 ;	Register assignment is optimal.
+                                    654 ;	Stack space usage: 0 bytes.
+    00000120                        655 _BreakLineEarly:
+                                    656 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    657 ;	genReceive
+                                    658 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    659 ;	src/main.c: 101: char character = text[index++];
+                                    660 ;	genAssign
+                                    661 ;	genAssignLit
+                                    662 ;	genCopy
+    00000120 85*00            [ 3]  663 	sta	*_BreakLineEarly_sloc0_1_0
+    00000122 86*01            [ 3]  664 	stx	*(_BreakLineEarly_sloc0_1_0 + 1)
+                                    665 ;	Raw cost for generated ic 3 : (4, 6.000000) count=1.000000
+                                    666 ;	genPlus
+                                    667 ;	genPlusIncr
+    00000124 18               [ 2]  668 	clc
+    00000125 69 01            [ 2]  669 	adc	#0x01
+    00000127 8Dr32r00         [ 4]  670 	sta	_BreakLineEarly_index_10000_154
+    0000012A 8A               [ 2]  671 	txa
+    0000012B 69 00            [ 2]  672 	adc	#0x00
+    0000012D 8Dr33r00         [ 4]  673 	sta	(_BreakLineEarly_index_10000_154 + 1)
+                                    674 ;	Raw cost for generated ic 4 : (12, 16.000000) count=1.000000
+                                    675 ;	genPlus
+                                    676 ;	genPlusIncr
+    00000130 ADr30r00         [ 4]  677 	lda	_BreakLineEarly_PARM_3
+    00000133 18               [ 2]  678 	clc
+    00000134 65*00            [ 3]  679 	adc	*_BreakLineEarly_sloc0_1_0
+    00000136 85*00            [ 3]  680 	sta	*_BreakLineEarly_sloc0_1_0
+    00000138 ADr31r00         [ 4]  681 	lda	(_BreakLineEarly_PARM_3 + 1)
+    0000013B 65*01            [ 3]  682 	adc	*(_BreakLineEarly_sloc0_1_0 + 1)
+    0000013D 85*01            [ 3]  683 	sta	*(_BreakLineEarly_sloc0_1_0 + 1)
+                                    684 ;	Raw cost for generated ic 6 : (15, 22.000000) count=1.000000
+                                    685 ;	genPointerGet
+    0000013F A0 00            [ 2]  686 	ldy	#0x00
+    00000141 B1*00            [ 6]  687 	lda	[*_BreakLineEarly_sloc0_1_0],y
+    00000143 AA               [ 2]  688 	tax
+                                    689 ;	Raw cost for generated ic 7 : (5, 9.000000) count=1.000000
+                                    690 ;	src/main.c: 104: if(columnSize>=INNER_DIALOGUE_BOX_WIDTH)return TRUE;
+                                    691 ;	genCmp
+    00000144 ADr2Fr00         [ 4]  692 	lda	_BreakLineEarly_PARM_2
+    00000147 C9 1E            [ 2]  693 	cmp	#0x1e
+    00000149 90 03            [ 4]  694 	bcc	00102$
+                                    695 ;	Raw cost for generated ic 9 : (10, 11.600000) count=1.000000
+                                    696 ;	skipping generated iCode
+                                    697 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    698 ;	genRet
+    0000014B A9 01            [ 2]  699 	lda	#0x01
+    0000014D 60               [ 6]  700 	rts
+                                    701 ;	Raw cost for generated ic 13 : (5, 5.000000) count=0.750000
+                                    702 ;	genLabel
+    0000014E                        703 00102$:
+                                    704 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    705 ;	src/main.c: 107: if(IsAlphaNumeric(character))return FALSE;
+                                    706 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    707 ;	genCall
+                                    708 ;	genSend
+    0000014E 8A               [ 2]  709 	txa
+    0000014F 20rC0r00         [ 6]  710 	jsr	_IsAlphaNumeric
+                                    711 ;	assignResultValue
+                                    712 ;	Raw cost for generated ic 16 : (4, 8.000000) count=1.000000
+                                    713 ;	genIfx
+    00000152 C9 00            [ 2]  714 	cmp	#0x00
+                                    715 ;	genIfxJump : z
+    00000154 F0 03            [ 4]  716 	beq	00104$
+                                    717 ;	Raw cost for generated ic 17 : (7, 7.600000) count=1.000000
+                                    718 ;	genRet
+    00000156 A9 00            [ 2]  719 	lda	#0x00
+    00000158 60               [ 6]  720 	rts
+                                    721 ;	Raw cost for generated ic 20 : (5, 5.000000) count=0.750000
+                                    722 ;	genLabel
+    00000159                        723 00104$:
+                                    724 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    725 ;	src/main.c: 111: uint8_t nextColumnSize=columnSize+1;
+                                    726 ;	genCast
+                                    727 ;	genCopy
+    00000159 ADr2Fr00         [ 4]  728 	lda	_BreakLineEarly_PARM_2
+                                    729 ;	Raw cost for generated ic 25 : (3, 4.000000) count=1.000000
+                                    730 ;	genPlus
+                                    731 ;	genPlusIncr
+    0000015C 18               [ 2]  732 	clc
+    0000015D 69 01            [ 2]  733 	adc	#0x01
+    0000015F 85*00            [ 3]  734 	sta	*_BreakLineEarly_sloc0_1_0
+                                    735 ;	Raw cost for generated ic 26 : (5, 7.000000) count=1.000000
+                                    736 ;	src/main.c: 114: while((character=text[index++])!='\0'){
+                                    737 ;	genAssign
+                                    738 ;	genAssignLit
+                                    739 ;	genCopy
+    00000161 ADr33r00         [ 4]  740 	lda	(_BreakLineEarly_index_10000_154 + 1)
+    00000164 85*03            [ 3]  741 	sta	*(_BreakLineEarly_sloc1_1_0 + 1)
+    00000166 ADr32r00         [ 4]  742 	lda	_BreakLineEarly_index_10000_154
+    00000169 85*02            [ 3]  743 	sta	*_BreakLineEarly_sloc1_1_0
+                                    744 ;	Raw cost for generated ic 58 : (10, 14.000000) count=1.000000
+                                    745 ;	genLabel
+    0000016B                        746 00107$:
+                                    747 ;	Raw cost for generated ic 28 : (0, 0.000000) count=2.285713
+                                    748 ;	genPlus
+                                    749 ;	genPlusIncr
+    0000016B ADr30r00         [ 4]  750 	lda	_BreakLineEarly_PARM_3
+    0000016E 18               [ 2]  751 	clc
+    0000016F 65*02            [ 3]  752 	adc	*_BreakLineEarly_sloc1_1_0
+    00000171 85*04            [ 3]  753 	sta	*_BreakLineEarly_sloc2_1_0
+    00000173 ADr31r00         [ 4]  754 	lda	(_BreakLineEarly_PARM_3 + 1)
+    00000176 65*03            [ 3]  755 	adc	*(_BreakLineEarly_sloc1_1_0 + 1)
+    00000178 85*05            [ 3]  756 	sta	*(_BreakLineEarly_sloc2_1_0 + 1)
+                                    757 ;	Raw cost for generated ic 32 : (15, 22.000000) count=2.285713
+                                    758 ;	genPlus
+                                    759 ;	genPlusIncr
+    0000017A E6*02            [ 5]  760 	inc	*_BreakLineEarly_sloc1_1_0
+    0000017C D0 02            [ 4]  761 	bne	00151$
+    0000017E E6*03            [ 5]  762 	inc	*(_BreakLineEarly_sloc1_1_0 + 1)
+    00000180                        763 00151$:
+                                    764 ;	Raw cost for generated ic 30 : (6, 12.600000) count=2.285713
+                                    765 ;	genPointerGet
+    00000180 A0 00            [ 2]  766 	ldy	#0x00
+    00000182 B1*04            [ 6]  767 	lda	[*_BreakLineEarly_sloc2_1_0],y
+                                    768 ;	Raw cost for generated ic 33 : (4, 7.000000) count=2.285713
+                                    769 ;	genIfx
+                                    770 ;	genIfxJump : z
+    00000184 F0 0C            [ 4]  771 	beq	00109$
+                                    772 ;	Raw cost for generated ic 35 : (5, 5.600000) count=2.285713
+                                    773 ;	src/main.c: 117: if(!IsAlphaNumeric(character))break;
+                                    774 ;	Raw cost for generated ic 38 : (0, 0.000000) count=1.714284
+                                    775 ;	genCall
+                                    776 ;	genSend
+    00000186 20rC0r00         [ 6]  777 	jsr	_IsAlphaNumeric
+                                    778 ;	assignResultValue
+                                    779 ;	Raw cost for generated ic 39 : (3, 6.000000) count=1.714284
+                                    780 ;	genIfx
+    00000189 C9 00            [ 2]  781 	cmp	#0x00
+                                    782 ;	genIfxJump : z
+    0000018B F0 05            [ 4]  783 	beq	00109$
+                                    784 ;	Raw cost for generated ic 40 : (7, 7.600000) count=1.714284
+                                    785 ;	src/main.c: 120: nextColumnSize++;
+                                    786 ;	genPlus
+                                    787 ;	genPlusIncr
+    0000018D E6*00            [ 5]  788 	inc	*_BreakLineEarly_sloc0_1_0
+                                    789 ;	Raw cost for generated ic 46 : (2, 5.000000) count=1.285713
+                                    790 ;	genGoto
+    0000018F 4Cr6Br01         [ 3]  791 	jmp	00107$
+                                    792 ;	Raw cost for generated ic 48 : (3, 3.000000) count=1.285713
+                                    793 ;	genLabel
+    00000192                        794 00109$:
+                                    795 ;	Raw cost for generated ic 49 : (0, 0.000000) count=0.999999
+                                    796 ;	src/main.c: 124: return nextColumnSize>INNER_DIALOGUE_BOX_WIDTH;
+                                    797 ;	genCmp
+    00000192 A5*00            [ 3]  798 	lda	*_BreakLineEarly_sloc0_1_0
+    00000194 C9 1E            [ 2]  799 	cmp	#0x1e
+    00000196 F0 02            [ 4]  800 	beq	00158$
+    00000198 B0 03            [ 4]  801 	bcs	00156$
+    0000019A                        802 00158$:
+    0000019A A9 00            [ 2]  803 	lda	#0x00
+    0000019C 60               [ 6]  804 	rts
+    0000019D                        805 00156$:
+    0000019D A9 01            [ 2]  806 	lda	#0x01
+                                    807 ;	Raw cost for generated ic 50 : (15, 17.200001) count=0.999999
+                                    808 ;	genRet
+                                    809 ;	Raw cost for generated ic 51 : (0, 0.000000) count=0.999999
+                                    810 ;	genLabel
+                                    811 ;	Raw cost for generated ic 52 : (0, 0.000000) count=0.999999
+                                    812 ;	src/main.c: 125: }   
+                                    813 ;	genEndFunction
+    0000019F 60               [ 6]  814 	rts
+                                    815 ;	Raw cost for generated ic 53 : (1, 6.000000) count=0.999999
+                                    816 ;------------------------------------------------------------
+                                    817 ;Allocation info for local variables in function 'WaitForAButton'
+                                    818 ;------------------------------------------------------------
+                                    819 ;	src/main.c: 128: void WaitForAButton(void){
+                                    820 ;	genLabel
+                                    821 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    822 ;	-----------------------------------------
+                                    823 ;	 function WaitForAButton
+                                    824 ;	-----------------------------------------
+                                    825 ;	Register assignment is optimal.
+                                    826 ;	Stack space usage: 0 bytes.
+    000001A0                        827 _WaitForAButton:
+                                    828 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    829 ;	src/main.c: 129: while(TRUE){
+                                    830 ;	genLabel
+    000001A0                        831 00105$:
+                                    832 ;	Raw cost for generated ic 4 : (0, 0.000000) count=15.846519
+                                    833 ;	src/main.c: 131: joypadPrevious=joypadCurrent;
+                                    834 ;	genAssign
+                                    835 ;	genAssignLit
+                                    836 ;	genCopy
+    000001A0 ADr03r00         [ 4]  837 	lda	_joypadCurrent
+    000001A3 8Dr04r00         [ 4]  838 	sta	_joypadPrevious
+                                    839 ;	Raw cost for generated ic 5 : (6, 8.000000) count=15.846519
+                                    840 ;	src/main.c: 132: joypadCurrent = joypad();
+                                    841 ;	genCall
+    000001A6 20r00r00         [ 6]  842 	jsr	_joypad
+                                    843 ;	assignResultValue
+                                    844 ;	Raw cost for generated ic 7 : (3, 6.000000) count=15.846519
+                                    845 ;	genAssign
+                                    846 ;	genAssignLit
+                                    847 ;	genCopy
+    000001A9 8Dr03r00         [ 4]  848 	sta	_joypadCurrent
+                                    849 ;	Raw cost for generated ic 9 : (3, 4.000000) count=15.846519
+                                    850 ;	src/main.c: 134: if((joypadCurrent & J_A) && !(joypadPrevious & J_A))break;
+                                    851 ;	genAnd
+    000001AC 29 80            [ 2]  852 	and	#0x80
+                                    853 ;	genIfxJump : z
+    000001AE F0 F0            [ 4]  854 	beq	00105$
+                                    855 ;	Raw cost for generated ic 11 : (7, 7.600000) count=15.846519
+                                    856 ;	skipping generated iCode
+                                    857 ;	Raw cost for generated ic 12 : (0, 0.000000) count=15.846519
+                                    858 ;	genCast
+                                    859 ;	genCopy
+    000001B0 ADr04r00         [ 4]  860 	lda	_joypadPrevious
+                                    861 ;	Raw cost for generated ic 15 : (3, 4.000000) count=3.961630
+                                    862 ;	genAnd
+    000001B3 29 80            [ 2]  863 	and	#0x80
+                                    864 ;	genIfxJump : z
+    000001B5 D0 E9            [ 4]  865 	bne	00105$
+                                    866 ;	Raw cost for generated ic 16 : (7, 7.600000) count=3.961630
+                                    867 ;	skipping generated iCode
+                                    868 ;	Raw cost for generated ic 17 : (0, 0.000000) count=3.961630
+                                    869 ;	genLabel
+                                    870 ;	Raw cost for generated ic 24 : (0, 0.000000) count=0.990407
+                                    871 ;	src/main.c: 137: }
+                                    872 ;	genEndFunction
+    000001B7 60               [ 6]  873 	rts
+                                    874 ;	Raw cost for generated ic 25 : (1, 6.000000) count=0.990407
+                                    875 ;------------------------------------------------------------
+                                    876 ;Allocation info for local variables in function 'ClearDialogueBox'
+                                    877 ;------------------------------------------------------------
+                                    878 ;	src/main.c: 139: void ClearDialogueBox(void){
+                                    879 ;	genLabel
+                                    880 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    881 ;	-----------------------------------------
+                                    882 ;	 function ClearDialogueBox
+                                    883 ;	-----------------------------------------
+                                    884 ;	Register assignment is optimal.
+                                    885 ;	Stack space usage: 0 bytes.
+    000001B8                        886 _ClearDialogueBox:
+                                    887 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    888 ;	src/main.c: 142: fill_winbkg_rect(1,DIALOGUE_BOX_Y+1,DEVICE_SCREEN_WIDTH-2,DIALOG_BOX_HEIGHT-2,0);
+                                    889 ;	genAssign
+                                    890 ;	genAssignLit
+    000001B8 A2 1E            [ 2]  891 	ldx	#0x1e
+    000001BA 8Er00r00         [ 4]  892 	stx	_fill_bkg_rect_PARM_3
+                                    893 ;	Raw cost for generated ic 4 : (5, 6.000000) count=1.000000
+                                    894 ;	genAssign
+                                    895 ;	genAssignLit
+    000001BD A2 05            [ 2]  896 	ldx	#0x05
+    000001BF 8Er00r00         [ 4]  897 	stx	_fill_bkg_rect_PARM_4
+                                    898 ;	Raw cost for generated ic 5 : (5, 6.000000) count=1.000000
+                                    899 ;	genAssign
+                                    900 ;	genAssignLit
+    000001C2 A2 00            [ 2]  901 	ldx	#0x00
+    000001C4 8Er00r00         [ 4]  902 	stx	_fill_bkg_rect_PARM_5
+                                    903 ;	Raw cost for generated ic 6 : (5, 6.000000) count=1.000000
+                                    904 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    905 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    906 ;	genCall
+                                    907 ;	genSend
+    000001C7 A9 01            [ 2]  908 	lda	#0x01
+    000001C9 A2 18            [ 2]  909 	ldx	#0x18
+    000001CB 20r00r00         [ 6]  910 	jsr	_fill_bkg_rect
+                                    911 ;	Raw cost for generated ic 7 : (7, 10.000000) count=1.000000
+                                    912 ;	src/main.c: 145: fill_winbkg_rect(1,DIALOGUE_BOX_Y,DEVICE_SCREEN_WIDTH-2,1,2);
+                                    913 ;	genAssign
+                                    914 ;	genAssignLit
+    000001CE A2 1E            [ 2]  915 	ldx	#0x1e
+    000001D0 8Er00r00         [ 4]  916 	stx	_fill_bkg_rect_PARM_3
+                                    917 ;	Raw cost for generated ic 10 : (5, 6.000000) count=1.000000
+                                    918 ;	genAssign
+                                    919 ;	genAssignLit
+    000001D3 A2 01            [ 2]  920 	ldx	#0x01
+    000001D5 8Er00r00         [ 4]  921 	stx	_fill_bkg_rect_PARM_4
+                                    922 ;	Raw cost for generated ic 11 : (5, 6.000000) count=1.000000
+                                    923 ;	genAssign
+                                    924 ;	genAssignLit
+    000001D8 E8               [ 2]  925 	inx
+    000001D9 8Er00r00         [ 4]  926 	stx	_fill_bkg_rect_PARM_5
+                                    927 ;	Raw cost for generated ic 12 : (4, 6.000000) count=1.000000
+                                    928 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    929 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    930 ;	genCall
+                                    931 ;	genSend
+    000001DC A9 01            [ 2]  932 	lda	#0x01
+    000001DE A2 17            [ 2]  933 	ldx	#0x17
+    000001E0 20r00r00         [ 6]  934 	jsr	_fill_bkg_rect
+                                    935 ;	Raw cost for generated ic 13 : (7, 10.000000) count=1.000000
+                                    936 ;	src/main.c: 146: set_winbkg_tile_xy(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,6);
+                                    937 ;	genAssign
+                                    938 ;	genAssignLit
+    000001E3 A2 06            [ 2]  939 	ldx	#0x06
+    000001E5 8Er00r00         [ 4]  940 	stx	_set_bkg_tile_xy_PARM_3
+                                    941 ;	Raw cost for generated ic 16 : (5, 6.000000) count=1.000000
+                                    942 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    943 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    944 ;	genCall
+                                    945 ;	genSend
+    000001E8 A9 1F            [ 2]  946 	lda	#0x1f
+    000001EA A2 1D            [ 2]  947 	ldx	#0x1d
+    000001EC 20r00r00         [ 6]  948 	jsr	_set_bkg_tile_xy
+                                    949 ;	Raw cost for generated ic 17 : (7, 10.000000) count=1.000000
+                                    950 ;	src/main.c: 147: fill_winbkg_rect(1,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,DEVICE_SCREEN_WIDTH-2,1,2);
+                                    951 ;	genAssign
+                                    952 ;	genAssignLit
+    000001EF A2 1E            [ 2]  953 	ldx	#0x1e
+    000001F1 8Er00r00         [ 4]  954 	stx	_fill_bkg_rect_PARM_3
+                                    955 ;	Raw cost for generated ic 20 : (5, 6.000000) count=1.000000
+                                    956 ;	genAssign
+                                    957 ;	genAssignLit
+    000001F4 A2 01            [ 2]  958 	ldx	#0x01
+    000001F6 8Er00r00         [ 4]  959 	stx	_fill_bkg_rect_PARM_4
+                                    960 ;	Raw cost for generated ic 21 : (5, 6.000000) count=1.000000
+                                    961 ;	genAssign
+                                    962 ;	genAssignLit
+    000001F9 E8               [ 2]  963 	inx
+    000001FA 8Er00r00         [ 4]  964 	stx	_fill_bkg_rect_PARM_5
+                                    965 ;	Raw cost for generated ic 22 : (4, 6.000000) count=1.000000
+                                    966 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    967 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    968 ;	genCall
+                                    969 ;	genSend
+    000001FD A9 01            [ 2]  970 	lda	#0x01
+    000001FF A2 1D            [ 2]  971 	ldx	#0x1d
+    00000201 20r00r00         [ 6]  972 	jsr	_fill_bkg_rect
+                                    973 ;	Raw cost for generated ic 23 : (7, 10.000000) count=1.000000
+                                    974 ;	src/main.c: 150: fill_winbkg_rect(0,DIALOGUE_BOX_Y+1,1,DIALOG_BOX_HEIGHT-2,4);
+                                    975 ;	genAssign
+                                    976 ;	genAssignLit
+    00000204 A2 01            [ 2]  977 	ldx	#0x01
+    00000206 8Er00r00         [ 4]  978 	stx	_fill_bkg_rect_PARM_3
+                                    979 ;	Raw cost for generated ic 26 : (5, 6.000000) count=1.000000
+                                    980 ;	genAssign
+                                    981 ;	genAssignLit
+    00000209 A2 05            [ 2]  982 	ldx	#0x05
+    0000020B 8Er00r00         [ 4]  983 	stx	_fill_bkg_rect_PARM_4
+                                    984 ;	Raw cost for generated ic 27 : (5, 6.000000) count=1.000000
+                                    985 ;	genAssign
+                                    986 ;	genAssignLit
+    0000020E CA               [ 2]  987 	dex
+    0000020F 8Er00r00         [ 4]  988 	stx	_fill_bkg_rect_PARM_5
+                                    989 ;	Raw cost for generated ic 28 : (4, 6.000000) count=1.000000
+                                    990 ;	Raw cost for generated ic 24 : (0, 0.000000) count=1.000000
+                                    991 ;	Raw cost for generated ic 25 : (0, 0.000000) count=1.000000
+                                    992 ;	genCall
+                                    993 ;	genSend
+    00000212 A9 00            [ 2]  994 	lda	#0x00
+    00000214 A2 18            [ 2]  995 	ldx	#0x18
+    00000216 20r00r00         [ 6]  996 	jsr	_fill_bkg_rect
+                                    997 ;	Raw cost for generated ic 29 : (7, 10.000000) count=1.000000
+                                    998 ;	src/main.c: 151: fill_winbkg_rect(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y+1,1,DIALOG_BOX_HEIGHT-2,4);
+                                    999 ;	genAssign
+                                   1000 ;	genAssignLit
+    00000219 A2 01            [ 2] 1001 	ldx	#0x01
+    0000021B 8Er00r00         [ 4] 1002 	stx	_fill_bkg_rect_PARM_3
+                                   1003 ;	Raw cost for generated ic 32 : (5, 6.000000) count=1.000000
+                                   1004 ;	genAssign
+                                   1005 ;	genAssignLit
+    0000021E A2 05            [ 2] 1006 	ldx	#0x05
+    00000220 8Er00r00         [ 4] 1007 	stx	_fill_bkg_rect_PARM_4
+                                   1008 ;	Raw cost for generated ic 33 : (5, 6.000000) count=1.000000
+                                   1009 ;	genAssign
+                                   1010 ;	genAssignLit
+    00000223 CA               [ 2] 1011 	dex
+    00000224 8Er00r00         [ 4] 1012 	stx	_fill_bkg_rect_PARM_5
+                                   1013 ;	Raw cost for generated ic 34 : (4, 6.000000) count=1.000000
+                                   1014 ;	Raw cost for generated ic 30 : (0, 0.000000) count=1.000000
+                                   1015 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                   1016 ;	genCall
+                                   1017 ;	genSend
+    00000227 A9 1F            [ 2] 1018 	lda	#0x1f
+    00000229 A2 18            [ 2] 1019 	ldx	#0x18
+    0000022B 20r00r00         [ 6] 1020 	jsr	_fill_bkg_rect
+                                   1021 ;	Raw cost for generated ic 35 : (7, 10.000000) count=1.000000
+                                   1022 ;	src/main.c: 154: set_winbkg_tile_xy(0,DIALOGUE_BOX_Y,1);
+                                   1023 ;	genAssign
+                                   1024 ;	genAssignLit
+    0000022E A2 01            [ 2] 1025 	ldx	#0x01
+    00000230 8Er00r00         [ 4] 1026 	stx	_set_bkg_tile_xy_PARM_3
+                                   1027 ;	Raw cost for generated ic 38 : (5, 6.000000) count=1.000000
+                                   1028 ;	Raw cost for generated ic 36 : (0, 0.000000) count=1.000000
+                                   1029 ;	Raw cost for generated ic 37 : (0, 0.000000) count=1.000000
+                                   1030 ;	genCall
+                                   1031 ;	genSend
+    00000233 A9 00            [ 2] 1032 	lda	#0x00
+    00000235 A2 17            [ 2] 1033 	ldx	#0x17
+    00000237 20r00r00         [ 6] 1034 	jsr	_set_bkg_tile_xy
+                                   1035 ;	Raw cost for generated ic 39 : (7, 10.000000) count=1.000000
+                                   1036 ;	src/main.c: 155: set_winbkg_tile_xy(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y,3);
+                                   1037 ;	genAssign
+                                   1038 ;	genAssignLit
+    0000023A A2 03            [ 2] 1039 	ldx	#0x03
+    0000023C 8Er00r00         [ 4] 1040 	stx	_set_bkg_tile_xy_PARM_3
+                                   1041 ;	Raw cost for generated ic 42 : (5, 6.000000) count=1.000000
+                                   1042 ;	Raw cost for generated ic 40 : (0, 0.000000) count=1.000000
+                                   1043 ;	Raw cost for generated ic 41 : (0, 0.000000) count=1.000000
+                                   1044 ;	genCall
+                                   1045 ;	genSend
+    0000023F A9 1F            [ 2] 1046 	lda	#0x1f
+    00000241 A2 17            [ 2] 1047 	ldx	#0x17
+    00000243 20r00r00         [ 6] 1048 	jsr	_set_bkg_tile_xy
+                                   1049 ;	Raw cost for generated ic 43 : (7, 10.000000) count=1.000000
+                                   1050 ;	src/main.c: 158: set_winbkg_tile_xy(0,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,5);
+                                   1051 ;	genAssign
+                                   1052 ;	genAssignLit
+    00000246 A2 05            [ 2] 1053 	ldx	#0x05
+    00000248 8Er00r00         [ 4] 1054 	stx	_set_bkg_tile_xy_PARM_3
+                                   1055 ;	Raw cost for generated ic 46 : (5, 6.000000) count=1.000000
+                                   1056 ;	Raw cost for generated ic 44 : (0, 0.000000) count=1.000000
+                                   1057 ;	Raw cost for generated ic 45 : (0, 0.000000) count=1.000000
+                                   1058 ;	genCall
+                                   1059 ;	genSend
+    0000024B A9 00            [ 2] 1060 	lda	#0x00
+    0000024D A2 1D            [ 2] 1061 	ldx	#0x1d
+    0000024F 20r00r00         [ 6] 1062 	jsr	_set_bkg_tile_xy
+                                   1063 ;	Raw cost for generated ic 47 : (7, 10.000000) count=1.000000
+                                   1064 ;	src/main.c: 159: set_winbkg_tile_xy(DEVICE_SCREEN_WIDTH-1,DIALOGUE_BOX_Y+DIALOG_BOX_HEIGHT-1,6);
+                                   1065 ;	genAssign
+                                   1066 ;	genAssignLit
+    00000252 A2 06            [ 2] 1067 	ldx	#0x06
+    00000254 8Er00r00         [ 4] 1068 	stx	_set_bkg_tile_xy_PARM_3
+                                   1069 ;	Raw cost for generated ic 50 : (5, 6.000000) count=1.000000
+                                   1070 ;	Raw cost for generated ic 48 : (0, 0.000000) count=1.000000
+                                   1071 ;	Raw cost for generated ic 49 : (0, 0.000000) count=1.000000
+                                   1072 ;	genCall
+                                   1073 ;	genSend
+    00000257 A9 1F            [ 2] 1074 	lda	#0x1f
+    00000259 A2 1D            [ 2] 1075 	ldx	#0x1d
+                                   1076 ;	Raw cost for generated ic 51 : (7, 10.000000) count=1.000000
+                                   1077 ;	genLabel
+                                   1078 ;	Raw cost for generated ic 52 : (0, 0.000000) count=1.000000
+                                   1079 ;	src/main.c: 160: }
+                                   1080 ;	genEndFunction
+    0000025B 4Cr00r00         [ 3] 1081 	jmp	_set_bkg_tile_xy
+                                   1082 ;	Raw cost for generated ic 53 : (1, 6.000000) count=1.000000
+                                   1083 ;------------------------------------------------------------
+                                   1084 ;Allocation info for local variables in function 'ShowDialgoueBox'
+                                   1085 ;------------------------------------------------------------
+                                   1086 ;desiredWindowPosition Allocated to registers 
+                                   1087 ;------------------------------------------------------------
+                                   1088 ;	src/main.c: 162: void ShowDialgoueBox(void){
+                                   1089 ;	genLabel
+                                   1090 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1091 ;	-----------------------------------------
+                                   1092 ;	 function ShowDialgoueBox
+                                   1093 ;	-----------------------------------------
+                                   1094 ;	Register assignment is optimal.
+                                   1095 ;	Stack space usage: 0 bytes.
+    0000025E                       1096 _ShowDialgoueBox:
+                                   1097 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1098 ;	src/main.c: 164: ClearDialogueBox();
+                                   1099 ;	genCall
+    0000025E 20rB8r01         [ 6] 1100 	jsr	_ClearDialogueBox
+                                   1101 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                   1102 ;	src/main.c: 168: while(windowYPosition>desiredWindowPosition){
+                                   1103 ;	genLabel
+    00000261                       1104 00101$:
+                                   1105 ;	Raw cost for generated ic 4 : (0, 0.000000) count=3.999997
+                                   1106 ;	genCmp
+    00000261 A9 B8            [ 2] 1107 	lda	#0xb8
+    00000263 38               [ 2] 1108 	sec
+    00000264 EDr00r00         [ 4] 1109 	sbc	_windowYPosition
+    00000267 A9 00            [ 2] 1110 	lda	#0x00
+    00000269 EDr01r00         [ 4] 1111 	sbc	(_windowYPosition + 1)
+    0000026C 50 04            [ 4] 1112 	bvc	00119$
+    0000026E 10 05            [ 4] 1113 	bpl	00118$
+    00000270 30 1E            [ 4] 1114 	bmi	00104$
+    00000272                       1115 00119$:
+    00000272 30 01            [ 4] 1116 	bmi	00118$
+    00000274 60               [ 6] 1117 	rts
+    00000275                       1118 00118$:
+                                   1119 ;	Raw cost for generated ic 5 : (22, 27.400002) count=3.999997
+                                   1120 ;	skipping generated iCode
+                                   1121 ;	Raw cost for generated ic 6 : (0, 0.000000) count=3.999997
+                                   1122 ;	src/main.c: 170: windowYPosition-=4;
+                                   1123 ;	genCast
+                                   1124 ;	genCopy
+    00000275 AEr01r00         [ 4] 1125 	ldx	(_windowYPosition + 1)
+    00000278 ADr00r00         [ 4] 1126 	lda	_windowYPosition
+                                   1127 ;	Raw cost for generated ic 9 : (6, 8.000000) count=2.999997
+                                   1128 ;	genMinus
+                                   1129 ;	genMinusDec
+    0000027B 38               [ 2] 1130 	sec
+    0000027C E9 04            [ 2] 1131 	sbc	#0x04
+    0000027E B0 01            [ 4] 1132 	bcs	00121$
+    00000280 CA               [ 2] 1133 	dex
+    00000281                       1134 00121$:
+                                   1135 ;	Raw cost for generated ic 10 : (6, 8.600000) count=2.999997
+                                   1136 ;	genCast
+                                   1137 ;	genCopy
+    00000281 8Dr00r00         [ 4] 1138 	sta	_windowYPosition
+    00000284 8Er01r00         [ 4] 1139 	stx	(_windowYPosition + 1)
+                                   1140 ;	Raw cost for generated ic 11 : (6, 8.000000) count=2.999997
+                                   1141 ;	src/main.c: 171: MoveWindow();
+                                   1142 ;	genCall
+    00000287 20r00r00         [ 6] 1143 	jsr	_MoveWindow
+                                   1144 ;	Raw cost for generated ic 14 : (3, 6.000000) count=2.999997
+                                   1145 ;	src/main.c: 172: vsync();
+                                   1146 ;	genCall
+    0000028A 20r00r00         [ 6] 1147 	jsr	_vsync
+                                   1148 ;	Raw cost for generated ic 15 : (3, 6.000000) count=2.999997
+                                   1149 ;	genGoto
+    0000028D 4Cr61r02         [ 3] 1150 	jmp	00101$
+                                   1151 ;	Raw cost for generated ic 16 : (3, 3.000000) count=2.999997
+                                   1152 ;	genLabel
+    00000290                       1153 00104$:
+                                   1154 ;	Raw cost for generated ic 18 : (0, 0.000000) count=0.999999
+                                   1155 ;	src/main.c: 174: }
+                                   1156 ;	genEndFunction
+    00000290 60               [ 6] 1157 	rts
+                                   1158 ;	Raw cost for generated ic 19 : (1, 6.000000) count=0.999999
+                                   1159 ;------------------------------------------------------------
+                                   1160 ;Allocation info for local variables in function 'HideDialgoueBox'
+                                   1161 ;------------------------------------------------------------
+                                   1162 ;desiredWindowPosition Allocated to registers 
+                                   1163 ;------------------------------------------------------------
+                                   1164 ;	src/main.c: 176: void HideDialgoueBox(void){
+                                   1165 ;	genLabel
+                                   1166 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1167 ;	-----------------------------------------
+                                   1168 ;	 function HideDialgoueBox
+                                   1169 ;	-----------------------------------------
+                                   1170 ;	Register assignment is optimal.
+                                   1171 ;	Stack space usage: 0 bytes.
+    00000291                       1172 _HideDialgoueBox:
+                                   1173 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1174 ;	src/main.c: 180: while(windowYPosition<desiredWindowPosition){
+                                   1175 ;	genLabel
+    00000291                       1176 00101$:
+                                   1177 ;	Raw cost for generated ic 3 : (0, 0.000000) count=3.999997
+                                   1178 ;	genCmp
+    00000291 ADr00r00         [ 4] 1179 	lda	_windowYPosition
+    00000294 38               [ 2] 1180 	sec
+    00000295 E9 F0            [ 2] 1181 	sbc	#0xf0
+    00000297 ADr01r00         [ 4] 1182 	lda	(_windowYPosition + 1)
+    0000029A E9 00            [ 2] 1183 	sbc	#0x00
+    0000029C 50 04            [ 4] 1184 	bvc	00119$
+    0000029E 10 05            [ 4] 1185 	bpl	00118$
+    000002A0 30 1E            [ 4] 1186 	bmi	00104$
+    000002A2                       1187 00119$:
+    000002A2 30 01            [ 4] 1188 	bmi	00118$
+    000002A4 60               [ 6] 1189 	rts
+    000002A5                       1190 00118$:
+                                   1191 ;	Raw cost for generated ic 4 : (22, 27.400002) count=3.999997
+                                   1192 ;	skipping generated iCode
+                                   1193 ;	Raw cost for generated ic 5 : (0, 0.000000) count=3.999997
+                                   1194 ;	src/main.c: 182: windowYPosition+=4;
+                                   1195 ;	genCast
+                                   1196 ;	genCopy
+    000002A5 AEr01r00         [ 4] 1197 	ldx	(_windowYPosition + 1)
+    000002A8 ADr00r00         [ 4] 1198 	lda	_windowYPosition
+                                   1199 ;	Raw cost for generated ic 8 : (6, 8.000000) count=2.999997
+                                   1200 ;	genPlus
+                                   1201 ;	genPlusIncr
+    000002AB 18               [ 2] 1202 	clc
+    000002AC 69 04            [ 2] 1203 	adc	#0x04
+    000002AE 90 01            [ 4] 1204 	bcc	00121$
+    000002B0 E8               [ 2] 1205 	inx
+    000002B1                       1206 00121$:
+                                   1207 ;	Raw cost for generated ic 9 : (6, 8.600000) count=2.999997
+                                   1208 ;	genCast
+                                   1209 ;	genCopy
+    000002B1 8Dr00r00         [ 4] 1210 	sta	_windowYPosition
+    000002B4 8Er01r00         [ 4] 1211 	stx	(_windowYPosition + 1)
+                                   1212 ;	Raw cost for generated ic 10 : (6, 8.000000) count=2.999997
+                                   1213 ;	src/main.c: 183: MoveWindow();
+                                   1214 ;	genCall
+    000002B7 20r00r00         [ 6] 1215 	jsr	_MoveWindow
+                                   1216 ;	Raw cost for generated ic 13 : (3, 6.000000) count=2.999997
+                                   1217 ;	src/main.c: 184: vsync();
+                                   1218 ;	genCall
+    000002BA 20r00r00         [ 6] 1219 	jsr	_vsync
+                                   1220 ;	Raw cost for generated ic 14 : (3, 6.000000) count=2.999997
+                                   1221 ;	genGoto
+    000002BD 4Cr91r02         [ 3] 1222 	jmp	00101$
+                                   1223 ;	Raw cost for generated ic 15 : (3, 3.000000) count=2.999997
+                                   1224 ;	genLabel
+    000002C0                       1225 00104$:
+                                   1226 ;	Raw cost for generated ic 17 : (0, 0.000000) count=0.999999
+                                   1227 ;	src/main.c: 186: }
+                                   1228 ;	genEndFunction
+    000002C0 60               [ 6] 1229 	rts
+                                   1230 ;	Raw cost for generated ic 18 : (1, 6.000000) count=0.999999
+                                   1231 ;------------------------------------------------------------
+                                   1232 ;Allocation info for local variables in function 'ResetLoadedCharacters'
+                                   1233 ;------------------------------------------------------------
+                                   1234 ;i             Allocated to registers 
+                                   1235 ;------------------------------------------------------------
+                                   1236 ;	src/main.c: 188: void ResetLoadedCharacters(void){
+                                   1237 ;	genLabel
+                                   1238 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1239 ;	-----------------------------------------
+                                   1240 ;	 function ResetLoadedCharacters
+                                   1241 ;	-----------------------------------------
+                                   1242 ;	Register assignment is optimal.
+                                   1243 ;	Stack space usage: 0 bytes.
+    000002C1                       1244 _ResetLoadedCharacters:
+                                   1245 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1246 ;	src/main.c: 190: loadedCharacterCount=1;
+                                   1247 ;	genAssign
+                                   1248 ;	genAssignLit
+    000002C1 A2 01            [ 2] 1249 	ldx	#0x01
+    000002C3 8Er05r00         [ 4] 1250 	stx	_loadedCharacterCount
+                                   1251 ;	Raw cost for generated ic 3 : (5, 6.000000) count=1.000000
+                                   1252 ;	src/main.c: 193: for(uint8_t i=0;i<45;i++)loadedCharacters[i]=255;
+                                   1253 ;	skipping iCode since result will be rematerialized
+                                   1254 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                   1255 ;	genAssign
+                                   1256 ;	genAssignLit
+                                   1257 ;	genCopy
+    000002C6 A0 00            [ 2] 1258 	ldy	#0x00
+                                   1259 ;	Raw cost for generated ic 22 : (2, 2.000000) count=1.000000
+                                   1260 ;	genLabel
+    000002C8                       1261 00103$:
+                                   1262 ;	Raw cost for generated ic 5 : (0, 0.000000) count=3.999997
+                                   1263 ;	genCmp
+    000002C8 C0 2D            [ 2] 1264 	cpy	#0x2d
+    000002CA B0 11            [ 4] 1265 	bcs	00105$
+                                   1266 ;	Raw cost for generated ic 6 : (7, 7.600000) count=3.999997
+                                   1267 ;	skipping generated iCode
+                                   1268 ;	Raw cost for generated ic 7 : (0, 0.000000) count=3.999997
+                                   1269 ;	genAssign
+                                   1270 ;	genAssignLit
+                                   1271 ;	genCopy
+    000002CC A2 00            [ 2] 1272 	ldx	#0x00
+    000002CE 98               [ 2] 1273 	tya
+                                   1274 ;	Raw cost for generated ic 11 : (3, 4.000000) count=2.999997
+                                   1275 ;	genPointerSet
+    000002CF 84*00            [ 3] 1276 	sty	*(REGTEMP+0)
+    000002D1 A8               [ 2] 1277 	tay
+    000002D2 A9 FF            [ 2] 1278 	lda	#0xff
+    000002D4 99r00r00         [ 5] 1279 	sta	(_loadedCharacters+0+0x0000),y
+    000002D7 A4*00            [ 3] 1280 	ldy	*(REGTEMP+0)
+                                   1281 ;	Raw cost for generated ic 12 : (10, 14.000000) count=2.999997
+                                   1282 ;	genPlus
+                                   1283 ;	genPlusIncr
+    000002D9 C8               [ 2] 1284 	iny
+                                   1285 ;	Raw cost for generated ic 15 : (1, 2.000000) count=2.999997
+                                   1286 ;	genGoto
+    000002DA 4CrC8r02         [ 3] 1287 	jmp	00103$
+                                   1288 ;	Raw cost for generated ic 17 : (3, 3.000000) count=2.999997
+                                   1289 ;	genLabel
+    000002DD                       1290 00105$:
+                                   1291 ;	Raw cost for generated ic 19 : (0, 0.000000) count=0.999999
+                                   1292 ;	src/main.c: 194: }
+                                   1293 ;	genEndFunction
+    000002DD 60               [ 6] 1294 	rts
+                                   1295 ;	Raw cost for generated ic 20 : (1, 6.000000) count=0.999999
+                                   1296 ;------------------------------------------------------------
+                                   1297 ;Allocation info for local variables in function 'vsyncMultiple'
+                                   1298 ;------------------------------------------------------------
+                                   1299 ;count         Allocated with name '_vsyncMultiple_count_10000_177'
+                                   1300 ;i             Allocated to registers 
+                                   1301 ;------------------------------------------------------------
+                                   1302 ;	src/main.c: 196: void vsyncMultiple(uint8_t count){
+                                   1303 ;	genLabel
+                                   1304 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1305 ;	-----------------------------------------
+                                   1306 ;	 function vsyncMultiple
+                                   1307 ;	-----------------------------------------
+                                   1308 ;	Register assignment is optimal.
+                                   1309 ;	Stack space usage: 0 bytes.
+    000002DE                       1310 _vsyncMultiple:
+                                   1311 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1312 ;	genReceive
+    000002DE 8Dr34r00         [ 4] 1313 	sta	_vsyncMultiple_count_10000_177
+                                   1314 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                   1315 ;	src/main.c: 199: for(uint8_t i=0;i<count;i++){
+                                   1316 ;	genAssign
+                                   1317 ;	genAssignLit
+                                   1318 ;	genCopy
+    000002E1 A9 00            [ 2] 1319 	lda	#0x00
+                                   1320 ;	Raw cost for generated ic 19 : (2, 2.000000) count=1.000000
+                                   1321 ;	genLabel
+    000002E3                       1322 00103$:
+                                   1323 ;	Raw cost for generated ic 4 : (0, 0.000000) count=3.999997
+                                   1324 ;	genCmp
+    000002E3 CDr34r00         [ 4] 1325 	cmp	_vsyncMultiple_count_10000_177
+    000002E6 B0 0B            [ 4] 1326 	bcs	00105$
+                                   1327 ;	Raw cost for generated ic 5 : (8, 9.600000) count=3.999997
+                                   1328 ;	skipping generated iCode
+                                   1329 ;	Raw cost for generated ic 6 : (0, 0.000000) count=3.999997
+                                   1330 ;	src/main.c: 201: vsync();
+                                   1331 ;	genCall
+    000002E8 48               [ 3] 1332 	pha
+    000002E9 20r00r00         [ 6] 1333 	jsr	_vsync
+    000002EC 68               [ 4] 1334 	pla
+                                   1335 ;	Raw cost for generated ic 9 : (5, 13.000000) count=2.999997
+                                   1336 ;	src/main.c: 199: for(uint8_t i=0;i<count;i++){
+                                   1337 ;	genPlus
+                                   1338 ;	genPlusIncr
+    000002ED 18               [ 2] 1339 	clc
+    000002EE 69 01            [ 2] 1340 	adc	#0x01
+                                   1341 ;	Raw cost for generated ic 12 : (3, 4.000000) count=2.999997
+                                   1342 ;	genGoto
+    000002F0 4CrE3r02         [ 3] 1343 	jmp	00103$
+                                   1344 ;	Raw cost for generated ic 14 : (3, 3.000000) count=2.999997
+                                   1345 ;	genLabel
+    000002F3                       1346 00105$:
+                                   1347 ;	Raw cost for generated ic 16 : (0, 0.000000) count=0.999999
+                                   1348 ;	src/main.c: 203: }
+                                   1349 ;	genEndFunction
+    000002F3 60               [ 6] 1350 	rts
+                                   1351 ;	Raw cost for generated ic 17 : (1, 6.000000) count=0.999999
+                                   1352 ;------------------------------------------------------------
+                                   1353 ;Allocation info for local variables in function 'DrawTextAdvanced'
+                                   1354 ;------------------------------------------------------------
+                                   1355 ;sloc0         Allocated with name '_DrawTextAdvanced_sloc0_1_0'
+                                   1356 ;sloc1         Allocated with name '_DrawTextAdvanced_sloc1_1_0'
+                                   1357 ;sloc2         Allocated with name '_DrawTextAdvanced_sloc2_1_0'
+                                   1358 ;text          Allocated with name '_DrawTextAdvanced_text_10000_181'
+                                   1359 ;column        Allocated to registers 
+                                   1360 ;row           Allocated to registers 
+                                   1361 ;index         Allocated with name '_DrawTextAdvanced_index_10001_183'
+                                   1362 ;columnSize    Allocated with name '_DrawTextAdvanced_columnSize_10001_183'
+                                   1363 ;rowCount      Allocated with name '_DrawTextAdvanced_rowCount_10001_183'
+                                   1364 ;copyBuffer    Allocated with name '_DrawTextAdvanced_copyBuffer_10001_183'
+                                   1365 ;copyBufferCount Allocated with name '_DrawTextAdvanced_copyBufferCount_10001_183'
+                                   1366 ;k             Allocated to registers 
+                                   1367 ;t             Allocated to registers 
+                                   1368 ;vramAddress   Allocated with name '_DrawTextAdvanced_vramAddress_10002_188'
+                                   1369 ;c             Allocated with name '_DrawTextAdvanced_c_10002_188'
+                                   1370 ;vramTile      Allocated with name '_DrawTextAdvanced_vramTile_20002_189'
+                                   1371 ;__500020009   Allocated to registers a 
+                                   1372 ;__500020010   Allocated to registers 
+                                   1373 ;__500020011   Allocated to registers 
+                                   1374 ;first_tile    Allocated to registers 
+                                   1375 ;nb_tiles      Allocated to registers 
+                                   1376 ;data          Allocated to registers 
+                                   1377 ;k             Allocated to registers 
+                                   1378 ;t             Allocated to registers 
+                                   1379 ;shiftCount    Allocated with name '_DrawTextAdvanced_shiftCount_70002_202'
+                                   1380 ;k             Allocated to registers 
+                                   1381 ;t             Allocated to registers 
+                                   1382 ;copyBufferIndex Allocated to registers y 
+                                   1383 ;k             Allocated to registers 
+                                   1384 ;t             Allocated to registers 
+                                   1385 ;------------------------------------------------------------
+                                   1386 ;	src/main.c: 205: void DrawTextAdvanced(char* text){
+                                   1387 ;	genLabel
+                                   1388 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1389 ;	-----------------------------------------
+                                   1390 ;	 function DrawTextAdvanced
+                                   1391 ;	-----------------------------------------
+                                   1392 ;	Register assignment might be sub-optimal.
+                                   1393 ;	Stack space usage: 0 bytes.
+    000002F4                       1394 _DrawTextAdvanced:
+                                   1395 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1396 ;	genReceive
+    000002F4 8Dr35r00         [ 4] 1397 	sta	_DrawTextAdvanced_text_10000_181
+    000002F7 8Er36r00         [ 4] 1398 	stx	(_DrawTextAdvanced_text_10000_181 + 1)
+                                   1399 ;	Raw cost for generated ic 2 : (6, 8.000000) count=1.000000
+                                   1400 ;	src/main.c: 210: ShowDialgoueBox();
+                                   1401 ;	genCall
+    000002FA 20r5Er02         [ 6] 1402 	jsr	_ShowDialgoueBox
+                                   1403 ;	Raw cost for generated ic 5 : (3, 6.000000) count=1.000000
+                                   1404 ;	src/main.c: 212: ResetLoadedCharacters();
+                                   1405 ;	genCall
+    000002FD 20rC1r02         [ 6] 1406 	jsr	_ResetLoadedCharacters
+                                   1407 ;	Raw cost for generated ic 6 : (3, 6.000000) count=1.000000
+                                   1408 ;	src/main.c: 214: uint16_t index=0;
+                                   1409 ;	genAssign
+                                   1410 ;	genAssignLit
+    00000300 A2 00            [ 2] 1411 	ldx	#0x00
+    00000302 8Er37r00         [ 4] 1412 	stx	_DrawTextAdvanced_index_10001_183
+    00000305 8Er38r00         [ 4] 1413 	stx	(_DrawTextAdvanced_index_10001_183 + 1)
+                                   1414 ;	Raw cost for generated ic 7 : (8, 10.000000) count=1.000000
+                                   1415 ;	src/main.c: 215: uint8_t columnSize=0;
+                                   1416 ;	genAssign
+                                   1417 ;	genAssignLit
+    00000308 8Er39r00         [ 4] 1418 	stx	_DrawTextAdvanced_columnSize_10001_183
+                                   1419 ;	Raw cost for generated ic 8 : (3, 4.000000) count=1.000000
+                                   1420 ;	src/main.c: 216: uint8_t rowCount=0;
+                                   1421 ;	genAssign
+                                   1422 ;	genAssignLit
+    0000030B 8Er3Ar00         [ 4] 1423 	stx	_DrawTextAdvanced_rowCount_10001_183
+                                   1424 ;	Raw cost for generated ic 9 : (3, 4.000000) count=1.000000
+                                   1425 ;	src/main.c: 221: uint8_t copyBufferCount=0;
+                                   1426 ;	genAssign
+                                   1427 ;	genAssignLit
+    0000030E 8ErEFr00         [ 4] 1428 	stx	_DrawTextAdvanced_copyBufferCount_10001_183
+                                   1429 ;	Raw cost for generated ic 10 : (3, 4.000000) count=1.000000
+                                   1430 ;	src/main.c: 224: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+                                   1431 ;	skipping iCode since result will be rematerialized
+                                   1432 ;	Raw cost for generated ic 23 : (0, 0.000000) count=1.000000
+                                   1433 ;	genAssign
+                                   1434 ;	genAssignLit
+                                   1435 ;	genCopy
+                                   1436 ;	Raw cost for generated ic 364 : (0, 0.000000) count=1.000000
+                                   1437 ;	genLabel
+    00000311                       1438 00138$:
+                                   1439 ;	Raw cost for generated ic 12 : (0, 0.000000) count=3.969304
+                                   1440 ;	genCmp
+    00000311 E0 1E            [ 2] 1441 	cpx	#0x1e
+    00000313 B0 3F            [ 4] 1442 	bcs	00102$
+                                   1443 ;	Raw cost for generated ic 13 : (7, 7.600000) count=3.969304
+                                   1444 ;	skipping generated iCode
+                                   1445 ;	Raw cost for generated ic 14 : (0, 0.000000) count=3.969304
+                                   1446 ;	src/main.c: 225: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+                                   1447 ;	genAssign
+                                   1448 ;	genAssignLit
+                                   1449 ;	genCopy
+    00000315 A0 00            [ 2] 1450 	ldy	#0x00
+                                   1451 ;	Raw cost for generated ic 343 : (2, 2.000000) count=2.976978
+                                   1452 ;	genAssign
+                                   1453 ;	genAssignLit
+    00000317 84*06            [ 3] 1454 	sty	*_DrawTextAdvanced_sloc0_1_0
+    00000319 84*07            [ 3] 1455 	sty	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   1456 ;	Raw cost for generated ic 346 : (4, 6.000000) count=2.976978
+                                   1457 ;	genLabel
+    0000031B                       1458 00135$:
+                                   1459 ;	Raw cost for generated ic 18 : (0, 0.000000) count=11.884892
+                                   1460 ;	genCmp
+    0000031B C0 06            [ 2] 1461 	cpy	#0x06
+    0000031D B0 31            [ 4] 1462 	bcs	00139$
+                                   1463 ;	Raw cost for generated ic 19 : (7, 7.600000) count=11.884892
+                                   1464 ;	skipping generated iCode
+                                   1465 ;	Raw cost for generated ic 20 : (0, 0.000000) count=11.884892
+                                   1466 ;	src/main.c: 226: copyBuffer[t][k]=0;
+                                   1467 ;	genPlus
+                                   1468 ;	genPlusIncr
+    0000031F A9r3B            [ 2] 1469 	lda	#_DrawTextAdvanced_copyBuffer_10001_183
+    00000321 18               [ 2] 1470 	clc
+    00000322 65*06            [ 3] 1471 	adc	*_DrawTextAdvanced_sloc0_1_0
+    00000324 85*08            [ 3] 1472 	sta	*_DrawTextAdvanced_sloc1_1_0
+    00000326 A9s00            [ 2] 1473 	lda	#>_DrawTextAdvanced_copyBuffer_10001_183
+    00000328 65*07            [ 3] 1474 	adc	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+    0000032A 85*09            [ 3] 1475 	sta	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+                                   1476 ;	Raw cost for generated ic 25 : (13, 18.000000) count=8.913667
+                                   1477 ;	genPlus
+                                   1478 ;	genPlusIncr
+    0000032C 8A               [ 2] 1479 	txa
+    0000032D 18               [ 2] 1480 	clc
+    0000032E 65*08            [ 3] 1481 	adc	*_DrawTextAdvanced_sloc1_1_0
+    00000330 85*08            [ 3] 1482 	sta	*_DrawTextAdvanced_sloc1_1_0
+    00000332 A9 00            [ 2] 1483 	lda	#0x00
+    00000334 65*09            [ 3] 1484 	adc	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    00000336 85*09            [ 3] 1485 	sta	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+                                   1486 ;	Raw cost for generated ic 27 : (12, 18.000000) count=8.913667
+                                   1487 ;	genPointerSet
+    00000338 84*00            [ 3] 1488 	sty	*(REGTEMP+0)
+    0000033A A9 00            [ 2] 1489 	lda	#0x00
+    0000033C A8               [ 2] 1490 	tay
+    0000033D 91*08            [ 6] 1491 	sta	[*_DrawTextAdvanced_sloc1_1_0],y
+    0000033F A4*00            [ 3] 1492 	ldy	*(REGTEMP+0)
+                                   1493 ;	Raw cost for generated ic 28 : (9, 16.000000) count=8.913667
+                                   1494 ;	src/main.c: 225: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+                                   1495 ;	genPlus
+                                   1496 ;	genPlusIncr
+    00000341 A5*06            [ 3] 1497 	lda	*_DrawTextAdvanced_sloc0_1_0
+    00000343 18               [ 2] 1498 	clc
+    00000344 69 1E            [ 2] 1499 	adc	#0x1e
+    00000346 85*06            [ 3] 1500 	sta	*_DrawTextAdvanced_sloc0_1_0
+    00000348 90 02            [ 4] 1501 	bcc	00329$
+    0000034A E6*07            [ 5] 1502 	inc	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+    0000034C                       1503 00329$:
+                                   1504 ;	Raw cost for generated ic 347 : (11, 17.600000) count=8.913667
+                                   1505 ;	genPlus
+                                   1506 ;	genPlusIncr
+    0000034C C8               [ 2] 1507 	iny
+                                   1508 ;	Raw cost for generated ic 31 : (1, 2.000000) count=8.913667
+                                   1509 ;	genGoto
+    0000034D 4Cr1Br03         [ 3] 1510 	jmp	00135$
+                                   1511 ;	Raw cost for generated ic 33 : (3, 3.000000) count=8.913667
+                                   1512 ;	genLabel
+    00000350                       1513 00139$:
+                                   1514 ;	Raw cost for generated ic 35 : (0, 0.000000) count=2.971223
+                                   1515 ;	src/main.c: 224: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+                                   1516 ;	genPlus
+                                   1517 ;	genPlusIncr
+    00000350 E8               [ 2] 1518 	inx
+                                   1519 ;	Raw cost for generated ic 37 : (1, 2.000000) count=2.971223
+                                   1520 ;	genGoto
+    00000351 4Cr11r03         [ 3] 1521 	jmp	00138$
+                                   1522 ;	Raw cost for generated ic 39 : (3, 3.000000) count=2.971223
+                                   1523 ;	genLabel
+    00000354                       1524 00102$:
+                                   1525 ;	Raw cost for generated ic 40 : (0, 0.000000) count=0.992326
+                                   1526 ;	src/main.c: 232: uint8_t* vramAddress = get_winbkg_xy_addr(column,row);
+                                   1527 ;	Raw cost for generated ic 41 : (0, 0.000000) count=0.992326
+                                   1528 ;	Raw cost for generated ic 42 : (0, 0.000000) count=0.992326
+                                   1529 ;	genCall
+                                   1530 ;	genSend
+    00000354 A9 01            [ 2] 1531 	lda	#0x01
+    00000356 A2 18            [ 2] 1532 	ldx	#0x18
+    00000358 20r00r00         [ 6] 1533 	jsr	_get_bkg_xy_addr
+                                   1534 ;	assignResultValue
+    0000035B 8DrF0r00         [ 4] 1535 	sta	_DrawTextAdvanced_vramAddress_10002_188
+    0000035E 8ErF1r00         [ 4] 1536 	stx	(_DrawTextAdvanced_vramAddress_10002_188 + 1)
+                                   1537 ;	Raw cost for generated ic 43 : (13, 18.000000) count=0.992326
+                                   1538 ;	src/main.c: 236: while((c=text[index])!='\0'){
+                                   1539 ;	skipping iCode since result will be rematerialized
+                                   1540 ;	Raw cost for generated ic 193 : (0, 0.000000) count=0.992326
+                                   1541 ;	skipping iCode since result will be rematerialized
+                                   1542 ;	Raw cost for generated ic 70 : (0, 0.000000) count=0.992326
+                                   1543 ;	skipping iCode since result will be rematerialized
+                                   1544 ;	Raw cost for generated ic 55 : (0, 0.000000) count=0.992326
+                                   1545 ;	skipping iCode since result will be rematerialized
+                                   1546 ;	Raw cost for generated ic 250 : (0, 0.000000) count=0.992326
+                                   1547 ;	skipping iCode since result will be rematerialized
+                                   1548 ;	Raw cost for generated ic 286 : (0, 0.000000) count=0.992326
+                                   1549 ;	genLabel
+    00000361                       1550 00125$:
+                                   1551 ;	Raw cost for generated ic 45 : (0, 0.000000) count=2.912225
+                                   1552 ;	genPlus
+                                   1553 ;	genPlusIncr
+    00000361 ADr35r00         [ 4] 1554 	lda	_DrawTextAdvanced_text_10000_181
+    00000364 18               [ 2] 1555 	clc
+    00000365 6Dr37r00         [ 4] 1556 	adc	_DrawTextAdvanced_index_10001_183
+    00000368 85*08            [ 3] 1557 	sta	*_DrawTextAdvanced_sloc1_1_0
+    0000036A ADr36r00         [ 4] 1558 	lda	(_DrawTextAdvanced_text_10000_181 + 1)
+    0000036D 6Dr38r00         [ 4] 1559 	adc	(_DrawTextAdvanced_index_10001_183 + 1)
+    00000370 85*09            [ 3] 1560 	sta	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+                                   1561 ;	Raw cost for generated ic 46 : (17, 24.000000) count=2.912225
+                                   1562 ;	genPointerGet
+    00000372 A0 00            [ 2] 1563 	ldy	#0x00
+    00000374 B1*08            [ 6] 1564 	lda	[*_DrawTextAdvanced_sloc1_1_0],y
+                                   1565 ;	Raw cost for generated ic 47 : (4, 7.000000) count=2.912225
+                                   1566 ;	genAssign
+                                   1567 ;	genAssignLit
+                                   1568 ;	genCopy
+    00000376 8DrF2r00         [ 4] 1569 	sta	_DrawTextAdvanced_c_10002_188
+                                   1570 ;	Raw cost for generated ic 48 : (3, 4.000000) count=2.912225
+                                   1571 ;	genIfx
+                                   1572 ;	genIfxJump : z
+    00000379 D0 03            [ 4] 1573 	bne	00331$
+    0000037B 4Cr91r02         [ 3] 1574 	jmp	_HideDialgoueBox
+    0000037E                       1575 00331$:
+                                   1576 ;	Raw cost for generated ic 49 : (5, 5.600000) count=2.912225
+                                   1577 ;	src/main.c: 238: uint8_t vramTile = GetTileForCharacter(c);
+                                   1578 ;	Raw cost for generated ic 52 : (0, 0.000000) count=2.184169
+                                   1579 ;	genCall
+                                   1580 ;	genSend
+    0000037E ADrF2r00         [ 4] 1581 	lda	_DrawTextAdvanced_c_10002_188
+    00000381 20r01r00         [ 6] 1582 	jsr	_GetTileForCharacter
+                                   1583 ;	assignResultValue
+    00000384 8DrF3r00         [ 4] 1584 	sta	_DrawTextAdvanced_vramTile_20002_189
+                                   1585 ;	Raw cost for generated ic 53 : (9, 14.000000) count=2.184169
+                                   1586 ;	src/main.c: 241: if(loadedCharacters[vramTile]==255){
+                                   1587 ;	genAssign
+                                   1588 ;	genAssignLit
+                                   1589 ;	genCopy
+    00000387 A2 00            [ 2] 1590 	ldx	#0x00
+    00000389 86*09            [ 3] 1591 	stx	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    0000038B ADrF3r00         [ 4] 1592 	lda	_DrawTextAdvanced_vramTile_20002_189
+    0000038E 85*08            [ 3] 1593 	sta	*_DrawTextAdvanced_sloc1_1_0
+                                   1594 ;	Raw cost for generated ic 56 : (9, 12.000000) count=2.184169
+                                   1595 ;	genPointerGet
+                                   1596 ;	setupDPTR
+    00000390 18               [ 2] 1597 	clc
+    00000391 A5*08            [ 3] 1598 	lda	*_DrawTextAdvanced_sloc1_1_0
+    00000393 69r00            [ 2] 1599 	adc	#<(_loadedCharacters+0)
+    00000395 85*00            [ 3] 1600 	sta	*(DPTR+0)
+    00000397 A5*09            [ 3] 1601 	lda	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    00000399 69s00            [ 2] 1602 	adc	#>(_loadedCharacters+0)
+    0000039B 85*01            [ 3] 1603 	sta	*(DPTR+1)
+    0000039D A0 00            [ 2] 1604 	ldy	#0x00
+    0000039F B1*00            [ 6] 1605 	lda	[DPTR],y
+                                   1606 ;	Raw cost for generated ic 57 : (17, 25.000000) count=2.184169
+                                   1607 ;	genCmpEQorNE
+    000003A1 C9 FF            [ 2] 1608 	cmp	#0xff
+    000003A3 D0 4D            [ 4] 1609 	bne	00104$
+                                   1610 ;	Raw cost for generated ic 58 : (7, 7.600000) count=2.184169
+                                   1611 ;	skipping generated iCode
+                                   1612 ;	Raw cost for generated ic 59 : (0, 0.000000) count=2.184169
+                                   1613 ;	src/main.c: 244: loadedCharacters[vramTile]=fontTilesStart+loadedCharacterCount++;
+                                   1614 ;	genAssign
+                                   1615 ;	genAssignLit
+                                   1616 ;	genCopy
+    000003A5 AEr05r00         [ 4] 1617 	ldx	_loadedCharacterCount
+                                   1618 ;	Raw cost for generated ic 64 : (3, 4.000000) count=1.638127
+                                   1619 ;	genPlus
+                                   1620 ;	genPlusIncr
+    000003A8 8A               [ 2] 1621 	txa
+    000003A9 18               [ 2] 1622 	clc
+    000003AA 69 01            [ 2] 1623 	adc	#0x01
+    000003AC 8Dr05r00         [ 4] 1624 	sta	_loadedCharacterCount
+                                   1625 ;	Raw cost for generated ic 65 : (7, 10.000000) count=1.638127
+                                   1626 ;	genPlus
+                                   1627 ;	genPlusIncr
+    000003AF 8A               [ 2] 1628 	txa
+    000003B0 18               [ 2] 1629 	clc
+    000003B1 6Dr02r00         [ 4] 1630 	adc	_fontTilesStart
+    000003B4 85*06            [ 3] 1631 	sta	*_DrawTextAdvanced_sloc0_1_0
+                                   1632 ;	Raw cost for generated ic 68 : (7, 11.000000) count=1.638127
+                                   1633 ;	genPointerSet
+                                   1634 ;	setupDPTR
+    000003B6 18               [ 2] 1635 	clc
+    000003B7 A5*08            [ 3] 1636 	lda	*_DrawTextAdvanced_sloc1_1_0
+    000003B9 69r00            [ 2] 1637 	adc	#<(_loadedCharacters+0)
+    000003BB 85*00            [ 3] 1638 	sta	*(DPTR+0)
+    000003BD A5*09            [ 3] 1639 	lda	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    000003BF 69s00            [ 2] 1640 	adc	#>(_loadedCharacters+0)
+    000003C1 85*01            [ 3] 1641 	sta	*(DPTR+1)
+    000003C3 A5*06            [ 3] 1642 	lda	*_DrawTextAdvanced_sloc0_1_0
+    000003C5 91*00            [ 6] 1643 	sta	[DPTR],y
+                                   1644 ;	Raw cost for generated ic 69 : (17, 27.000000) count=1.638127
+                                   1645 ;	src/main.c: 247: set_native_tile_data(loadedCharacters[vramTile],1,Font_tiles+vramTile*TILE_SIZE_BYTES);
+                                   1646 ;	genCast
+                                   1647 ;	genCopy
+    000003C7 A2 00            [ 2] 1648 	ldx	#0x00
+    000003C9 ADrF3r00         [ 4] 1649 	lda	_DrawTextAdvanced_vramTile_20002_189
+                                   1650 ;	Raw cost for generated ic 71 : (5, 6.000000) count=1.638127
+                                   1651 ;	genLeftShift
+                                   1652 ;	genLeftShiftLiteral
+                                   1653 ;	genlshTwo
+    000003CC 86*00            [ 3] 1654 	stx	*(REGTEMP+0)
+    000003CE 0A               [ 2] 1655 	asl	a
+    000003CF 26*00            [ 5] 1656 	rol	*(REGTEMP+0)
+    000003D1 0A               [ 2] 1657 	asl	a
+    000003D2 26*00            [ 5] 1658 	rol	*(REGTEMP+0)
+    000003D4 0A               [ 2] 1659 	asl	a
+    000003D5 26*00            [ 5] 1660 	rol	*(REGTEMP+0)
+    000003D7 0A               [ 2] 1661 	asl	a
+    000003D8 26*00            [ 5] 1662 	rol	*(REGTEMP+0)
+    000003DA A6*00            [ 3] 1663 	ldx	*(REGTEMP+0)
+                                   1664 ;	Raw cost for generated ic 72 : (16, 34.000000) count=1.638127
+                                   1665 ;	genPlus
+                                   1666 ;	genPlusIncr
+    000003DC 18               [ 2] 1667 	clc
+    000003DD 69r00            [ 2] 1668 	adc	#_Font_tiles
+    000003DF 48               [ 3] 1669 	pha
+    000003E0 8A               [ 2] 1670 	txa
+    000003E1 69s00            [ 2] 1671 	adc	#>_Font_tiles
+    000003E3 AA               [ 2] 1672 	tax
+    000003E4 68               [ 4] 1673 	pla
+                                   1674 ;	Raw cost for generated ic 73 : (9, 17.000000) count=1.638127
+                                   1675 ;	genCast
+                                   1676 ;	genCopy
+    000003E5 8Dr00r00         [ 4] 1677 	sta	_set_bkg_native_data_PARM_3
+    000003E8 8Er01r00         [ 4] 1678 	stx	(_set_bkg_native_data_PARM_3 + 1)
+                                   1679 ;	Raw cost for generated ic 74 : (6, 8.000000) count=1.638127
+                                   1680 ;	genCast
+                                   1681 ;	genCopy
+    000003EB A5*06            [ 3] 1682 	lda	*_DrawTextAdvanced_sloc0_1_0
+                                   1683 ;	Raw cost for generated ic 80 : (2, 3.000000) count=1.638127
+                                   1684 ;	../../../include/nes/nes.h: 1277: set_bkg_native_data(first_tile, nb_tiles, data);
+                                   1685 ;	genCast
+                                   1686 ;	genCopy
+                                   1687 ;	Raw cost for generated ic 90 : (0, 0.000000) count=1.638127
+                                   1688 ;	Raw cost for generated ic 91 : (0, 0.000000) count=1.638127
+                                   1689 ;	Raw cost for generated ic 92 : (0, 0.000000) count=1.638127
+                                   1690 ;	genCall
+                                   1691 ;	genSend
+    000003ED A2 01            [ 2] 1692 	ldx	#0x01
+    000003EF 20r00r00         [ 6] 1693 	jsr	_set_bkg_native_data
+                                   1694 ;	Raw cost for generated ic 94 : (5, 8.000000) count=1.638127
+                                   1695 ;	src/main.c: 247: set_native_tile_data(loadedCharacters[vramTile],1,Font_tiles+vramTile*TILE_SIZE_BYTES);
+                                   1696 ;	genLabel
+    000003F2                       1697 00104$:
+                                   1698 ;	Raw cost for generated ic 122 : (0, 0.000000) count=2.184169
+                                   1699 ;	src/main.c: 253: set_vram_byte(vramAddress++,loadedCharacters[vramTile]);
+                                   1700 ;	genAssign
+                                   1701 ;	genAssignLit
+                                   1702 ;	genCopy
+    000003F2 AErF1r00         [ 4] 1703 	ldx	(_DrawTextAdvanced_vramAddress_10002_188 + 1)
+    000003F5 ADrF0r00         [ 4] 1704 	lda	_DrawTextAdvanced_vramAddress_10002_188
+                                   1705 ;	Raw cost for generated ic 123 : (6, 8.000000) count=2.184169
+                                   1706 ;	genPlus
+                                   1707 ;	genPlusIncr
+    000003F8 EErF0r00         [ 6] 1708 	inc	_DrawTextAdvanced_vramAddress_10002_188
+    000003FB D0 03            [ 4] 1709 	bne	00333$
+    000003FD EErF1r00         [ 6] 1710 	inc	(_DrawTextAdvanced_vramAddress_10002_188 + 1)
+    00000400                       1711 00333$:
+                                   1712 ;	Raw cost for generated ic 124 : (8, 14.600000) count=2.184169
+                                   1713 ;	genPointerGet
+    00000400 85*00            [ 3] 1714 	sta	*(REGTEMP+0)
+    00000402 86*01            [ 3] 1715 	stx	*(REGTEMP+1)
+                                   1716 ;	setupDPTR
+    00000404 18               [ 2] 1717 	clc
+    00000405 A5*08            [ 3] 1718 	lda	*_DrawTextAdvanced_sloc1_1_0
+    00000407 69r00            [ 2] 1719 	adc	#<(_loadedCharacters+0)
+    00000409 85*00            [ 3] 1720 	sta	*(DPTR+0)
+    0000040B A5*09            [ 3] 1721 	lda	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    0000040D 69s00            [ 2] 1722 	adc	#>(_loadedCharacters+0)
+    0000040F 85*01            [ 3] 1723 	sta	*(DPTR+1)
+    00000411 A0 00            [ 2] 1724 	ldy	#0x00
+    00000413 B1*00            [ 6] 1725 	lda	[DPTR],y
+    00000415 8Dr00r00         [ 4] 1726 	sta	_set_vram_byte_PARM_2
+    00000418 A6*01            [ 3] 1727 	ldx	*(REGTEMP+1)
+    0000041A A5*00            [ 3] 1728 	lda	*(REGTEMP+0)
+                                   1729 ;	Raw cost for generated ic 128 : (28, 41.000000) count=2.184169
+                                   1730 ;	Raw cost for generated ic 129 : (0, 0.000000) count=2.184169
+                                   1731 ;	genCall
+                                   1732 ;	genSend
+    0000041C 20r00r00         [ 6] 1733 	jsr	_set_vram_byte
+                                   1734 ;	Raw cost for generated ic 131 : (3, 6.000000) count=2.184169
+                                   1735 ;	src/main.c: 261: if(rowCount<DIALOG_BOX_INNER_HEIGHT)copyBuffer[rowCount][copyBufferCount++] = loadedCharacters[vramTile];
+                                   1736 ;	Raw cost for generated ic 407 : (0, 0.000000) count=2.184169
+                                   1737 ;	Raw cost for generated ic 408 : (0, 0.000000) count=2.184169
+                                   1738 ;	genCall
+                                   1739 ;	genSend
+    0000041F ADr3Ar00         [ 4] 1740 	lda	_DrawTextAdvanced_rowCount_10001_183
+    00000422 A2 1E            [ 2] 1741 	ldx	#0x1e
+    00000424 20r00r00         [ 6] 1742 	jsr	__muluchar
+                                   1743 ;	assignResultValue
+                                   1744 ;	Raw cost for generated ic 409 : (8, 12.000000) count=2.184169
+                                   1745 ;	genPlus
+                                   1746 ;	genPlusIncr
+    00000427 18               [ 2] 1747 	clc
+    00000428 69r3B            [ 2] 1748 	adc	#_DrawTextAdvanced_copyBuffer_10001_183
+    0000042A 85*06            [ 3] 1749 	sta	*_DrawTextAdvanced_sloc0_1_0
+    0000042C 8A               [ 2] 1750 	txa
+    0000042D 69s00            [ 2] 1751 	adc	#>_DrawTextAdvanced_copyBuffer_10001_183
+    0000042F 85*07            [ 3] 1752 	sta	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   1753 ;	Raw cost for generated ic 138 : (10, 14.000000) count=2.184169
+                                   1754 ;	genAssign
+                                   1755 ;	genAssignLit
+                                   1756 ;	genCopy
+    00000431 ADrEFr00         [ 4] 1757 	lda	_DrawTextAdvanced_copyBufferCount_10001_183
+                                   1758 ;	Raw cost for generated ic 139 : (3, 4.000000) count=2.184169
+                                   1759 ;	genPlus
+                                   1760 ;	genPlusIncr
+    00000434 EErEFr00         [ 6] 1761 	inc	_DrawTextAdvanced_copyBufferCount_10001_183
+                                   1762 ;	Raw cost for generated ic 140 : (3, 6.000000) count=2.184169
+                                   1763 ;	genPlus
+                                   1764 ;	genPlusIncr
+    00000437 18               [ 2] 1765 	clc
+    00000438 65*06            [ 3] 1766 	adc	*_DrawTextAdvanced_sloc0_1_0
+    0000043A 85*06            [ 3] 1767 	sta	*_DrawTextAdvanced_sloc0_1_0
+    0000043C A9 00            [ 2] 1768 	lda	#0x00
+    0000043E 65*07            [ 3] 1769 	adc	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+    00000440 85*07            [ 3] 1770 	sta	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   1771 ;	Raw cost for generated ic 143 : (11, 16.000000) count=2.184169
+                                   1772 ;	genPointerGet
+                                   1773 ;	setupDPTR
+    00000442 18               [ 2] 1774 	clc
+    00000443 A5*08            [ 3] 1775 	lda	*_DrawTextAdvanced_sloc1_1_0
+    00000445 69r00            [ 2] 1776 	adc	#<(_loadedCharacters+0)
+    00000447 85*00            [ 3] 1777 	sta	*(DPTR+0)
+    00000449 A5*09            [ 3] 1778 	lda	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    0000044B 69s00            [ 2] 1779 	adc	#>(_loadedCharacters+0)
+    0000044D 85*01            [ 3] 1780 	sta	*(DPTR+1)
+    0000044F A0 00            [ 2] 1781 	ldy	#0x00
+    00000451 B1*00            [ 6] 1782 	lda	[DPTR],y
+                                   1783 ;	Raw cost for generated ic 146 : (17, 25.000000) count=2.184169
+                                   1784 ;	genPointerSet
+    00000453 91*06            [ 6] 1785 	sta	[*_DrawTextAdvanced_sloc0_1_0],y
+                                   1786 ;	Raw cost for generated ic 147 : (2, 6.000000) count=2.184169
+                                   1787 ;	src/main.c: 263: index++;
+                                   1788 ;	genPlus
+                                   1789 ;	genPlusIncr
+    00000455 EEr37r00         [ 6] 1790 	inc	_DrawTextAdvanced_index_10001_183
+    00000458 D0 03            [ 4] 1791 	bne	00334$
+    0000045A EEr38r00         [ 6] 1792 	inc	(_DrawTextAdvanced_index_10001_183 + 1)
+    0000045D                       1793 00334$:
+                                   1794 ;	Raw cost for generated ic 150 : (8, 14.600000) count=2.184169
+                                   1795 ;	src/main.c: 264: columnSize++;
+                                   1796 ;	genPlus
+                                   1797 ;	genPlusIncr
+    0000045D EEr39r00         [ 6] 1798 	inc	_DrawTextAdvanced_columnSize_10001_183
+                                   1799 ;	Raw cost for generated ic 153 : (3, 6.000000) count=2.184169
+                                   1800 ;	src/main.c: 267: if(BreakLineEarly(index,columnSize,text) || c=='.'){
+                                   1801 ;	genAssign
+                                   1802 ;	genAssignLit
+                                   1803 ;	genCopy
+    00000460 ADr39r00         [ 4] 1804 	lda	_DrawTextAdvanced_columnSize_10001_183
+    00000463 8Dr2Fr00         [ 4] 1805 	sta	_BreakLineEarly_PARM_2
+                                   1806 ;	Raw cost for generated ic 156 : (6, 8.000000) count=2.184169
+                                   1807 ;	genAssign
+                                   1808 ;	genAssignLit
+                                   1809 ;	genCopy
+    00000466 ADr36r00         [ 4] 1810 	lda	(_DrawTextAdvanced_text_10000_181 + 1)
+    00000469 8Dr31r00         [ 4] 1811 	sta	(_BreakLineEarly_PARM_3 + 1)
+    0000046C ADr35r00         [ 4] 1812 	lda	_DrawTextAdvanced_text_10000_181
+    0000046F 8Dr30r00         [ 4] 1813 	sta	_BreakLineEarly_PARM_3
+                                   1814 ;	Raw cost for generated ic 157 : (12, 16.000000) count=2.184169
+                                   1815 ;	Raw cost for generated ic 155 : (0, 0.000000) count=2.184169
+                                   1816 ;	genCall
+                                   1817 ;	genSend
+    00000472 AEr38r00         [ 4] 1818 	ldx	(_DrawTextAdvanced_index_10001_183 + 1)
+    00000475 ADr37r00         [ 4] 1819 	lda	_DrawTextAdvanced_index_10001_183
+    00000478 20r20r01         [ 6] 1820 	jsr	_BreakLineEarly
+                                   1821 ;	assignResultValue
+                                   1822 ;	Raw cost for generated ic 158 : (9, 14.000000) count=2.184169
+                                   1823 ;	genIfx
+    0000047B C9 00            [ 2] 1824 	cmp	#0x00
+                                   1825 ;	genIfxJump : z
+    0000047D D0 0A            [ 4] 1826 	bne	00122$
+                                   1827 ;	Raw cost for generated ic 159 : (7, 7.600000) count=2.184169
+                                   1828 ;	genCmpEQorNE
+    0000047F ADrF2r00         [ 4] 1829 	lda	_DrawTextAdvanced_c_10002_188
+    00000482 C9 2E            [ 2] 1830 	cmp	#0x2e
+    00000484 F0 03            [ 4] 1831 	beq	00337$
+    00000486 4Cr26r06         [ 3] 1832 	jmp	00123$
+    00000489                       1833 00337$:
+                                   1834 ;	Raw cost for generated ic 162 : (10, 11.600000) count=1.638127
+                                   1835 ;	skipping generated iCode
+                                   1836 ;	Raw cost for generated ic 163 : (0, 0.000000) count=1.638127
+                                   1837 ;	genLabel
+    00000489                       1838 00122$:
+                                   1839 ;	Raw cost for generated ic 165 : (0, 0.000000) count=1.774637
+                                   1840 ;	src/main.c: 269: rowCount+=LINE_SKIP;
+                                   1841 ;	genCast
+                                   1842 ;	genCopy
+    00000489 ADr3Ar00         [ 4] 1843 	lda	_DrawTextAdvanced_rowCount_10001_183
+                                   1844 ;	Raw cost for generated ic 166 : (3, 4.000000) count=1.774637
+                                   1845 ;	genPlus
+                                   1846 ;	genPlusIncr
+    0000048C 18               [ 2] 1847 	clc
+    0000048D 69 02            [ 2] 1848 	adc	#0x02
+    0000048F 8Dr3Ar00         [ 4] 1849 	sta	_DrawTextAdvanced_rowCount_10001_183
+                                   1850 ;	Raw cost for generated ic 167 : (6, 8.000000) count=1.774637
+                                   1851 ;	src/main.c: 272: copyBufferCount=0;
+                                   1852 ;	genAssign
+                                   1853 ;	genAssignLit
+    00000492 A2 00            [ 2] 1854 	ldx	#0x00
+    00000494 8ErEFr00         [ 4] 1855 	stx	_DrawTextAdvanced_copyBufferCount_10001_183
+                                   1856 ;	Raw cost for generated ic 169 : (5, 6.000000) count=1.774637
+                                   1857 ;	src/main.c: 276: if(c=='.'||c=='?'){
+                                   1858 ;	genCmpEQorNE
+    00000497 ADrF2r00         [ 4] 1859 	lda	_DrawTextAdvanced_c_10002_188
+    0000049A C9 2E            [ 2] 1860 	cmp	#0x2e
+    0000049C F0 07            [ 4] 1861 	beq	00115$
+                                   1862 ;	Raw cost for generated ic 170 : (10, 11.600000) count=1.774637
+                                   1863 ;	skipping generated iCode
+                                   1864 ;	Raw cost for generated ic 171 : (0, 0.000000) count=1.774637
+                                   1865 ;	genCmpEQorNE
+    0000049E ADrF2r00         [ 4] 1866 	lda	_DrawTextAdvanced_c_10002_188
+    000004A1 C9 3F            [ 2] 1867 	cmp	#0x3f
+    000004A3 D0 51            [ 4] 1868 	bne	00116$
+                                   1869 ;	Raw cost for generated ic 174 : (10, 11.600000) count=1.330978
+                                   1870 ;	skipping generated iCode
+                                   1871 ;	Raw cost for generated ic 175 : (0, 0.000000) count=1.330978
+                                   1872 ;	genLabel
+    000004A5                       1873 00115$:
+                                   1874 ;	Raw cost for generated ic 177 : (0, 0.000000) count=1.441893
+                                   1875 ;	src/main.c: 277: WaitForAButton();
+                                   1876 ;	genCall
+    000004A5 20rA0r01         [ 6] 1877 	jsr	_WaitForAButton
+                                   1878 ;	Raw cost for generated ic 178 : (3, 6.000000) count=1.441893
+                                   1879 ;	src/main.c: 278: ClearDialogueBox();
+                                   1880 ;	genCall
+    000004A8 20rB8r01         [ 6] 1881 	jsr	_ClearDialogueBox
+                                   1882 ;	Raw cost for generated ic 179 : (3, 6.000000) count=1.441893
+                                   1883 ;	src/main.c: 279: rowCount=0;
+                                   1884 ;	genAssign
+                                   1885 ;	genAssignLit
+    000004AB A2 00            [ 2] 1886 	ldx	#0x00
+    000004AD 8Er3Ar00         [ 4] 1887 	stx	_DrawTextAdvanced_rowCount_10001_183
+                                   1888 ;	Raw cost for generated ic 180 : (5, 6.000000) count=1.441893
+                                   1889 ;	src/main.c: 282: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+                                   1890 ;	genAssign
+                                   1891 ;	genAssignLit
+                                   1892 ;	genCopy
+                                   1893 ;	Raw cost for generated ic 367 : (0, 0.000000) count=1.441893
+                                   1894 ;	genLabel
+    000004B0                       1895 00144$:
+                                   1896 ;	Raw cost for generated ic 182 : (0, 0.000000) count=5.172993
+                                   1897 ;	genCmp
+    000004B0 E0 1E            [ 2] 1898 	cpx	#0x1e
+    000004B2 90 03            [ 4] 1899 	bcc	00340$
+    000004B4 4CrDFr05         [ 3] 1900 	jmp	00117$
+    000004B7                       1901 00340$:
+                                   1902 ;	Raw cost for generated ic 183 : (7, 7.600000) count=5.172993
+                                   1903 ;	skipping generated iCode
+                                   1904 ;	Raw cost for generated ic 184 : (0, 0.000000) count=5.172993
+                                   1905 ;	src/main.c: 283: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+                                   1906 ;	genAssign
+                                   1907 ;	genAssignLit
+                                   1908 ;	genCopy
+    000004B7 A0 00            [ 2] 1909 	ldy	#0x00
+                                   1910 ;	Raw cost for generated ic 348 : (2, 2.000000) count=3.879744
+                                   1911 ;	genAssign
+                                   1912 ;	genAssignLit
+    000004B9 84*08            [ 3] 1913 	sty	*_DrawTextAdvanced_sloc1_1_0
+    000004BB 84*09            [ 3] 1914 	sty	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+                                   1915 ;	Raw cost for generated ic 351 : (4, 6.000000) count=3.879744
+                                   1916 ;	genLabel
+    000004BD                       1917 00141$:
+                                   1918 ;	Raw cost for generated ic 188 : (0, 0.000000) count=15.073043
+                                   1919 ;	genCmp
+    000004BD C0 06            [ 2] 1920 	cpy	#0x06
+    000004BF B0 31            [ 4] 1921 	bcs	00145$
+                                   1922 ;	Raw cost for generated ic 189 : (7, 7.600000) count=15.073043
+                                   1923 ;	skipping generated iCode
+                                   1924 ;	Raw cost for generated ic 190 : (0, 0.000000) count=15.073043
+                                   1925 ;	src/main.c: 284: copyBuffer[t][k]=0;
+                                   1926 ;	genPlus
+                                   1927 ;	genPlusIncr
+    000004C1 A9r3B            [ 2] 1928 	lda	#_DrawTextAdvanced_copyBuffer_10001_183
+    000004C3 18               [ 2] 1929 	clc
+    000004C4 65*08            [ 3] 1930 	adc	*_DrawTextAdvanced_sloc1_1_0
+    000004C6 85*06            [ 3] 1931 	sta	*_DrawTextAdvanced_sloc0_1_0
+    000004C8 A9s00            [ 2] 1932 	lda	#>_DrawTextAdvanced_copyBuffer_10001_183
+    000004CA 65*09            [ 3] 1933 	adc	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    000004CC 85*07            [ 3] 1934 	sta	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   1935 ;	Raw cost for generated ic 195 : (13, 18.000000) count=11.304783
+                                   1936 ;	genPlus
+                                   1937 ;	genPlusIncr
+    000004CE 8A               [ 2] 1938 	txa
+    000004CF 18               [ 2] 1939 	clc
+    000004D0 65*06            [ 3] 1940 	adc	*_DrawTextAdvanced_sloc0_1_0
+    000004D2 85*06            [ 3] 1941 	sta	*_DrawTextAdvanced_sloc0_1_0
+    000004D4 A9 00            [ 2] 1942 	lda	#0x00
+    000004D6 65*07            [ 3] 1943 	adc	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+    000004D8 85*07            [ 3] 1944 	sta	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   1945 ;	Raw cost for generated ic 197 : (12, 18.000000) count=11.304783
+                                   1946 ;	genPointerSet
+    000004DA 84*00            [ 3] 1947 	sty	*(REGTEMP+0)
+    000004DC A9 00            [ 2] 1948 	lda	#0x00
+    000004DE A8               [ 2] 1949 	tay
+    000004DF 91*06            [ 6] 1950 	sta	[*_DrawTextAdvanced_sloc0_1_0],y
+    000004E1 A4*00            [ 3] 1951 	ldy	*(REGTEMP+0)
+                                   1952 ;	Raw cost for generated ic 198 : (9, 16.000000) count=11.304783
+                                   1953 ;	src/main.c: 283: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT+1;t++){
+                                   1954 ;	genPlus
+                                   1955 ;	genPlusIncr
+    000004E3 A5*08            [ 3] 1956 	lda	*_DrawTextAdvanced_sloc1_1_0
+    000004E5 18               [ 2] 1957 	clc
+    000004E6 69 1E            [ 2] 1958 	adc	#0x1e
+    000004E8 85*08            [ 3] 1959 	sta	*_DrawTextAdvanced_sloc1_1_0
+    000004EA 90 02            [ 4] 1960 	bcc	00342$
+    000004EC E6*09            [ 5] 1961 	inc	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    000004EE                       1962 00342$:
+                                   1963 ;	Raw cost for generated ic 352 : (11, 17.600000) count=11.304783
+                                   1964 ;	genPlus
+                                   1965 ;	genPlusIncr
+    000004EE C8               [ 2] 1966 	iny
+                                   1967 ;	Raw cost for generated ic 201 : (1, 2.000000) count=11.304783
+                                   1968 ;	genGoto
+    000004EF 4CrBDr04         [ 3] 1969 	jmp	00141$
+                                   1970 ;	Raw cost for generated ic 203 : (3, 3.000000) count=11.304783
+                                   1971 ;	genLabel
+    000004F2                       1972 00145$:
+                                   1973 ;	Raw cost for generated ic 205 : (0, 0.000000) count=3.768261
+                                   1974 ;	src/main.c: 282: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+                                   1975 ;	genPlus
+                                   1976 ;	genPlusIncr
+    000004F2 E8               [ 2] 1977 	inx
+                                   1978 ;	Raw cost for generated ic 207 : (1, 2.000000) count=3.768261
+                                   1979 ;	genGoto
+    000004F3 4CrB0r04         [ 3] 1980 	jmp	00144$
+                                   1981 ;	Raw cost for generated ic 209 : (3, 3.000000) count=3.768261
+                                   1982 ;	genLabel
+    000004F6                       1983 00116$:
+                                   1984 ;	Raw cost for generated ic 212 : (0, 0.000000) count=0.332744
+                                   1985 ;	src/main.c: 291: else if( rowCount>=DIALOG_BOX_INNER_HEIGHT){
+                                   1986 ;	genCmp
+    000004F6 ADr3Ar00         [ 4] 1987 	lda	_DrawTextAdvanced_rowCount_10001_183
+    000004F9 C9 05            [ 2] 1988 	cmp	#0x05
+    000004FB B0 03            [ 4] 1989 	bcs	00343$
+    000004FD 4CrDFr05         [ 3] 1990 	jmp	00117$
+    00000500                       1991 00343$:
+                                   1992 ;	Raw cost for generated ic 213 : (10, 11.600000) count=0.332744
+                                   1993 ;	skipping generated iCode
+                                   1994 ;	Raw cost for generated ic 214 : (0, 0.000000) count=0.332744
+                                   1995 ;	src/main.c: 294: uint8_t shiftCount = rowCount-LINE_SKIP;
+                                   1996 ;	genCast
+                                   1997 ;	genCopy
+    00000500 ADr3Ar00         [ 4] 1998 	lda	_DrawTextAdvanced_rowCount_10001_183
+                                   1999 ;	Raw cost for generated ic 217 : (3, 4.000000) count=0.249558
+                                   2000 ;	genMinus
+                                   2001 ;	genMinusDec
+    00000503 38               [ 2] 2002 	sec
+    00000504 E9 02            [ 2] 2003 	sbc	#0x02
+    00000506 8DrF4r00         [ 4] 2004 	sta	_DrawTextAdvanced_shiftCount_70002_202
+                                   2005 ;	Raw cost for generated ic 218 : (6, 8.000000) count=0.249558
+                                   2006 ;	src/main.c: 296: for(uint8_t k=0;k<shiftCount;k++){
+                                   2007 ;	genAssign
+                                   2008 ;	genAssignLit
+    00000509 A2 00            [ 2] 2009 	ldx	#0x00
+    0000050B 86*08            [ 3] 2010 	stx	*_DrawTextAdvanced_sloc1_1_0
+                                   2011 ;	Raw cost for generated ic 371 : (4, 5.000000) count=0.249558
+                                   2012 ;	genLabel
+    0000050D                       2013 00150$:
+                                   2014 ;	Raw cost for generated ic 221 : (0, 0.000000) count=0.903271
+                                   2015 ;	genCmp
+    0000050D A5*08            [ 3] 2016 	lda	*_DrawTextAdvanced_sloc1_1_0
+    0000050F CDrF4r00         [ 4] 2017 	cmp	_DrawTextAdvanced_shiftCount_70002_202
+    00000512 90 03            [ 4] 2018 	bcc	00344$
+    00000514 4Cr93r05         [ 3] 2019 	jmp	00110$
+    00000517                       2020 00344$:
+                                   2021 ;	Raw cost for generated ic 222 : (10, 12.600000) count=0.903271
+                                   2022 ;	skipping generated iCode
+                                   2023 ;	Raw cost for generated ic 223 : (0, 0.000000) count=0.903271
+                                   2024 ;	src/main.c: 298: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+                                   2025 ;	genAssign
+                                   2026 ;	genAssignLit
+    00000517 A2 00            [ 2] 2027 	ldx	#0x00
+    00000519 86*06            [ 3] 2028 	stx	*_DrawTextAdvanced_sloc0_1_0
+                                   2029 ;	Raw cost for generated ic 353 : (4, 5.000000) count=0.677453
+                                   2030 ;	genLabel
+    0000051B                       2031 00147$:
+                                   2032 ;	Raw cost for generated ic 227 : (0, 0.000000) count=2.638589
+                                   2033 ;	genCmp
+    0000051B A5*06            [ 3] 2034 	lda	*_DrawTextAdvanced_sloc0_1_0
+    0000051D C9 05            [ 2] 2035 	cmp	#0x05
+    0000051F B0 68            [ 4] 2036 	bcs	00109$
+                                   2037 ;	Raw cost for generated ic 228 : (9, 10.600000) count=2.638589
+                                   2038 ;	skipping generated iCode
+                                   2039 ;	Raw cost for generated ic 229 : (0, 0.000000) count=2.638589
+                                   2040 ;	src/main.c: 300: uint8_t copyBufferIndex = MIN(1+t+k,DIALOG_BOX_INNER_HEIGHT);
+                                   2041 ;	genCast
+                                   2042 ;	genCopy
+    00000521 A2 00            [ 2] 2043 	ldx	#0x00
+    00000523 A5*06            [ 3] 2044 	lda	*_DrawTextAdvanced_sloc0_1_0
+                                   2045 ;	Raw cost for generated ic 232 : (4, 5.000000) count=1.978942
+                                   2046 ;	genPlus
+                                   2047 ;	genPlusIncr
+    00000525 18               [ 2] 2048 	clc
+    00000526 69 01            [ 2] 2049 	adc	#0x01
+    00000528 85*0A            [ 3] 2050 	sta	*_DrawTextAdvanced_sloc2_1_0
+    0000052A 8A               [ 2] 2051 	txa
+    0000052B 69 00            [ 2] 2052 	adc	#0x00
+    0000052D 85*0B            [ 3] 2053 	sta	*(_DrawTextAdvanced_sloc2_1_0 + 1)
+                                   2054 ;	Raw cost for generated ic 233 : (10, 14.000000) count=1.978942
+                                   2055 ;	genCast
+                                   2056 ;	genCopy
+    0000052F A5*08            [ 3] 2057 	lda	*_DrawTextAdvanced_sloc1_1_0
+                                   2058 ;	Raw cost for generated ic 234 : (2, 3.000000) count=1.978942
+                                   2059 ;	genPlus
+                                   2060 ;	genPlusIncr
+    00000531 18               [ 2] 2061 	clc
+    00000532 65*0A            [ 3] 2062 	adc	*_DrawTextAdvanced_sloc2_1_0
+    00000534 48               [ 3] 2063 	pha
+    00000535 8A               [ 2] 2064 	txa
+    00000536 65*0B            [ 3] 2065 	adc	*(_DrawTextAdvanced_sloc2_1_0 + 1)
+    00000538 AA               [ 2] 2066 	tax
+    00000539 68               [ 4] 2067 	pla
+                                   2068 ;	Raw cost for generated ic 235 : (9, 19.000000) count=1.978942
+                                   2069 ;	genCmp
+    0000053A 38               [ 2] 2070 	sec
+    0000053B E9 05            [ 2] 2071 	sbc	#0x05
+    0000053D 8A               [ 2] 2072 	txa
+    0000053E E9 00            [ 2] 2073 	sbc	#0x00
+    00000540 50 04            [ 4] 2074 	bvc	00347$
+    00000542 10 04            [ 4] 2075 	bpl	00346$
+    00000544 30 10            [ 4] 2076 	bmi	00160$
+    00000546                       2077 00347$:
+    00000546 10 0E            [ 4] 2078 	bpl	00160$
+    00000548                       2079 00346$:
+                                   2080 ;	Raw cost for generated ic 236 : (17, 21.400002) count=1.978942
+                                   2081 ;	skipping generated iCode
+                                   2082 ;	Raw cost for generated ic 237 : (0, 0.000000) count=1.978942
+                                   2083 ;	genCast
+                                   2084 ;	genCopy
+    00000548 A6*06            [ 3] 2085 	ldx	*_DrawTextAdvanced_sloc0_1_0
+                                   2086 ;	Raw cost for generated ic 238 : (2, 3.000000) count=1.484207
+                                   2087 ;	genPlus
+                                   2088 ;	genPlusIncr
+    0000054A E8               [ 2] 2089 	inx
+                                   2090 ;	Raw cost for generated ic 239 : (1, 2.000000) count=1.484207
+                                   2091 ;	genCast
+                                   2092 ;	genCopy
+    0000054B A5*08            [ 3] 2093 	lda	*_DrawTextAdvanced_sloc1_1_0
+                                   2094 ;	Raw cost for generated ic 240 : (2, 3.000000) count=1.484207
+                                   2095 ;	genPlus
+                                   2096 ;	genPlusIncr
+    0000054D 18               [ 2] 2097 	clc
+    0000054E 86*00            [ 3] 2098 	stx	*(REGTEMP+0)
+    00000550 65*00            [ 3] 2099 	adc	*(REGTEMP+0)
+    00000552 A8               [ 2] 2100 	tay
+                                   2101 ;	Raw cost for generated ic 241 : (6, 10.000000) count=1.484207
+                                   2102 ;	genGoto
+    00000553 4Cr58r05         [ 3] 2103 	jmp	00161$
+                                   2104 ;	Raw cost for generated ic 243 : (3, 3.000000) count=1.484207
+                                   2105 ;	genLabel
+    00000556                       2106 00160$:
+                                   2107 ;	Raw cost for generated ic 244 : (0, 0.000000) count=0.494736
+                                   2108 ;	genAssign
+                                   2109 ;	genAssignLit
+                                   2110 ;	genCopy
+    00000556 A0 05            [ 2] 2111 	ldy	#0x05
+                                   2112 ;	Raw cost for generated ic 245 : (2, 2.000000) count=0.494736
+                                   2113 ;	genLabel
+    00000558                       2114 00161$:
+                                   2115 ;	Raw cost for generated ic 246 : (0, 0.000000) count=1.978942
+                                   2116 ;	genAssign
+                                   2117 ;	genAssignLit
+                                   2118 ;	genCopy
+                                   2119 ;	Raw cost for generated ic 247 : (0, 0.000000) count=1.978942
+                                   2120 ;	src/main.c: 302: set_text_tiles(1,DIALOGUE_BOX_Y+1+t,INNER_DIALOGUE_BOX_WIDTH,1,copyBuffer[copyBufferIndex]);
+                                   2121 ;	genCast
+                                   2122 ;	genCopy
+    00000558 A5*06            [ 3] 2123 	lda	*_DrawTextAdvanced_sloc0_1_0
+                                   2124 ;	Raw cost for generated ic 248 : (2, 3.000000) count=1.978942
+                                   2125 ;	genPlus
+                                   2126 ;	genPlusIncr
+    0000055A 18               [ 2] 2127 	clc
+    0000055B 69 18            [ 2] 2128 	adc	#0x18
+    0000055D 85*0A            [ 3] 2129 	sta	*_DrawTextAdvanced_sloc2_1_0
+                                   2130 ;	Raw cost for generated ic 249 : (5, 7.000000) count=1.978942
+                                   2131 ;	Raw cost for generated ic 410 : (0, 0.000000) count=1.978942
+                                   2132 ;	Raw cost for generated ic 411 : (0, 0.000000) count=1.978942
+                                   2133 ;	genCall
+                                   2134 ;	genSend
+    0000055F 98               [ 2] 2135 	tya
+    00000560 A2 1E            [ 2] 2136 	ldx	#0x1e
+    00000562 20r00r00         [ 6] 2137 	jsr	__muluchar
+                                   2138 ;	assignResultValue
+                                   2139 ;	Raw cost for generated ic 412 : (6, 10.000000) count=1.978942
+                                   2140 ;	genPlus
+                                   2141 ;	genPlusIncr
+    00000565 18               [ 2] 2142 	clc
+    00000566 69r3B            [ 2] 2143 	adc	#_DrawTextAdvanced_copyBuffer_10001_183
+    00000568 48               [ 3] 2144 	pha
+    00000569 8A               [ 2] 2145 	txa
+    0000056A 69s00            [ 2] 2146 	adc	#>_DrawTextAdvanced_copyBuffer_10001_183
+    0000056C AA               [ 2] 2147 	tax
+    0000056D 68               [ 4] 2148 	pla
+                                   2149 ;	Raw cost for generated ic 252 : (9, 17.000000) count=1.978942
+                                   2150 ;	genCast
+                                   2151 ;	genCopy
+    0000056E 8Dr00r00         [ 4] 2152 	sta	_set_bkg_tiles_PARM_5
+    00000571 8Er01r00         [ 4] 2153 	stx	(_set_bkg_tiles_PARM_5 + 1)
+                                   2154 ;	Raw cost for generated ic 253 : (6, 8.000000) count=1.978942
+                                   2155 ;	genAssign
+                                   2156 ;	genAssignLit
+    00000574 A2 1E            [ 2] 2157 	ldx	#0x1e
+    00000576 8Er00r00         [ 4] 2158 	stx	_set_bkg_tiles_PARM_3
+                                   2159 ;	Raw cost for generated ic 256 : (5, 6.000000) count=1.978942
+                                   2160 ;	genAssign
+                                   2161 ;	genAssignLit
+    00000579 A2 01            [ 2] 2162 	ldx	#0x01
+    0000057B 8Er00r00         [ 4] 2163 	stx	_set_bkg_tiles_PARM_4
+                                   2164 ;	Raw cost for generated ic 257 : (5, 6.000000) count=1.978942
+                                   2165 ;	Raw cost for generated ic 254 : (0, 0.000000) count=1.978942
+                                   2166 ;	Raw cost for generated ic 255 : (0, 0.000000) count=1.978942
+                                   2167 ;	genCall
+                                   2168 ;	genSend
+    0000057E 8A               [ 2] 2169 	txa
+    0000057F A6*0A            [ 3] 2170 	ldx	*_DrawTextAdvanced_sloc2_1_0
+    00000581 20r00r00         [ 6] 2171 	jsr	_set_bkg_tiles
+                                   2172 ;	Raw cost for generated ic 259 : (6, 11.000000) count=1.978942
+                                   2173 ;	src/main.c: 298: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+                                   2174 ;	genPlus
+                                   2175 ;	genPlusIncr
+    00000584 E6*06            [ 5] 2176 	inc	*_DrawTextAdvanced_sloc0_1_0
+                                   2177 ;	Raw cost for generated ic 262 : (2, 5.000000) count=1.978942
+                                   2178 ;	genGoto
+    00000586 4Cr1Br05         [ 3] 2179 	jmp	00147$
+                                   2180 ;	Raw cost for generated ic 264 : (3, 3.000000) count=1.978942
+                                   2181 ;	genLabel
+    00000589                       2182 00109$:
+                                   2183 ;	Raw cost for generated ic 265 : (0, 0.000000) count=0.659647
+                                   2184 ;	src/main.c: 306: vsyncMultiple(LINE_SKIP_DELAY);
+                                   2185 ;	Raw cost for generated ic 266 : (0, 0.000000) count=0.659647
+                                   2186 ;	genCall
+                                   2187 ;	genSend
+    00000589 A9 07            [ 2] 2188 	lda	#0x07
+    0000058B 20rDEr02         [ 6] 2189 	jsr	_vsyncMultiple
+                                   2190 ;	Raw cost for generated ic 267 : (5, 8.000000) count=0.659647
+                                   2191 ;	src/main.c: 296: for(uint8_t k=0;k<shiftCount;k++){
+                                   2192 ;	genPlus
+                                   2193 ;	genPlusIncr
+    0000058E E6*08            [ 5] 2194 	inc	*_DrawTextAdvanced_sloc1_1_0
+                                   2195 ;	Raw cost for generated ic 270 : (2, 5.000000) count=0.659647
+                                   2196 ;	genGoto
+    00000590 4Cr0Dr05         [ 3] 2197 	jmp	00150$
+                                   2198 ;	Raw cost for generated ic 272 : (3, 3.000000) count=0.659647
+                                   2199 ;	genLabel
+    00000593                       2200 00110$:
+                                   2201 ;	Raw cost for generated ic 273 : (0, 0.000000) count=0.234000
+                                   2202 ;	src/main.c: 310: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+                                   2203 ;	genAssign
+                                   2204 ;	genAssignLit
+    00000593 A2 00            [ 2] 2205 	ldx	#0x00
+    00000595 86*0A            [ 3] 2206 	stx	*_DrawTextAdvanced_sloc2_1_0
+                                   2207 ;	Raw cost for generated ic 374 : (4, 5.000000) count=0.234000
+                                   2208 ;	genLabel
+    00000597                       2209 00156$:
+                                   2210 ;	Raw cost for generated ic 275 : (0, 0.000000) count=0.800072
+                                   2211 ;	genCmp
+    00000597 A5*0A            [ 3] 2212 	lda	*_DrawTextAdvanced_sloc2_1_0
+    00000599 C9 1E            [ 2] 2213 	cmp	#0x1e
+    0000059B B0 3D            [ 4] 2214 	bcs	00112$
+                                   2215 ;	Raw cost for generated ic 276 : (9, 10.600000) count=0.800072
+                                   2216 ;	skipping generated iCode
+                                   2217 ;	Raw cost for generated ic 277 : (0, 0.000000) count=0.800072
+                                   2218 ;	src/main.c: 311: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+                                   2219 ;	genAssign
+                                   2220 ;	genAssignLit
+                                   2221 ;	genCopy
+    0000059D A2 00            [ 2] 2222 	ldx	#0x00
+                                   2223 ;	Raw cost for generated ic 356 : (2, 2.000000) count=0.600054
+                                   2224 ;	genAssign
+                                   2225 ;	genAssignLit
+    0000059F 86*08            [ 3] 2226 	stx	*_DrawTextAdvanced_sloc1_1_0
+    000005A1 86*09            [ 3] 2227 	stx	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+                                   2228 ;	Raw cost for generated ic 359 : (4, 6.000000) count=0.600054
+                                   2229 ;	genLabel
+    000005A3                       2230 00153$:
+                                   2231 ;	Raw cost for generated ic 281 : (0, 0.000000) count=2.298269
+                                   2232 ;	genCmp
+    000005A3 E0 05            [ 2] 2233 	cpx	#0x05
+    000005A5 B0 2E            [ 4] 2234 	bcs	00157$
+                                   2235 ;	Raw cost for generated ic 282 : (7, 7.600000) count=2.298269
+                                   2236 ;	skipping generated iCode
+                                   2237 ;	Raw cost for generated ic 283 : (0, 0.000000) count=2.298269
+                                   2238 ;	src/main.c: 312: copyBuffer[t][k]=0;
+                                   2239 ;	genPlus
+                                   2240 ;	genPlusIncr
+    000005A7 A9r3B            [ 2] 2241 	lda	#_DrawTextAdvanced_copyBuffer_10001_183
+    000005A9 18               [ 2] 2242 	clc
+    000005AA 65*08            [ 3] 2243 	adc	*_DrawTextAdvanced_sloc1_1_0
+    000005AC 85*06            [ 3] 2244 	sta	*_DrawTextAdvanced_sloc0_1_0
+    000005AE A9s00            [ 2] 2245 	lda	#>_DrawTextAdvanced_copyBuffer_10001_183
+    000005B0 65*09            [ 3] 2246 	adc	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    000005B2 85*07            [ 3] 2247 	sta	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   2248 ;	Raw cost for generated ic 288 : (13, 18.000000) count=1.723701
+                                   2249 ;	genPlus
+                                   2250 ;	genPlusIncr
+    000005B4 A5*06            [ 3] 2251 	lda	*_DrawTextAdvanced_sloc0_1_0
+    000005B6 18               [ 2] 2252 	clc
+    000005B7 65*0A            [ 3] 2253 	adc	*_DrawTextAdvanced_sloc2_1_0
+    000005B9 85*06            [ 3] 2254 	sta	*_DrawTextAdvanced_sloc0_1_0
+    000005BB A5*07            [ 3] 2255 	lda	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+    000005BD 69 00            [ 2] 2256 	adc	#0x00
+    000005BF 85*07            [ 3] 2257 	sta	*(_DrawTextAdvanced_sloc0_1_0 + 1)
+                                   2258 ;	Raw cost for generated ic 290 : (13, 19.000000) count=1.723701
+                                   2259 ;	genPointerSet
+    000005C1 A9 00            [ 2] 2260 	lda	#0x00
+    000005C3 A8               [ 2] 2261 	tay
+    000005C4 91*06            [ 6] 2262 	sta	[*_DrawTextAdvanced_sloc0_1_0],y
+                                   2263 ;	Raw cost for generated ic 291 : (5, 10.000000) count=1.723701
+                                   2264 ;	src/main.c: 311: for(uint8_t t=0;t<DIALOG_BOX_INNER_HEIGHT;t++){
+                                   2265 ;	genPlus
+                                   2266 ;	genPlusIncr
+    000005C6 A5*08            [ 3] 2267 	lda	*_DrawTextAdvanced_sloc1_1_0
+    000005C8 18               [ 2] 2268 	clc
+    000005C9 69 1E            [ 2] 2269 	adc	#0x1e
+    000005CB 85*08            [ 3] 2270 	sta	*_DrawTextAdvanced_sloc1_1_0
+    000005CD 90 02            [ 4] 2271 	bcc	00351$
+    000005CF E6*09            [ 5] 2272 	inc	*(_DrawTextAdvanced_sloc1_1_0 + 1)
+    000005D1                       2273 00351$:
+                                   2274 ;	Raw cost for generated ic 360 : (11, 17.600000) count=1.723701
+                                   2275 ;	genPlus
+                                   2276 ;	genPlusIncr
+    000005D1 E8               [ 2] 2277 	inx
+                                   2278 ;	Raw cost for generated ic 294 : (1, 2.000000) count=1.723701
+                                   2279 ;	genGoto
+    000005D2 4CrA3r05         [ 3] 2280 	jmp	00153$
+                                   2281 ;	Raw cost for generated ic 296 : (3, 3.000000) count=1.723701
+                                   2282 ;	genLabel
+    000005D5                       2283 00157$:
+                                   2284 ;	Raw cost for generated ic 298 : (0, 0.000000) count=0.574567
+                                   2285 ;	src/main.c: 310: for(uint8_t k=0;k<INNER_DIALOGUE_BOX_WIDTH;k++){
+                                   2286 ;	genPlus
+                                   2287 ;	genPlusIncr
+    000005D5 E6*0A            [ 5] 2288 	inc	*_DrawTextAdvanced_sloc2_1_0
+                                   2289 ;	Raw cost for generated ic 300 : (2, 5.000000) count=0.574567
+                                   2290 ;	genGoto
+    000005D7 4Cr97r05         [ 3] 2291 	jmp	00156$
+                                   2292 ;	Raw cost for generated ic 302 : (3, 3.000000) count=0.574567
+                                   2293 ;	genLabel
+    000005DA                       2294 00112$:
+                                   2295 ;	Raw cost for generated ic 303 : (0, 0.000000) count=0.204856
+                                   2296 ;	src/main.c: 317: rowCount=LINE_SKIP;
+                                   2297 ;	genAssign
+                                   2298 ;	genAssignLit
+    000005DA A2 02            [ 2] 2299 	ldx	#0x02
+    000005DC 8Er3Ar00         [ 4] 2300 	stx	_DrawTextAdvanced_rowCount_10001_183
+                                   2301 ;	Raw cost for generated ic 304 : (5, 6.000000) count=0.204856
+                                   2302 ;	genLabel
+    000005DF                       2303 00117$:
+                                   2304 ;	Raw cost for generated ic 306 : (0, 0.000000) count=1.581290
+                                   2305 ;	src/main.c: 322: vramAddress = get_winbkg_xy_addr(column,row+rowCount);
+                                   2306 ;	genPlus
+                                   2307 ;	genPlusIncr
+    000005DF ADr3Ar00         [ 4] 2308 	lda	_DrawTextAdvanced_rowCount_10001_183
+    000005E2 18               [ 2] 2309 	clc
+    000005E3 69 18            [ 2] 2310 	adc	#0x18
+                                   2311 ;	Raw cost for generated ic 307 : (6, 8.000000) count=1.581290
+                                   2312 ;	Raw cost for generated ic 308 : (0, 0.000000) count=1.581290
+                                   2313 ;	Raw cost for generated ic 309 : (0, 0.000000) count=1.581290
+                                   2314 ;	genCall
+                                   2315 ;	genSend
+    000005E5 AA               [ 2] 2316 	tax
+    000005E6 A9 01            [ 2] 2317 	lda	#0x01
+    000005E8 20r00r00         [ 6] 2318 	jsr	_get_bkg_xy_addr
+                                   2319 ;	assignResultValue
+    000005EB 8DrF0r00         [ 4] 2320 	sta	_DrawTextAdvanced_vramAddress_10002_188
+    000005EE 8ErF1r00         [ 4] 2321 	stx	(_DrawTextAdvanced_vramAddress_10002_188 + 1)
+                                   2322 ;	Raw cost for generated ic 310 : (12, 18.000000) count=1.581290
+                                   2323 ;	src/main.c: 324: columnSize=0;
+                                   2324 ;	genAssign
+                                   2325 ;	genAssignLit
+    000005F1 A2 00            [ 2] 2326 	ldx	#0x00
+    000005F3 8Er39r00         [ 4] 2327 	stx	_DrawTextAdvanced_columnSize_10001_183
+                                   2328 ;	Raw cost for generated ic 312 : (5, 6.000000) count=1.581290
+                                   2329 ;	src/main.c: 327: while(text[index]==' '){
+                                   2330 ;	genAssign
+                                   2331 ;	genAssignLit
+                                   2332 ;	genCopy
+    000005F6 AEr38r00         [ 4] 2333 	ldx	(_DrawTextAdvanced_index_10001_183 + 1)
+    000005F9 ADr37r00         [ 4] 2334 	lda	_DrawTextAdvanced_index_10001_183
+                                   2335 ;	Raw cost for generated ic 361 : (6, 8.000000) count=1.581290
+                                   2336 ;	genLabel
+    000005FC                       2337 00119$:
+                                   2338 ;	Raw cost for generated ic 313 : (0, 0.000000) count=6.119635
+                                   2339 ;	genPlus
+                                   2340 ;	genPlusIncr
+    000005FC 48               [ 3] 2341 	pha
+    000005FD 18               [ 2] 2342 	clc
+    000005FE 6Dr35r00         [ 4] 2343 	adc	_DrawTextAdvanced_text_10000_181
+    00000601 85*0A            [ 3] 2344 	sta	*_DrawTextAdvanced_sloc2_1_0
+    00000603 8A               [ 2] 2345 	txa
+    00000604 6Dr36r00         [ 4] 2346 	adc	(_DrawTextAdvanced_text_10000_181 + 1)
+    00000607 85*0B            [ 3] 2347 	sta	*(_DrawTextAdvanced_sloc2_1_0 + 1)
+    00000609 68               [ 4] 2348 	pla
+                                   2349 ;	Raw cost for generated ic 314 : (14, 25.000000) count=6.119635
+                                   2350 ;	genPointerGet
+    0000060A 85*00            [ 3] 2351 	sta	*(REGTEMP+0)
+    0000060C A0 00            [ 2] 2352 	ldy	#0x00
+    0000060E B1*0A            [ 6] 2353 	lda	[*_DrawTextAdvanced_sloc2_1_0],y
+    00000610 A8               [ 2] 2354 	tay
+    00000611 A5*00            [ 3] 2355 	lda	*(REGTEMP+0)
+                                   2356 ;	Raw cost for generated ic 315 : (9, 15.000000) count=6.119635
+                                   2357 ;	genCmpEQorNE
+    00000613 C0 20            [ 2] 2358 	cpy	#0x20
+    00000615 D0 09            [ 4] 2359 	bne	00194$
+                                   2360 ;	Raw cost for generated ic 316 : (7, 7.600000) count=6.119635
+                                   2361 ;	skipping generated iCode
+                                   2362 ;	Raw cost for generated ic 317 : (0, 0.000000) count=6.119635
+                                   2363 ;	src/main.c: 328: index++;
+                                   2364 ;	genPlus
+                                   2365 ;	genPlusIncr
+    00000617 18               [ 2] 2366 	clc
+    00000618 69 01            [ 2] 2367 	adc	#0x01
+    0000061A 90 E0            [ 4] 2368 	bcc	00119$
+    0000061C E8               [ 2] 2369 	inx
+                                   2370 ;	Raw cost for generated ic 321 : (6, 8.600000) count=4.589726
+                                   2371 ;	genGoto
+    0000061D 4CrFCr05         [ 3] 2372 	jmp	00119$
+                                   2373 ;	Raw cost for generated ic 323 : (3, 3.000000) count=4.589726
+                                   2374 ;	genLabel
+    00000620                       2375 00194$:
+                                   2376 ;	Raw cost for generated ic 362 : (0, 0.000000) count=1.529909
+                                   2377 ;	genAssign
+                                   2378 ;	genAssignLit
+                                   2379 ;	genCopy
+    00000620 8Dr37r00         [ 4] 2380 	sta	_DrawTextAdvanced_index_10001_183
+    00000623 8Er38r00         [ 4] 2381 	stx	(_DrawTextAdvanced_index_10001_183 + 1)
+                                   2382 ;	Raw cost for generated ic 363 : (6, 8.000000) count=1.529909
+                                   2383 ;	genLabel
+    00000626                       2384 00123$:
+                                   2385 ;	Raw cost for generated ic 325 : (0, 0.000000) count=1.939440
+                                   2386 ;	src/main.c: 332: vsyncMultiple(TYPEWRITER_DELAY);
+                                   2387 ;	Raw cost for generated ic 326 : (0, 0.000000) count=1.939440
+                                   2388 ;	genCall
+                                   2389 ;	genSend
+    00000626 A9 02            [ 2] 2390 	lda	#0x02
+    00000628 20rDEr02         [ 6] 2391 	jsr	_vsyncMultiple
+                                   2392 ;	Raw cost for generated ic 327 : (5, 8.000000) count=1.939440
+                                   2393 ;	genGoto
+    0000062B 4Cr61r03         [ 3] 2394 	jmp	00125$
+                                   2395 ;	Raw cost for generated ic 328 : (3, 3.000000) count=1.939440
+                                   2396 ;	genLabel
+                                   2397 ;	Raw cost for generated ic 329 : (0, 0.000000) count=0.728056
+                                   2398 ;	src/main.c: 335: HideDialgoueBox();
+                                   2399 ;	genCall
+                                   2400 ;	Raw cost for generated ic 330 : (3, 6.000000) count=0.728056
+                                   2401 ;	genLabel
+                                   2402 ;	Raw cost for generated ic 331 : (0, 0.000000) count=0.728056
+                                   2403 ;	src/main.c: 337: }
+                                   2404 ;	genEndFunction
+    0000062E 4Cr91r02         [ 3] 2405 	jmp	_HideDialgoueBox
+                                   2406 ;	Raw cost for generated ic 332 : (1, 6.000000) count=0.728056
+                                   2407 ;------------------------------------------------------------
+                                   2408 ;Allocation info for local variables in function 'ClearScreen'
+                                   2409 ;------------------------------------------------------------
+                                   2410 ;	src/main.c: 341: void ClearScreen(void){
+                                   2411 ;	genLabel
+                                   2412 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   2413 ;	-----------------------------------------
+                                   2414 ;	 function ClearScreen
+                                   2415 ;	-----------------------------------------
+                                   2416 ;	Register assignment is optimal.
+                                   2417 ;	Stack space usage: 0 bytes.
+    00000631                       2418 _ClearScreen:
+                                   2419 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   2420 ;	src/main.c: 346: fill_bkg_rect(0,0,DEVICE_SCREEN_WIDTH,DEVICE_SCREEN_HEIGHT,0);
+                                   2421 ;	genAssign
+                                   2422 ;	genAssignLit
+    00000631 A2 20            [ 2] 2423 	ldx	#0x20
+    00000633 8Er00r00         [ 4] 2424 	stx	_fill_bkg_rect_PARM_3
+                                   2425 ;	Raw cost for generated ic 4 : (5, 6.000000) count=1.000000
+                                   2426 ;	genAssign
+                                   2427 ;	genAssignLit
+    00000636 A2 1E            [ 2] 2428 	ldx	#0x1e
+    00000638 8Er00r00         [ 4] 2429 	stx	_fill_bkg_rect_PARM_4
+                                   2430 ;	Raw cost for generated ic 5 : (5, 6.000000) count=1.000000
+                                   2431 ;	genAssign
+                                   2432 ;	genAssignLit
+    0000063B A2 00            [ 2] 2433 	ldx	#0x00
+    0000063D 8Er00r00         [ 4] 2434 	stx	_fill_bkg_rect_PARM_5
+                                   2435 ;	Raw cost for generated ic 6 : (5, 6.000000) count=1.000000
+                                   2436 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                   2437 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                   2438 ;	genCall
+                                   2439 ;	genSend
+    00000640 8A               [ 2] 2440 	txa
+                                   2441 ;	Raw cost for generated ic 7 : (4, 8.000000) count=1.000000
+                                   2442 ;	genLabel
+                                   2443 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                   2444 ;	src/main.c: 347: }
+                                   2445 ;	genEndFunction
+    00000641 4Cr00r00         [ 3] 2446 	jmp	_fill_bkg_rect
+                                   2447 ;	Raw cost for generated ic 9 : (1, 6.000000) count=1.000000
+                                   2448 ;------------------------------------------------------------
+                                   2449 ;Allocation info for local variables in function 'main'
+                                   2450 ;------------------------------------------------------------
+                                   2451 ;emptyTile     Allocated with name '_main_emptyTile_10001_221'
+                                   2452 ;i             Allocated to registers 
+                                   2453 ;__200010013   Allocated to registers 
+                                   2454 ;__200010014   Allocated to registers 
+                                   2455 ;__200010015   Allocated to registers 
+                                   2456 ;first_tile    Allocated to registers 
+                                   2457 ;nb_tiles      Allocated to registers 
+                                   2458 ;data          Allocated to registers 
+                                   2459 ;__200010017   Allocated to registers 
+                                   2460 ;__200010018   Allocated to registers 
+                                   2461 ;__200010019   Allocated to registers 
+                                   2462 ;first_tile    Allocated to registers 
+                                   2463 ;nb_tiles      Allocated to registers 
+                                   2464 ;data          Allocated to registers 
+                                   2465 ;------------------------------------------------------------
+                                   2466 ;	src/main.c: 349: void main(void)
+                                   2467 ;	genLabel
+                                   2468 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   2469 ;	-----------------------------------------
+                                   2470 ;	 function main
+                                   2471 ;	-----------------------------------------
+                                   2472 ;	Register assignment is optimal.
+                                   2473 ;	Stack space usage: 0 bytes.
+    00000644                       2474 _main:
+                                   2475 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   2476 ;	src/main.c: 351: DISPLAY_ON;
+                                   2477 ;	genCall
+    00000644 20r00r00         [ 6] 2478 	jsr	_display_on
+                                   2479 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                   2480 ;	src/main.c: 352: SHOW_BKG;
+                                   2481 ;	genOr
+    00000647 ADr00r00         [ 4] 2482 	lda	_shadow_PPUMASK
+    0000064A 09 08            [ 2] 2483 	ora	#0x08
+    0000064C 8Dr00r00         [ 4] 2484 	sta	_shadow_PPUMASK
+                                   2485 ;	Raw cost for generated ic 3 : (8, 10.000000) count=1.000000
+                                   2486 ;	src/main.c: 358: fontTilesStart = DialogueBox_TILE_COUNT+1;
+                                   2487 ;	genAssign
+                                   2488 ;	genAssignLit
+    0000064F A2 07            [ 2] 2489 	ldx	#0x07
+    00000651 8Er02r00         [ 4] 2490 	stx	_fontTilesStart
+                                   2491 ;	Raw cost for generated ic 6 : (5, 6.000000) count=1.000000
+                                   2492 ;	src/main.c: 360: for(uint8_t i=0;i<TILE_SIZE_BYTES;i++)emptyTile[i]=0;
+                                   2493 ;	skipping iCode since result will be rematerialized
+                                   2494 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                   2495 ;	genAssign
+                                   2496 ;	genAssignLit
+                                   2497 ;	genCopy
+    00000654 A0 00            [ 2] 2498 	ldy	#0x00
+                                   2499 ;	Raw cost for generated ic 126 : (2, 2.000000) count=1.000000
+                                   2500 ;	genLabel
+    00000656                       2501 00118$:
+                                   2502 ;	Raw cost for generated ic 8 : (0, 0.000000) count=3.999997
+                                   2503 ;	genCmp
+    00000656 C0 10            [ 2] 2504 	cpy	#0x10
+    00000658 B0 10            [ 4] 2505 	bcs	00101$
+                                   2506 ;	Raw cost for generated ic 9 : (7, 7.600000) count=3.999997
+                                   2507 ;	skipping generated iCode
+                                   2508 ;	Raw cost for generated ic 10 : (0, 0.000000) count=3.999997
+                                   2509 ;	genAssign
+                                   2510 ;	genAssignLit
+                                   2511 ;	genCopy
+    0000065A A2 00            [ 2] 2512 	ldx	#0x00
+    0000065C 98               [ 2] 2513 	tya
+                                   2514 ;	Raw cost for generated ic 14 : (3, 4.000000) count=2.999997
+                                   2515 ;	genPointerSet
+    0000065D 84*00            [ 3] 2516 	sty	*(REGTEMP+0)
+    0000065F A8               [ 2] 2517 	tay
+    00000660 8A               [ 2] 2518 	txa
+    00000661 99rF5r00         [ 5] 2519 	sta	(_main_emptyTile_10001_221+0+0x0000),y
+    00000664 A4*00            [ 3] 2520 	ldy	*(REGTEMP+0)
+                                   2521 ;	Raw cost for generated ic 15 : (9, 14.000000) count=2.999997
+                                   2522 ;	genPlus
+                                   2523 ;	genPlusIncr
+    00000666 C8               [ 2] 2524 	iny
+                                   2525 ;	Raw cost for generated ic 18 : (1, 2.000000) count=2.999997
+                                   2526 ;	genGoto
+    00000667 4Cr56r06         [ 3] 2527 	jmp	00118$
+                                   2528 ;	Raw cost for generated ic 20 : (3, 3.000000) count=2.999997
+                                   2529 ;	genLabel
+    0000066A                       2530 00101$:
+                                   2531 ;	Raw cost for generated ic 21 : (0, 0.000000) count=0.999999
+                                   2532 ;	src/main.c: 362: set_native_tile_data(0,1,emptyTile);
+                                   2533 ;	genCast
+                                   2534 ;	genCopy
+    0000066A A9s00            [ 2] 2535 	lda	#>_main_emptyTile_10001_221
+    0000066C 8Dr01r00         [ 4] 2536 	sta	(_set_bkg_native_data_PARM_3 + 1)
+    0000066F A9rF5            [ 2] 2537 	lda	#_main_emptyTile_10001_221
+    00000671 8Dr00r00         [ 4] 2538 	sta	_set_bkg_native_data_PARM_3
+                                   2539 ;	Raw cost for generated ic 23 : (10, 12.000000) count=0.999999
+                                   2540 ;	../../../include/nes/nes.h: 1277: set_bkg_native_data(first_tile, nb_tiles, data);
+                                   2541 ;	Raw cost for generated ic 36 : (0, 0.000000) count=0.999999
+                                   2542 ;	Raw cost for generated ic 37 : (0, 0.000000) count=0.999999
+                                   2543 ;	genCall
+                                   2544 ;	genSend
+    00000674 A9 00            [ 2] 2545 	lda	#0x00
+    00000676 A2 01            [ 2] 2546 	ldx	#0x01
+    00000678 20r00r00         [ 6] 2547 	jsr	_set_bkg_native_data
+                                   2548 ;	Raw cost for generated ic 39 : (7, 10.000000) count=0.999999
+                                   2549 ;	src/main.c: 364: ClearScreen();
+                                   2550 ;	genCall
+    0000067B 20r31r06         [ 6] 2551 	jsr	_ClearScreen
+                                   2552 ;	Raw cost for generated ic 67 : (3, 6.000000) count=0.999999
+                                   2553 ;	src/main.c: 366: set_native_tile_data(1,DialogueBox_TILE_COUNT,DialogueBox_tiles);
+                                   2554 ;	skipping iCode since result will be rematerialized
+                                   2555 ;	Raw cost for generated ic 68 : (0, 0.000000) count=0.999999
+                                   2556 ;	genCast
+                                   2557 ;	genCopy
+    0000067E A9s00            [ 2] 2558 	lda	#>_DialogueBox_tiles
+    00000680 8Dr01r00         [ 4] 2559 	sta	(_set_bkg_native_data_PARM_3 + 1)
+    00000683 A9r00            [ 2] 2560 	lda	#_DialogueBox_tiles
+    00000685 8Dr00r00         [ 4] 2561 	sta	_set_bkg_native_data_PARM_3
+                                   2562 ;	Raw cost for generated ic 69 : (10, 12.000000) count=0.999999
+                                   2563 ;	../../../include/nes/nes.h: 1277: set_bkg_native_data(first_tile, nb_tiles, data);
+                                   2564 ;	Raw cost for generated ic 82 : (0, 0.000000) count=0.999999
+                                   2565 ;	Raw cost for generated ic 83 : (0, 0.000000) count=0.999999
+                                   2566 ;	genCall
+                                   2567 ;	genSend
+    00000688 A9 01            [ 2] 2568 	lda	#0x01
+    0000068A A2 06            [ 2] 2569 	ldx	#0x06
+    0000068C 20r00r00         [ 6] 2570 	jsr	_set_bkg_native_data
+                                   2571 ;	Raw cost for generated ic 85 : (7, 10.000000) count=0.999999
+                                   2572 ;	src/main.c: 368: while(TRUE){
+                                   2573 ;	genLabel
+    0000068F                       2574 00103$:
+                                   2575 ;	Raw cost for generated ic 115 : (0, 0.000000) count=68.918907
+                                   2576 ;	src/main.c: 372: DrawTextAdvanced("When the code reaches a period or question mark, it will pause and wait for you to press the A button for it to continue. Afterwards, It will start a new page and continue.  The code will automatically jump to a new line, when it cannot fully draw a word.  When both rows of text are full, the code will slide the current text upwards and continue. For every page, the code will dynamically populate VRAM. Only letters and characters used, will be loaded into VRAM.");
+                                   2577 ;	skipping iCode since result will be rematerialized
+                                   2578 ;	Raw cost for generated ic 116 : (0, 0.000000) count=68.918907
+                                   2579 ;	skipping iCode since result will be rematerialized
+                                   2580 ;	Raw cost for generated ic 117 : (0, 0.000000) count=68.918907
+                                   2581 ;	Raw cost for generated ic 118 : (0, 0.000000) count=68.918907
+                                   2582 ;	genCall
+                                   2583 ;	genSend
+    0000068F A2s06            [ 2] 2584 	ldx	#>___str_0
+    00000691 A9r9A            [ 2] 2585 	lda	#___str_0
+    00000693 20rF4r02         [ 6] 2586 	jsr	_DrawTextAdvanced
+                                   2587 ;	Raw cost for generated ic 119 : (7, 10.000000) count=68.918907
+                                   2588 ;	genGoto
+    00000696 4Cr8Fr06         [ 3] 2589 	jmp	00103$
+                                   2590 ;	Raw cost for generated ic 120 : (3, 3.000000) count=68.918907
+                                   2591 ;	genLabel
+                                   2592 ;	Raw cost for generated ic 122 : (0, 0.000000) count=0.000000
+                                   2593 ;	src/main.c: 375: }
+                                   2594 ;	genEndFunction
+    00000699 60               [ 6] 2595 	rts
+                                   2596 ;	Raw cost for generated ic 123 : (1, 6.000000) count=0.000000
+                                   2597 	.area _CODE
+    0000069A                       2598 ___str_0:
+    0000069A 57 68 65 6E 20 74 68  2599 	.ascii "When the code reaches a period or question mark, it will pau"
+             65 20 63 6F 64 65 20
+             72 65 61 63 68 65 73
+             20 61 20 70 65 72 69
+             6F 64 20 6F 72 20 71
+             75 65 73 74 69 6F 6E
+             20 6D 61 72 6B 2C 20
+             69 74 20 77 69 6C 6C
+             20 70 61 75
+    000006D6 73 65 20 61 6E 64 20  2600 	.ascii "se and wait for you to press the A button for it to continue"
+             77 61 69 74 20 66 6F
+             72 20 79 6F 75 20 74
+             6F 20 70 72 65 73 73
+             20 74 68 65 20 41 20
+             62 75 74 74 6F 6E 20
+             66 6F 72 20 69 74 20
+             74 6F 20 63 6F 6E 74
+             69 6E 75 65
+    00000712 2E 20 41 66 74 65 72  2601 	.ascii ". Afterwards, It will start a new page and continue.  The co"
+             77 61 72 64 73 2C 20
+             49 74 20 77 69 6C 6C
+             20 73 74 61 72 74 20
+             61 20 6E 65 77 20 70
+             61 67 65 20 61 6E 64
+             20 63 6F 6E 74 69 6E
+             75 65 2E 20 20 54 68
+             65 20 63 6F
+    0000074E 64 65 20 77 69 6C 6C  2602 	.ascii "de will automatically jump to a new line, when it cannot ful"
+             20 61 75 74 6F 6D 61
+             74 69 63 61 6C 6C 79
+             20 6A 75 6D 70 20 74
+             6F 20 61 20 6E 65 77
+             20 6C 69 6E 65 2C 20
+             77 68 65 6E 20 69 74
+             20 63 61 6E 6E 6F 74
+             20 66 75 6C
+    0000078A 6C 79 20 64 72 61 77  2603 	.ascii "ly draw a word.  When both rows of text are full, the code w"
+             20 61 20 77 6F 72 64
+             2E 20 20 57 68 65 6E
+             20 62 6F 74 68 20 72
+             6F 77 73 20 6F 66 20
+             74 65 78 74 20 61 72
+             65 20 66 75 6C 6C 2C
+             20 74 68 65 20 63 6F
+             64 65 20 77
+    000007C6 69 6C 6C 20 73 6C 69  2604 	.ascii "ill slide the current text upwards and continue. For every p"
+             64 65 20 74 68 65 20
+             63 75 72 72 65 6E 74
+             20 74 65 78 74 20 75
+             70 77 61 72 64 73 20
+             61 6E 64 20 63 6F 6E
+             74 69 6E 75 65 2E 20
+             46 6F 72 20 65 76 65
+             72 79 20 70
+    00000802 61 67 65 2C 20 74 68  2605 	.ascii "age, the code will dynamically populate VRAM. Only letters a"
+             65 20 63 6F 64 65 20
+             77 69 6C 6C 20 64 79
+             6E 61 6D 69 63 61 6C
+             6C 79 20 70 6F 70 75
+             6C 61 74 65 20 56 52
+             41 4D 2E 20 4F 6E 6C
+             79 20 6C 65 74 74 65
+             72 73 20 61
+    0000083E 6E 64 20 63 68 61 72  2606 	.ascii "nd characters used, will be loaded into VRAM."
+             61 63 74 65 72 73 20
+             75 73 65 64 2C 20 77
+             69 6C 6C 20 62 65 20
+             6C 6F 61 64 65 64 20
+             69 6E 74 6F 20 56 52
+             41 4D 2E
+    0000086B 00                    2607 	.db 0x00
+                                   2608 	.area _XINIT
+    00000000                       2609 __xinit__windowYPosition:
+    00000000 F0 00                 2610 	.dw #0x00f0
+    00000002                       2611 __xinit__fontTilesStart:
+    00000002 00                    2612 	.db #0x00	; 0
+    00000003                       2613 __xinit__joypadCurrent:
+    00000003 00                    2614 	.db #0x00	; 0
+    00000004                       2615 __xinit__joypadPrevious:
+    00000004 00                    2616 	.db #0x00	; 0
+    00000005                       2617 __xinit__loadedCharacterCount:
+    00000005 00                    2618 	.db #0x00	; 0
+                                   2619 	.area _CABS    (ABS)

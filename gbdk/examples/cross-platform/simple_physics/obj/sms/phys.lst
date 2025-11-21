@@ -1,0 +1,391 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module phys
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _set_tile_2bpp_data
+                                     12 	.globl _joypad
+                                     13 	.globl _vsync
+                                     14 	.globl _joy
+                                     15 	.globl _old_joy
+                                     16 	.globl _SpdY
+                                     17 	.globl _SpdX
+                                     18 	.globl _PosY
+                                     19 	.globl _PosX
+                                     20 	.globl _sprite_data
+                                     21 ;--------------------------------------------------------
+                                     22 ; special function registers
+                                     23 ;--------------------------------------------------------
+                         00000000    24 _GG_STATE	=	0x0000
+                         00000001    25 _GG_EXT_7BIT	=	0x0001
+                         00000002    26 _GG_EXT_CTL	=	0x0002
+                         00000003    27 _GG_SIO_SEND	=	0x0003
+                         00000004    28 _GG_SIO_RECV	=	0x0004
+                         00000005    29 _GG_SIO_CTL	=	0x0005
+                         00000006    30 _GG_SOUND_PAN	=	0x0006
+                         0000003E    31 _MEMORY_CTL	=	0x003e
+                         0000003F    32 _JOY_CTL	=	0x003f
+                         0000007E    33 _VCOUNTER	=	0x007e
+                         0000007F    34 _PSG	=	0x007f
+                         0000007F    35 _HCOUNTER	=	0x007f
+                         000000BE    36 _VDP_DATA	=	0x00be
+                         000000BF    37 _VDP_CMD	=	0x00bf
+                         000000BF    38 _VDP_STATUS	=	0x00bf
+                         000000DC    39 _JOY_PORT1	=	0x00dc
+                         000000DD    40 _JOY_PORT2	=	0x00dd
+                         000000F0    41 _FMADDRESS	=	0x00f0
+                         000000F1    42 _FMDATA	=	0x00f1
+                         000000F2    43 _AUDIOCTRL	=	0x00f2
+                                     44 ;--------------------------------------------------------
+                                     45 ; ram data
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _DATA
+                         0000FFFC    48 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    49 _GLASSES_3D	=	0xfff8
+                         0000FFFD    50 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    51 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    52 _MAP_FRAME2	=	0xffff
+    00000000                         53 _PosX::
+    00000000                         54 	.ds 2
+    00000002                         55 _PosY::
+    00000002                         56 	.ds 2
+    00000004                         57 _SpdX::
+    00000004                         58 	.ds 2
+    00000006                         59 _SpdY::
+    00000006                         60 	.ds 2
+    00000008                         61 _old_joy::
+    00000008                         62 	.ds 1
+                                     63 ;--------------------------------------------------------
+                                     64 ; ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _INITIALIZED
+    00000000                         67 _joy::
+    00000000                         68 	.ds 1
+                                     69 ;--------------------------------------------------------
+                                     70 ; absolute external ram data
+                                     71 ;--------------------------------------------------------
+                                     72 	.area _DABS (ABS)
+                                     73 ;--------------------------------------------------------
+                                     74 ; global & static initialisations
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _HOME
+                                     77 	.area _GSINIT
+                                     78 	.area _GSFINAL
+                                     79 	.area _GSINIT
+                                     80 ;--------------------------------------------------------
+                                     81 ; Home
+                                     82 ;--------------------------------------------------------
+                                     83 	.area _HOME
+                                     84 	.area _HOME
+                                     85 ;--------------------------------------------------------
+                                     86 ; code
+                                     87 ;--------------------------------------------------------
+                                     88 	.area _CODE
+                                     89 ;src/phys.c:45: void main(void) {
+                                     90 ;	---------------------------------
+                                     91 ; Function main
+                                     92 ; ---------------------------------
+    00000000                         93 _main::
+                                     94 ;src/phys.c:51: set_sprite_data(0, 4, sprite_data);
+                                     95 ;../../../include/sms/sms.h:644: set_tile_2bpp_data((uint8_t)(start) + 0x100u, ntiles, src, _current_2bpp_palette);
+    00000000 2Ar00r00         [16]   96 	ld	hl, (__current_2bpp_palette)
+    00000003 E5               [11]   97 	push	hl
+    00000004 21r77r01         [10]   98 	ld	hl, #_sprite_data
+    00000007 E5               [11]   99 	push	hl
+    00000008 21 04 00         [10]  100 	ld	hl, #0x0004
+    0000000B E5               [11]  101 	push	hl
+    0000000C 21 00 01         [10]  102 	ld	hl, #0x0100
+    0000000F E5               [11]  103 	push	hl
+    00000010 CDr00r00         [17]  104 	call	_set_tile_2bpp_data
+                                    105 ;../../../include/sms/sms.h:815: shadow_OAM[0x41+(nb << 1)] = tile;
+    00000013 21r41r00         [10]  106 	ld	hl, #_shadow_OAM+65
+    00000016 36 00            [10]  107 	ld	(hl), #0x00
+                                    108 ;src/phys.c:57: SHOW_BKG; SHOW_SPRITES;
+    00000018 AF               [ 4]  109 	xor	a, a
+    00000019 32r00r00         [13]  110 	ld	(__sprites_OFF+0), a
+                                    111 ;src/phys.c:59: PosX = PosY = PIXELS_TO_SUBPIXELS(64);
+    0000001C 21 00 04         [10]  112 	ld	hl, #0x0400
+    0000001F 22r02r00         [16]  113 	ld	(_PosY), hl
+    00000022 22r00r00         [16]  114 	ld	(_PosX), hl
+                                    115 ;src/phys.c:60: SpdX = SpdY = PIXELS_TO_SUBPIXELS(0);
+    00000025 65               [ 4]  116 	ld	h, l
+    00000026 22r06r00         [16]  117 	ld	(_SpdY), hl
+    00000029 22r04r00         [16]  118 	ld	(_SpdX), hl
+                                    119 ;src/phys.c:62: while(TRUE) {
+    0000002C                        120 00132$:
+                                    121 ;src/phys.c:64: INPUT_PROCESS;
+    0000002C 3Ar00r00         [13]  122 	ld	a, (_joy+0)
+    0000002F 32r08r00         [13]  123 	ld	(_old_joy+0), a
+    00000032 CDr00r00         [17]  124 	call	_joypad
+    00000035 7D               [ 4]  125 	ld	a, l
+    00000036 32r00r00         [13]  126 	ld	(_joy+0), a
+    00000039 3Ar00r00         [13]  127 	ld	a, (_joy)
+    0000003C 4F               [ 4]  128 	ld	c, a
+                                    129 ;src/phys.c:68: SpdY -= Y_ACCELERATION_IN_SUBPIXELS;
+    0000003D 2Ar06r00         [16]  130 	ld	hl, (_SpdY)
+                                    131 ;src/phys.c:67: if (INPUT_KEY(J_UP)) {
+    00000040 CB 41            [ 8]  132 	bit	0, c
+    00000042 28 1C            [12]  133 	jr	Z, 00108$
+                                    134 ;src/phys.c:68: SpdY -= Y_ACCELERATION_IN_SUBPIXELS;
+    00000044 2B               [ 6]  135 	dec	hl
+    00000045 2B               [ 6]  136 	dec	hl
+    00000046 22r06r00         [16]  137 	ld	(_SpdY), hl
+                                    138 ;src/phys.c:69: if (SpdY < -MAX_Y_SPEED_IN_SUBPIXELS) SpdY = -MAX_Y_SPEED_IN_SUBPIXELS;
+    00000049 3Ar06r00         [13]  139 	ld	a, (_SpdY+0)
+    0000004C D6 C0            [ 7]  140 	sub	a, #0xc0
+    0000004E 3Ar07r00         [13]  141 	ld	a, (_SpdY+1)
+    00000051 17               [ 4]  142 	rla
+    00000052 3F               [ 4]  143 	ccf
+    00000053 1F               [ 4]  144 	rra
+    00000054 DE 7F            [ 7]  145 	sbc	a, #0x7f
+    00000056 30 28            [12]  146 	jr	NC, 00109$
+    00000058 21 C0 FF         [10]  147 	ld	hl, #0xffc0
+    0000005B 22r06r00         [16]  148 	ld	(_SpdY), hl
+    0000005E 18 20            [12]  149 	jr	00109$
+    00000060                        150 00108$:
+                                    151 ;src/phys.c:70: } else if (INPUT_KEY(J_DOWN)) {
+    00000060 CB 49            [ 8]  152 	bit	1, c
+    00000062 28 1C            [12]  153 	jr	Z, 00109$
+                                    154 ;src/phys.c:71: SpdY += Y_ACCELERATION_IN_SUBPIXELS;
+    00000064 23               [ 6]  155 	inc	hl
+    00000065 23               [ 6]  156 	inc	hl
+    00000066 22r06r00         [16]  157 	ld	(_SpdY), hl
+                                    158 ;src/phys.c:72: if (SpdY > MAX_Y_SPEED_IN_SUBPIXELS) SpdY = MAX_Y_SPEED_IN_SUBPIXELS;
+    00000069 2Ar06r00         [16]  159 	ld	hl, (_SpdY)
+    0000006C 3E 40            [ 7]  160 	ld	a, #0x40
+    0000006E BD               [ 4]  161 	cp	a, l
+    0000006F 3E 00            [ 7]  162 	ld	a, #0x00
+    00000071 9C               [ 4]  163 	sbc	a, h
+    00000072 E2r77r00         [10]  164 	jp	PO, 00248$
+    00000075 EE 80            [ 7]  165 	xor	a, #0x80
+    00000077                        166 00248$:
+    00000077 F2r80r00         [10]  167 	jp	P, 00109$
+    0000007A 21 40 00         [10]  168 	ld	hl, #0x0040
+    0000007D 22r06r00         [16]  169 	ld	(_SpdY), hl
+    00000080                        170 00109$:
+                                    171 ;src/phys.c:75: SpdX -= X_ACCELERATION_IN_SUBPIXELS;
+    00000080 2Ar04r00         [16]  172 	ld	hl, (_SpdX)
+                                    173 ;src/phys.c:74: if (INPUT_KEY(J_LEFT)) {
+    00000083 CB 51            [ 8]  174 	bit	2, c
+    00000085 28 1C            [12]  175 	jr	Z, 00117$
+                                    176 ;src/phys.c:75: SpdX -= X_ACCELERATION_IN_SUBPIXELS;
+    00000087 2B               [ 6]  177 	dec	hl
+    00000088 2B               [ 6]  178 	dec	hl
+    00000089 22r04r00         [16]  179 	ld	(_SpdX), hl
+                                    180 ;src/phys.c:76: if (SpdX < -MAX_X_SPEED_IN_SUBPIXELS) SpdX = -MAX_X_SPEED_IN_SUBPIXELS;
+    0000008C 3Ar04r00         [13]  181 	ld	a, (_SpdX+0)
+    0000008F D6 C0            [ 7]  182 	sub	a, #0xc0
+    00000091 3Ar05r00         [13]  183 	ld	a, (_SpdX+1)
+    00000094 17               [ 4]  184 	rla
+    00000095 3F               [ 4]  185 	ccf
+    00000096 1F               [ 4]  186 	rra
+    00000097 DE 7F            [ 7]  187 	sbc	a, #0x7f
+    00000099 30 28            [12]  188 	jr	NC, 00118$
+    0000009B 21 C0 FF         [10]  189 	ld	hl, #0xffc0
+    0000009E 22r04r00         [16]  190 	ld	(_SpdX), hl
+    000000A1 18 20            [12]  191 	jr	00118$
+    000000A3                        192 00117$:
+                                    193 ;src/phys.c:77: } else if (INPUT_KEY(J_RIGHT)) {
+    000000A3 CB 59            [ 8]  194 	bit	3, c
+    000000A5 28 1C            [12]  195 	jr	Z, 00118$
+                                    196 ;src/phys.c:78: SpdX += X_ACCELERATION_IN_SUBPIXELS;
+    000000A7 23               [ 6]  197 	inc	hl
+    000000A8 23               [ 6]  198 	inc	hl
+    000000A9 22r04r00         [16]  199 	ld	(_SpdX), hl
+                                    200 ;src/phys.c:79: if (SpdX > MAX_X_SPEED_IN_SUBPIXELS) SpdX = MAX_X_SPEED_IN_SUBPIXELS;
+    000000AC 2Ar04r00         [16]  201 	ld	hl, (_SpdX)
+    000000AF 3E 40            [ 7]  202 	ld	a, #0x40
+    000000B1 BD               [ 4]  203 	cp	a, l
+    000000B2 3E 00            [ 7]  204 	ld	a, #0x00
+    000000B4 9C               [ 4]  205 	sbc	a, h
+    000000B5 E2rBAr00         [10]  206 	jp	PO, 00251$
+    000000B8 EE 80            [ 7]  207 	xor	a, #0x80
+    000000BA                        208 00251$:
+    000000BA F2rC3r00         [10]  209 	jp	P, 00118$
+    000000BD 21 40 00         [10]  210 	ld	hl, #0x0040
+    000000C0 22r04r00         [16]  211 	ld	(_SpdX), hl
+    000000C3                        212 00118$:
+                                    213 ;src/phys.c:82: if (INPUT_KEYPRESS(J_A)) {
+    000000C3 3Ar08r00         [13]  214 	ld	a, (_old_joy)
+    000000C6 06 00            [ 7]  215 	ld	b, #0x00
+    000000C8 2F               [ 4]  216 	cpl
+    000000C9 4F               [ 4]  217 	ld	c, a
+    000000CA 78               [ 4]  218 	ld	a, b
+    000000CB 2F               [ 4]  219 	cpl
+    000000CC 3Ar00r00         [13]  220 	ld	a, (_joy)
+    000000CF 1E 00            [ 7]  221 	ld	e, #0x00
+    000000D1 A1               [ 4]  222 	and	a, c
+    000000D2 CB 6F            [ 8]  223 	bit	5, a
+    000000D4 28 06            [12]  224 	jr	Z, 00120$
+                                    225 ;src/phys.c:83: SpdY = -JUMP_ACCELERATION_IN_SUBPIXELS;
+    000000D6 21 E0 FF         [10]  226 	ld	hl, #0xffe0
+    000000D9 22r06r00         [16]  227 	ld	(_SpdY), hl
+    000000DC                        228 00120$:
+                                    229 ;src/phys.c:87: PosX += SpdX, PosY += SpdY;
+    000000DC 21r04r00         [10]  230 	ld	hl, #_SpdX
+    000000DF D5               [11]  231 	push	de
+    000000E0 11r00r00         [10]  232 	ld	de, #_PosX
+    000000E3 1A               [ 7]  233 	ld	a, (de)
+    000000E4 86               [ 7]  234 	add	a, (hl)
+    000000E5 23               [ 6]  235 	inc	hl
+    000000E6 12               [ 7]  236 	ld	(de), a
+    000000E7 13               [ 6]  237 	inc	de
+    000000E8 1A               [ 7]  238 	ld	a, (de)
+    000000E9 8E               [ 7]  239 	adc	a, (hl)
+    000000EA 12               [ 7]  240 	ld	(de), a
+    000000EB 21r06r00         [10]  241 	ld	hl, #_SpdY
+    000000EE 11r02r00         [10]  242 	ld	de, #_PosY
+    000000F1 1A               [ 7]  243 	ld	a, (de)
+    000000F2 86               [ 7]  244 	add	a, (hl)
+    000000F3 23               [ 6]  245 	inc	hl
+    000000F4 12               [ 7]  246 	ld	(de), a
+    000000F5 13               [ 6]  247 	inc	de
+    000000F6 1A               [ 7]  248 	ld	a, (de)
+    000000F7 8E               [ 7]  249 	adc	a, (hl)
+    000000F8 12               [ 7]  250 	ld	(de), a
+    000000F9 D1               [10]  251 	pop	de
+                                    252 ;src/phys.c:90: move_sprite(0, SUBPIXELS_TO_PIXELS(PosX), SUBPIXELS_TO_PIXELS(PosY));
+    000000FA 2Ar02r00         [16]  253 	ld	hl, (_PosY)
+    000000FD CB 2C            [ 8]  254 	sra	h
+    000000FF CB 1D            [ 8]  255 	rr	l
+    00000101 CB 2C            [ 8]  256 	sra	h
+    00000103 CB 1D            [ 8]  257 	rr	l
+    00000105 CB 2C            [ 8]  258 	sra	h
+    00000107 CB 1D            [ 8]  259 	rr	l
+    00000109 CB 2C            [ 8]  260 	sra	h
+    0000010B CB 1D            [ 8]  261 	rr	l
+    0000010D 45               [ 4]  262 	ld	b, l
+    0000010E 2Ar00r00         [16]  263 	ld	hl, (_PosX)
+    00000111 CB 2C            [ 8]  264 	sra	h
+    00000113 CB 1D            [ 8]  265 	rr	l
+    00000115 CB 2C            [ 8]  266 	sra	h
+    00000117 CB 1D            [ 8]  267 	rr	l
+    00000119 CB 2C            [ 8]  268 	sra	h
+    0000011B CB 1D            [ 8]  269 	rr	l
+    0000011D CB 2C            [ 8]  270 	sra	h
+    0000011F CB 1D            [ 8]  271 	rr	l
+    00000121 4D               [ 4]  272 	ld	c, l
+                                    273 ;../../../include/sms/sms.h:856: shadow_OAM[nb] = (y < VDP_SAT_TERM) ? y : 0xC0;
+    00000122 78               [ 4]  274 	ld	a, b
+    00000123 D6 D0            [ 7]  275 	sub	a, #0xd0
+    00000125 38 02            [12]  276 	jr	C, 00140$
+    00000127 06 C0            [ 7]  277 	ld	b, #0xc0
+    00000129                        278 00140$:
+    00000129 21r00r00         [10]  279 	ld	hl, #_shadow_OAM
+    0000012C 70               [ 7]  280 	ld	(hl), b
+                                    281 ;../../../include/sms/sms.h:857: shadow_OAM[0x40+(nb << 1)] = x;
+    0000012D 21r40r00         [10]  282 	ld	hl, #(_shadow_OAM + 64)
+    00000130 71               [ 7]  283 	ld	(hl), c
+                                    284 ;src/phys.c:93: if (SpdY < 0) SpdY++; else if (SpdY) SpdY--;
+    00000131 2Ar06r00         [16]  285 	ld	hl, (_SpdY)
+    00000134 CB 7C            [ 8]  286 	bit	7, h
+    00000136 28 09            [12]  287 	jr	Z, 00124$
+    00000138 2Ar06r00         [16]  288 	ld	hl, (_SpdY)
+    0000013B 23               [ 6]  289 	inc	hl
+    0000013C 22r06r00         [16]  290 	ld	(_SpdY), hl
+    0000013F 18 10            [12]  291 	jr	00125$
+    00000141                        292 00124$:
+    00000141 3Ar07r00         [13]  293 	ld	a, (_SpdY+1)
+    00000144 21r06r00         [10]  294 	ld	hl, #_SpdY
+    00000147 B6               [ 7]  295 	or	a, (hl)
+    00000148 28 07            [12]  296 	jr	Z, 00125$
+    0000014A 2Ar06r00         [16]  297 	ld	hl, (_SpdY)
+    0000014D 2B               [ 6]  298 	dec	hl
+    0000014E 22r06r00         [16]  299 	ld	(_SpdY), hl
+    00000151                        300 00125$:
+                                    301 ;src/phys.c:94: if (SpdX < 0) SpdX++; else if (SpdX) SpdX--;
+    00000151 2Ar04r00         [16]  302 	ld	hl, (_SpdX)
+    00000154 CB 7C            [ 8]  303 	bit	7, h
+    00000156 28 09            [12]  304 	jr	Z, 00129$
+    00000158 2Ar04r00         [16]  305 	ld	hl, (_SpdX)
+    0000015B 23               [ 6]  306 	inc	hl
+    0000015C 22r04r00         [16]  307 	ld	(_SpdX), hl
+    0000015F 18 10            [12]  308 	jr	00130$
+    00000161                        309 00129$:
+    00000161 3Ar05r00         [13]  310 	ld	a, (_SpdX+1)
+    00000164 21r04r00         [10]  311 	ld	hl, #_SpdX
+    00000167 B6               [ 7]  312 	or	a, (hl)
+    00000168 28 07            [12]  313 	jr	Z, 00130$
+    0000016A 2Ar04r00         [16]  314 	ld	hl, (_SpdX)
+    0000016D 2B               [ 6]  315 	dec	hl
+    0000016E 22r04r00         [16]  316 	ld	(_SpdX), hl
+    00000171                        317 00130$:
+                                    318 ;src/phys.c:97: vsync();
+    00000171 CDr00r00         [17]  319 	call	_vsync
+                                    320 ;src/phys.c:99: }
+    00000174 C3r2Cr00         [10]  321 	jp	00132$
+    00000177                        322 _sprite_data:
+    00000177 3C                     323 	.db #0x3c	; 60
+    00000178 3C                     324 	.db #0x3c	; 60
+    00000179 42                     325 	.db #0x42	; 66	'B'
+    0000017A 7E                     326 	.db #0x7e	; 126
+    0000017B 99                     327 	.db #0x99	; 153
+    0000017C FF                     328 	.db #0xff	; 255
+    0000017D A9                     329 	.db #0xa9	; 169
+    0000017E FF                     330 	.db #0xff	; 255
+    0000017F 89                     331 	.db #0x89	; 137
+    00000180 FF                     332 	.db #0xff	; 255
+    00000181 89                     333 	.db #0x89	; 137
+    00000182 FF                     334 	.db #0xff	; 255
+    00000183 42                     335 	.db #0x42	; 66	'B'
+    00000184 7E                     336 	.db #0x7e	; 126
+    00000185 3C                     337 	.db #0x3c	; 60
+    00000186 3C                     338 	.db #0x3c	; 60
+    00000187 3C                     339 	.db #0x3c	; 60
+    00000188 3C                     340 	.db #0x3c	; 60
+    00000189 42                     341 	.db #0x42	; 66	'B'
+    0000018A 7E                     342 	.db #0x7e	; 126
+    0000018B B9                     343 	.db #0xb9	; 185
+    0000018C FF                     344 	.db #0xff	; 255
+    0000018D 89                     345 	.db #0x89	; 137
+    0000018E FF                     346 	.db #0xff	; 255
+    0000018F 91                     347 	.db #0x91	; 145
+    00000190 FF                     348 	.db #0xff	; 255
+    00000191 B9                     349 	.db #0xb9	; 185
+    00000192 FF                     350 	.db #0xff	; 255
+    00000193 42                     351 	.db #0x42	; 66	'B'
+    00000194 7E                     352 	.db #0x7e	; 126
+    00000195 3C                     353 	.db #0x3c	; 60
+    00000196 3C                     354 	.db #0x3c	; 60
+    00000197 3C                     355 	.db #0x3c	; 60
+    00000198 3C                     356 	.db #0x3c	; 60
+    00000199 42                     357 	.db #0x42	; 66	'B'
+    0000019A 7E                     358 	.db #0x7e	; 126
+    0000019B 99                     359 	.db #0x99	; 153
+    0000019C FF                     360 	.db #0xff	; 255
+    0000019D 89                     361 	.db #0x89	; 137
+    0000019E FF                     362 	.db #0xff	; 255
+    0000019F 99                     363 	.db #0x99	; 153
+    000001A0 FF                     364 	.db #0xff	; 255
+    000001A1 89                     365 	.db #0x89	; 137
+    000001A2 FF                     366 	.db #0xff	; 255
+    000001A3 5A                     367 	.db #0x5a	; 90	'Z'
+    000001A4 7E                     368 	.db #0x7e	; 126
+    000001A5 3C                     369 	.db #0x3c	; 60
+    000001A6 3C                     370 	.db #0x3c	; 60
+    000001A7 3C                     371 	.db #0x3c	; 60
+    000001A8 3C                     372 	.db #0x3c	; 60
+    000001A9 42                     373 	.db #0x42	; 66	'B'
+    000001AA 7E                     374 	.db #0x7e	; 126
+    000001AB A9                     375 	.db #0xa9	; 169
+    000001AC FF                     376 	.db #0xff	; 255
+    000001AD A9                     377 	.db #0xa9	; 169
+    000001AE FF                     378 	.db #0xff	; 255
+    000001AF B9                     379 	.db #0xb9	; 185
+    000001B0 FF                     380 	.db #0xff	; 255
+    000001B1 89                     381 	.db #0x89	; 137
+    000001B2 FF                     382 	.db #0xff	; 255
+    000001B3 42                     383 	.db #0x42	; 66	'B'
+    000001B4 7E                     384 	.db #0x7e	; 126
+    000001B5 3C                     385 	.db #0x3c	; 60
+    000001B6 3C                     386 	.db #0x3c	; 60
+                                    387 	.area _CODE
+                                    388 	.area _INITIALIZER
+    00000000                        389 __xinit__joy:
+    00000000 00                     390 	.db #0x00	; 0
+                                    391 	.area _CABS (ABS)

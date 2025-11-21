@@ -1,0 +1,57 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =   00002710 L
+    .__.ABS.                                                    =   00000000 G
+    .__.CPU.                                                    =   00000000 L
+    .__.H$L.                                                    =   00000000 L
+    _LCDC_REG                                                       ******** GX
+  0 ___str_0                                                        000000EC R
+  0 ___str_1                                                        000000EF R
+  0 ___str_10                                                       000001C7 R
+  0 ___str_11                                                       000001D9 R
+  0 ___str_13                                                       0000025A R
+  0 ___str_14                                                       00000269 R
+  0 ___str_16                                                       00000295 R
+  0 ___str_17                                                       000002A6 R
+  0 ___str_2                                                        000000F2 R
+  0 ___str_3                                                        000000F9 R
+  0 ___str_4                                                        00000100 R
+  0 ___str_5                                                        00000108 R
+  0 ___str_6                                                        00000112 R
+  0 ___str_7                                                        0000011B R
+  0 ___str_8                                                        00000122 R
+  0 ___str_9                                                        0000012B R
+    _duck_io_get_rtc                                                ******** GX
+    _duck_io_laptop_init                                            ******** GX
+    _duck_io_set_rtc                                                ******** GX
+    _gotoxy                                                         ******** GX
+    _joypad                                                         ******** GX
+  0 _main                                                           000001EB GR
+    _printf                                                         ******** GX
+    _puts                                                           ******** GX
+  1 _rtc                                                            00000000 GR
+  0 _send_some_rtc_data                                             00000172 R
+    _sys_time                                                       ******** GX
+  0 _use_rtc_data                                                   00000000 R
+    _vsync                                                          ******** GX
+    _waitpadup                                                      ******** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Area Table
+
+   0 _CODE                                      size      2CD   flags    0
+   1 _DATA                                      size        9   flags    0
+   2 _INITIALIZED                               size        0   flags    0
+   3 _DABS                                      size        0   flags    8
+   4 _HOME                                      size        0   flags    0
+   5 _GSINIT                                    size        0   flags    0
+   6 _GSFINAL                                   size        0   flags    0
+   7 _INITIALIZER                               size        0   flags    0
+   8 _CABS                                      size        0   flags    8
+

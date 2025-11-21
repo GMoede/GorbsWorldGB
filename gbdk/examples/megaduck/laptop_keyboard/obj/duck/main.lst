@@ -1,0 +1,401 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _duck_io_process_key_data
+                                     12 	.globl _duck_io_poll_keyboard
+                                     13 	.globl _duck_check_model
+                                     14 	.globl _duck_io_laptop_init
+                                     15 	.globl _puts
+                                     16 	.globl _printf
+                                     17 	.globl _putchar
+                                     18 	.globl _cls
+                                     19 	.globl _posy
+                                     20 	.globl _posx
+                                     21 	.globl _gotoxy
+                                     22 	.globl _set_sprite_data
+                                     23 	.globl _vsync
+                                     24 	.globl _keydata
+                                     25 	.globl _keyboard_read_ok
+                                     26 	.globl _cursor_y
+                                     27 	.globl _cursor_x
+                                     28 	.globl _cursor_tile
+                                     29 ;--------------------------------------------------------
+                                     30 ; special function registers
+                                     31 ;--------------------------------------------------------
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _DATA
+    00000000                         36 _cursor_x::
+    00000000                         37 	.ds 1
+    00000001                         38 _cursor_y::
+    00000001                         39 	.ds 1
+    00000002                         40 _keyboard_read_ok::
+    00000002                         41 	.ds 1
+    00000003                         42 _keydata::
+    00000003                         43 	.ds 2
+                                     44 ;--------------------------------------------------------
+                                     45 ; ram data
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _INITIALIZED
+                                     48 ;--------------------------------------------------------
+                                     49 ; absolute external ram data
+                                     50 ;--------------------------------------------------------
+                                     51 	.area _DABS (ABS)
+                                     52 ;--------------------------------------------------------
+                                     53 ; global & static initialisations
+                                     54 ;--------------------------------------------------------
+                                     55 	.area _HOME
+                                     56 	.area _GSINIT
+                                     57 	.area _GSFINAL
+                                     58 	.area _GSINIT
+                                     59 ;--------------------------------------------------------
+                                     60 ; Home
+                                     61 ;--------------------------------------------------------
+                                     62 	.area _HOME
+                                     63 	.area _HOME
+                                     64 ;--------------------------------------------------------
+                                     65 ; code
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _CODE
+                                     68 ;src/main.c:40: static void update_edit_cursor(int8_t delta_x, int8_t delta_y) {
+                                     69 ;	---------------------------------
+                                     70 ; Function update_edit_cursor
+                                     71 ; ---------------------------------
+    00000000                         72 _update_edit_cursor:
+    00000000 57               [ 4]   73 	ld	d, a
+                                     74 ;src/main.c:41: gotoxy(posx() + delta_x, posy() + delta_y);
+    00000001 D5               [16]   75 	push	de
+    00000002 CDr00r00         [24]   76 	call	_posy
+    00000005 7B               [ 4]   77 	ld	a, e
+    00000006 D1               [12]   78 	pop	de
+    00000007 83               [ 4]   79 	add	a, e
+    00000008 5F               [ 4]   80 	ld	e, a
+    00000009 D5               [16]   81 	push	de
+    0000000A CDr00r00         [24]   82 	call	_posx
+    0000000D 7B               [ 4]   83 	ld	a, e
+    0000000E D1               [12]   84 	pop	de
+    0000000F 82               [ 4]   85 	add	a, d
+    00000010 63               [ 4]   86 	ld	h, e
+    00000011 E5               [16]   87 	push	hl
+    00000012 33               [ 8]   88 	inc	sp
+    00000013 F5               [16]   89 	push	af
+    00000014 33               [ 8]   90 	inc	sp
+    00000015 CDr00r00         [24]   91 	call	_gotoxy
+    00000018 E1               [12]   92 	pop	hl
+                                     93 ;src/main.c:42: move_sprite(SPR_CURSOR, (posx() * 8) + DEVICE_SPRITE_PX_OFFSET_X, (posy() * 8) + DEVICE_SPRITE_PX_OFFSET_Y);
+    00000019 CDr00r00         [24]   94 	call	_posy
+    0000001C 7B               [ 4]   95 	ld	a, e
+    0000001D 87               [ 4]   96 	add	a, a
+    0000001E 87               [ 4]   97 	add	a, a
+    0000001F 87               [ 4]   98 	add	a, a
+    00000020 C6 10            [ 8]   99 	add	a, #0x10
+    00000022 47               [ 4]  100 	ld	b, a
+    00000023 C5               [16]  101 	push	bc
+    00000024 CDr00r00         [24]  102 	call	_posx
+    00000027 7B               [ 4]  103 	ld	a, e
+    00000028 C1               [12]  104 	pop	bc
+    00000029 87               [ 4]  105 	add	a, a
+    0000002A 87               [ 4]  106 	add	a, a
+    0000002B 87               [ 4]  107 	add	a, a
+    0000002C C6 08            [ 8]  108 	add	a, #0x08
+    0000002E 4F               [ 4]  109 	ld	c, a
+                                    110 ;../../../include/gb/gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000002F 21r00r00         [12]  111 	ld	hl, #_shadow_OAM
+                                    112 ;../../../include/gb/gb.h:1974: itm->y=y, itm->x=x;
+    00000032 78               [ 4]  113 	ld	a, b
+    00000033 22               [ 8]  114 	ld	(hl+), a
+    00000034 71               [ 8]  115 	ld	(hl), c
+                                    116 ;src/main.c:42: move_sprite(SPR_CURSOR, (posx() * 8) + DEVICE_SPRITE_PX_OFFSET_X, (posy() * 8) + DEVICE_SPRITE_PX_OFFSET_Y);
+                                    117 ;src/main.c:43: }
+    00000035 C9               [16]  118 	ret
+    00000036                        119 _cursor_tile:
+    00000036 00                     120 	.db #0x00	; 0
+    00000037 00                     121 	.db #0x00	; 0
+    00000038 00                     122 	.db #0x00	; 0
+    00000039 00                     123 	.db #0x00	; 0
+    0000003A 00                     124 	.db #0x00	; 0
+    0000003B 00                     125 	.db #0x00	; 0
+    0000003C 00                     126 	.db #0x00	; 0
+    0000003D 00                     127 	.db #0x00	; 0
+    0000003E 00                     128 	.db #0x00	; 0
+    0000003F 00                     129 	.db #0x00	; 0
+    00000040 00                     130 	.db #0x00	; 0
+    00000041 00                     131 	.db #0x00	; 0
+    00000042 55                     132 	.db #0x55	; 85	'U'
+    00000043 55                     133 	.db #0x55	; 85	'U'
+    00000044 AA                     134 	.db #0xaa	; 170
+    00000045 AA                     135 	.db #0xaa	; 170
+                                    136 ;src/main.c:47: static void use_key_data(char key) {
+                                    137 ;	---------------------------------
+                                    138 ; Function use_key_data
+                                    139 ; ---------------------------------
+    00000046                        140 _use_key_data:
+                                    141 ;src/main.c:49: switch (key) {
+    00000046 B7               [ 4]  142 	or	a, a
+    00000047 C8               [20]  143 	ret	Z
+    00000048 FE 01            [ 8]  144 	cp	a, #0x01
+    0000004A 28 1A            [12]  145 	jr	Z, 00102$
+    0000004C FE 02            [ 8]  146 	cp	a, #0x02
+    0000004E 28 1C            [12]  147 	jr	Z, 00103$
+    00000050 FE 03            [ 8]  148 	cp	a, #0x03
+    00000052 28 25            [12]  149 	jr	Z, 00105$
+    00000054 FE 04            [ 8]  150 	cp	a, #0x04
+    00000056 28 1A            [12]  151 	jr	Z, 00104$
+    00000058 FE 05            [ 8]  152 	cp	a, #0x05
+    0000005A 28 24            [12]  153 	jr	Z, 00106$
+    0000005C FE 08            [ 8]  154 	cp	a, #0x08
+    0000005E 28 3E            [12]  155 	jr	Z, 00108$
+    00000060 FE 0D            [ 8]  156 	cp	a, #0x0d
+    00000062 28 26            [12]  157 	jr	Z, 00107$
+    00000064 18 5A            [12]  158 	jr	00109$
+                                    159 ;src/main.c:53: case KEY_ARROW_UP:    update_edit_cursor( 0, -1); break;
+    00000066                        160 00102$:
+    00000066 1E FF            [ 8]  161 	ld	e, #0xff
+    00000068 AF               [ 4]  162 	xor	a, a
+    00000069 C3r00r00         [16]  163 	jp	_update_edit_cursor
+                                    164 ;src/main.c:54: case KEY_ARROW_DOWN:  update_edit_cursor( 0,  1); break;
+    0000006C                        165 00103$:
+    0000006C 1E 01            [ 8]  166 	ld	e, #0x01
+    0000006E AF               [ 4]  167 	xor	a, a
+    0000006F C3r00r00         [16]  168 	jp	_update_edit_cursor
+                                    169 ;src/main.c:55: case KEY_ARROW_LEFT:  update_edit_cursor(-1,  0); break;
+    00000072                        170 00104$:
+    00000072 1E 00            [ 8]  171 	ld	e, #0x00
+    00000074 3E FF            [ 8]  172 	ld	a, #0xff
+    00000076 C3r00r00         [16]  173 	jp	_update_edit_cursor
+                                    174 ;src/main.c:56: case KEY_ARROW_RIGHT: update_edit_cursor( 1,  0); break;
+    00000079                        175 00105$:
+    00000079 1E 00            [ 8]  176 	ld	e, #0x00
+    0000007B 3E 01            [ 8]  177 	ld	a, #0x01
+    0000007D C3r00r00         [16]  178 	jp	_update_edit_cursor
+                                    179 ;src/main.c:59: case KEY_HELP:
+    00000080                        180 00106$:
+                                    181 ;src/main.c:60: cls();
+    00000080 CDr00r00         [24]  182 	call	_cls
+                                    183 ;src/main.c:61: update_edit_cursor(1, 0);
+    00000083 1E 00            [ 8]  184 	ld	e, #0x00
+                                    185 ;src/main.c:62: break;
+    00000085 3E 01            [ 8]  186 	ld	a, #0x01
+    00000087 C3r00r00         [16]  187 	jp	_update_edit_cursor
+                                    188 ;src/main.c:64: case KEY_ENTER:
+    0000008A                        189 00107$:
+                                    190 ;src/main.c:65: gotoxy(0, posy() + 1);
+    0000008A CDr00r00         [24]  191 	call	_posy
+    0000008D 7B               [ 4]  192 	ld	a, e
+    0000008E 3C               [ 4]  193 	inc	a
+    0000008F 67               [ 4]  194 	ld	h, a
+    00000090 2E 00            [ 8]  195 	ld	l, #0x00
+    00000092 E5               [16]  196 	push	hl
+    00000093 CDr00r00         [24]  197 	call	_gotoxy
+    00000096 E1               [12]  198 	pop	hl
+                                    199 ;src/main.c:66: update_edit_cursor(1, 0);
+    00000097 1E 00            [ 8]  200 	ld	e, #0x00
+                                    201 ;src/main.c:67: break;
+    00000099 3E 01            [ 8]  202 	ld	a, #0x01
+    0000009B C3r00r00         [16]  203 	jp	_update_edit_cursor
+                                    204 ;src/main.c:69: case KEY_BACKSPACE:
+    0000009E                        205 00108$:
+                                    206 ;src/main.c:70: gotoxy(posx() - 1, posy());
+    0000009E CDr00r00         [24]  207 	call	_posy
+    000000A1 43               [ 4]  208 	ld	b, e
+    000000A2 C5               [16]  209 	push	bc
+    000000A3 CDr00r00         [24]  210 	call	_posx
+    000000A6 C1               [12]  211 	pop	bc
+    000000A7 7B               [ 4]  212 	ld	a, e
+    000000A8 3D               [ 4]  213 	dec	a
+    000000A9 C5               [16]  214 	push	bc
+    000000AA 33               [ 8]  215 	inc	sp
+    000000AB F5               [16]  216 	push	af
+    000000AC 33               [ 8]  217 	inc	sp
+    000000AD CDr00r00         [24]  218 	call	_gotoxy
+    000000B0 E1               [12]  219 	pop	hl
+                                    220 ;src/main.c:71: putchar(' ');
+    000000B1 3E 20            [ 8]  221 	ld	a, #0x20
+    000000B3 F5               [16]  222 	push	af
+    000000B4 33               [ 8]  223 	inc	sp
+    000000B5 CDr00r00         [24]  224 	call	_putchar
+    000000B8 33               [ 8]  225 	inc	sp
+                                    226 ;src/main.c:72: update_edit_cursor(-1, 0);
+    000000B9 1E 00            [ 8]  227 	ld	e, #0x00
+                                    228 ;src/main.c:73: break;
+    000000BB 3E FF            [ 8]  229 	ld	a, #0xff
+    000000BD C3r00r00         [16]  230 	jp	_update_edit_cursor
+                                    231 ;src/main.c:76: default:
+    000000C0                        232 00109$:
+                                    233 ;src/main.c:77: putchar(key);
+    000000C0 F5               [16]  234 	push	af
+    000000C1 33               [ 8]  235 	inc	sp
+    000000C2 CDr00r00         [24]  236 	call	_putchar
+    000000C5 33               [ 8]  237 	inc	sp
+                                    238 ;src/main.c:78: update_edit_cursor(0, 0);
+    000000C6 AF               [ 4]  239 	xor	a, a
+    000000C7 5F               [ 4]  240 	ld	e, a
+                                    241 ;src/main.c:80: }
+                                    242 ;src/main.c:81: }
+    000000C8 C3r00r00         [16]  243 	jp	_update_edit_cursor
+                                    244 ;src/main.c:84: static void gfx_init(void) {
+                                    245 ;	---------------------------------
+                                    246 ; Function gfx_init
+                                    247 ; ---------------------------------
+    000000CB                        248 _gfx_init:
+                                    249 ;src/main.c:87: set_sprite_data(0,1,cursor_tile);
+    000000CB 11r36r00         [12]  250 	ld	de, #_cursor_tile
+    000000CE D5               [16]  251 	push	de
+    000000CF AF               [ 4]  252 	xor	a, a
+    000000D0 3C               [ 4]  253 	inc	a
+    000000D1 F5               [16]  254 	push	af
+    000000D2 CDr00r00         [24]  255 	call	_set_sprite_data
+    000000D5 E8 04            [16]  256 	add	sp, #4
+                                    257 ;../../../include/gb/gb.h:1887: shadow_OAM[nb].tile=tile;
+    000000D7 21r02r00         [12]  258 	ld	hl, #(_shadow_OAM + 2)
+                                    259 ;../../../include/gb/gb.h:2001: shadow_OAM[nb].y = 0;
+    000000DA AF               [ 4]  260 	xor	a, a
+    000000DB 32               [ 8]  261 	ld	(hl-), a
+    000000DC 2B               [ 8]  262 	dec	hl
+    000000DD 36 00            [12]  263 	ld	(hl), #0x00
+                                    264 ;src/main.c:91: SPRITES_8x8;
+    000000DF F0r00            [12]  265 	ldh	a, (_LCDC_REG + 0)
+    000000E1 E6 FD            [ 8]  266 	and	a, #0xfd
+    000000E3 E0r00            [12]  267 	ldh	(_LCDC_REG + 0), a
+                                    268 ;src/main.c:92: SHOW_SPRITES;
+    000000E5 F0r00            [12]  269 	ldh	a, (_LCDC_REG + 0)
+    000000E7 F6 01            [ 8]  270 	or	a, #0x01
+    000000E9 E0r00            [12]  271 	ldh	(_LCDC_REG + 0), a
+                                    272 ;src/main.c:93: SHOW_BKG;
+    000000EB F0r00            [12]  273 	ldh	a, (_LCDC_REG + 0)
+    000000ED F6 40            [ 8]  274 	or	a, #0x40
+    000000EF E0r00            [12]  275 	ldh	(_LCDC_REG + 0), a
+                                    276 ;src/main.c:94: }
+    000000F1 C9               [16]  277 	ret
+                                    278 ;src/main.c:97: void main(void) {
+                                    279 ;	---------------------------------
+                                    280 ; Function main
+                                    281 ; ---------------------------------
+    000000F2                        282 _main::
+    000000F2 3B               [ 8]  283 	dec	sp
+                                    284 ;src/main.c:99: uint8_t megaduck_model = duck_check_model(); // This must be called before any vram tiles are loaded or cleared
+    000000F3 CDr00r00         [24]  285 	call	_duck_check_model
+    000000F6 F8 00            [12]  286 	ldhl	sp,	#0
+    000000F8 77               [ 8]  287 	ld	(hl), a
+                                    288 ;src/main.c:100: bool megaduck_laptop_init_ok = duck_io_laptop_init();
+    000000F9 CDr00r00         [24]  289 	call	_duck_io_laptop_init
+    000000FC 4F               [ 4]  290 	ld	c, a
+                                    291 ;src/main.c:102: gfx_init();
+    000000FD C5               [16]  292 	push	bc
+    000000FE CDrCBr00         [24]  293 	call	_gfx_init
+                                    294 ;src/main.c:103: printf("Initializing..\n");
+    00000101 11r70r01         [12]  295 	ld	de, #___str_1
+    00000104 CDr00r00         [24]  296 	call	_puts
+    00000107 C1               [12]  297 	pop	bc
+                                    298 ;src/main.c:105: if (!megaduck_laptop_init_ok) {
+    00000108 CB 41            [ 8]  299 	bit	0, c
+    0000010A 20 0D            [12]  300 	jr	NZ, 00105$
+                                    301 ;src/main.c:109: "or Failed to Initialize");
+    0000010C 11r7Fr01         [12]  302 	ld	de, #___str_2
+    0000010F D5               [16]  303 	push	de
+    00000110 CDr00r00         [24]  304 	call	_printf
+    00000113 E1               [12]  305 	pop	hl
+                                    306 ;src/main.c:110: while(1) {
+    00000114                        307 00102$:
+                                    308 ;src/main.c:111: vsync();
+    00000114 CDr00r00         [24]  309 	call	_vsync
+    00000117 18 FB            [12]  310 	jr	00102$
+    00000119                        311 00105$:
+                                    312 ;src/main.c:117: printf("Laptop Detected! >%hu<\n", megaduck_model);
+    00000119 F8 00            [12]  313 	ldhl	sp,	#0
+    0000011B 4E               [ 8]  314 	ld	c, (hl)
+    0000011C 06 00            [ 8]  315 	ld	b, #0x00
+    0000011E C5               [16]  316 	push	bc
+    0000011F 11rABr01         [12]  317 	ld	de, #___str_3
+    00000122 D5               [16]  318 	push	de
+    00000123 CDr00r00         [24]  319 	call	_printf
+    00000126 E8 04            [16]  320 	add	sp, #4
+                                    321 ;src/main.c:121: if (megaduck_model == MEGADUCK_LAPTOP_SPANISH)
+    00000128 F8 00            [12]  322 	ldhl	sp,	#0
+    0000012A 7E               [ 8]  323 	ld	a, (hl)
+    0000012B 3D               [ 4]  324 	dec	a
+    0000012C 20 08            [12]  325 	jr	NZ, 00109$
+                                    326 ;src/main.c:122: printf("Spanish model\n");
+    0000012E 11rC3r01         [12]  327 	ld	de, #___str_5
+    00000131 CDr00r00         [24]  328 	call	_puts
+    00000134 18 0D            [12]  329 	jr	00110$
+    00000136                        330 00109$:
+                                    331 ;src/main.c:123: else if (megaduck_model == MEGADUCK_LAPTOP_GERMAN)
+    00000136 F8 00            [12]  332 	ldhl	sp,	#0
+    00000138 7E               [ 8]  333 	ld	a, (hl)
+    00000139 D6 02            [ 8]  334 	sub	a, #0x02
+    0000013B 20 06            [12]  335 	jr	NZ, 00110$
+                                    336 ;src/main.c:124: printf("German model\n");
+    0000013D 11rD1r01         [12]  337 	ld	de, #___str_7
+    00000140 CDr00r00         [24]  338 	call	_puts
+    00000143                        339 00110$:
+                                    340 ;src/main.c:127: update_edit_cursor(1,1);
+    00000143 3E 01            [ 8]  341 	ld	a,#0x01
+    00000145 5F               [ 4]  342 	ld	e,a
+    00000146 CDr00r00         [24]  343 	call	_update_edit_cursor
+                                    344 ;src/main.c:130: while(1) {
+    00000149                        345 00116$:
+                                    346 ;src/main.c:131: vsync();
+    00000149 CDr00r00         [24]  347 	call	_vsync
+                                    348 ;src/main.c:135: if (sys_time & 0x01u) {
+    0000014C FAr00r00         [16]  349 	ld	a, (_sys_time)
+    0000014F 21r01r00         [12]  350 	ld	hl, #_sys_time + 1
+    00000152 4E               [ 8]  351 	ld	c, (hl)
+    00000153 0F               [ 4]  352 	rrca
+    00000154 30 F3            [12]  353 	jr	NC, 00116$
+                                    354 ;src/main.c:137: if (duck_io_poll_keyboard(&keydata)) {
+    00000156 11r03r00         [12]  355 	ld	de, #_keydata
+    00000159 CDr00r00         [24]  356 	call	_duck_io_poll_keyboard
+    0000015C CB 47            [ 8]  357 	bit	0,a
+    0000015E 28 E9            [12]  358 	jr	Z, 00116$
+                                    359 ;src/main.c:139: char current_key = duck_io_process_key_data(&keydata, megaduck_model);
+    00000160 F8 00            [12]  360 	ldhl	sp,	#0
+    00000162 7E               [ 8]  361 	ld	a, (hl)
+    00000163 11r03r00         [12]  362 	ld	de, #_keydata
+    00000166 CDr00r00         [24]  363 	call	_duck_io_process_key_data
+                                    364 ;src/main.c:141: use_key_data(current_key);
+    00000169 CDr46r00         [24]  365 	call	_use_key_data
+    0000016C 18 DB            [12]  366 	jr	00116$
+                                    367 ;src/main.c:145: }
+    0000016E 33               [ 8]  368 	inc	sp
+    0000016F C9               [16]  369 	ret
+    00000170                        370 ___str_1:
+    00000170 49 6E 69 74 69 61 6C   371 	.ascii "Initializing.."
+             69 7A 69 6E 67 2E 2E
+    0000017E 00                     372 	.db 0x00
+    0000017F                        373 ___str_2:
+    0000017F 4C 61 70 74 6F 70 20   374 	.ascii "Laptop not detected"
+             6E 6F 74 20 64 65 74
+             65 63 74 65 64
+    00000192 0A                     375 	.db 0x0a
+    00000193 6F 72 20 46 61 69 6C   376 	.ascii "or Failed to Initialize"
+             65 64 20 74 6F 20 49
+             6E 69 74 69 61 6C 69
+             7A 65
+    000001AA 00                     377 	.db 0x00
+    000001AB                        378 ___str_3:
+    000001AB 4C 61 70 74 6F 70 20   379 	.ascii "Laptop Detected! >%hu<"
+             44 65 74 65 63 74 65
+             64 21 20 3E 25 68 75
+             3C
+    000001C1 0A                     380 	.db 0x0a
+    000001C2 00                     381 	.db 0x00
+    000001C3                        382 ___str_5:
+    000001C3 53 70 61 6E 69 73 68   383 	.ascii "Spanish model"
+             20 6D 6F 64 65 6C
+    000001D0 00                     384 	.db 0x00
+    000001D1                        385 ___str_7:
+    000001D1 47 65 72 6D 61 6E 20   386 	.ascii "German model"
+             6D 6F 64 65 6C
+    000001DD 00                     387 	.db 0x00
+                                    388 	.area _CODE
+                                    389 	.area _INITIALIZER
+                                    390 	.area _CABS (ABS)

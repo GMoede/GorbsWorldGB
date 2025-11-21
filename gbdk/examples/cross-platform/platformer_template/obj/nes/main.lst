@@ -1,0 +1,371 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _SetCurrentLevelSubmap
+                                     23 	.globl b_UpdateCamera
+                                     24 	.globl _UpdateCamera
+                                     25 	.globl _SetupCurrentLevel
+                                     26 	.globl _ShowCentered
+                                     27 	.globl _WaitForStartOrA
+                                     28 	.globl _hide_sprites_range
+                                     29 	.globl b_UpdatePlayer
+                                     30 	.globl _UpdatePlayer
+                                     31 	.globl b_SetupPlayer
+                                     32 	.globl _SetupPlayer
+                                     33 	.globl _display_off
+                                     34 	.globl _display_on
+                                     35 	.globl _vsync
+                                     36 	.globl _joypad
+                                     37 	.globl _OAMDMA
+                                     38 	.globl _PPUDATA
+                                     39 	.globl _PPUADDR
+                                     40 	.globl _PPUSCROLL
+                                     41 	.globl _OAMDATA
+                                     42 	.globl _OAMADDR
+                                     43 	.globl _PPUSTATUS
+                                     44 	.globl _PPUMASK
+                                     45 	.globl _PPUCTRL
+                                     46 ;--------------------------------------------------------
+                                     47 ; ZP ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _ZP      (PAG)
+                                     50 ;--------------------------------------------------------
+                                     51 ; overlayable items in ram
+                                     52 ;--------------------------------------------------------
+                                     53 ;--------------------------------------------------------
+                                     54 ; uninitialized external ram data
+                                     55 ;--------------------------------------------------------
+                                     56 	.area _BSS
+                         00002000    57 _PPUCTRL	=	0x2000
+                         00002001    58 _PPUMASK	=	0x2001
+                         00002002    59 _PPUSTATUS	=	0x2002
+                         00002003    60 _OAMADDR	=	0x2003
+                         00002004    61 _OAMDATA	=	0x2004
+                         00002005    62 _PPUSCROLL	=	0x2005
+                         00002006    63 _PPUADDR	=	0x2006
+                         00002007    64 _PPUDATA	=	0x2007
+                         00004014    65 _OAMDMA	=	0x4014
+                                     66 ;--------------------------------------------------------
+                                     67 ; absolute external ram data
+                                     68 ;--------------------------------------------------------
+                                     69 	.area _DABS    (ABS)
+                                     70 ;--------------------------------------------------------
+                                     71 ; initialized external ram data
+                                     72 ;--------------------------------------------------------
+                                     73 	.area _DATA
+                                     74 ;--------------------------------------------------------
+                                     75 ; global & static initialisations
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _HOME
+                                     78 	.area _GSINIT
+                                     79 	.area _GSFINAL
+                                     80 	.area _GSINIT
+                                     81 ;--------------------------------------------------------
+                                     82 ; Home
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _HOME
+                                     85 	.area _HOME
+                                     86 ;--------------------------------------------------------
+                                     87 ; code
+                                     88 ;--------------------------------------------------------
+                                     89 	.area _CODE
+                                     90 ;------------------------------------------------------------
+                                     91 ;Allocation info for local variables in function 'main'
+                                     92 ;------------------------------------------------------------
+                                     93 ;spritesUsed   Allocated to registers a 
+                                     94 ;------------------------------------------------------------
+                                     95 ;	src/main.c: 14: void main(void)
+                                     96 ;	genLabel
+                                     97 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                     98 ;	-----------------------------------------
+                                     99 ;	 function main
+                                    100 ;	-----------------------------------------
+                                    101 ;	Register assignment is optimal.
+                                    102 ;	Stack space usage: 0 bytes.
+    00000000                        103 _main:
+                                    104 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    105 ;	src/main.c: 25: SHOW_BKG;
+                                    106 ;	genOr
+    00000000 ADr00r00         [ 4]  107 	lda	_shadow_PPUMASK
+    00000003 09 08            [ 2]  108 	ora	#0x08
+    00000005 8Dr00r00         [ 4]  109 	sta	_shadow_PPUMASK
+                                    110 ;	Raw cost for generated ic 2 : (8, 10.000000) count=1.000000
+                                    111 ;	src/main.c: 26: SHOW_SPRITES;
+                                    112 ;	genOr
+    00000008 ADr00r00         [ 4]  113 	lda	_shadow_PPUMASK
+    0000000B 09 10            [ 2]  114 	ora	#0x10
+    0000000D 8Dr00r00         [ 4]  115 	sta	_shadow_PPUMASK
+                                    116 ;	Raw cost for generated ic 4 : (8, 10.000000) count=1.000000
+                                    117 ;	src/main.c: 27: SPRITES_8x16;
+                                    118 ;	genOr
+    00000010 ADr00r00         [ 4]  119 	lda	_shadow_PPUCTRL
+    00000013 09 20            [ 2]  120 	ora	#0x20
+    00000015 8Dr00r00         [ 4]  121 	sta	_shadow_PPUCTRL
+                                    122 ;	Raw cost for generated ic 6 : (8, 10.000000) count=1.000000
+                                    123 ;	src/main.c: 29: ShowCentered(TitleScreen_WIDTH,TitleScreen_HEIGHT,BANK(TitleScreen),TitleScreen_tiles,TitleScreen_TILE_COUNT,TitleScreen_map,TitleScreen_palettes);
+                                    124 ;	skipping iCode since result will be rematerialized
+                                    125 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    126 ;	genCast
+                                    127 ;	genCopy
+    00000018 A9r00            [ 2]  128 	lda	#___bank_TitleScreen
+    0000001A 8Dr00r00         [ 4]  129 	sta	_ShowCentered_PARM_3
+                                    130 ;	Raw cost for generated ic 9 : (5, 6.000000) count=1.000000
+                                    131 ;	skipping iCode since result will be rematerialized
+                                    132 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    133 ;	genCast
+                                    134 ;	genCopy
+    0000001D A9s00            [ 2]  135 	lda	#>_TitleScreen_tiles
+    0000001F 8Dr01r00         [ 4]  136 	sta	(_ShowCentered_PARM_4 + 1)
+    00000022 A9r00            [ 2]  137 	lda	#_TitleScreen_tiles
+    00000024 8Dr00r00         [ 4]  138 	sta	_ShowCentered_PARM_4
+                                    139 ;	Raw cost for generated ic 11 : (10, 12.000000) count=1.000000
+                                    140 ;	skipping iCode since result will be rematerialized
+                                    141 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    142 ;	genCast
+                                    143 ;	genCopy
+    00000027 A9s00            [ 2]  144 	lda	#>_TitleScreen_map
+    00000029 8Dr01r00         [ 4]  145 	sta	(_ShowCentered_PARM_6 + 1)
+    0000002C A9r00            [ 2]  146 	lda	#_TitleScreen_map
+    0000002E 8Dr00r00         [ 4]  147 	sta	_ShowCentered_PARM_6
+                                    148 ;	Raw cost for generated ic 13 : (10, 12.000000) count=1.000000
+                                    149 ;	skipping iCode since result will be rematerialized
+                                    150 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    151 ;	genCast
+                                    152 ;	genCopy
+    00000031 A9s00            [ 2]  153 	lda	#>_TitleScreen_palettes
+    00000033 8Dr01r00         [ 4]  154 	sta	(_ShowCentered_PARM_7 + 1)
+    00000036 A9r00            [ 2]  155 	lda	#_TitleScreen_palettes
+    00000038 8Dr00r00         [ 4]  156 	sta	_ShowCentered_PARM_7
+                                    157 ;	Raw cost for generated ic 15 : (10, 12.000000) count=1.000000
+                                    158 ;	genAssign
+                                    159 ;	genAssignLit
+    0000003B A2 76            [ 2]  160 	ldx	#0x76
+    0000003D 8Er00r00         [ 4]  161 	stx	_ShowCentered_PARM_5
+                                    162 ;	Raw cost for generated ic 20 : (5, 6.000000) count=1.000000
+                                    163 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    164 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    165 ;	genCall
+                                    166 ;	genSend
+    00000040 A9 A0            [ 2]  167 	lda	#0xa0
+    00000042 A2 48            [ 2]  168 	ldx	#0x48
+    00000044 20r00r00         [ 6]  169 	jsr	_ShowCentered
+                                    170 ;	Raw cost for generated ic 23 : (7, 10.000000) count=1.000000
+                                    171 ;	src/main.c: 31: WaitForStartOrA();
+                                    172 ;	genCall
+    00000047 20r00r00         [ 6]  173 	jsr	_WaitForStartOrA
+                                    174 ;	Raw cost for generated ic 24 : (3, 6.000000) count=1.000000
+                                    175 ;	src/main.c: 34: currentLevel=255;
+                                    176 ;	genAssign
+                                    177 ;	genAssignLit
+    0000004A A2 FF            [ 2]  178 	ldx	#0xff
+    0000004C 8Er00r00         [ 4]  179 	stx	_currentLevel
+                                    180 ;	Raw cost for generated ic 26 : (5, 6.000000) count=1.000000
+                                    181 ;	src/main.c: 35: nextLevel=0;
+                                    182 ;	genAssign
+                                    183 ;	genAssignLit
+    0000004F E8               [ 2]  184 	inx
+    00000050 8Er00r00         [ 4]  185 	stx	_nextLevel
+                                    186 ;	Raw cost for generated ic 28 : (4, 6.000000) count=1.000000
+                                    187 ;	src/main.c: 38: while(1) {
+                                    188 ;	genLabel
+    00000053                        189 00106$:
+                                    190 ;	Raw cost for generated ic 31 : (0, 0.000000) count=72.000000
+                                    191 ;	src/main.c: 41: vsync();
+                                    192 ;	genCall
+    00000053 20r00r00         [ 6]  193 	jsr	_vsync
+                                    194 ;	Raw cost for generated ic 32 : (3, 6.000000) count=72.000000
+                                    195 ;	src/main.c: 44: if(nextLevel!=currentLevel){
+                                    196 ;	genCmpEQorNE
+    00000056 ADr00r00         [ 4]  197 	lda	_nextLevel
+    00000059 CDr00r00         [ 4]  198 	cmp	_currentLevel
+    0000005C F0 6E            [ 4]  199 	beq	00104$
+                                    200 ;	Raw cost for generated ic 33 : (11, 13.600000) count=72.000000
+                                    201 ;	skipping generated iCode
+                                    202 ;	Raw cost for generated ic 34 : (0, 0.000000) count=72.000000
+                                    203 ;	src/main.c: 48: if(currentLevel!=255){
+                                    204 ;	genCmpEQorNE
+    0000005E ADr00r00         [ 4]  205 	lda	_currentLevel
+    00000061 C9 FF            [ 2]  206 	cmp	#0xff
+    00000063 F0 32            [ 4]  207 	beq	00102$
+                                    208 ;	Raw cost for generated ic 37 : (10, 11.600000) count=54.000000
+                                    209 ;	skipping generated iCode
+                                    210 ;	Raw cost for generated ic 38 : (0, 0.000000) count=54.000000
+                                    211 ;	src/main.c: 50: ShowCentered(NextLevel_WIDTH,NextLevel_HEIGHT,BANK(NextLevel),NextLevel_tiles,NextLevel_TILE_COUNT,NextLevel_map,NextLevel_palettes);
+                                    212 ;	skipping iCode since result will be rematerialized
+                                    213 ;	Raw cost for generated ic 41 : (0, 0.000000) count=40.500000
+                                    214 ;	genCast
+                                    215 ;	genCopy
+    00000065 A9r00            [ 2]  216 	lda	#___bank_NextLevel
+    00000067 8Dr00r00         [ 4]  217 	sta	_ShowCentered_PARM_3
+                                    218 ;	Raw cost for generated ic 42 : (5, 6.000000) count=40.500000
+                                    219 ;	skipping iCode since result will be rematerialized
+                                    220 ;	Raw cost for generated ic 43 : (0, 0.000000) count=40.500000
+                                    221 ;	genCast
+                                    222 ;	genCopy
+    0000006A A9s00            [ 2]  223 	lda	#>_NextLevel_tiles
+    0000006C 8Dr01r00         [ 4]  224 	sta	(_ShowCentered_PARM_4 + 1)
+    0000006F A9r00            [ 2]  225 	lda	#_NextLevel_tiles
+    00000071 8Dr00r00         [ 4]  226 	sta	_ShowCentered_PARM_4
+                                    227 ;	Raw cost for generated ic 44 : (10, 12.000000) count=40.500000
+                                    228 ;	skipping iCode since result will be rematerialized
+                                    229 ;	Raw cost for generated ic 45 : (0, 0.000000) count=40.500000
+                                    230 ;	genCast
+                                    231 ;	genCopy
+    00000074 A9s00            [ 2]  232 	lda	#>_NextLevel_map
+    00000076 8Dr01r00         [ 4]  233 	sta	(_ShowCentered_PARM_6 + 1)
+    00000079 A9r00            [ 2]  234 	lda	#_NextLevel_map
+    0000007B 8Dr00r00         [ 4]  235 	sta	_ShowCentered_PARM_6
+                                    236 ;	Raw cost for generated ic 46 : (10, 12.000000) count=40.500000
+                                    237 ;	skipping iCode since result will be rematerialized
+                                    238 ;	Raw cost for generated ic 47 : (0, 0.000000) count=40.500000
+                                    239 ;	genCast
+                                    240 ;	genCopy
+    0000007E A9s00            [ 2]  241 	lda	#>_NextLevel_palettes
+    00000080 8Dr01r00         [ 4]  242 	sta	(_ShowCentered_PARM_7 + 1)
+    00000083 A9r00            [ 2]  243 	lda	#_NextLevel_palettes
+    00000085 8Dr00r00         [ 4]  244 	sta	_ShowCentered_PARM_7
+                                    245 ;	Raw cost for generated ic 48 : (10, 12.000000) count=40.500000
+                                    246 ;	genAssign
+                                    247 ;	genAssignLit
+    00000088 A2 1C            [ 2]  248 	ldx	#0x1c
+    0000008A 8Er00r00         [ 4]  249 	stx	_ShowCentered_PARM_5
+                                    250 ;	Raw cost for generated ic 53 : (5, 6.000000) count=40.500000
+                                    251 ;	Raw cost for generated ic 49 : (0, 0.000000) count=40.500000
+                                    252 ;	Raw cost for generated ic 50 : (0, 0.000000) count=40.500000
+                                    253 ;	genCall
+                                    254 ;	genSend
+    0000008D A9 A0            [ 2]  255 	lda	#0xa0
+    0000008F A2 48            [ 2]  256 	ldx	#0x48
+    00000091 20r00r00         [ 6]  257 	jsr	_ShowCentered
+                                    258 ;	Raw cost for generated ic 56 : (7, 10.000000) count=40.500000
+                                    259 ;	src/main.c: 52: WaitForStartOrA();
+                                    260 ;	genCall
+    00000094 20r00r00         [ 6]  261 	jsr	_WaitForStartOrA
+                                    262 ;	Raw cost for generated ic 57 : (3, 6.000000) count=40.500000
+                                    263 ;	genLabel
+    00000097                        264 00102$:
+                                    265 ;	Raw cost for generated ic 58 : (0, 0.000000) count=54.000000
+                                    266 ;	src/main.c: 56: currentLevel=nextLevel;
+                                    267 ;	genAssign
+                                    268 ;	genAssignLit
+                                    269 ;	genCopy
+    00000097 ADr00r00         [ 4]  270 	lda	_nextLevel
+    0000009A 8Dr00r00         [ 4]  271 	sta	_currentLevel
+                                    272 ;	Raw cost for generated ic 59 : (6, 8.000000) count=54.000000
+                                    273 ;	src/main.c: 58: DISPLAY_OFF;
+                                    274 ;	genCall
+    0000009D 20r00r00         [ 6]  275 	jsr	_display_off
+                                    276 ;	Raw cost for generated ic 61 : (3, 6.000000) count=54.000000
+                                    277 ;	src/main.c: 61: SetupCurrentLevel();
+                                    278 ;	genCall
+    000000A0 20r00r00         [ 6]  279 	jsr	_SetupCurrentLevel
+                                    280 ;	Raw cost for generated ic 62 : (3, 6.000000) count=54.000000
+                                    281 ;	src/main.c: 63: camera_x=0;
+                                    282 ;	genAssign
+                                    283 ;	genAssignLit
+    000000A3 A2 00            [ 2]  284 	ldx	#0x00
+    000000A5 8Er00r00         [ 4]  285 	stx	_camera_x
+    000000A8 8Er01r00         [ 4]  286 	stx	(_camera_x + 1)
+                                    287 ;	Raw cost for generated ic 64 : (8, 11.000000) count=54.000000
+                                    288 ;	src/main.c: 69: SetCurrentLevelSubmap(0,0,DEVICE_SCREEN_WIDTH+1,DEVICE_SCREEN_HEIGHT);
+                                    289 ;	genAssign
+                                    290 ;	genAssignLit
+    000000AB A2 21            [ 2]  291 	ldx	#0x21
+    000000AD 8Er00r00         [ 4]  292 	stx	_SetCurrentLevelSubmap_PARM_3
+                                    293 ;	Raw cost for generated ic 67 : (5, 6.000000) count=54.000000
+                                    294 ;	genAssign
+                                    295 ;	genAssignLit
+    000000B0 A2 1E            [ 2]  296 	ldx	#0x1e
+    000000B2 8Er00r00         [ 4]  297 	stx	_SetCurrentLevelSubmap_PARM_4
+                                    298 ;	Raw cost for generated ic 68 : (5, 6.000000) count=54.000000
+                                    299 ;	Raw cost for generated ic 65 : (0, 0.000000) count=54.000000
+                                    300 ;	Raw cost for generated ic 66 : (0, 0.000000) count=54.000000
+                                    301 ;	genCall
+                                    302 ;	genSend
+    000000B5 A9 00            [ 2]  303 	lda	#0x00
+    000000B7 AA               [ 2]  304 	tax
+    000000B8 20r00r00         [ 6]  305 	jsr	_SetCurrentLevelSubmap
+                                    306 ;	Raw cost for generated ic 69 : (6, 10.000000) count=54.000000
+                                    307 ;	src/main.c: 71: DISPLAY_ON;
+                                    308 ;	genCall
+    000000BB 20r00r00         [ 6]  309 	jsr	_display_on
+                                    310 ;	Raw cost for generated ic 70 : (3, 6.000000) count=54.000000
+                                    311 ;	src/main.c: 77: HIDE_LEFT_COLUMN;
+                                    312 ;	genAnd
+    000000BE ADr00r00         [ 4]  313 	lda	_shadow_PPUMASK
+    000000C1 29 F9            [ 2]  314 	and	#0xf9
+    000000C3 8Dr00r00         [ 4]  315 	sta	_shadow_PPUMASK
+                                    316 ;	Raw cost for generated ic 71 : (8, 10.000000) count=54.000000
+                                    317 ;	src/main.c: 81: SetupPlayer();
+                                    318 ;	genCall
+    000000C6 20r00r00         [ 6]  319 	jsr	___sdcc_bcall
+    000000C9r00                     320 	.db	b_SetupPlayer
+    000000CArFFrFF                  321 	.dw 	_SetupPlayer-1
+                                    322 ;	Raw cost for generated ic 73 : (0, 0.000000) count=54.000000
+                                    323 ;	genLabel
+    000000CC                        324 00104$:
+                                    325 ;	Raw cost for generated ic 74 : (0, 0.000000) count=72.000000
+                                    326 ;	src/main.c: 85: joypadPrevious = joypadCurrent;
+                                    327 ;	genAssign
+                                    328 ;	genAssignLit
+                                    329 ;	genCopy
+    000000CC ADr00r00         [ 4]  330 	lda	_joypadCurrent
+    000000CF 8Dr00r00         [ 4]  331 	sta	_joypadPrevious
+                                    332 ;	Raw cost for generated ic 75 : (6, 8.000000) count=72.000000
+                                    333 ;	src/main.c: 86: joypadCurrent = joypad();
+                                    334 ;	genCall
+    000000D2 20r00r00         [ 6]  335 	jsr	_joypad
+                                    336 ;	assignResultValue
+    000000D5 8Dr00r00         [ 4]  337 	sta	_joypadCurrent
+                                    338 ;	Raw cost for generated ic 77 : (6, 10.000000) count=72.000000
+                                    339 ;	src/main.c: 88: uint8_t spritesUsed = UpdatePlayer();
+                                    340 ;	genCall
+    000000D8 20r00r00         [ 6]  341 	jsr	___sdcc_bcall
+    000000DBr00                     342 	.db	b_UpdatePlayer
+    000000DCrFFrFF                  343 	.dw 	_UpdatePlayer-1
+                                    344 ;	assignResultValue
+                                    345 ;	Raw cost for generated ic 80 : (0, 0.000000) count=72.000000
+                                    346 ;	src/main.c: 89: hide_sprites_range(spritesUsed,MAX_HARDWARE_SPRITES);
+                                    347 ;	Raw cost for generated ic 82 : (0, 0.000000) count=72.000000
+                                    348 ;	Raw cost for generated ic 83 : (0, 0.000000) count=72.000000
+                                    349 ;	genCall
+                                    350 ;	genSend
+    000000DE A2 40            [ 2]  351 	ldx	#0x40
+    000000E0 20r00r00         [ 6]  352 	jsr	_hide_sprites_range
+                                    353 ;	Raw cost for generated ic 84 : (5, 8.000000) count=72.000000
+                                    354 ;	src/main.c: 91: UpdateCamera();
+                                    355 ;	genCall
+    000000E3 20r00r00         [ 6]  356 	jsr	___sdcc_bcall
+    000000E6r00                     357 	.db	b_UpdateCamera
+    000000E7rFFrFF                  358 	.dw 	_UpdateCamera-1
+                                    359 ;	Raw cost for generated ic 85 : (0, 0.000000) count=72.000000
+                                    360 ;	genGoto
+    000000E9 4Cr53r00         [ 3]  361 	jmp	00106$
+                                    362 ;	Raw cost for generated ic 86 : (3, 3.000000) count=72.000000
+                                    363 ;	genLabel
+                                    364 ;	Raw cost for generated ic 88 : (0, 0.000000) count=0.000000
+                                    365 ;	src/main.c: 93: }
+                                    366 ;	genEndFunction
+    000000EC 60               [ 6]  367 	rts
+                                    368 ;	Raw cost for generated ic 89 : (1, 6.000000) count=0.000000
+                                    369 	.area _CODE
+                                    370 	.area _XINIT
+                                    371 	.area _CABS    (ABS)

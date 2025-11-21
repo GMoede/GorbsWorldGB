@@ -1,0 +1,2426 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module player
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _PlayerPalettesGGSMS
+                                     22 	.globl _baseProp
+                                     23 	.globl b_UpdatePlayer
+                                     24 	.globl _UpdatePlayer
+                                     25 	.globl _DrawPlayer
+                                     26 	.globl b_SetupPlayer
+                                     27 	.globl _SetupPlayer
+                                     28 	.globl _SetPlayerPalettes
+                                     29 	.globl _UpdatePlayerVRAMTiles
+                                     30 	.globl _IsTileSolid
+                                     31 	.globl __switch_prg0
+                                     32 	.globl _set_sprite_data
+                                     33 	.globl _set_sprite_palette
+                                     34 	.globl _threeFrameCounter
+                                     35 	.globl _playerJumpIncrease
+                                     36 	.globl _facingRight
+                                     37 	.globl _DrawPlayer_PARM_3
+                                     38 	.globl _DrawPlayer_PARM_2
+                                     39 	.globl _playerYVelocity
+                                     40 	.globl _playerXVelocity
+                                     41 	.globl _playerY
+                                     42 	.globl _playerX
+                                     43 	.globl _OAMDMA
+                                     44 	.globl _PPUDATA
+                                     45 	.globl _PPUADDR
+                                     46 	.globl _PPUSCROLL
+                                     47 	.globl _OAMDATA
+                                     48 	.globl _OAMADDR
+                                     49 	.globl _PPUSTATUS
+                                     50 	.globl _PPUMASK
+                                     51 	.globl _PPUCTRL
+                                     52 ;--------------------------------------------------------
+                                     53 ; ZP ram data
+                                     54 ;--------------------------------------------------------
+                                     55 	.area _ZP      (PAG)
+    00000000                         56 _UpdatePlayer_sloc0_1_0:
+    00000000                         57 	.ds 2
+    00000002                         58 _UpdatePlayer_sloc1_1_0:
+    00000002                         59 	.ds 2
+    00000004                         60 _UpdatePlayer_sloc2_1_0:
+    00000004                         61 	.ds 2
+    00000006                         62 _UpdatePlayer_sloc3_1_0:
+    00000006                         63 	.ds 2
+    00000008                         64 _UpdatePlayer_sloc4_1_0:
+    00000008                         65 	.ds 2
+    0000000A                         66 _UpdatePlayer_sloc5_1_0:
+    0000000A                         67 	.ds 2
+                                     68 ;--------------------------------------------------------
+                                     69 ; overlayable items in ram
+                                     70 ;--------------------------------------------------------
+                                     71 ;--------------------------------------------------------
+                                     72 ; uninitialized external ram data
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _BSS
+                         00002000    75 _PPUCTRL	=	0x2000
+                         00002001    76 _PPUMASK	=	0x2001
+                         00002002    77 _PPUSTATUS	=	0x2002
+                         00002003    78 _OAMADDR	=	0x2003
+                         00002004    79 _OAMDATA	=	0x2004
+                         00002005    80 _PPUSCROLL	=	0x2005
+                         00002006    81 _PPUADDR	=	0x2006
+                         00002007    82 _PPUDATA	=	0x2007
+                         00004014    83 _OAMDMA	=	0x4014
+    00000000                         84 _playerX::
+    00000000                         85 	.ds 2
+    00000002                         86 _playerY::
+    00000002                         87 	.ds 2
+    00000004                         88 _playerXVelocity::
+    00000004                         89 	.ds 2
+    00000006                         90 _playerYVelocity::
+    00000006                         91 	.ds 2
+    00000008                         92 _DrawPlayer_PARM_2:
+    00000008                         93 	.ds 2
+    0000000A                         94 _DrawPlayer_PARM_3:
+    0000000A                         95 	.ds 1
+    0000000B                         96 _DrawPlayer__previous_bank_10000_140:
+    0000000B                         97 	.ds 1
+    0000000C                         98 _DrawPlayer_playerCameraX_10000_140:
+    0000000C                         99 	.ds 2
+    0000000E                        100 _DrawPlayer_playerCameraY_10000_140:
+    0000000E                        101 	.ds 2
+    00000010                        102 _UpdatePlayer_moveSpeed_10000_145:
+    00000010                        103 	.ds 2
+    00000012                        104 _UpdatePlayer_threeFrameCounterValue_10001_146:
+    00000012                        105 	.ds 1
+    00000013                        106 _UpdatePlayer_turning_10002_149:
+    00000013                        107 	.ds 1
+    00000014                        108 _UpdatePlayer_playerRealX_10003_175:
+    00000014                        109 	.ds 2
+    00000016                        110 _UpdatePlayer_playerRealY_10003_175:
+    00000016                        111 	.ds 2
+    00000018                        112 _UpdatePlayer_grounded_10003_175:
+    00000018                        113 	.ds 1
+    00000019                        114 _UpdatePlayer_max_30004_205:
+    00000019                        115 	.ds 2
+    0000001B                        116 _UpdatePlayer_spritesUsed_10005_207:
+    0000001B                        117 	.ds 1
+                                    118 ;--------------------------------------------------------
+                                    119 ; absolute external ram data
+                                    120 ;--------------------------------------------------------
+                                    121 	.area _DABS    (ABS)
+                                    122 ;--------------------------------------------------------
+                                    123 ; initialized external ram data
+                                    124 ;--------------------------------------------------------
+                                    125 	.area _DATA
+    00000000                        126 _facingRight::
+    00000000                        127 	.ds 1
+    00000001                        128 _playerJumpIncrease::
+    00000001                        129 	.ds 1
+    00000002                        130 _threeFrameCounter::
+    00000002                        131 	.ds 1
+                                    132 ;--------------------------------------------------------
+                                    133 ; global & static initialisations
+                                    134 ;--------------------------------------------------------
+                                    135 	.area _HOME
+                                    136 	.area _GSINIT
+                                    137 	.area _GSFINAL
+                                    138 	.area _GSINIT
+                                    139 ;--------------------------------------------------------
+                                    140 ; Home
+                                    141 ;--------------------------------------------------------
+                                    142 	.area _HOME
+                                    143 ;	src/player.c: 67: void UpdatePlayerVRAMTiles(void) NONBANKED{
+                                    144 ;	genLabel
+                                    145 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    146 ;	-----------------------------------------
+                                    147 ;	 function UpdatePlayerVRAMTiles
+                                    148 ;	-----------------------------------------
+                                    149 ;	Register assignment is optimal.
+                                    150 ;	Stack space usage: 0 bytes.
+    00000000                        151 _UpdatePlayerVRAMTiles:
+                                    152 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    153 ;	src/player.c: 68: uint8_t _previous_bank = CURRENT_BANK;
+                                    154 ;	genAssign
+                                    155 ;	genAssignLit
+                                    156 ;	genCopy
+    00000000 ADr00r00         [ 4]  157 	lda	__current_bank
+                                    158 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    159 ;	src/player.c: 71: SWITCH_ROM(BANK(PlayerCharacterSprites));
+                                    160 ;	skipping iCode since result will be rematerialized
+                                    161 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    162 ;	genCast
+                                    163 ;	genCopy
+    00000003 A2r00            [ 2]  164 	ldx	#___bank_PlayerCharacterSprites
+                                    165 ;	Raw cost for generated ic 4 : (2, 2.000000) count=1.000000
+                                    166 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    167 ;	genCall
+    00000005 48               [ 3]  168 	pha
+                                    169 ;	genSend
+    00000006 8A               [ 2]  170 	txa
+    00000007 20r00r00         [ 6]  171 	jsr	__switch_prg0
+    0000000A 68               [ 4]  172 	pla
+                                    173 ;	Raw cost for generated ic 6 : (6, 15.000000) count=1.000000
+                                    174 ;	src/player.c: 73: set_player_sprite_data (0,PlayerCharacterSprites_TILE_COUNT,PlayerCharacterSprites_tiles);
+                                    175 ;	skipping iCode since result will be rematerialized
+                                    176 ;	Raw cost for generated ic 7 : (0, 0.000000) count=1.000000
+                                    177 ;	genCast
+                                    178 ;	genCopy
+    0000000B A2s00            [ 2]  179 	ldx	#>_PlayerCharacterSprites_tiles
+    0000000D 8Er01r00         [ 4]  180 	stx	(_set_sprite_data_PARM_3 + 1)
+    00000010 A2r00            [ 2]  181 	ldx	#_PlayerCharacterSprites_tiles
+    00000012 8Er00r00         [ 4]  182 	stx	_set_sprite_data_PARM_3
+                                    183 ;	Raw cost for generated ic 8 : (10, 12.000000) count=1.000000
+                                    184 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    185 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    186 ;	genCall
+    00000015 48               [ 3]  187 	pha
+                                    188 ;	genSend
+    00000016 A9 00            [ 2]  189 	lda	#0x00
+    00000018 A2 3E            [ 2]  190 	ldx	#0x3e
+    0000001A 20r00r00         [ 6]  191 	jsr	_set_sprite_data
+    0000001D 68               [ 4]  192 	pla
+                                    193 ;	Raw cost for generated ic 12 : (9, 17.000000) count=1.000000
+                                    194 ;	src/player.c: 75: SWITCH_ROM(_previous_bank);
+                                    195 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    196 ;	genCall
+                                    197 ;	genSend
+                                    198 ;	Raw cost for generated ic 14 : (3, 6.000000) count=1.000000
+                                    199 ;	genLabel
+                                    200 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    201 ;	src/player.c: 76: }
+                                    202 ;	genEndFunction
+    0000001E 4Cr00r00         [ 3]  203 	jmp	__switch_prg0
+                                    204 ;	Raw cost for generated ic 16 : (1, 6.000000) count=1.000000
+                                    205 ;	src/player.c: 78: void SetPlayerPalettes(void) NONBANKED{
+                                    206 ;	genLabel
+                                    207 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    208 ;	-----------------------------------------
+                                    209 ;	 function SetPlayerPalettes
+                                    210 ;	-----------------------------------------
+                                    211 ;	Register assignment is optimal.
+                                    212 ;	Stack space usage: 0 bytes.
+    00000021                        213 _SetPlayerPalettes:
+                                    214 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    215 ;	src/player.c: 79: uint8_t _previous_bank = CURRENT_BANK;
+                                    216 ;	genAssign
+                                    217 ;	genAssignLit
+                                    218 ;	genCopy
+    00000021 ADr00r00         [ 4]  219 	lda	__current_bank
+                                    220 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    221 ;	src/player.c: 81: SWITCH_ROM(PLAYER_PALETTES_BANK);
+                                    222 ;	skipping iCode since result will be rematerialized
+                                    223 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    224 ;	genCast
+                                    225 ;	genCopy
+    00000024 A2r00            [ 2]  226 	ldx	#___bank_PlayerCharacterSprites
+                                    227 ;	Raw cost for generated ic 4 : (2, 2.000000) count=1.000000
+                                    228 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    229 ;	genCall
+    00000026 48               [ 3]  230 	pha
+                                    231 ;	genSend
+    00000027 8A               [ 2]  232 	txa
+    00000028 20r00r00         [ 6]  233 	jsr	__switch_prg0
+    0000002B 68               [ 4]  234 	pla
+                                    235 ;	Raw cost for generated ic 6 : (6, 15.000000) count=1.000000
+                                    236 ;	src/player.c: 91: set_sprite_palette(baseProp, 4, PLAYER_PALETTES);
+                                    237 ;	skipping iCode since result will be rematerialized
+                                    238 ;	Raw cost for generated ic 7 : (0, 0.000000) count=1.000000
+                                    239 ;	genCast
+                                    240 ;	genCopy
+    0000002C A2s00            [ 2]  241 	ldx	#>_PlayerCharacterSprites_palettes
+    0000002E 8Er01r00         [ 4]  242 	stx	(_set_sprite_palette_PARM_3 + 1)
+    00000031 A2r00            [ 2]  243 	ldx	#_PlayerCharacterSprites_palettes
+    00000033 8Er00r00         [ 4]  244 	stx	_set_sprite_palette_PARM_3
+                                    245 ;	Raw cost for generated ic 8 : (10, 12.000000) count=1.000000
+                                    246 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    247 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    248 ;	genCall
+    00000036 48               [ 3]  249 	pha
+                                    250 ;	genSend
+    00000037 ADr7Br06         [ 4]  251 	lda	_baseProp
+    0000003A A2 04            [ 2]  252 	ldx	#0x04
+    0000003C 20r00r00         [ 6]  253 	jsr	_set_sprite_palette
+    0000003F 68               [ 4]  254 	pla
+                                    255 ;	Raw cost for generated ic 12 : (10, 19.000000) count=1.000000
+                                    256 ;	src/player.c: 95: SWITCH_ROM(_previous_bank);
+                                    257 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    258 ;	genCall
+                                    259 ;	genSend
+                                    260 ;	Raw cost for generated ic 14 : (3, 6.000000) count=1.000000
+                                    261 ;	genLabel
+                                    262 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    263 ;	src/player.c: 96: }
+                                    264 ;	genEndFunction
+    00000040 4Cr00r00         [ 3]  265 	jmp	__switch_prg0
+                                    266 ;	Raw cost for generated ic 16 : (1, 6.000000) count=1.000000
+                                    267 ;	src/player.c: 116: uint8_t DrawPlayer(uint16_t playerRealX, uint16_t playerRealY, uint8_t frame) NONBANKED{
+                                    268 ;	genLabel
+                                    269 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    270 ;	-----------------------------------------
+                                    271 ;	 function DrawPlayer
+                                    272 ;	-----------------------------------------
+                                    273 ;	Register assignment is optimal.
+                                    274 ;	Stack space usage: 0 bytes.
+    00000043                        275 _DrawPlayer:
+                                    276 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    277 ;	genReceive
+                                    278 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    279 ;	src/player.c: 119: uint8_t _previous_bank = CURRENT_BANK;
+                                    280 ;	genAssign
+                                    281 ;	genAssignLit
+                                    282 ;	genCopy
+    00000043 ACr00r00         [ 4]  283 	ldy	__current_bank
+    00000046 8Cr0Br00         [ 4]  284 	sty	_DrawPlayer__previous_bank_10000_140
+                                    285 ;	Raw cost for generated ic 4 : (6, 8.000000) count=1.000000
+                                    286 ;	src/player.c: 123: uint16_t playerCameraX = (playerRealX-camera_x)+DEVICE_SPRITE_PX_OFFSET_X;
+                                    287 ;	genMinus
+                                    288 ;	genMinusDec
+    00000049 38               [ 2]  289 	sec
+    0000004A EDr00r00         [ 4]  290 	sbc	_camera_x
+    0000004D 8Dr0Cr00         [ 4]  291 	sta	_DrawPlayer_playerCameraX_10000_140
+    00000050 8A               [ 2]  292 	txa
+    00000051 EDr01r00         [ 4]  293 	sbc	(_camera_x + 1)
+    00000054 8Dr0Dr00         [ 4]  294 	sta	(_DrawPlayer_playerCameraX_10000_140 + 1)
+                                    295 ;	Raw cost for generated ic 5 : (14, 20.000000) count=1.000000
+                                    296 ;	src/player.c: 124: uint16_t playerCameraY= (playerRealY)+DEVICE_SPRITE_PX_OFFSET_Y;
+                                    297 ;	genCast
+                                    298 ;	genCopy
+    00000057 AEr09r00         [ 4]  299 	ldx	(_DrawPlayer_PARM_2 + 1)
+    0000005A ADr08r00         [ 4]  300 	lda	_DrawPlayer_PARM_2
+                                    301 ;	Raw cost for generated ic 7 : (6, 8.000000) count=1.000000
+                                    302 ;	genPlus
+                                    303 ;	genPlusIncr
+    0000005D 18               [ 2]  304 	clc
+    0000005E 69 FF            [ 2]  305 	adc	#0xff
+    00000060 48               [ 3]  306 	pha
+    00000061 8A               [ 2]  307 	txa
+    00000062 69 FF            [ 2]  308 	adc	#0xff
+    00000064 AA               [ 2]  309 	tax
+    00000065 68               [ 4]  310 	pla
+                                    311 ;	Raw cost for generated ic 8 : (9, 17.000000) count=1.000000
+                                    312 ;	genCast
+                                    313 ;	genCopy
+    00000066 8Dr0Er00         [ 4]  314 	sta	_DrawPlayer_playerCameraY_10000_140
+    00000069 8Er0Fr00         [ 4]  315 	stx	(_DrawPlayer_playerCameraY_10000_140 + 1)
+                                    316 ;	Raw cost for generated ic 9 : (6, 8.000000) count=1.000000
+                                    317 ;	src/player.c: 126: SWITCH_ROM(BANK(PlayerCharacterSprites));
+                                    318 ;	skipping iCode since result will be rematerialized
+                                    319 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    320 ;	genCast
+                                    321 ;	genCopy
+    0000006C A9r00            [ 2]  322 	lda	#___bank_PlayerCharacterSprites
+                                    323 ;	Raw cost for generated ic 12 : (2, 2.000000) count=1.000000
+                                    324 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    325 ;	genCall
+                                    326 ;	genSend
+    0000006E 20r00r00         [ 6]  327 	jsr	__switch_prg0
+                                    328 ;	Raw cost for generated ic 14 : (3, 6.000000) count=1.000000
+                                    329 ;	src/player.c: 128: spritesUsed = move_metasprite_ex(PlayerCharacterSprites_metasprites[frame],0,baseProp,0,playerCameraX,playerCameraY);
+                                    330 ;	skipping iCode since result will be rematerialized
+                                    331 ;	Raw cost for generated ic 20 : (0, 0.000000) count=1.000000
+                                    332 ;	genCast
+                                    333 ;	genCopy
+    00000071 A2 00            [ 2]  334 	ldx	#0x00
+    00000073 ADr0Ar00         [ 4]  335 	lda	_DrawPlayer_PARM_3
+                                    336 ;	Raw cost for generated ic 21 : (5, 6.000000) count=1.000000
+                                    337 ;	genLeftShift
+                                    338 ;	genLeftShiftLiteral
+                                    339 ;	genlshTwo
+    00000076 86*00            [ 3]  340 	stx	*(REGTEMP+0)
+    00000078 0A               [ 2]  341 	asl	a
+    00000079 26*00            [ 5]  342 	rol	*(REGTEMP+0)
+    0000007B A6*00            [ 3]  343 	ldx	*(REGTEMP+0)
+                                    344 ;	Raw cost for generated ic 22 : (7, 13.000000) count=1.000000
+                                    345 ;	genAssign
+                                    346 ;	genAssignLit
+                                    347 ;	genCopy
+                                    348 ;	Raw cost for generated ic 23 : (0, 0.000000) count=1.000000
+                                    349 ;	genPointerGet
+                                    350 ;	setupDPTR
+    0000007D 18               [ 2]  351 	clc
+    0000007E 69r00            [ 2]  352 	adc	#<(_PlayerCharacterSprites_metasprites+0)
+    00000080 85*00            [ 3]  353 	sta	*(DPTR+0)
+    00000082 8A               [ 2]  354 	txa
+    00000083 69s00            [ 2]  355 	adc	#>(_PlayerCharacterSprites_metasprites+0)
+    00000085 85*01            [ 3]  356 	sta	*(DPTR+1)
+    00000087 A0 01            [ 2]  357 	ldy	#0x01
+    00000089 B1*00            [ 6]  358 	lda	[DPTR],y
+    0000008B AA               [ 2]  359 	tax
+    0000008C 88               [ 2]  360 	dey
+    0000008D B1*00            [ 6]  361 	lda	[DPTR],y
+                                    362 ;	Raw cost for generated ic 24 : (18, 30.000000) count=1.000000
+                                    363 ;	../../../include/nes/metasprites.h: 91: __current_metasprite = metasprite;
+                                    364 ;	genCast
+                                    365 ;	genCopy
+    0000008F 8Dr00r00         [ 4]  366 	sta	___current_metasprite
+    00000092 8Er01r00         [ 4]  367 	stx	(___current_metasprite + 1)
+                                    368 ;	Raw cost for generated ic 32 : (6, 8.000000) count=1.000000
+                                    369 ;	../../../include/nes/metasprites.h: 92: __current_base_tile = base_tile;
+                                    370 ;	genAssign
+                                    371 ;	genAssignLit
+    00000095 8Cr00r00         [ 4]  372 	sty	___current_base_tile
+                                    373 ;	Raw cost for generated ic 36 : (3, 4.000000) count=1.000000
+                                    374 ;	../../../include/nes/metasprites.h: 93: __current_base_prop = base_prop;
+                                    375 ;	genAssign
+                                    376 ;	genAssignLit
+    00000098 8Cr00r00         [ 4]  377 	sty	___current_base_prop
+                                    378 ;	Raw cost for generated ic 38 : (3, 4.000000) count=1.000000
+                                    379 ;	../../../include/nes/metasprites.h: 94: return __move_metasprite(base_sprite, x, y);
+                                    380 ;	genAssign
+                                    381 ;	genAssignLit
+                                    382 ;	genCopy
+    0000009B ADr0Dr00         [ 4]  383 	lda	(_DrawPlayer_playerCameraX_10000_140 + 1)
+    0000009E 8Dr01r00         [ 4]  384 	sta	(___move_metasprite_PARM_2 + 1)
+    000000A1 ADr0Cr00         [ 4]  385 	lda	_DrawPlayer_playerCameraX_10000_140
+    000000A4 8Dr00r00         [ 4]  386 	sta	___move_metasprite_PARM_2
+                                    387 ;	Raw cost for generated ic 40 : (12, 16.000000) count=1.000000
+                                    388 ;	genAssign
+                                    389 ;	genAssignLit
+                                    390 ;	genCopy
+    000000A7 ADr0Fr00         [ 4]  391 	lda	(_DrawPlayer_playerCameraY_10000_140 + 1)
+    000000AA 8Dr01r00         [ 4]  392 	sta	(___move_metasprite_PARM_3 + 1)
+    000000AD ADr0Er00         [ 4]  393 	lda	_DrawPlayer_playerCameraY_10000_140
+    000000B0 8Dr00r00         [ 4]  394 	sta	___move_metasprite_PARM_3
+                                    395 ;	Raw cost for generated ic 41 : (12, 16.000000) count=1.000000
+                                    396 ;	Raw cost for generated ic 39 : (0, 0.000000) count=1.000000
+                                    397 ;	genCall
+                                    398 ;	genSend
+    000000B3 98               [ 2]  399 	tya
+    000000B4 20r00r00         [ 6]  400 	jsr	___move_metasprite
+                                    401 ;	assignResultValue
+                                    402 ;	Raw cost for generated ic 42 : (4, 8.000000) count=1.000000
+                                    403 ;	src/player.c: 130: SWITCH_ROM(_previous_bank);
+                                    404 ;	Raw cost for generated ic 47 : (0, 0.000000) count=1.000000
+                                    405 ;	genCall
+    000000B7 48               [ 3]  406 	pha
+                                    407 ;	genSend
+    000000B8 ADr0Br00         [ 4]  408 	lda	_DrawPlayer__previous_bank_10000_140
+    000000BB 20r00r00         [ 6]  409 	jsr	__switch_prg0
+    000000BE 68               [ 4]  410 	pla
+                                    411 ;	Raw cost for generated ic 48 : (8, 17.000000) count=1.000000
+                                    412 ;	src/player.c: 132: return spritesUsed;
+                                    413 ;	genRet
+                                    414 ;	Raw cost for generated ic 49 : (0, 0.000000) count=1.000000
+                                    415 ;	genLabel
+                                    416 ;	Raw cost for generated ic 50 : (0, 0.000000) count=1.000000
+                                    417 ;	src/player.c: 133: }
+                                    418 ;	genEndFunction
+    000000BF 60               [ 6]  419 	rts
+                                    420 ;	Raw cost for generated ic 51 : (1, 6.000000) count=1.000000
+                                    421 	.area _HOME
+                                    422 ;--------------------------------------------------------
+                                    423 ; code
+                                    424 ;--------------------------------------------------------
+                                    425 	.area _CODE_255
+                                    426 ;------------------------------------------------------------
+                                    427 ;Allocation info for local variables in function 'UpdatePlayerVRAMTiles'
+                                    428 ;------------------------------------------------------------
+                                    429 ;_previous_bank Allocated to registers a 
+                                    430 ;------------------------------------------------------------
+                                    431 ;------------------------------------------------------------
+                                    432 ;Allocation info for local variables in function 'SetPlayerPalettes'
+                                    433 ;------------------------------------------------------------
+                                    434 ;_previous_bank Allocated to registers a 
+                                    435 ;------------------------------------------------------------
+                                    436 ;------------------------------------------------------------
+                                    437 ;Allocation info for local variables in function 'SetupPlayer'
+                                    438 ;------------------------------------------------------------
+                                    439 ;	src/player.c: 98: void SetupPlayer(void) BANKED{
+                                    440 ;	genLabel
+                                    441 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    442 ;	-----------------------------------------
+                                    443 ;	 function SetupPlayer
+                                    444 ;	-----------------------------------------
+                                    445 ;	Register assignment is optimal.
+                                    446 ;	Stack space usage: 0 bytes.
+                         000000FF   447 	b_SetupPlayer	= 255
+    00000000                        448 _SetupPlayer:
+                                    449 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    450 ;	src/player.c: 102: playerX=40<<4;
+                                    451 ;	genAssign
+                                    452 ;	genAssignLit
+    00000000 A2 80            [ 2]  453 	ldx	#0x80
+    00000002 8Er00r00         [ 4]  454 	stx	_playerX
+    00000005 A2 02            [ 2]  455 	ldx	#0x02
+    00000007 8Er01r00         [ 4]  456 	stx	(_playerX + 1)
+                                    457 ;	Raw cost for generated ic 3 : (10, 12.000000) count=1.000000
+                                    458 ;	src/player.c: 103: playerY=40<<4;
+                                    459 ;	genAssign
+                                    460 ;	genAssignLit
+    0000000A A2 80            [ 2]  461 	ldx	#0x80
+    0000000C 8Er02r00         [ 4]  462 	stx	_playerY
+    0000000F A2 02            [ 2]  463 	ldx	#0x02
+    00000011 8Er03r00         [ 4]  464 	stx	(_playerY + 1)
+                                    465 ;	Raw cost for generated ic 5 : (10, 12.000000) count=1.000000
+                                    466 ;	src/player.c: 105: playerXVelocity=0;
+                                    467 ;	genAssign
+                                    468 ;	genAssignLit
+    00000014 A2 00            [ 2]  469 	ldx	#0x00
+    00000016 8Er04r00         [ 4]  470 	stx	_playerXVelocity
+    00000019 8Er05r00         [ 4]  471 	stx	(_playerXVelocity + 1)
+                                    472 ;	Raw cost for generated ic 7 : (8, 11.000000) count=1.000000
+                                    473 ;	src/player.c: 106: playerYVelocity=0;
+                                    474 ;	genAssign
+                                    475 ;	genAssignLit
+    0000001C 8Er06r00         [ 4]  476 	stx	_playerYVelocity
+    0000001F 8Er07r00         [ 4]  477 	stx	(_playerYVelocity + 1)
+                                    478 ;	Raw cost for generated ic 9 : (6, 9.000000) count=1.000000
+                                    479 ;	src/player.c: 108: UpdatePlayerVRAMTiles();
+                                    480 ;	genCall
+    00000022 20r00r00         [ 6]  481 	jsr	_UpdatePlayerVRAMTiles
+                                    482 ;	Raw cost for generated ic 10 : (3, 6.000000) count=1.000000
+                                    483 ;	src/player.c: 111: SetPlayerPalettes();
+                                    484 ;	genCall
+                                    485 ;	Raw cost for generated ic 11 : (3, 6.000000) count=1.000000
+                                    486 ;	genLabel
+                                    487 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    488 ;	src/player.c: 114: }
+                                    489 ;	genEndFunction
+    00000025 4Cr21r00         [ 3]  490 	jmp	_SetPlayerPalettes
+                                    491 ;	Raw cost for generated ic 13 : (1, 6.000000) count=1.000000
+                                    492 ;------------------------------------------------------------
+                                    493 ;Allocation info for local variables in function 'DrawPlayer'
+                                    494 ;------------------------------------------------------------
+                                    495 ;playerRealY   Allocated with name '_DrawPlayer_PARM_2'
+                                    496 ;frame         Allocated with name '_DrawPlayer_PARM_3'
+                                    497 ;playerRealX   Allocated to registers a x 
+                                    498 ;__200000009   Allocated to registers a 
+                                    499 ;spritesUsed   Allocated to registers 
+                                    500 ;_previous_bank Allocated with name '_DrawPlayer__previous_bank_10000_140'
+                                    501 ;playerCameraX Allocated with name '_DrawPlayer_playerCameraX_10000_140'
+                                    502 ;playerCameraY Allocated with name '_DrawPlayer_playerCameraY_10000_140'
+                                    503 ;__200000010   Allocated to registers 
+                                    504 ;__200000011   Allocated to registers 
+                                    505 ;__200000012   Allocated to registers 
+                                    506 ;__200000013   Allocated to registers 
+                                    507 ;__200000014   Allocated to registers 
+                                    508 ;__200000015   Allocated to registers 
+                                    509 ;metasprite    Allocated to registers 
+                                    510 ;base_tile     Allocated to registers 
+                                    511 ;base_prop     Allocated to registers 
+                                    512 ;base_sprite   Allocated to registers 
+                                    513 ;x             Allocated to registers 
+                                    514 ;y             Allocated to registers 
+                                    515 ;------------------------------------------------------------
+                                    516 ;------------------------------------------------------------
+                                    517 ;Allocation info for local variables in function 'UpdatePlayer'
+                                    518 ;------------------------------------------------------------
+                                    519 ;sloc0         Allocated with name '_UpdatePlayer_sloc0_1_0'
+                                    520 ;sloc1         Allocated with name '_UpdatePlayer_sloc1_1_0'
+                                    521 ;sloc2         Allocated with name '_UpdatePlayer_sloc2_1_0'
+                                    522 ;sloc3         Allocated with name '_UpdatePlayer_sloc3_1_0'
+                                    523 ;sloc4         Allocated with name '_UpdatePlayer_sloc4_1_0'
+                                    524 ;sloc5         Allocated with name '_UpdatePlayer_sloc5_1_0'
+                                    525 ;moveSpeed     Allocated with name '_UpdatePlayer_moveSpeed_10000_145'
+                                    526 ;threeFrameCounterSpeed Allocated to registers a 
+                                    527 ;threeFrameCounterValue Allocated with name '_UpdatePlayer_threeFrameCounterValue_10001_146'
+                                    528 ;turning       Allocated with name '_UpdatePlayer_turning_10002_149'
+                                    529 ;playerRealX   Allocated with name '_UpdatePlayer_playerRealX_10003_175'
+                                    530 ;playerRealY   Allocated with name '_UpdatePlayer_playerRealY_10003_175'
+                                    531 ;grounded      Allocated with name '_UpdatePlayer_grounded_10003_175'
+                                    532 ;pressedA      Allocated to registers y 
+                                    533 ;pressedUp     Allocated to registers a 
+                                    534 ;pressedAOrUp  Allocated to registers y 
+                                    535 ;max           Allocated with name '_UpdatePlayer_max_30004_205'
+                                    536 ;frame         Allocated to registers a 
+                                    537 ;directionOffset Allocated to registers x 
+                                    538 ;spritesUsed   Allocated with name '_UpdatePlayer_spritesUsed_10005_207'
+                                    539 ;------------------------------------------------------------
+                                    540 ;	src/player.c: 135: uint8_t UpdatePlayer(void) BANKED{
+                                    541 ;	genLabel
+                                    542 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    543 ;	-----------------------------------------
+                                    544 ;	 function UpdatePlayer
+                                    545 ;	-----------------------------------------
+                                    546 ;	Register assignment might be sub-optimal.
+                                    547 ;	Stack space usage: 0 bytes.
+                         000000FF   548 	b_UpdatePlayer	= 255
+    00000028                        549 _UpdatePlayer:
+                                    550 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    551 ;	src/player.c: 139: int16_t moveSpeed = (joypadCurrent & J_B) ?PLAYER_CHARACTER_RUN_VELOCITY:PLAYER_CHARACTER_WALK_VELOCITY;
+                                    552 ;	genCast
+                                    553 ;	genCopy
+    00000028 ACr00r00         [ 4]  554 	ldy	_joypadCurrent
+                                    555 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    556 ;	genAnd
+    0000002B 98               [ 2]  557 	tya
+    0000002C 29 40            [ 2]  558 	and	#0x40
+                                    559 ;	genIfxJump : z
+    0000002E F0 07            [ 4]  560 	beq	00191$
+                                    561 ;	Raw cost for generated ic 3 : (8, 9.600000) count=1.000000
+                                    562 ;	skipping generated iCode
+                                    563 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    564 ;	genAssign
+                                    565 ;	genAssignLit
+                                    566 ;	genCopy
+    00000030 A2 01            [ 2]  567 	ldx	#0x01
+    00000032 A9 A9            [ 2]  568 	lda	#0xa9
+                                    569 ;	Raw cost for generated ic 5 : (4, 4.000000) count=0.750000
+                                    570 ;	genGoto
+    00000034 4Cr3Br00         [ 3]  571 	jmp	00192$
+                                    572 ;	Raw cost for generated ic 6 : (3, 3.000000) count=0.750000
+                                    573 ;	genLabel
+    00000037                        574 00191$:
+                                    575 ;	Raw cost for generated ic 7 : (0, 0.000000) count=0.250000
+                                    576 ;	genAssign
+                                    577 ;	genAssignLit
+                                    578 ;	genCopy
+    00000037 A2 01            [ 2]  579 	ldx	#0x01
+    00000039 A9 45            [ 2]  580 	lda	#0x45
+                                    581 ;	Raw cost for generated ic 8 : (4, 4.000000) count=0.250000
+                                    582 ;	genLabel
+    0000003B                        583 00192$:
+                                    584 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    585 ;	genCast
+                                    586 ;	genCopy
+    0000003B 8Dr10r00         [ 4]  587 	sta	_UpdatePlayer_moveSpeed_10000_145
+    0000003E 8Er11r00         [ 4]  588 	stx	(_UpdatePlayer_moveSpeed_10000_145 + 1)
+                                    589 ;	Raw cost for generated ic 10 : (6, 8.000000) count=1.000000
+                                    590 ;	src/player.c: 140: uint8_t threeFrameCounterSpeed = (joypadCurrent & J_B) ? PLAYER_CHARACTER_RUN_TWO_FRAME_COUNTER : PLAYER_CHARACTER_WALK_TWO_FRAME_COUNTER;
+                                    591 ;	genAnd
+    00000041 98               [ 2]  592 	tya
+    00000042 29 40            [ 2]  593 	and	#0x40
+                                    594 ;	genIfxJump : z
+    00000044 F0 05            [ 4]  595 	beq	00193$
+                                    596 ;	Raw cost for generated ic 13 : (8, 9.600000) count=1.000000
+                                    597 ;	skipping generated iCode
+                                    598 ;	Raw cost for generated ic 14 : (0, 0.000000) count=1.000000
+                                    599 ;	genAssign
+                                    600 ;	genAssignLit
+                                    601 ;	genCopy
+    00000046 A9 05            [ 2]  602 	lda	#0x05
+                                    603 ;	Raw cost for generated ic 15 : (2, 2.000000) count=0.750000
+                                    604 ;	genGoto
+    00000048 4Cr4Dr00         [ 3]  605 	jmp	00194$
+                                    606 ;	Raw cost for generated ic 16 : (3, 3.000000) count=0.750000
+                                    607 ;	genLabel
+    0000004B                        608 00193$:
+                                    609 ;	Raw cost for generated ic 17 : (0, 0.000000) count=0.250000
+                                    610 ;	genAssign
+                                    611 ;	genAssignLit
+                                    612 ;	genCopy
+    0000004B A9 03            [ 2]  613 	lda	#0x03
+                                    614 ;	Raw cost for generated ic 18 : (2, 2.000000) count=0.250000
+                                    615 ;	genLabel
+    0000004D                        616 00194$:
+                                    617 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    618 ;	genCast
+                                    619 ;	genCopy
+                                    620 ;	Raw cost for generated ic 20 : (0, 0.000000) count=1.000000
+                                    621 ;	src/player.c: 142: threeFrameCounter+=threeFrameCounterSpeed;
+                                    622 ;	genPlus
+                                    623 ;	genPlusIncr
+    0000004D 18               [ 2]  624 	clc
+    0000004E 6Dr02r00         [ 4]  625 	adc	_threeFrameCounter
+                                    626 ;	Raw cost for generated ic 22 : (7, 10.000000) count=1.000000
+                                    627 ;	src/player.c: 143: uint8_t threeFrameCounterValue = threeFrameCounter>>4;
+                                    628 ;	genRightShift
+                                    629 ;	genRightShiftLiteral
+                                    630 ;	genrshOne
+    00000051 8Dr02r00         [ 4]  631 	sta	_threeFrameCounter
+    00000054 4A               [ 2]  632 	lsr	a
+    00000055 4A               [ 2]  633 	lsr	a
+    00000056 4A               [ 2]  634 	lsr	a
+    00000057 4A               [ 2]  635 	lsr	a
+                                    636 ;	Raw cost for generated ic 25 : (10, 16.000000) count=1.000000
+                                    637 ;	src/player.c: 144: if(threeFrameCounterValue>=3){
+                                    638 ;	genCmp
+    00000058 8Dr12r00         [ 4]  639 	sta	_UpdatePlayer_threeFrameCounterValue_10001_146
+    0000005B C9 03            [ 2]  640 	cmp	#0x03
+    0000005D 90 08            [ 4]  641 	bcc	00102$
+                                    642 ;	Raw cost for generated ic 27 : (10, 11.600000) count=1.000000
+                                    643 ;	skipping generated iCode
+                                    644 ;	Raw cost for generated ic 28 : (0, 0.000000) count=1.000000
+                                    645 ;	src/player.c: 145: threeFrameCounter=0;
+                                    646 ;	genAssign
+                                    647 ;	genAssignLit
+    0000005F A2 00            [ 2]  648 	ldx	#0x00
+    00000061 8Er02r00         [ 4]  649 	stx	_threeFrameCounter
+                                    650 ;	Raw cost for generated ic 32 : (5, 6.000000) count=0.750000
+                                    651 ;	src/player.c: 146: threeFrameCounterValue=0;
+                                    652 ;	genAssign
+                                    653 ;	genAssignLit
+    00000064 8Er12r00         [ 4]  654 	stx	_UpdatePlayer_threeFrameCounterValue_10001_146
+                                    655 ;	Raw cost for generated ic 33 : (3, 4.000000) count=0.750000
+                                    656 ;	genLabel
+    00000067                        657 00102$:
+                                    658 ;	Raw cost for generated ic 34 : (0, 0.000000) count=1.000000
+                                    659 ;	src/player.c: 149: uint8_t turning = FALSE;
+                                    660 ;	genAssign
+                                    661 ;	genAssignLit
+    00000067 A2 00            [ 2]  662 	ldx	#0x00
+    00000069 8Er13r00         [ 4]  663 	stx	_UpdatePlayer_turning_10002_149
+                                    664 ;	Raw cost for generated ic 35 : (5, 6.000000) count=1.000000
+                                    665 ;	src/player.c: 151: if(joypadCurrent &J_RIGHT){
+                                    666 ;	genAnd
+    0000006C 98               [ 2]  667 	tya
+    0000006D 29 01            [ 2]  668 	and	#0x01
+                                    669 ;	genIfxJump : z
+    0000006F F0 52            [ 4]  670 	beq	00134$
+                                    671 ;	Raw cost for generated ic 37 : (8, 9.600000) count=1.000000
+                                    672 ;	skipping generated iCode
+                                    673 ;	Raw cost for generated ic 38 : (0, 0.000000) count=1.000000
+                                    674 ;	src/player.c: 154: if(playerXVelocity<0){
+                                    675 ;	genCast
+                                    676 ;	genCopy
+    00000071 ADr05r00         [ 4]  677 	lda	(_playerXVelocity + 1)
+    00000074 85*01            [ 3]  678 	sta	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000076 ADr04r00         [ 4]  679 	lda	_playerXVelocity
+    00000079 85*00            [ 3]  680 	sta	*_UpdatePlayer_sloc0_1_0
+                                    681 ;	Raw cost for generated ic 41 : (10, 14.000000) count=0.750000
+                                    682 ;	genCmp
+    0000007B 24*01            [ 3]  683 	bit	*(_UpdatePlayer_sloc0_1_0 + 1)
+    0000007D 10 28            [ 4]  684 	bpl	00109$
+                                    685 ;	Raw cost for generated ic 42 : (7, 8.600000) count=0.750000
+                                    686 ;	skipping generated iCode
+                                    687 ;	Raw cost for generated ic 43 : (0, 0.000000) count=0.750000
+                                    688 ;	src/player.c: 157: playerXVelocity+=GROUND_FRICTION;
+                                    689 ;	genPlus
+                                    690 ;	genPlusIncr
+    0000007F A6*01            [ 3]  691 	ldx	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000081 A5*00            [ 3]  692 	lda	*_UpdatePlayer_sloc0_1_0
+    00000083 18               [ 2]  693 	clc
+    00000084 69 0F            [ 2]  694 	adc	#0x0f
+    00000086 90 01            [ 4]  695 	bcc	00539$
+    00000088 E8               [ 2]  696 	inx
+    00000089                        697 00539$:
+                                    698 ;	Raw cost for generated ic 47 : (10, 14.600000) count=0.562500
+                                    699 ;	genCast
+                                    700 ;	genCopy
+                                    701 ;	Raw cost for generated ic 48 : (6, 9.000000) count=0.562500
+                                    702 ;	src/player.c: 160: if(playerXVelocity<0)turning=TRUE;
+                                    703 ;	genCast
+                                    704 ;	genCopy
+    00000089 8Dr04r00         [ 4]  705 	sta	_playerXVelocity
+    0000008C 8Er05r00         [ 4]  706 	stx	(_playerXVelocity + 1)
+    0000008F 85*00            [ 3]  707 	sta	*_UpdatePlayer_sloc0_1_0
+    00000091 86*01            [ 3]  708 	stx	*(_UpdatePlayer_sloc0_1_0 + 1)
+                                    709 ;	Raw cost for generated ic 51 : (10, 14.000000) count=0.562500
+                                    710 ;	genCmp
+    00000093 24*01            [ 3]  711 	bit	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000095 10 08            [ 4]  712 	bpl	00104$
+                                    713 ;	Raw cost for generated ic 52 : (7, 8.600000) count=0.562500
+                                    714 ;	skipping generated iCode
+                                    715 ;	Raw cost for generated ic 53 : (0, 0.000000) count=0.562500
+                                    716 ;	genAssign
+                                    717 ;	genAssignLit
+    00000097 A2 01            [ 2]  718 	ldx	#0x01
+    00000099 8Er13r00         [ 4]  719 	stx	_UpdatePlayer_turning_10002_149
+                                    720 ;	Raw cost for generated ic 56 : (5, 6.000000) count=0.421875
+                                    721 ;	genGoto
+    0000009C 4Cr94r01         [ 3]  722 	jmp	00135$
+                                    723 ;	Raw cost for generated ic 57 : (3, 3.000000) count=0.421875
+                                    724 ;	genLabel
+    0000009F                        725 00104$:
+                                    726 ;	Raw cost for generated ic 58 : (0, 0.000000) count=0.140625
+                                    727 ;	src/player.c: 163: facingRight=TRUE;
+                                    728 ;	genAssign
+                                    729 ;	genAssignLit
+    0000009F A2 01            [ 2]  730 	ldx	#0x01
+    000000A1 8Er00r00         [ 4]  731 	stx	_facingRight
+                                    732 ;	Raw cost for generated ic 60 : (5, 6.000000) count=0.140625
+                                    733 ;	genGoto
+    000000A4 4Cr94r01         [ 3]  734 	jmp	00135$
+                                    735 ;	Raw cost for generated ic 62 : (3, 3.000000) count=0.140625
+                                    736 ;	genLabel
+    000000A7                        737 00109$:
+                                    738 ;	Raw cost for generated ic 63 : (0, 0.000000) count=0.187500
+                                    739 ;	src/player.c: 166: playerXVelocity=moveSpeed;
+                                    740 ;	genAssign
+                                    741 ;	genAssignLit
+                                    742 ;	genCopy
+    000000A7 ADr11r00         [ 4]  743 	lda	(_UpdatePlayer_moveSpeed_10000_145 + 1)
+    000000AA 8Dr05r00         [ 4]  744 	sta	(_playerXVelocity + 1)
+    000000AD ADr10r00         [ 4]  745 	lda	_UpdatePlayer_moveSpeed_10000_145
+    000000B0 8Dr04r00         [ 4]  746 	sta	_playerXVelocity
+                                    747 ;	Raw cost for generated ic 65 : (12, 17.000000) count=0.187500
+                                    748 ;	src/player.c: 169: if(!facingRight){
+                                    749 ;	genIfx
+    000000B3 ADr00r00         [ 4]  750 	lda	_facingRight
+                                    751 ;	genIfxJump : z
+    000000B6 F0 03            [ 4]  752 	beq	00542$
+    000000B8 4Cr94r01         [ 3]  753 	jmp	00135$
+    000000BB                        754 00542$:
+                                    755 ;	Raw cost for generated ic 66 : (8, 9.600000) count=0.187500
+                                    756 ;	src/player.c: 170: facingRight=TRUE;
+                                    757 ;	genAssign
+                                    758 ;	genAssignLit
+    000000BB A2 01            [ 2]  759 	ldx	#0x01
+    000000BD 8Er00r00         [ 4]  760 	stx	_facingRight
+                                    761 ;	Raw cost for generated ic 70 : (5, 6.000000) count=0.140625
+                                    762 ;	genGoto
+    000000C0 4Cr94r01         [ 3]  763 	jmp	00135$
+                                    764 ;	Raw cost for generated ic 73 : (3, 3.000000) count=0.140625
+                                    765 ;	genLabel
+    000000C3                        766 00134$:
+                                    767 ;	Raw cost for generated ic 74 : (0, 0.000000) count=0.250000
+                                    768 ;	src/player.c: 174: }else if(joypadCurrent &J_LEFT){
+                                    769 ;	genAnd
+    000000C3 98               [ 2]  770 	tya
+    000000C4 29 02            [ 2]  771 	and	#0x02
+                                    772 ;	genIfxJump : z
+    000000C6 F0 6E            [ 4]  773 	beq	00131$
+                                    774 ;	Raw cost for generated ic 76 : (8, 9.600000) count=0.250000
+                                    775 ;	skipping generated iCode
+                                    776 ;	Raw cost for generated ic 77 : (0, 0.000000) count=0.250000
+                                    777 ;	src/player.c: 177: if(playerXVelocity>0){
+                                    778 ;	genCast
+                                    779 ;	genCopy
+    000000C8 ADr05r00         [ 4]  780 	lda	(_playerXVelocity + 1)
+    000000CB 85*01            [ 3]  781 	sta	*(_UpdatePlayer_sloc0_1_0 + 1)
+    000000CD ADr04r00         [ 4]  782 	lda	_playerXVelocity
+    000000D0 85*00            [ 3]  783 	sta	*_UpdatePlayer_sloc0_1_0
+                                    784 ;	Raw cost for generated ic 80 : (10, 14.000000) count=0.187500
+                                    785 ;	genCmp
+    000000D2 A9 00            [ 2]  786 	lda	#0x00
+    000000D4 38               [ 2]  787 	sec
+    000000D5 E5*00            [ 3]  788 	sbc	*_UpdatePlayer_sloc0_1_0
+    000000D7 A9 00            [ 2]  789 	lda	#0x00
+    000000D9 E5*01            [ 3]  790 	sbc	*(_UpdatePlayer_sloc0_1_0 + 1)
+    000000DB 50 04            [ 4]  791 	bvc	00546$
+    000000DD 10 04            [ 4]  792 	bpl	00545$
+    000000DF 30 37            [ 4]  793 	bmi	00117$
+    000000E1                        794 00546$:
+    000000E1 10 35            [ 4]  795 	bpl	00117$
+    000000E3                        796 00545$:
+                                    797 ;	Raw cost for generated ic 81 : (20, 25.400002) count=0.187500
+                                    798 ;	skipping generated iCode
+                                    799 ;	Raw cost for generated ic 82 : (0, 0.000000) count=0.187500
+                                    800 ;	src/player.c: 180: playerXVelocity-=GROUND_FRICTION;
+                                    801 ;	genMinus
+                                    802 ;	genMinusDec
+    000000E3 A6*01            [ 3]  803 	ldx	*(_UpdatePlayer_sloc0_1_0 + 1)
+    000000E5 A5*00            [ 3]  804 	lda	*_UpdatePlayer_sloc0_1_0
+    000000E7 38               [ 2]  805 	sec
+    000000E8 E9 0F            [ 2]  806 	sbc	#0x0f
+    000000EA B0 01            [ 4]  807 	bcs	00548$
+    000000EC CA               [ 2]  808 	dex
+    000000ED                        809 00548$:
+                                    810 ;	Raw cost for generated ic 86 : (10, 14.600000) count=0.140625
+                                    811 ;	genCast
+                                    812 ;	genCopy
+                                    813 ;	Raw cost for generated ic 87 : (6, 9.000000) count=0.140625
+                                    814 ;	src/player.c: 183: if(playerXVelocity>0)turning=TRUE;
+                                    815 ;	genCast
+                                    816 ;	genCopy
+    000000ED 8Dr04r00         [ 4]  817 	sta	_playerXVelocity
+    000000F0 8Er05r00         [ 4]  818 	stx	(_playerXVelocity + 1)
+                                    819 ;	Raw cost for generated ic 90 : (6, 8.000000) count=0.140625
+                                    820 ;	genCmp
+    000000F3 85*00            [ 3]  821 	sta	*(REGTEMP+0)
+    000000F5 A9 00            [ 2]  822 	lda	#0x00
+    000000F7 38               [ 2]  823 	sec
+    000000F8 E5*00            [ 3]  824 	sbc	*(REGTEMP+0)
+    000000FA A9 00            [ 2]  825 	lda	#0x00
+    000000FC 86*00            [ 3]  826 	stx	*(REGTEMP+0)
+    000000FE E5*00            [ 3]  827 	sbc	*(REGTEMP+0)
+    00000100 50 04            [ 4]  828 	bvc	00550$
+    00000102 10 04            [ 4]  829 	bpl	00549$
+    00000104 30 0A            [ 4]  830 	bmi	00112$
+    00000106                        831 00550$:
+    00000106 10 08            [ 4]  832 	bpl	00112$
+    00000108                        833 00549$:
+                                    834 ;	Raw cost for generated ic 91 : (24, 31.400002) count=0.140625
+                                    835 ;	skipping generated iCode
+                                    836 ;	Raw cost for generated ic 92 : (0, 0.000000) count=0.140625
+                                    837 ;	genAssign
+                                    838 ;	genAssignLit
+    00000108 A2 01            [ 2]  839 	ldx	#0x01
+    0000010A 8Er13r00         [ 4]  840 	stx	_UpdatePlayer_turning_10002_149
+                                    841 ;	Raw cost for generated ic 95 : (5, 6.000000) count=0.105469
+                                    842 ;	genGoto
+    0000010D 4Cr94r01         [ 3]  843 	jmp	00135$
+                                    844 ;	Raw cost for generated ic 96 : (3, 3.000000) count=0.105469
+                                    845 ;	genLabel
+    00000110                        846 00112$:
+                                    847 ;	Raw cost for generated ic 97 : (0, 0.000000) count=0.035156
+                                    848 ;	src/player.c: 186: facingRight=FALSE;
+                                    849 ;	genAssign
+                                    850 ;	genAssignLit
+    00000110 A2 00            [ 2]  851 	ldx	#0x00
+    00000112 8Er00r00         [ 4]  852 	stx	_facingRight
+                                    853 ;	Raw cost for generated ic 99 : (5, 6.000000) count=0.035156
+                                    854 ;	genGoto
+    00000115 4Cr94r01         [ 3]  855 	jmp	00135$
+                                    856 ;	Raw cost for generated ic 101 : (3, 3.000000) count=0.035156
+                                    857 ;	genLabel
+    00000118                        858 00117$:
+                                    859 ;	Raw cost for generated ic 102 : (0, 0.000000) count=0.046875
+                                    860 ;	src/player.c: 190: playerXVelocity=-moveSpeed;
+                                    861 ;	genUminus
+    00000118 A9 00            [ 2]  862 	lda	#0x00
+    0000011A 38               [ 2]  863 	sec
+    0000011B EDr10r00         [ 4]  864 	sbc	_UpdatePlayer_moveSpeed_10000_145
+    0000011E 8Dr04r00         [ 4]  865 	sta	_playerXVelocity
+    00000121 A9 00            [ 2]  866 	lda	#0x00
+    00000123 EDr11r00         [ 4]  867 	sbc	(_UpdatePlayer_moveSpeed_10000_145 + 1)
+    00000126 8Dr05r00         [ 4]  868 	sta	(_playerXVelocity + 1)
+                                    869 ;	Raw cost for generated ic 103 : (17, 23.000000) count=0.046875
+                                    870 ;	src/player.c: 193: if(facingRight){
+                                    871 ;	genIfx
+    00000129 ADr00r00         [ 4]  872 	lda	_facingRight
+                                    873 ;	genIfxJump : z
+    0000012C F0 66            [ 4]  874 	beq	00135$
+                                    875 ;	Raw cost for generated ic 106 : (8, 9.600000) count=0.046875
+                                    876 ;	src/player.c: 194: facingRight=FALSE;
+                                    877 ;	genAssign
+                                    878 ;	genAssignLit
+    0000012E A2 00            [ 2]  879 	ldx	#0x00
+    00000130 8Er00r00         [ 4]  880 	stx	_facingRight
+                                    881 ;	Raw cost for generated ic 110 : (5, 6.000000) count=0.035156
+                                    882 ;	genGoto
+    00000133 4Cr94r01         [ 3]  883 	jmp	00135$
+                                    884 ;	Raw cost for generated ic 113 : (3, 3.000000) count=0.035156
+                                    885 ;	genLabel
+    00000136                        886 00131$:
+                                    887 ;	Raw cost for generated ic 114 : (0, 0.000000) count=0.062500
+                                    888 ;	src/player.c: 203: if (playerXVelocity > 0) {
+                                    889 ;	genCast
+                                    890 ;	genCopy
+    00000136 ADr05r00         [ 4]  891 	lda	(_playerXVelocity + 1)
+    00000139 85*01            [ 3]  892 	sta	*(_UpdatePlayer_sloc0_1_0 + 1)
+    0000013B ADr04r00         [ 4]  893 	lda	_playerXVelocity
+    0000013E 85*00            [ 3]  894 	sta	*_UpdatePlayer_sloc0_1_0
+                                    895 ;	Raw cost for generated ic 115 : (10, 14.000000) count=0.062500
+                                    896 ;	genCmp
+    00000140 A9 00            [ 2]  897 	lda	#0x00
+    00000142 38               [ 2]  898 	sec
+    00000143 E5*00            [ 3]  899 	sbc	*_UpdatePlayer_sloc0_1_0
+    00000145 A9 00            [ 2]  900 	lda	#0x00
+    00000147 E5*01            [ 3]  901 	sbc	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000149 50 04            [ 4]  902 	bvc	00555$
+    0000014B 10 04            [ 4]  903 	bpl	00554$
+    0000014D 30 31            [ 4]  904 	bmi	00128$
+    0000014F                        905 00555$:
+    0000014F 10 2F            [ 4]  906 	bpl	00128$
+    00000151                        907 00554$:
+                                    908 ;	Raw cost for generated ic 116 : (20, 25.400002) count=0.062500
+                                    909 ;	skipping generated iCode
+                                    910 ;	Raw cost for generated ic 117 : (0, 0.000000) count=0.062500
+                                    911 ;	src/player.c: 204: if (playerXVelocity >= GROUND_FRICTION) playerXVelocity -= GROUND_FRICTION;
+                                    912 ;	genCmp
+    00000151 A5*00            [ 3]  913 	lda	*_UpdatePlayer_sloc0_1_0
+    00000153 38               [ 2]  914 	sec
+    00000154 E9 0F            [ 2]  915 	sbc	#0x0f
+    00000156 A5*01            [ 3]  916 	lda	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000158 E9 00            [ 2]  917 	sbc	#0x00
+    0000015A 70 04            [ 4]  918 	bvs	00558$
+    0000015C 10 04            [ 4]  919 	bpl	00557$
+    0000015E 30 15            [ 4]  920 	bmi	00120$
+    00000160                        921 00558$:
+    00000160 10 13            [ 4]  922 	bpl	00120$
+    00000162                        923 00557$:
+                                    924 ;	Raw cost for generated ic 121 : (20, 25.400002) count=0.046875
+                                    925 ;	skipping generated iCode
+                                    926 ;	Raw cost for generated ic 122 : (0, 0.000000) count=0.046875
+                                    927 ;	genMinus
+                                    928 ;	genMinusDec
+    00000162 A6*01            [ 3]  929 	ldx	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000164 A5*00            [ 3]  930 	lda	*_UpdatePlayer_sloc0_1_0
+    00000166 38               [ 2]  931 	sec
+    00000167 E9 0F            [ 2]  932 	sbc	#0x0f
+    00000169 B0 01            [ 4]  933 	bcs	00560$
+    0000016B CA               [ 2]  934 	dex
+    0000016C                        935 00560$:
+                                    936 ;	Raw cost for generated ic 126 : (10, 14.600000) count=0.035156
+                                    937 ;	genCast
+                                    938 ;	genCopy
+    0000016C 8Dr04r00         [ 4]  939 	sta	_playerXVelocity
+    0000016F 8Er05r00         [ 4]  940 	stx	(_playerXVelocity + 1)
+                                    941 ;	Raw cost for generated ic 127 : (6, 9.000000) count=0.035156
+                                    942 ;	genGoto
+    00000172 4Cr94r01         [ 3]  943 	jmp	00135$
+                                    944 ;	Raw cost for generated ic 130 : (3, 3.000000) count=0.035156
+                                    945 ;	genLabel
+    00000175                        946 00120$:
+                                    947 ;	Raw cost for generated ic 131 : (0, 0.000000) count=0.011719
+                                    948 ;	src/player.c: 205: else playerXVelocity=0;
+                                    949 ;	genAssign
+                                    950 ;	genAssignLit
+    00000175 A2 00            [ 2]  951 	ldx	#0x00
+    00000177 8Er04r00         [ 4]  952 	stx	_playerXVelocity
+    0000017A 8Er05r00         [ 4]  953 	stx	(_playerXVelocity + 1)
+                                    954 ;	Raw cost for generated ic 133 : (8, 11.000000) count=0.011719
+                                    955 ;	genGoto
+    0000017D 4Cr94r01         [ 3]  956 	jmp	00135$
+                                    957 ;	Raw cost for generated ic 135 : (3, 3.000000) count=0.011719
+                                    958 ;	genLabel
+    00000180                        959 00128$:
+                                    960 ;	Raw cost for generated ic 136 : (0, 0.000000) count=0.015625
+                                    961 ;	src/player.c: 207: else if (playerXVelocity < 0) {
+                                    962 ;	genCmp
+    00000180 24*01            [ 3]  963 	bit	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000182 10 10            [ 4]  964 	bpl	00135$
+                                    965 ;	Raw cost for generated ic 138 : (7, 8.600000) count=0.015625
+                                    966 ;	skipping generated iCode
+                                    967 ;	Raw cost for generated ic 139 : (0, 0.000000) count=0.015625
+                                    968 ;	src/player.c: 208: if (playerXVelocity <= GROUND_FRICTION) playerXVelocity += GROUND_FRICTION;
+                                    969 ;	genPlus
+                                    970 ;	genPlusIncr
+    00000184 A6*01            [ 3]  971 	ldx	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000186 A5*00            [ 3]  972 	lda	*_UpdatePlayer_sloc0_1_0
+    00000188 18               [ 2]  973 	clc
+    00000189 69 0F            [ 2]  974 	adc	#0x0f
+    0000018B 90 01            [ 4]  975 	bcc	00562$
+    0000018D E8               [ 2]  976 	inx
+    0000018E                        977 00562$:
+                                    978 ;	Raw cost for generated ic 148 : (10, 14.600000) count=0.011719
+                                    979 ;	genCast
+                                    980 ;	genCopy
+    0000018E 8Dr04r00         [ 4]  981 	sta	_playerXVelocity
+    00000191 8Er05r00         [ 4]  982 	stx	(_playerXVelocity + 1)
+                                    983 ;	Raw cost for generated ic 149 : (6, 9.000000) count=0.011719
+                                    984 ;	src/player.c: 209: else playerXVelocity=0;
+                                    985 ;	genLabel
+    00000194                        986 00135$:
+                                    987 ;	Raw cost for generated ic 160 : (0, 0.000000) count=1.000000
+                                    988 ;	src/player.c: 213: uint16_t playerRealX = playerX>>4;
+                                    989 ;	genRightShift
+                                    990 ;	genRightShiftLiteral
+                                    991 ;	genrshTwo
+    00000194 AEr01r00         [ 4]  992 	ldx	(_playerX + 1)
+    00000197 ADr00r00         [ 4]  993 	lda	_playerX
+    0000019A 86*00            [ 3]  994 	stx	*(REGTEMP+0)
+    0000019C 46*00            [ 5]  995 	lsr	*(REGTEMP+0)
+    0000019E 6A               [ 2]  996 	ror	a
+    0000019F 46*00            [ 5]  997 	lsr	*(REGTEMP+0)
+    000001A1 6A               [ 2]  998 	ror	a
+    000001A2 46*00            [ 5]  999 	lsr	*(REGTEMP+0)
+    000001A4 6A               [ 2] 1000 	ror	a
+    000001A5 46*00            [ 5] 1001 	lsr	*(REGTEMP+0)
+    000001A7 6A               [ 2] 1002 	ror	a
+    000001A8 A6*00            [ 3] 1003 	ldx	*(REGTEMP+0)
+    000001AA 85*00            [ 3] 1004 	sta	*_UpdatePlayer_sloc0_1_0
+    000001AC 86*01            [ 3] 1005 	stx	*(_UpdatePlayer_sloc0_1_0 + 1)
+                                   1006 ;	Raw cost for generated ic 161 : (26, 48.000000) count=1.000000
+                                   1007 ;	src/player.c: 214: uint16_t playerRealY = playerY>>4;
+                                   1008 ;	genRightShift
+                                   1009 ;	genRightShiftLiteral
+                                   1010 ;	genrshTwo
+    000001AE AEr03r00         [ 4] 1011 	ldx	(_playerY + 1)
+    000001B1 ADr02r00         [ 4] 1012 	lda	_playerY
+    000001B4 86*00            [ 3] 1013 	stx	*(REGTEMP+0)
+    000001B6 46*00            [ 5] 1014 	lsr	*(REGTEMP+0)
+    000001B8 6A               [ 2] 1015 	ror	a
+    000001B9 46*00            [ 5] 1016 	lsr	*(REGTEMP+0)
+    000001BB 6A               [ 2] 1017 	ror	a
+    000001BC 46*00            [ 5] 1018 	lsr	*(REGTEMP+0)
+    000001BE 6A               [ 2] 1019 	ror	a
+    000001BF 46*00            [ 5] 1020 	lsr	*(REGTEMP+0)
+    000001C1 6A               [ 2] 1021 	ror	a
+    000001C2 A6*00            [ 3] 1022 	ldx	*(REGTEMP+0)
+    000001C4 85*02            [ 3] 1023 	sta	*_UpdatePlayer_sloc1_1_0
+    000001C6 86*03            [ 3] 1024 	stx	*(_UpdatePlayer_sloc1_1_0 + 1)
+                                   1025 ;	Raw cost for generated ic 163 : (26, 48.000000) count=1.000000
+                                   1026 ;	src/player.c: 216: uint8_t grounded = FALSE;
+                                   1027 ;	genAssign
+                                   1028 ;	genAssignLit
+    000001C8 A2 00            [ 2] 1029 	ldx	#0x00
+    000001CA 8Er18r00         [ 4] 1030 	stx	_UpdatePlayer_grounded_10003_175
+                                   1031 ;	Raw cost for generated ic 165 : (5, 6.000000) count=1.000000
+                                   1032 ;	src/player.c: 223: if(playerRealY<DEVICE_SCREEN_PX_HEIGHT){
+                                   1033 ;	genCmp
+    000001CD A5*02            [ 3] 1034 	lda	*_UpdatePlayer_sloc1_1_0
+    000001CF 38               [ 2] 1035 	sec
+    000001D0 E9 F0            [ 2] 1036 	sbc	#0xf0
+    000001D2 A5*03            [ 3] 1037 	lda	*(_UpdatePlayer_sloc1_1_0 + 1)
+    000001D4 E9 00            [ 2] 1038 	sbc	#0x00
+    000001D6 B0 44            [ 4] 1039 	bcs	00140$
+                                   1040 ;	Raw cost for generated ic 166 : (14, 17.600000) count=1.000000
+                                   1041 ;	skipping generated iCode
+                                   1042 ;	Raw cost for generated ic 167 : (0, 0.000000) count=1.000000
+                                   1043 ;	src/player.c: 226: while(IsTileSolid(playerRealX,playerRealY+PLAYER_CHARACTER_BOUNDING_BOX_HEIGHT-1)){
+                                   1044 ;	genLabel
+    000001D8                       1045 00136$:
+                                   1046 ;	Raw cost for generated ic 170 : (0, 0.000000) count=2.999995
+                                   1047 ;	genCast
+                                   1048 ;	genCopy
+    000001D8 A6*03            [ 3] 1049 	ldx	*(_UpdatePlayer_sloc1_1_0 + 1)
+    000001DA A5*02            [ 3] 1050 	lda	*_UpdatePlayer_sloc1_1_0
+                                   1051 ;	Raw cost for generated ic 171 : (4, 6.000000) count=2.999995
+                                   1052 ;	genPlus
+                                   1053 ;	genPlusIncr
+    000001DC 18               [ 2] 1054 	clc
+    000001DD 69 17            [ 2] 1055 	adc	#0x17
+    000001DF 90 01            [ 4] 1056 	bcc	00564$
+    000001E1 E8               [ 2] 1057 	inx
+    000001E2                       1058 00564$:
+                                   1059 ;	Raw cost for generated ic 172 : (6, 8.600000) count=2.999995
+                                   1060 ;	genCast
+                                   1061 ;	genCopy
+    000001E2 8Dr00r00         [ 4] 1062 	sta	_IsTileSolid_PARM_2
+    000001E5 8Er01r00         [ 4] 1063 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1064 ;	Raw cost for generated ic 173 : (6, 8.000000) count=2.999995
+                                   1065 ;	Raw cost for generated ic 174 : (0, 0.000000) count=2.999995
+                                   1066 ;	genCall
+                                   1067 ;	genSend
+    000001E8 A6*01            [ 3] 1068 	ldx	*(_UpdatePlayer_sloc0_1_0 + 1)
+    000001EA A5*00            [ 3] 1069 	lda	*_UpdatePlayer_sloc0_1_0
+    000001EC 20r00r00         [ 6] 1070 	jsr	_IsTileSolid
+                                   1071 ;	assignResultValue
+                                   1072 ;	Raw cost for generated ic 176 : (7, 12.000000) count=2.999995
+                                   1073 ;	genIfx
+    000001EF C9 00            [ 2] 1074 	cmp	#0x00
+                                   1075 ;	genIfxJump : z
+    000001F1 F0 29            [ 4] 1076 	beq	00140$
+                                   1077 ;	Raw cost for generated ic 177 : (7, 7.600000) count=2.999995
+                                   1078 ;	src/player.c: 227: playerY-=16;
+                                   1079 ;	genCast
+                                   1080 ;	genCopy
+    000001F3 AEr03r00         [ 4] 1081 	ldx	(_playerY + 1)
+    000001F6 ADr02r00         [ 4] 1082 	lda	_playerY
+                                   1083 ;	Raw cost for generated ic 180 : (6, 8.000000) count=2.249995
+                                   1084 ;	genMinus
+                                   1085 ;	genMinusDec
+    000001F9 38               [ 2] 1086 	sec
+    000001FA E9 10            [ 2] 1087 	sbc	#0x10
+    000001FC B0 01            [ 4] 1088 	bcs	00567$
+    000001FE CA               [ 2] 1089 	dex
+    000001FF                       1090 00567$:
+                                   1091 ;	Raw cost for generated ic 181 : (6, 8.600000) count=2.249995
+                                   1092 ;	genCast
+                                   1093 ;	genCopy
+                                   1094 ;	Raw cost for generated ic 182 : (6, 8.000000) count=2.249995
+                                   1095 ;	src/player.c: 228: playerRealY = playerY>>4;
+                                   1096 ;	genRightShift
+                                   1097 ;	genRightShiftLiteral
+                                   1098 ;	genrshTwo
+    000001FF 8Dr02r00         [ 4] 1099 	sta	_playerY
+    00000202 8Er03r00         [ 4] 1100 	stx	(_playerY + 1)
+    00000205 86*00            [ 3] 1101 	stx	*(REGTEMP+0)
+    00000207 46*00            [ 5] 1102 	lsr	*(REGTEMP+0)
+    00000209 6A               [ 2] 1103 	ror	a
+    0000020A 46*00            [ 5] 1104 	lsr	*(REGTEMP+0)
+    0000020C 6A               [ 2] 1105 	ror	a
+    0000020D 46*00            [ 5] 1106 	lsr	*(REGTEMP+0)
+    0000020F 6A               [ 2] 1107 	ror	a
+    00000210 46*00            [ 5] 1108 	lsr	*(REGTEMP+0)
+    00000212 6A               [ 2] 1109 	ror	a
+    00000213 A6*00            [ 3] 1110 	ldx	*(REGTEMP+0)
+    00000215 85*02            [ 3] 1111 	sta	*_UpdatePlayer_sloc1_1_0
+    00000217 86*03            [ 3] 1112 	stx	*(_UpdatePlayer_sloc1_1_0 + 1)
+                                   1113 ;	Raw cost for generated ic 185 : (26, 48.000000) count=2.249995
+                                   1114 ;	genGoto
+    00000219 4CrD8r01         [ 3] 1115 	jmp	00136$
+                                   1116 ;	Raw cost for generated ic 187 : (3, 3.000000) count=2.249995
+                                   1117 ;	genLabel
+    0000021C                       1118 00140$:
+                                   1119 ;	Raw cost for generated ic 189 : (0, 0.000000) count=0.999999
+                                   1120 ;	src/player.c: 242: if(playerXVelocity!=0){
+                                   1121 ;	genIfx
+    0000021C ADr05r00         [ 4] 1122 	lda	(_playerXVelocity + 1)
+    0000021F 0Dr04r00         [ 4] 1123 	ora	_playerXVelocity
+                                   1124 ;	genIfxJump : z
+    00000222 D0 03            [ 4] 1125 	bne	00569$
+    00000224 4Cr78r03         [ 3] 1126 	jmp	00155$
+    00000227                       1127 00569$:
+                                   1128 ;	Raw cost for generated ic 190 : (11, 13.600000) count=0.999999
+                                   1129 ;	src/player.c: 245: if(playerXVelocity>0){
+                                   1130 ;	genCast
+                                   1131 ;	genCopy
+    00000227 ADr05r00         [ 4] 1132 	lda	(_playerXVelocity + 1)
+    0000022A 85*05            [ 3] 1133 	sta	*(_UpdatePlayer_sloc2_1_0 + 1)
+    0000022C ADr04r00         [ 4] 1134 	lda	_playerXVelocity
+    0000022F 85*04            [ 3] 1135 	sta	*_UpdatePlayer_sloc2_1_0
+                                   1136 ;	Raw cost for generated ic 193 : (10, 14.000000) count=0.749998
+                                   1137 ;	genCmp
+    00000231 A9 00            [ 2] 1138 	lda	#0x00
+    00000233 38               [ 2] 1139 	sec
+    00000234 E5*04            [ 3] 1140 	sbc	*_UpdatePlayer_sloc2_1_0
+    00000236 A9 00            [ 2] 1141 	lda	#0x00
+    00000238 E5*05            [ 3] 1142 	sbc	*(_UpdatePlayer_sloc2_1_0 + 1)
+    0000023A 50 04            [ 4] 1143 	bvc	00571$
+    0000023C 10 07            [ 4] 1144 	bpl	00570$
+    0000023E 30 02            [ 4] 1145 	bmi	00572$
+    00000240                       1146 00571$:
+    00000240 30 03            [ 4] 1147 	bmi	00570$
+    00000242                       1148 00572$:
+    00000242 4CrDEr02         [ 3] 1149 	jmp	00152$
+    00000245                       1150 00570$:
+                                   1151 ;	Raw cost for generated ic 194 : (20, 25.400002) count=0.749998
+                                   1152 ;	skipping generated iCode
+                                   1153 ;	Raw cost for generated ic 195 : (0, 0.000000) count=0.749998
+                                   1154 ;	src/player.c: 249: if(IsTileSolid(playerRealX+PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH,playerRealY+2)||IsTileSolid(playerRealX+PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH,playerRealY+PLAYER_CHARACTER_BOUNDING_BOX_HALF_HEIGHT)||IsTileSolid(playerRealX+PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH,playerRealY+(PLAYER_CHARACTER_BOUNDING_BOX_HEIGHT-2)))playerXVelocity=0;
+                                   1155 ;	genCast
+                                   1156 ;	genCopy
+    00000245 A5*01            [ 3] 1157 	lda	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000247 85*07            [ 3] 1158 	sta	*(_UpdatePlayer_sloc3_1_0 + 1)
+    00000249 A5*00            [ 3] 1159 	lda	*_UpdatePlayer_sloc0_1_0
+    0000024B 85*06            [ 3] 1160 	sta	*_UpdatePlayer_sloc3_1_0
+                                   1161 ;	Raw cost for generated ic 198 : (8, 12.000000) count=0.562498
+                                   1162 ;	genPlus
+                                   1163 ;	genPlusIncr
+    0000024D A6*07            [ 3] 1164 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    0000024F A5*06            [ 3] 1165 	lda	*_UpdatePlayer_sloc3_1_0
+    00000251 18               [ 2] 1166 	clc
+    00000252 69 05            [ 2] 1167 	adc	#0x05
+    00000254 90 01            [ 4] 1168 	bcc	00573$
+    00000256 E8               [ 2] 1169 	inx
+    00000257                       1170 00573$:
+                                   1171 ;	Raw cost for generated ic 199 : (10, 14.600000) count=0.562498
+                                   1172 ;	genCast
+                                   1173 ;	genCopy
+    00000257 85*08            [ 3] 1174 	sta	*_UpdatePlayer_sloc4_1_0
+    00000259 86*09            [ 3] 1175 	stx	*(_UpdatePlayer_sloc4_1_0 + 1)
+                                   1176 ;	Raw cost for generated ic 200 : (4, 6.000000) count=0.562498
+                                   1177 ;	genCast
+                                   1178 ;	genCopy
+    0000025B A5*03            [ 3] 1179 	lda	*(_UpdatePlayer_sloc1_1_0 + 1)
+    0000025D 85*0B            [ 3] 1180 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    0000025F A5*02            [ 3] 1181 	lda	*_UpdatePlayer_sloc1_1_0
+    00000261 85*0A            [ 3] 1182 	sta	*_UpdatePlayer_sloc5_1_0
+                                   1183 ;	Raw cost for generated ic 201 : (8, 12.000000) count=0.562498
+                                   1184 ;	genPlus
+                                   1185 ;	genPlusIncr
+    00000263 A6*0B            [ 3] 1186 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000265 A5*0A            [ 3] 1187 	lda	*_UpdatePlayer_sloc5_1_0
+    00000267 18               [ 2] 1188 	clc
+    00000268 69 02            [ 2] 1189 	adc	#0x02
+    0000026A 90 01            [ 4] 1190 	bcc	00574$
+    0000026C E8               [ 2] 1191 	inx
+    0000026D                       1192 00574$:
+                                   1193 ;	Raw cost for generated ic 202 : (10, 14.600000) count=0.562498
+                                   1194 ;	genCast
+                                   1195 ;	genCopy
+    0000026D 8Dr00r00         [ 4] 1196 	sta	_IsTileSolid_PARM_2
+    00000270 8Er01r00         [ 4] 1197 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1198 ;	Raw cost for generated ic 203 : (6, 8.000000) count=0.562498
+                                   1199 ;	Raw cost for generated ic 204 : (0, 0.000000) count=0.562498
+                                   1200 ;	genCall
+                                   1201 ;	genSend
+    00000273 A6*09            [ 3] 1202 	ldx	*(_UpdatePlayer_sloc4_1_0 + 1)
+    00000275 A5*08            [ 3] 1203 	lda	*_UpdatePlayer_sloc4_1_0
+    00000277 20r00r00         [ 6] 1204 	jsr	_IsTileSolid
+                                   1205 ;	assignResultValue
+                                   1206 ;	Raw cost for generated ic 206 : (7, 12.000000) count=0.562498
+                                   1207 ;	genIfx
+    0000027A C9 00            [ 2] 1208 	cmp	#0x00
+                                   1209 ;	genIfxJump : z
+    0000027C D0 55            [ 4] 1210 	bne	00141$
+                                   1211 ;	Raw cost for generated ic 207 : (7, 7.600000) count=0.562498
+                                   1212 ;	genPlus
+                                   1213 ;	genPlusIncr
+    0000027E A6*07            [ 3] 1214 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    00000280 A5*06            [ 3] 1215 	lda	*_UpdatePlayer_sloc3_1_0
+    00000282 18               [ 2] 1216 	clc
+    00000283 69 05            [ 2] 1217 	adc	#0x05
+    00000285 90 01            [ 4] 1218 	bcc	00577$
+    00000287 E8               [ 2] 1219 	inx
+    00000288                       1220 00577$:
+                                   1221 ;	Raw cost for generated ic 211 : (10, 14.600000) count=0.421874
+                                   1222 ;	genCast
+                                   1223 ;	genCopy
+    00000288 85*08            [ 3] 1224 	sta	*_UpdatePlayer_sloc4_1_0
+    0000028A 86*09            [ 3] 1225 	stx	*(_UpdatePlayer_sloc4_1_0 + 1)
+                                   1226 ;	Raw cost for generated ic 212 : (4, 6.000000) count=0.421874
+                                   1227 ;	genPlus
+                                   1228 ;	genPlusIncr
+    0000028C A6*0B            [ 3] 1229 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    0000028E A5*0A            [ 3] 1230 	lda	*_UpdatePlayer_sloc5_1_0
+    00000290 18               [ 2] 1231 	clc
+    00000291 69 0C            [ 2] 1232 	adc	#0x0c
+    00000293 90 01            [ 4] 1233 	bcc	00578$
+    00000295 E8               [ 2] 1234 	inx
+    00000296                       1235 00578$:
+                                   1236 ;	Raw cost for generated ic 214 : (10, 14.600000) count=0.421874
+                                   1237 ;	genCast
+                                   1238 ;	genCopy
+    00000296 8Dr00r00         [ 4] 1239 	sta	_IsTileSolid_PARM_2
+    00000299 8Er01r00         [ 4] 1240 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1241 ;	Raw cost for generated ic 215 : (6, 8.000000) count=0.421874
+                                   1242 ;	Raw cost for generated ic 216 : (0, 0.000000) count=0.421874
+                                   1243 ;	genCall
+                                   1244 ;	genSend
+    0000029C A6*09            [ 3] 1245 	ldx	*(_UpdatePlayer_sloc4_1_0 + 1)
+    0000029E A5*08            [ 3] 1246 	lda	*_UpdatePlayer_sloc4_1_0
+    000002A0 20r00r00         [ 6] 1247 	jsr	_IsTileSolid
+                                   1248 ;	assignResultValue
+                                   1249 ;	Raw cost for generated ic 218 : (7, 12.000000) count=0.421874
+                                   1250 ;	genIfx
+    000002A3 C9 00            [ 2] 1251 	cmp	#0x00
+                                   1252 ;	genIfxJump : z
+    000002A5 D0 2C            [ 4] 1253 	bne	00141$
+                                   1254 ;	Raw cost for generated ic 219 : (7, 7.600000) count=0.421874
+                                   1255 ;	genPlus
+                                   1256 ;	genPlusIncr
+    000002A7 A6*07            [ 3] 1257 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    000002A9 A5*06            [ 3] 1258 	lda	*_UpdatePlayer_sloc3_1_0
+    000002AB 18               [ 2] 1259 	clc
+    000002AC 69 05            [ 2] 1260 	adc	#0x05
+    000002AE 90 01            [ 4] 1261 	bcc	00581$
+    000002B0 E8               [ 2] 1262 	inx
+    000002B1                       1263 00581$:
+                                   1264 ;	Raw cost for generated ic 223 : (10, 14.600000) count=0.316405
+                                   1265 ;	genCast
+                                   1266 ;	genCopy
+    000002B1 85*08            [ 3] 1267 	sta	*_UpdatePlayer_sloc4_1_0
+    000002B3 86*09            [ 3] 1268 	stx	*(_UpdatePlayer_sloc4_1_0 + 1)
+                                   1269 ;	Raw cost for generated ic 224 : (4, 6.000000) count=0.316405
+                                   1270 ;	genPlus
+                                   1271 ;	genPlusIncr
+    000002B5 A6*0B            [ 3] 1272 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000002B7 A5*0A            [ 3] 1273 	lda	*_UpdatePlayer_sloc5_1_0
+    000002B9 18               [ 2] 1274 	clc
+    000002BA 69 16            [ 2] 1275 	adc	#0x16
+    000002BC 90 01            [ 4] 1276 	bcc	00582$
+    000002BE E8               [ 2] 1277 	inx
+    000002BF                       1278 00582$:
+                                   1279 ;	Raw cost for generated ic 226 : (10, 14.600000) count=0.316405
+                                   1280 ;	genCast
+                                   1281 ;	genCopy
+    000002BF 8Dr00r00         [ 4] 1282 	sta	_IsTileSolid_PARM_2
+    000002C2 8Er01r00         [ 4] 1283 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1284 ;	Raw cost for generated ic 227 : (6, 8.000000) count=0.316405
+                                   1285 ;	Raw cost for generated ic 228 : (0, 0.000000) count=0.316405
+                                   1286 ;	genCall
+                                   1287 ;	genSend
+    000002C5 A6*09            [ 3] 1288 	ldx	*(_UpdatePlayer_sloc4_1_0 + 1)
+    000002C7 A5*08            [ 3] 1289 	lda	*_UpdatePlayer_sloc4_1_0
+    000002C9 20r00r00         [ 6] 1290 	jsr	_IsTileSolid
+                                   1291 ;	assignResultValue
+                                   1292 ;	Raw cost for generated ic 230 : (7, 12.000000) count=0.316405
+                                   1293 ;	genIfx
+    000002CC C9 00            [ 2] 1294 	cmp	#0x00
+                                   1295 ;	genIfxJump : z
+    000002CE D0 03            [ 4] 1296 	bne	00584$
+    000002D0 4Cr78r03         [ 3] 1297 	jmp	00155$
+    000002D3                       1298 00584$:
+                                   1299 ;	Raw cost for generated ic 231 : (7, 7.600000) count=0.316405
+                                   1300 ;	genLabel
+    000002D3                       1301 00141$:
+                                   1302 ;	Raw cost for generated ic 233 : (0, 0.000000) count=0.483397
+                                   1303 ;	genAssign
+                                   1304 ;	genAssignLit
+    000002D3 A2 00            [ 2] 1305 	ldx	#0x00
+    000002D5 8Er04r00         [ 4] 1306 	stx	_playerXVelocity
+    000002D8 8Er05r00         [ 4] 1307 	stx	(_playerXVelocity + 1)
+                                   1308 ;	Raw cost for generated ic 235 : (8, 11.000000) count=0.483397
+                                   1309 ;	genGoto
+    000002DB 4Cr78r03         [ 3] 1310 	jmp	00155$
+                                   1311 ;	Raw cost for generated ic 237 : (3, 3.000000) count=0.483397
+                                   1312 ;	genLabel
+    000002DE                       1313 00152$:
+                                   1314 ;	Raw cost for generated ic 238 : (0, 0.000000) count=0.187499
+                                   1315 ;	src/player.c: 252: }else if(playerXVelocity<0){
+                                   1316 ;	genCmp
+    000002DE 24*05            [ 3] 1317 	bit	*(_UpdatePlayer_sloc2_1_0 + 1)
+    000002E0 30 03            [ 4] 1318 	bmi	00585$
+    000002E2 4Cr78r03         [ 3] 1319 	jmp	00155$
+    000002E5                       1320 00585$:
+                                   1321 ;	Raw cost for generated ic 240 : (7, 8.600000) count=0.187499
+                                   1322 ;	skipping generated iCode
+                                   1323 ;	Raw cost for generated ic 241 : (0, 0.000000) count=0.187499
+                                   1324 ;	src/player.c: 256: if(IsTileSolid(playerRealX-PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH,playerRealY+2)||IsTileSolid(playerRealX-PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH,playerRealY+PLAYER_CHARACTER_BOUNDING_BOX_HALF_HEIGHT)||IsTileSolid(playerRealX-PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH,playerRealY+(PLAYER_CHARACTER_BOUNDING_BOX_HEIGHT-2)))playerXVelocity=0;
+                                   1325 ;	genCast
+                                   1326 ;	genCopy
+    000002E5 A5*01            [ 3] 1327 	lda	*(_UpdatePlayer_sloc0_1_0 + 1)
+    000002E7 85*0B            [ 3] 1328 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000002E9 A5*00            [ 3] 1329 	lda	*_UpdatePlayer_sloc0_1_0
+    000002EB 85*0A            [ 3] 1330 	sta	*_UpdatePlayer_sloc5_1_0
+                                   1331 ;	Raw cost for generated ic 244 : (8, 12.000000) count=0.140622
+                                   1332 ;	genMinus
+                                   1333 ;	genMinusDec
+    000002ED A6*0B            [ 3] 1334 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000002EF A5*0A            [ 3] 1335 	lda	*_UpdatePlayer_sloc5_1_0
+    000002F1 38               [ 2] 1336 	sec
+    000002F2 E9 05            [ 2] 1337 	sbc	#0x05
+    000002F4 B0 01            [ 4] 1338 	bcs	00586$
+    000002F6 CA               [ 2] 1339 	dex
+    000002F7                       1340 00586$:
+                                   1341 ;	Raw cost for generated ic 245 : (10, 14.600000) count=0.140622
+                                   1342 ;	genCast
+                                   1343 ;	genCopy
+    000002F7 85*08            [ 3] 1344 	sta	*_UpdatePlayer_sloc4_1_0
+    000002F9 86*09            [ 3] 1345 	stx	*(_UpdatePlayer_sloc4_1_0 + 1)
+                                   1346 ;	Raw cost for generated ic 246 : (4, 6.000000) count=0.140622
+                                   1347 ;	genCast
+                                   1348 ;	genCopy
+    000002FB A5*03            [ 3] 1349 	lda	*(_UpdatePlayer_sloc1_1_0 + 1)
+    000002FD 85*07            [ 3] 1350 	sta	*(_UpdatePlayer_sloc3_1_0 + 1)
+    000002FF A5*02            [ 3] 1351 	lda	*_UpdatePlayer_sloc1_1_0
+    00000301 85*06            [ 3] 1352 	sta	*_UpdatePlayer_sloc3_1_0
+                                   1353 ;	Raw cost for generated ic 247 : (8, 12.000000) count=0.140622
+                                   1354 ;	genPlus
+                                   1355 ;	genPlusIncr
+    00000303 A6*07            [ 3] 1356 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    00000305 A5*06            [ 3] 1357 	lda	*_UpdatePlayer_sloc3_1_0
+    00000307 18               [ 2] 1358 	clc
+    00000308 69 02            [ 2] 1359 	adc	#0x02
+    0000030A 90 01            [ 4] 1360 	bcc	00587$
+    0000030C E8               [ 2] 1361 	inx
+    0000030D                       1362 00587$:
+                                   1363 ;	Raw cost for generated ic 248 : (10, 14.600000) count=0.140622
+                                   1364 ;	genCast
+                                   1365 ;	genCopy
+    0000030D 8Dr00r00         [ 4] 1366 	sta	_IsTileSolid_PARM_2
+    00000310 8Er01r00         [ 4] 1367 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1368 ;	Raw cost for generated ic 249 : (6, 8.000000) count=0.140622
+                                   1369 ;	Raw cost for generated ic 250 : (0, 0.000000) count=0.140622
+                                   1370 ;	genCall
+                                   1371 ;	genSend
+    00000313 A6*09            [ 3] 1372 	ldx	*(_UpdatePlayer_sloc4_1_0 + 1)
+    00000315 A5*08            [ 3] 1373 	lda	*_UpdatePlayer_sloc4_1_0
+    00000317 20r00r00         [ 6] 1374 	jsr	_IsTileSolid
+                                   1375 ;	assignResultValue
+                                   1376 ;	Raw cost for generated ic 252 : (7, 12.000000) count=0.140622
+                                   1377 ;	genIfx
+    0000031A C9 00            [ 2] 1378 	cmp	#0x00
+                                   1379 ;	genIfxJump : z
+    0000031C D0 52            [ 4] 1380 	bne	00145$
+                                   1381 ;	Raw cost for generated ic 253 : (7, 7.600000) count=0.140622
+                                   1382 ;	genMinus
+                                   1383 ;	genMinusDec
+    0000031E A6*0B            [ 3] 1384 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000320 A5*0A            [ 3] 1385 	lda	*_UpdatePlayer_sloc5_1_0
+    00000322 38               [ 2] 1386 	sec
+    00000323 E9 05            [ 2] 1387 	sbc	#0x05
+    00000325 B0 01            [ 4] 1388 	bcs	00590$
+    00000327 CA               [ 2] 1389 	dex
+    00000328                       1390 00590$:
+                                   1391 ;	Raw cost for generated ic 257 : (10, 14.600000) count=0.105467
+                                   1392 ;	genCast
+                                   1393 ;	genCopy
+    00000328 85*08            [ 3] 1394 	sta	*_UpdatePlayer_sloc4_1_0
+    0000032A 86*09            [ 3] 1395 	stx	*(_UpdatePlayer_sloc4_1_0 + 1)
+                                   1396 ;	Raw cost for generated ic 258 : (4, 6.000000) count=0.105467
+                                   1397 ;	genPlus
+                                   1398 ;	genPlusIncr
+    0000032C A6*07            [ 3] 1399 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    0000032E A5*06            [ 3] 1400 	lda	*_UpdatePlayer_sloc3_1_0
+    00000330 18               [ 2] 1401 	clc
+    00000331 69 0C            [ 2] 1402 	adc	#0x0c
+    00000333 90 01            [ 4] 1403 	bcc	00591$
+    00000335 E8               [ 2] 1404 	inx
+    00000336                       1405 00591$:
+                                   1406 ;	Raw cost for generated ic 260 : (10, 14.600000) count=0.105467
+                                   1407 ;	genCast
+                                   1408 ;	genCopy
+    00000336 8Dr00r00         [ 4] 1409 	sta	_IsTileSolid_PARM_2
+    00000339 8Er01r00         [ 4] 1410 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1411 ;	Raw cost for generated ic 261 : (6, 8.000000) count=0.105467
+                                   1412 ;	Raw cost for generated ic 262 : (0, 0.000000) count=0.105467
+                                   1413 ;	genCall
+                                   1414 ;	genSend
+    0000033C A6*09            [ 3] 1415 	ldx	*(_UpdatePlayer_sloc4_1_0 + 1)
+    0000033E A5*08            [ 3] 1416 	lda	*_UpdatePlayer_sloc4_1_0
+    00000340 20r00r00         [ 6] 1417 	jsr	_IsTileSolid
+                                   1418 ;	assignResultValue
+                                   1419 ;	Raw cost for generated ic 264 : (7, 12.000000) count=0.105467
+                                   1420 ;	genIfx
+    00000343 C9 00            [ 2] 1421 	cmp	#0x00
+                                   1422 ;	genIfxJump : z
+    00000345 D0 29            [ 4] 1423 	bne	00145$
+                                   1424 ;	Raw cost for generated ic 265 : (7, 7.600000) count=0.105467
+                                   1425 ;	genMinus
+                                   1426 ;	genMinusDec
+    00000347 A6*0B            [ 3] 1427 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000349 A5*0A            [ 3] 1428 	lda	*_UpdatePlayer_sloc5_1_0
+    0000034B 38               [ 2] 1429 	sec
+    0000034C E9 05            [ 2] 1430 	sbc	#0x05
+    0000034E B0 01            [ 4] 1431 	bcs	00594$
+    00000350 CA               [ 2] 1432 	dex
+    00000351                       1433 00594$:
+                                   1434 ;	Raw cost for generated ic 269 : (10, 14.600000) count=0.079100
+                                   1435 ;	genCast
+                                   1436 ;	genCopy
+    00000351 85*0A            [ 3] 1437 	sta	*_UpdatePlayer_sloc5_1_0
+    00000353 86*0B            [ 3] 1438 	stx	*(_UpdatePlayer_sloc5_1_0 + 1)
+                                   1439 ;	Raw cost for generated ic 270 : (4, 6.000000) count=0.079100
+                                   1440 ;	genPlus
+                                   1441 ;	genPlusIncr
+    00000355 A6*07            [ 3] 1442 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    00000357 A5*06            [ 3] 1443 	lda	*_UpdatePlayer_sloc3_1_0
+    00000359 18               [ 2] 1444 	clc
+    0000035A 69 16            [ 2] 1445 	adc	#0x16
+    0000035C 90 01            [ 4] 1446 	bcc	00595$
+    0000035E E8               [ 2] 1447 	inx
+    0000035F                       1448 00595$:
+                                   1449 ;	Raw cost for generated ic 272 : (10, 14.600000) count=0.079100
+                                   1450 ;	genCast
+                                   1451 ;	genCopy
+    0000035F 8Dr00r00         [ 4] 1452 	sta	_IsTileSolid_PARM_2
+    00000362 8Er01r00         [ 4] 1453 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1454 ;	Raw cost for generated ic 273 : (6, 8.000000) count=0.079100
+                                   1455 ;	Raw cost for generated ic 274 : (0, 0.000000) count=0.079100
+                                   1456 ;	genCall
+                                   1457 ;	genSend
+    00000365 A6*0B            [ 3] 1458 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000367 A5*0A            [ 3] 1459 	lda	*_UpdatePlayer_sloc5_1_0
+    00000369 20r00r00         [ 6] 1460 	jsr	_IsTileSolid
+                                   1461 ;	assignResultValue
+                                   1462 ;	Raw cost for generated ic 276 : (7, 12.000000) count=0.079100
+                                   1463 ;	genIfx
+    0000036C C9 00            [ 2] 1464 	cmp	#0x00
+                                   1465 ;	genIfxJump : z
+    0000036E F0 08            [ 4] 1466 	beq	00155$
+                                   1467 ;	Raw cost for generated ic 277 : (7, 7.600000) count=0.079100
+                                   1468 ;	genLabel
+    00000370                       1469 00145$:
+                                   1470 ;	Raw cost for generated ic 279 : (0, 0.000000) count=0.120847
+                                   1471 ;	genAssign
+                                   1472 ;	genAssignLit
+    00000370 A2 00            [ 2] 1473 	ldx	#0x00
+    00000372 8Er04r00         [ 4] 1474 	stx	_playerXVelocity
+    00000375 8Er05r00         [ 4] 1475 	stx	(_playerXVelocity + 1)
+                                   1476 ;	Raw cost for generated ic 281 : (8, 11.000000) count=0.120847
+                                   1477 ;	genLabel
+    00000378                       1478 00155$:
+                                   1479 ;	Raw cost for generated ic 285 : (0, 0.000000) count=0.999995
+                                   1480 ;	src/player.c: 261: if(playerYVelocity>=0){
+                                   1481 ;	genCast
+                                   1482 ;	genCopy
+    00000378 ADr07r00         [ 4] 1483 	lda	(_playerYVelocity + 1)
+    0000037B 85*0B            [ 3] 1484 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    0000037D ADr06r00         [ 4] 1485 	lda	_playerYVelocity
+    00000380 85*0A            [ 3] 1486 	sta	*_UpdatePlayer_sloc5_1_0
+                                   1487 ;	Raw cost for generated ic 286 : (10, 14.000000) count=0.999995
+                                   1488 ;	genCmp
+    00000382 24*0B            [ 3] 1489 	bit	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000384 30 74            [ 4] 1490 	bmi	00160$
+                                   1491 ;	Raw cost for generated ic 287 : (7, 8.600000) count=0.999995
+                                   1492 ;	skipping generated iCode
+                                   1493 ;	Raw cost for generated ic 288 : (0, 0.000000) count=0.999995
+                                   1494 ;	src/player.c: 265: if(IsTileSolid(playerRealX+(PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH-2),playerRealY+PLAYER_CHARACTER_BOUNDING_BOX_HEIGHT)||IsTileSolid(playerRealX-(PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH-2),playerRealY+PLAYER_CHARACTER_BOUNDING_BOX_HEIGHT)){
+                                   1495 ;	genCast
+                                   1496 ;	genCopy
+    00000386 A5*01            [ 3] 1497 	lda	*(_UpdatePlayer_sloc0_1_0 + 1)
+    00000388 85*0B            [ 3] 1498 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    0000038A A5*00            [ 3] 1499 	lda	*_UpdatePlayer_sloc0_1_0
+    0000038C 85*0A            [ 3] 1500 	sta	*_UpdatePlayer_sloc5_1_0
+                                   1501 ;	Raw cost for generated ic 291 : (8, 12.000000) count=0.749996
+                                   1502 ;	genPlus
+                                   1503 ;	genPlusIncr
+    0000038E A6*0B            [ 3] 1504 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000390 A5*0A            [ 3] 1505 	lda	*_UpdatePlayer_sloc5_1_0
+    00000392 18               [ 2] 1506 	clc
+    00000393 69 03            [ 2] 1507 	adc	#0x03
+    00000395 90 01            [ 4] 1508 	bcc	00599$
+    00000397 E8               [ 2] 1509 	inx
+    00000398                       1510 00599$:
+                                   1511 ;	Raw cost for generated ic 292 : (10, 14.600000) count=0.749996
+                                   1512 ;	genCast
+                                   1513 ;	genCopy
+    00000398 85*08            [ 3] 1514 	sta	*_UpdatePlayer_sloc4_1_0
+    0000039A 86*09            [ 3] 1515 	stx	*(_UpdatePlayer_sloc4_1_0 + 1)
+                                   1516 ;	Raw cost for generated ic 293 : (4, 6.000000) count=0.749996
+                                   1517 ;	genCast
+                                   1518 ;	genCopy
+    0000039C A5*03            [ 3] 1519 	lda	*(_UpdatePlayer_sloc1_1_0 + 1)
+    0000039E 85*07            [ 3] 1520 	sta	*(_UpdatePlayer_sloc3_1_0 + 1)
+    000003A0 A5*02            [ 3] 1521 	lda	*_UpdatePlayer_sloc1_1_0
+    000003A2 85*06            [ 3] 1522 	sta	*_UpdatePlayer_sloc3_1_0
+                                   1523 ;	Raw cost for generated ic 294 : (8, 12.000000) count=0.749996
+                                   1524 ;	genPlus
+                                   1525 ;	genPlusIncr
+    000003A4 A6*07            [ 3] 1526 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    000003A6 A5*06            [ 3] 1527 	lda	*_UpdatePlayer_sloc3_1_0
+    000003A8 18               [ 2] 1528 	clc
+    000003A9 69 18            [ 2] 1529 	adc	#0x18
+    000003AB 90 01            [ 4] 1530 	bcc	00600$
+    000003AD E8               [ 2] 1531 	inx
+    000003AE                       1532 00600$:
+                                   1533 ;	Raw cost for generated ic 295 : (10, 14.600000) count=0.749996
+                                   1534 ;	genCast
+                                   1535 ;	genCopy
+    000003AE 8Dr00r00         [ 4] 1536 	sta	_IsTileSolid_PARM_2
+    000003B1 8Er01r00         [ 4] 1537 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1538 ;	Raw cost for generated ic 296 : (6, 8.000000) count=0.749996
+                                   1539 ;	Raw cost for generated ic 297 : (0, 0.000000) count=0.749996
+                                   1540 ;	genCall
+                                   1541 ;	genSend
+    000003B4 A6*09            [ 3] 1542 	ldx	*(_UpdatePlayer_sloc4_1_0 + 1)
+    000003B6 A5*08            [ 3] 1543 	lda	*_UpdatePlayer_sloc4_1_0
+    000003B8 20r00r00         [ 6] 1544 	jsr	_IsTileSolid
+                                   1545 ;	assignResultValue
+                                   1546 ;	Raw cost for generated ic 299 : (7, 12.000000) count=0.749996
+                                   1547 ;	genIfx
+    000003BB C9 00            [ 2] 1548 	cmp	#0x00
+                                   1549 ;	genIfxJump : z
+    000003BD D0 2C            [ 4] 1550 	bne	00156$
+                                   1551 ;	Raw cost for generated ic 300 : (7, 7.600000) count=0.749996
+                                   1552 ;	genMinus
+                                   1553 ;	genMinusDec
+    000003BF A6*0B            [ 3] 1554 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000003C1 A5*0A            [ 3] 1555 	lda	*_UpdatePlayer_sloc5_1_0
+    000003C3 38               [ 2] 1556 	sec
+    000003C4 E9 03            [ 2] 1557 	sbc	#0x03
+    000003C6 B0 01            [ 4] 1558 	bcs	00603$
+    000003C8 CA               [ 2] 1559 	dex
+    000003C9                       1560 00603$:
+                                   1561 ;	Raw cost for generated ic 304 : (10, 14.600000) count=0.562497
+                                   1562 ;	genCast
+                                   1563 ;	genCopy
+    000003C9 85*0A            [ 3] 1564 	sta	*_UpdatePlayer_sloc5_1_0
+    000003CB 86*0B            [ 3] 1565 	stx	*(_UpdatePlayer_sloc5_1_0 + 1)
+                                   1566 ;	Raw cost for generated ic 305 : (4, 6.000000) count=0.562497
+                                   1567 ;	genPlus
+                                   1568 ;	genPlusIncr
+    000003CD A6*07            [ 3] 1569 	ldx	*(_UpdatePlayer_sloc3_1_0 + 1)
+    000003CF A5*06            [ 3] 1570 	lda	*_UpdatePlayer_sloc3_1_0
+    000003D1 18               [ 2] 1571 	clc
+    000003D2 69 18            [ 2] 1572 	adc	#0x18
+    000003D4 90 01            [ 4] 1573 	bcc	00604$
+    000003D6 E8               [ 2] 1574 	inx
+    000003D7                       1575 00604$:
+                                   1576 ;	Raw cost for generated ic 307 : (10, 14.600000) count=0.562497
+                                   1577 ;	genCast
+                                   1578 ;	genCopy
+    000003D7 8Dr00r00         [ 4] 1579 	sta	_IsTileSolid_PARM_2
+    000003DA 8Er01r00         [ 4] 1580 	stx	(_IsTileSolid_PARM_2 + 1)
+                                   1581 ;	Raw cost for generated ic 308 : (6, 8.000000) count=0.562497
+                                   1582 ;	Raw cost for generated ic 309 : (0, 0.000000) count=0.562497
+                                   1583 ;	genCall
+                                   1584 ;	genSend
+    000003DD A6*0B            [ 3] 1585 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000003DF A5*0A            [ 3] 1586 	lda	*_UpdatePlayer_sloc5_1_0
+    000003E1 20r00r00         [ 6] 1587 	jsr	_IsTileSolid
+                                   1588 ;	assignResultValue
+                                   1589 ;	Raw cost for generated ic 311 : (7, 12.000000) count=0.562497
+                                   1590 ;	genIfx
+    000003E4 C9 00            [ 2] 1591 	cmp	#0x00
+                                   1592 ;	genIfxJump : z
+    000003E6 D0 03            [ 4] 1593 	bne	00606$
+    000003E8 4Cr69r04         [ 3] 1594 	jmp	00167$
+    000003EB                       1595 00606$:
+                                   1596 ;	Raw cost for generated ic 312 : (7, 7.600000) count=0.562497
+                                   1597 ;	genLabel
+    000003EB                       1598 00156$:
+                                   1599 ;	Raw cost for generated ic 314 : (0, 0.000000) count=0.609372
+                                   1600 ;	src/player.c: 266: playerYVelocity=0;
+                                   1601 ;	genAssign
+                                   1602 ;	genAssignLit
+    000003EB A2 00            [ 2] 1603 	ldx	#0x00
+    000003ED 8Er06r00         [ 4] 1604 	stx	_playerYVelocity
+    000003F0 8Er07r00         [ 4] 1605 	stx	(_playerYVelocity + 1)
+                                   1606 ;	Raw cost for generated ic 316 : (8, 11.000000) count=0.609372
+                                   1607 ;	src/player.c: 267: grounded=TRUE;
+                                   1608 ;	genAssign
+                                   1609 ;	genAssignLit
+    000003F3 E8               [ 2] 1610 	inx
+    000003F4 8Er18r00         [ 4] 1611 	stx	_UpdatePlayer_grounded_10003_175
+                                   1612 ;	Raw cost for generated ic 317 : (4, 6.000000) count=0.609372
+                                   1613 ;	genGoto
+    000003F7 4Cr69r04         [ 3] 1614 	jmp	00167$
+                                   1615 ;	Raw cost for generated ic 319 : (3, 3.000000) count=0.609372
+                                   1616 ;	src/player.c: 277: while(IsTileSolid(playerRealX+(PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH-2),playerRealY)||IsTileSolid(playerRealX-(PLAYER_CHARACTER_BOUNDING_BOX_HALF_WIDTH-2),playerRealY)){
+                                   1617 ;	genLabel
+    000003FA                       1618 00160$:
+                                   1619 ;	Raw cost for generated ic 326 : (0, 0.000000) count=1.333251
+                                   1620 ;	genCast
+                                   1621 ;	genCopy
+    000003FA A5*01            [ 3] 1622 	lda	*(_UpdatePlayer_sloc0_1_0 + 1)
+    000003FC 85*0B            [ 3] 1623 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000003FE A5*00            [ 3] 1624 	lda	*_UpdatePlayer_sloc0_1_0
+    00000400 85*0A            [ 3] 1625 	sta	*_UpdatePlayer_sloc5_1_0
+                                   1626 ;	Raw cost for generated ic 327 : (8, 12.000000) count=1.333251
+                                   1627 ;	genPlus
+                                   1628 ;	genPlusIncr
+    00000402 A6*0B            [ 3] 1629 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000404 A5*0A            [ 3] 1630 	lda	*_UpdatePlayer_sloc5_1_0
+    00000406 18               [ 2] 1631 	clc
+    00000407 69 03            [ 2] 1632 	adc	#0x03
+    00000409 90 01            [ 4] 1633 	bcc	00607$
+    0000040B E8               [ 2] 1634 	inx
+    0000040C                       1635 00607$:
+                                   1636 ;	Raw cost for generated ic 328 : (10, 14.600000) count=1.333251
+                                   1637 ;	genCast
+                                   1638 ;	genCopy
+                                   1639 ;	Raw cost for generated ic 329 : (0, 0.000000) count=1.333251
+                                   1640 ;	genAssign
+                                   1641 ;	genAssignLit
+                                   1642 ;	genCopy
+    0000040C A4*03            [ 3] 1643 	ldy	*(_UpdatePlayer_sloc1_1_0 + 1)
+    0000040E 8Cr01r00         [ 4] 1644 	sty	(_IsTileSolid_PARM_2 + 1)
+    00000411 A4*02            [ 3] 1645 	ldy	*_UpdatePlayer_sloc1_1_0
+    00000413 8Cr00r00         [ 4] 1646 	sty	_IsTileSolid_PARM_2
+                                   1647 ;	Raw cost for generated ic 331 : (10, 14.000000) count=1.333251
+                                   1648 ;	Raw cost for generated ic 330 : (0, 0.000000) count=1.333251
+                                   1649 ;	genCall
+                                   1650 ;	genSend
+    00000416 20r00r00         [ 6] 1651 	jsr	_IsTileSolid
+                                   1652 ;	assignResultValue
+                                   1653 ;	Raw cost for generated ic 332 : (3, 6.000000) count=1.333251
+                                   1654 ;	genIfx
+    00000419 C9 00            [ 2] 1655 	cmp	#0x00
+                                   1656 ;	genIfxJump : z
+    0000041B D0 1B            [ 4] 1657 	bne	00161$
+                                   1658 ;	Raw cost for generated ic 333 : (7, 7.600000) count=1.333251
+                                   1659 ;	genMinus
+                                   1660 ;	genMinusDec
+    0000041D A6*0B            [ 3] 1661 	ldx	*(_UpdatePlayer_sloc5_1_0 + 1)
+    0000041F A5*0A            [ 3] 1662 	lda	*_UpdatePlayer_sloc5_1_0
+    00000421 38               [ 2] 1663 	sec
+    00000422 E9 03            [ 2] 1664 	sbc	#0x03
+    00000424 B0 01            [ 4] 1665 	bcs	00610$
+    00000426 CA               [ 2] 1666 	dex
+    00000427                       1667 00610$:
+                                   1668 ;	Raw cost for generated ic 337 : (10, 14.600000) count=0.999925
+                                   1669 ;	genCast
+                                   1670 ;	genCopy
+                                   1671 ;	Raw cost for generated ic 338 : (0, 0.000000) count=0.999925
+                                   1672 ;	genAssign
+                                   1673 ;	genAssignLit
+                                   1674 ;	genCopy
+    00000427 A4*03            [ 3] 1675 	ldy	*(_UpdatePlayer_sloc1_1_0 + 1)
+    00000429 8Cr01r00         [ 4] 1676 	sty	(_IsTileSolid_PARM_2 + 1)
+    0000042C A4*02            [ 3] 1677 	ldy	*_UpdatePlayer_sloc1_1_0
+    0000042E 8Cr00r00         [ 4] 1678 	sty	_IsTileSolid_PARM_2
+                                   1679 ;	Raw cost for generated ic 340 : (10, 14.000000) count=0.999925
+                                   1680 ;	Raw cost for generated ic 339 : (0, 0.000000) count=0.999925
+                                   1681 ;	genCall
+                                   1682 ;	genSend
+    00000431 20r00r00         [ 6] 1683 	jsr	_IsTileSolid
+                                   1684 ;	assignResultValue
+                                   1685 ;	Raw cost for generated ic 341 : (3, 6.000000) count=0.999925
+                                   1686 ;	genIfx
+    00000434 C9 00            [ 2] 1687 	cmp	#0x00
+                                   1688 ;	genIfxJump : z
+    00000436 F0 31            [ 4] 1689 	beq	00167$
+                                   1690 ;	Raw cost for generated ic 342 : (7, 7.600000) count=0.999925
+                                   1691 ;	genLabel
+    00000438                       1692 00161$:
+                                   1693 ;	Raw cost for generated ic 344 : (0, 0.000000) count=1.083253
+                                   1694 ;	src/player.c: 278: playerYVelocity=0;
+                                   1695 ;	genAssign
+                                   1696 ;	genAssignLit
+    00000438 A2 00            [ 2] 1697 	ldx	#0x00
+    0000043A 8Er06r00         [ 4] 1698 	stx	_playerYVelocity
+    0000043D 8Er07r00         [ 4] 1699 	stx	(_playerYVelocity + 1)
+                                   1700 ;	Raw cost for generated ic 346 : (8, 11.000000) count=1.083253
+                                   1701 ;	src/player.c: 279: playerY+=16;
+                                   1702 ;	genCast
+                                   1703 ;	genCopy
+    00000440 AEr03r00         [ 4] 1704 	ldx	(_playerY + 1)
+    00000443 ADr02r00         [ 4] 1705 	lda	_playerY
+                                   1706 ;	Raw cost for generated ic 347 : (6, 8.000000) count=1.083253
+                                   1707 ;	genPlus
+                                   1708 ;	genPlusIncr
+    00000446 18               [ 2] 1709 	clc
+    00000447 69 10            [ 2] 1710 	adc	#0x10
+    00000449 90 01            [ 4] 1711 	bcc	00613$
+    0000044B E8               [ 2] 1712 	inx
+    0000044C                       1713 00613$:
+                                   1714 ;	Raw cost for generated ic 348 : (6, 8.600000) count=1.083253
+                                   1715 ;	genCast
+                                   1716 ;	genCopy
+                                   1717 ;	Raw cost for generated ic 349 : (6, 8.000000) count=1.083253
+                                   1718 ;	src/player.c: 280: playerRealY = playerY>>4;
+                                   1719 ;	genRightShift
+                                   1720 ;	genRightShiftLiteral
+                                   1721 ;	genrshTwo
+    0000044C 8Dr02r00         [ 4] 1722 	sta	_playerY
+    0000044F 8Er03r00         [ 4] 1723 	stx	(_playerY + 1)
+    00000452 86*00            [ 3] 1724 	stx	*(REGTEMP+0)
+    00000454 46*00            [ 5] 1725 	lsr	*(REGTEMP+0)
+    00000456 6A               [ 2] 1726 	ror	a
+    00000457 46*00            [ 5] 1727 	lsr	*(REGTEMP+0)
+    00000459 6A               [ 2] 1728 	ror	a
+    0000045A 46*00            [ 5] 1729 	lsr	*(REGTEMP+0)
+    0000045C 6A               [ 2] 1730 	ror	a
+    0000045D 46*00            [ 5] 1731 	lsr	*(REGTEMP+0)
+    0000045F 6A               [ 2] 1732 	ror	a
+    00000460 A6*00            [ 3] 1733 	ldx	*(REGTEMP+0)
+    00000462 85*02            [ 3] 1734 	sta	*_UpdatePlayer_sloc1_1_0
+    00000464 86*03            [ 3] 1735 	stx	*(_UpdatePlayer_sloc1_1_0 + 1)
+                                   1736 ;	Raw cost for generated ic 352 : (26, 48.000000) count=1.083253
+                                   1737 ;	genGoto
+    00000466 4CrFAr03         [ 3] 1738 	jmp	00160$
+                                   1739 ;	Raw cost for generated ic 354 : (3, 3.000000) count=1.083253
+                                   1740 ;	genLabel
+    00000469                       1741 00167$:
+                                   1742 ;	Raw cost for generated ic 357 : (0, 0.000000) count=0.999977
+                                   1743 ;	src/player.c: 286: uint8_t pressedA = (joypadCurrent & J_A && !(joypadPrevious & J_A));
+                                   1744 ;	genCast
+                                   1745 ;	genCopy
+    00000469 AEr00r00         [ 4] 1746 	ldx	_joypadCurrent
+                                   1747 ;	Raw cost for generated ic 358 : (3, 4.000000) count=0.999977
+                                   1748 ;	genAnd
+    0000046C 8A               [ 2] 1749 	txa
+    0000046D 29 80            [ 2] 1750 	and	#0x80
+                                   1751 ;	genIfxJump : z
+    0000046F F0 07            [ 4] 1752 	beq	00195$
+                                   1753 ;	Raw cost for generated ic 359 : (8, 9.600000) count=0.999977
+                                   1754 ;	skipping generated iCode
+                                   1755 ;	Raw cost for generated ic 360 : (0, 0.000000) count=0.999977
+                                   1756 ;	genCast
+                                   1757 ;	genCopy
+    00000471 ADr00r00         [ 4] 1758 	lda	_joypadPrevious
+                                   1759 ;	Raw cost for generated ic 361 : (3, 4.000000) count=0.749983
+                                   1760 ;	genAnd
+    00000474 29 80            [ 2] 1761 	and	#0x80
+                                   1762 ;	genIfxJump : z
+    00000476 F0 05            [ 4] 1763 	beq	00196$
+                                   1764 ;	Raw cost for generated ic 362 : (7, 7.600000) count=0.749983
+                                   1765 ;	skipping generated iCode
+                                   1766 ;	Raw cost for generated ic 364 : (0, 0.000000) count=0.749983
+                                   1767 ;	genLabel
+    00000478                       1768 00195$:
+                                   1769 ;	Raw cost for generated ic 365 : (0, 0.000000) count=0.812482
+                                   1770 ;	genAssign
+                                   1771 ;	genAssignLit
+                                   1772 ;	genCopy
+    00000478 A0 00            [ 2] 1773 	ldy	#0x00
+                                   1774 ;	Raw cost for generated ic 366 : (2, 2.000000) count=0.812482
+                                   1775 ;	genGoto
+    0000047A 4Cr7Fr04         [ 3] 1776 	jmp	00197$
+                                   1777 ;	Raw cost for generated ic 367 : (3, 3.000000) count=0.812482
+                                   1778 ;	genLabel
+    0000047D                       1779 00196$:
+                                   1780 ;	Raw cost for generated ic 368 : (0, 0.000000) count=0.187490
+                                   1781 ;	genAssign
+                                   1782 ;	genAssignLit
+                                   1783 ;	genCopy
+    0000047D A0 01            [ 2] 1784 	ldy	#0x01
+                                   1785 ;	Raw cost for generated ic 369 : (2, 2.000000) count=0.187490
+                                   1786 ;	genLabel
+    0000047F                       1787 00197$:
+                                   1788 ;	Raw cost for generated ic 370 : (0, 0.000000) count=0.999971
+                                   1789 ;	genCast
+                                   1790 ;	genCopy
+                                   1791 ;	Raw cost for generated ic 371 : (0, 0.000000) count=0.999971
+                                   1792 ;	src/player.c: 287: uint8_t pressedUp = (joypadCurrent & J_UP && !(joypadPrevious & J_UP));
+                                   1793 ;	genAnd
+    0000047F 8A               [ 2] 1794 	txa
+    00000480 29 08            [ 2] 1795 	and	#0x08
+                                   1796 ;	genIfxJump : z
+    00000482 F0 07            [ 4] 1797 	beq	00198$
+                                   1798 ;	Raw cost for generated ic 374 : (8, 9.600000) count=0.999971
+                                   1799 ;	skipping generated iCode
+                                   1800 ;	Raw cost for generated ic 375 : (0, 0.000000) count=0.999971
+                                   1801 ;	genCast
+                                   1802 ;	genCopy
+    00000484 ADr00r00         [ 4] 1803 	lda	_joypadPrevious
+                                   1804 ;	Raw cost for generated ic 376 : (3, 4.000000) count=0.749979
+                                   1805 ;	genAnd
+    00000487 29 08            [ 2] 1806 	and	#0x08
+                                   1807 ;	genIfxJump : z
+    00000489 F0 05            [ 4] 1808 	beq	00199$
+                                   1809 ;	Raw cost for generated ic 377 : (7, 7.600000) count=0.749979
+                                   1810 ;	skipping generated iCode
+                                   1811 ;	Raw cost for generated ic 379 : (0, 0.000000) count=0.749979
+                                   1812 ;	genLabel
+    0000048B                       1813 00198$:
+                                   1814 ;	Raw cost for generated ic 380 : (0, 0.000000) count=0.812477
+                                   1815 ;	genAssign
+                                   1816 ;	genAssignLit
+                                   1817 ;	genCopy
+    0000048B A9 00            [ 2] 1818 	lda	#0x00
+                                   1819 ;	Raw cost for generated ic 381 : (2, 2.000000) count=0.812477
+                                   1820 ;	genGoto
+    0000048D 4Cr92r04         [ 3] 1821 	jmp	00200$
+                                   1822 ;	Raw cost for generated ic 382 : (3, 3.000000) count=0.812477
+                                   1823 ;	genLabel
+    00000490                       1824 00199$:
+                                   1825 ;	Raw cost for generated ic 383 : (0, 0.000000) count=0.187490
+                                   1826 ;	genAssign
+                                   1827 ;	genAssignLit
+                                   1828 ;	genCopy
+    00000490 A9 01            [ 2] 1829 	lda	#0x01
+                                   1830 ;	Raw cost for generated ic 384 : (2, 2.000000) count=0.187490
+                                   1831 ;	genLabel
+    00000492                       1832 00200$:
+                                   1833 ;	Raw cost for generated ic 385 : (0, 0.000000) count=0.999967
+                                   1834 ;	genCast
+                                   1835 ;	genCopy
+                                   1836 ;	Raw cost for generated ic 386 : (0, 0.000000) count=0.999967
+                                   1837 ;	src/player.c: 288: uint8_t pressedAOrUp = pressedA||pressedUp;
+                                   1838 ;	genIfx
+    00000492 C0 00            [ 2] 1839 	cpy	#0x00
+                                   1840 ;	genIfxJump : z
+    00000494 D0 09            [ 4] 1841 	bne	00202$
+                                   1842 ;	Raw cost for generated ic 388 : (7, 7.600000) count=0.999967
+                                   1843 ;	genIfx
+    00000496 C9 00            [ 2] 1844 	cmp	#0x00
+                                   1845 ;	genIfxJump : z
+    00000498 D0 05            [ 4] 1846 	bne	00202$
+                                   1847 ;	Raw cost for generated ic 389 : (7, 7.600000) count=0.749975
+                                   1848 ;	genAssign
+                                   1849 ;	genAssignLit
+                                   1850 ;	genCopy
+    0000049A A0 00            [ 2] 1851 	ldy	#0x00
+                                   1852 ;	Raw cost for generated ic 391 : (2, 2.000000) count=0.562469
+                                   1853 ;	genGoto
+    0000049C 4CrA1r04         [ 3] 1854 	jmp	00203$
+                                   1855 ;	Raw cost for generated ic 392 : (3, 3.000000) count=0.562469
+                                   1856 ;	genLabel
+    0000049F                       1857 00202$:
+                                   1858 ;	Raw cost for generated ic 393 : (0, 0.000000) count=0.437476
+                                   1859 ;	genAssign
+                                   1860 ;	genAssignLit
+                                   1861 ;	genCopy
+    0000049F A0 01            [ 2] 1862 	ldy	#0x01
+                                   1863 ;	Raw cost for generated ic 394 : (2, 2.000000) count=0.437476
+                                   1864 ;	genLabel
+    000004A1                       1865 00203$:
+                                   1866 ;	Raw cost for generated ic 395 : (0, 0.000000) count=0.999946
+                                   1867 ;	genCast
+                                   1868 ;	genCopy
+                                   1869 ;	Raw cost for generated ic 396 : (0, 0.000000) count=0.999946
+                                   1870 ;	src/player.c: 291: if(grounded && pressedAOrUp){
+                                   1871 ;	genIfx
+    000004A1 ADr18r00         [ 4] 1872 	lda	_UpdatePlayer_grounded_10003_175
+                                   1873 ;	genIfxJump : z
+    000004A4 F0 13            [ 4] 1874 	beq	00169$
+                                   1875 ;	Raw cost for generated ic 398 : (8, 9.600000) count=0.999946
+                                   1876 ;	genIfx
+    000004A6 C0 00            [ 2] 1877 	cpy	#0x00
+                                   1878 ;	genIfxJump : z
+    000004A8 F0 0F            [ 4] 1879 	beq	00169$
+                                   1880 ;	Raw cost for generated ic 401 : (7, 7.600000) count=0.749959
+                                   1881 ;	src/player.c: 292: playerYVelocity=-PLAYER_CHARACTER_JUMP_VELOCITY;
+                                   1882 ;	genAssign
+                                   1883 ;	genAssignLit
+    000004AA A0 DA            [ 2] 1884 	ldy	#0xda
+    000004AC 8Cr06r00         [ 4] 1885 	sty	_playerYVelocity
+    000004AF A0 FD            [ 2] 1886 	ldy	#0xfd
+    000004B1 8Cr07r00         [ 4] 1887 	sty	(_playerYVelocity + 1)
+                                   1888 ;	Raw cost for generated ic 405 : (10, 13.000000) count=0.562469
+                                   1889 ;	src/player.c: 293: playerJumpIncrease=PLAYER_CHARACTER_INCREASE_JUMP_TIMER_MAX;
+                                   1890 ;	genAssign
+                                   1891 ;	genAssignLit
+    000004B4 A0 14            [ 2] 1892 	ldy	#0x14
+    000004B6 8Cr01r00         [ 4] 1893 	sty	_playerJumpIncrease
+                                   1894 ;	Raw cost for generated ic 407 : (5, 6.000000) count=0.562469
+                                   1895 ;	genLabel
+    000004B9                       1896 00169$:
+                                   1897 ;	Raw cost for generated ic 408 : (0, 0.000000) count=0.999946
+                                   1898 ;	src/player.c: 297: if(!grounded){
+                                   1899 ;	genIfx
+    000004B9 ADr18r00         [ 4] 1900 	lda	_UpdatePlayer_grounded_10003_175
+                                   1901 ;	genIfxJump : z
+    000004BC D0 31            [ 4] 1902 	bne	00180$
+                                   1903 ;	Raw cost for generated ic 409 : (8, 9.600000) count=0.999946
+                                   1904 ;	src/player.c: 300: if(playerJumpIncrease>0)playerJumpIncrease--;
+                                   1905 ;	genIfx
+    000004BE ADr01r00         [ 4] 1906 	lda	_playerJumpIncrease
+                                   1907 ;	genIfxJump : z
+    000004C1 F0 03            [ 4] 1908 	beq	00172$
+                                   1909 ;	Raw cost for generated ic 412 : (8, 9.600000) count=0.749959
+                                   1910 ;	genMinus
+                                   1911 ;	genMinusDec
+    000004C3 CEr01r00         [ 6] 1912 	dec	_playerJumpIncrease
+                                   1913 ;	Raw cost for generated ic 416 : (3, 6.000000) count=0.562469
+                                   1914 ;	genLabel
+    000004C6                       1915 00172$:
+                                   1916 ;	Raw cost for generated ic 419 : (0, 0.000000) count=0.749959
+                                   1917 ;	src/player.c: 303: if(!((joypadCurrent & J_A||joypadCurrent & J_UP))||playerJumpIncrease==0){
+                                   1918 ;	genAnd
+    000004C6 8A               [ 2] 1919 	txa
+    000004C7 29 80            [ 2] 1920 	and	#0x80
+                                   1921 ;	genIfxJump : z
+    000004C9 D0 05            [ 4] 1922 	bne	00176$
+                                   1923 ;	Raw cost for generated ic 421 : (8, 9.600000) count=0.749959
+                                   1924 ;	skipping generated iCode
+                                   1925 ;	Raw cost for generated ic 422 : (0, 0.000000) count=0.749959
+                                   1926 ;	genAnd
+    000004CB 8A               [ 2] 1927 	txa
+    000004CC 29 08            [ 2] 1928 	and	#0x08
+                                   1929 ;	genIfxJump : z
+    000004CE F0 05            [ 4] 1930 	beq	00173$
+                                   1931 ;	Raw cost for generated ic 426 : (8, 9.600000) count=0.562469
+                                   1932 ;	skipping generated iCode
+                                   1933 ;	Raw cost for generated ic 427 : (0, 0.000000) count=0.562469
+                                   1934 ;	genLabel
+    000004D0                       1935 00176$:
+                                   1936 ;	Raw cost for generated ic 429 : (0, 0.000000) count=0.609342
+                                   1937 ;	genIfx
+    000004D0 ADr01r00         [ 4] 1938 	lda	_playerJumpIncrease
+                                   1939 ;	genIfxJump : z
+    000004D3 D0 30            [ 4] 1940 	bne	00181$
+                                   1941 ;	Raw cost for generated ic 430 : (8, 9.600000) count=0.609342
+                                   1942 ;	genLabel
+    000004D5                       1943 00173$:
+                                   1944 ;	Raw cost for generated ic 432 : (0, 0.000000) count=0.597624
+                                   1945 ;	src/player.c: 306: playerYVelocity+=GRAVTY;
+                                   1946 ;	genCast
+                                   1947 ;	genCopy
+    000004D5 AEr07r00         [ 4] 1948 	ldx	(_playerYVelocity + 1)
+    000004D8 ADr06r00         [ 4] 1949 	lda	_playerYVelocity
+                                   1950 ;	Raw cost for generated ic 433 : (6, 8.000000) count=0.597624
+                                   1951 ;	genPlus
+                                   1952 ;	genPlusIncr
+    000004DB 18               [ 2] 1953 	clc
+    000004DC 69 2D            [ 2] 1954 	adc	#0x2d
+    000004DE 90 01            [ 4] 1955 	bcc	00638$
+    000004E0 E8               [ 2] 1956 	inx
+    000004E1                       1957 00638$:
+                                   1958 ;	Raw cost for generated ic 434 : (6, 8.600000) count=0.597624
+                                   1959 ;	genCast
+                                   1960 ;	genCopy
+    000004E1 8Dr06r00         [ 4] 1961 	sta	_playerYVelocity
+    000004E4 8Er07r00         [ 4] 1962 	stx	(_playerYVelocity + 1)
+                                   1963 ;	Raw cost for generated ic 435 : (6, 9.000000) count=0.597624
+                                   1964 ;	src/player.c: 309: playerJumpIncrease=0;
+                                   1965 ;	genAssign
+                                   1966 ;	genAssignLit
+    000004E7 A2 00            [ 2] 1967 	ldx	#0x00
+    000004E9 8Er01r00         [ 4] 1968 	stx	_playerJumpIncrease
+                                   1969 ;	Raw cost for generated ic 439 : (5, 6.000000) count=0.597624
+                                   1970 ;	genGoto
+    000004EC 4Cr05r05         [ 3] 1971 	jmp	00181$
+                                   1972 ;	Raw cost for generated ic 441 : (3, 3.000000) count=0.597624
+                                   1973 ;	genLabel
+    000004EF                       1974 00180$:
+                                   1975 ;	Raw cost for generated ic 442 : (0, 0.000000) count=0.249986
+                                   1976 ;	src/player.c: 313: }else if(playerYVelocity>=0){
+                                   1977 ;	genCast
+                                   1978 ;	genCopy
+    000004EF ADr07r00         [ 4] 1979 	lda	(_playerYVelocity + 1)
+    000004F2 85*0B            [ 3] 1980 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000004F4 ADr06r00         [ 4] 1981 	lda	_playerYVelocity
+    000004F7 85*0A            [ 3] 1982 	sta	*_UpdatePlayer_sloc5_1_0
+                                   1983 ;	Raw cost for generated ic 443 : (10, 14.000000) count=0.249986
+                                   1984 ;	genCmp
+    000004F9 24*0B            [ 3] 1985 	bit	*(_UpdatePlayer_sloc5_1_0 + 1)
+    000004FB 30 08            [ 4] 1986 	bmi	00181$
+                                   1987 ;	Raw cost for generated ic 444 : (7, 8.600000) count=0.249986
+                                   1988 ;	skipping generated iCode
+                                   1989 ;	Raw cost for generated ic 445 : (0, 0.000000) count=0.249986
+                                   1990 ;	src/player.c: 316: playerYVelocity=0;
+                                   1991 ;	genAssign
+                                   1992 ;	genAssignLit
+    000004FD A2 00            [ 2] 1993 	ldx	#0x00
+    000004FF 8Er06r00         [ 4] 1994 	stx	_playerYVelocity
+    00000502 8Er07r00         [ 4] 1995 	stx	(_playerYVelocity + 1)
+                                   1996 ;	Raw cost for generated ic 449 : (8, 11.000000) count=0.187490
+                                   1997 ;	genLabel
+    00000505                       1998 00181$:
+                                   1999 ;	Raw cost for generated ic 451 : (0, 0.000000) count=0.999946
+                                   2000 ;	src/player.c: 320: playerX+=playerXVelocity>>4;
+                                   2001 ;	genRightShift
+                                   2002 ;	genRightShiftLiteral
+                                   2003 ;	genrshTwo
+    00000505 AEr05r00         [ 4] 2004 	ldx	(_playerXVelocity + 1)
+    00000508 ADr04r00         [ 4] 2005 	lda	_playerXVelocity
+    0000050B 86*00            [ 3] 2006 	stx	*(REGTEMP+0)
+    0000050D E0 80            [ 2] 2007 	cpx	#0x80
+    0000050F 66*00            [ 5] 2008 	ror	*(REGTEMP+0)
+    00000511 6A               [ 2] 2009 	ror	a
+    00000512 E0 80            [ 2] 2010 	cpx	#0x80
+    00000514 66*00            [ 5] 2011 	ror	*(REGTEMP+0)
+    00000516 6A               [ 2] 2012 	ror	a
+    00000517 E0 80            [ 2] 2013 	cpx	#0x80
+    00000519 66*00            [ 5] 2014 	ror	*(REGTEMP+0)
+    0000051B 6A               [ 2] 2015 	ror	a
+    0000051C E0 80            [ 2] 2016 	cpx	#0x80
+    0000051E 66*00            [ 5] 2017 	ror	*(REGTEMP+0)
+    00000520 6A               [ 2] 2018 	ror	a
+    00000521 A6*00            [ 3] 2019 	ldx	*(REGTEMP+0)
+                                   2020 ;	Raw cost for generated ic 452 : (34, 56.000000) count=0.999946
+                                   2021 ;	genCast
+                                   2022 ;	genCopy
+    00000523 85*0A            [ 3] 2023 	sta	*_UpdatePlayer_sloc5_1_0
+    00000525 86*0B            [ 3] 2024 	stx	*(_UpdatePlayer_sloc5_1_0 + 1)
+                                   2025 ;	Raw cost for generated ic 453 : (4, 6.000000) count=0.999946
+                                   2026 ;	genPlus
+                                   2027 ;	genPlusIncr
+    00000527 18               [ 2] 2028 	clc
+    00000528 6Dr00r00         [ 4] 2029 	adc	_playerX
+    0000052B 8Dr00r00         [ 4] 2030 	sta	_playerX
+    0000052E 8A               [ 2] 2031 	txa
+    0000052F 6Dr01r00         [ 4] 2032 	adc	(_playerX + 1)
+    00000532 8Dr01r00         [ 4] 2033 	sta	(_playerX + 1)
+                                   2034 ;	Raw cost for generated ic 454 : (14, 20.000000) count=0.999946
+                                   2035 ;	src/player.c: 321: playerY+=playerYVelocity>>4;
+                                   2036 ;	genRightShift
+                                   2037 ;	genRightShiftLiteral
+                                   2038 ;	genrshTwo
+    00000535 AEr07r00         [ 4] 2039 	ldx	(_playerYVelocity + 1)
+    00000538 ADr06r00         [ 4] 2040 	lda	_playerYVelocity
+    0000053B 86*00            [ 3] 2041 	stx	*(REGTEMP+0)
+    0000053D E0 80            [ 2] 2042 	cpx	#0x80
+    0000053F 66*00            [ 5] 2043 	ror	*(REGTEMP+0)
+    00000541 6A               [ 2] 2044 	ror	a
+    00000542 E0 80            [ 2] 2045 	cpx	#0x80
+    00000544 66*00            [ 5] 2046 	ror	*(REGTEMP+0)
+    00000546 6A               [ 2] 2047 	ror	a
+    00000547 E0 80            [ 2] 2048 	cpx	#0x80
+    00000549 66*00            [ 5] 2049 	ror	*(REGTEMP+0)
+    0000054B 6A               [ 2] 2050 	ror	a
+    0000054C E0 80            [ 2] 2051 	cpx	#0x80
+    0000054E 66*00            [ 5] 2052 	ror	*(REGTEMP+0)
+    00000550 6A               [ 2] 2053 	ror	a
+    00000551 A6*00            [ 3] 2054 	ldx	*(REGTEMP+0)
+                                   2055 ;	Raw cost for generated ic 457 : (30, 50.000000) count=0.999946
+                                   2056 ;	genCast
+                                   2057 ;	genCopy
+                                   2058 ;	Raw cost for generated ic 458 : (0, 0.000000) count=0.999946
+                                   2059 ;	genPlus
+                                   2060 ;	genPlusIncr
+    00000553 18               [ 2] 2061 	clc
+    00000554 6Dr02r00         [ 4] 2062 	adc	_playerY
+    00000557 8Dr02r00         [ 4] 2063 	sta	_playerY
+    0000055A 8A               [ 2] 2064 	txa
+    0000055B 6Dr03r00         [ 4] 2065 	adc	(_playerY + 1)
+    0000055E 8Dr03r00         [ 4] 2066 	sta	(_playerY + 1)
+                                   2067 ;	Raw cost for generated ic 459 : (14, 20.000000) count=0.999946
+                                   2068 ;	src/player.c: 324: playerRealX = playerX>>4;
+                                   2069 ;	genRightShift
+                                   2070 ;	genRightShiftLiteral
+                                   2071 ;	genrshTwo
+    00000561 AEr01r00         [ 4] 2072 	ldx	(_playerX + 1)
+    00000564 ADr00r00         [ 4] 2073 	lda	_playerX
+    00000567 86*00            [ 3] 2074 	stx	*(REGTEMP+0)
+    00000569 46*00            [ 5] 2075 	lsr	*(REGTEMP+0)
+    0000056B 6A               [ 2] 2076 	ror	a
+    0000056C 46*00            [ 5] 2077 	lsr	*(REGTEMP+0)
+    0000056E 6A               [ 2] 2078 	ror	a
+    0000056F 46*00            [ 5] 2079 	lsr	*(REGTEMP+0)
+    00000571 6A               [ 2] 2080 	ror	a
+    00000572 46*00            [ 5] 2081 	lsr	*(REGTEMP+0)
+    00000574 6A               [ 2] 2082 	ror	a
+    00000575 A6*00            [ 3] 2083 	ldx	*(REGTEMP+0)
+    00000577 8Dr14r00         [ 4] 2084 	sta	_UpdatePlayer_playerRealX_10003_175
+    0000057A 8Er15r00         [ 4] 2085 	stx	(_UpdatePlayer_playerRealX_10003_175 + 1)
+                                   2086 ;	Raw cost for generated ic 462 : (28, 50.000000) count=0.999946
+                                   2087 ;	src/player.c: 325: playerRealY = playerY>>4;
+                                   2088 ;	genRightShift
+                                   2089 ;	genRightShiftLiteral
+                                   2090 ;	genrshTwo
+    0000057D AEr03r00         [ 4] 2091 	ldx	(_playerY + 1)
+    00000580 ADr02r00         [ 4] 2092 	lda	_playerY
+    00000583 86*00            [ 3] 2093 	stx	*(REGTEMP+0)
+    00000585 46*00            [ 5] 2094 	lsr	*(REGTEMP+0)
+    00000587 6A               [ 2] 2095 	ror	a
+    00000588 46*00            [ 5] 2096 	lsr	*(REGTEMP+0)
+    0000058A 6A               [ 2] 2097 	ror	a
+    0000058B 46*00            [ 5] 2098 	lsr	*(REGTEMP+0)
+    0000058D 6A               [ 2] 2099 	ror	a
+    0000058E 46*00            [ 5] 2100 	lsr	*(REGTEMP+0)
+    00000590 6A               [ 2] 2101 	ror	a
+    00000591 A6*00            [ 3] 2102 	ldx	*(REGTEMP+0)
+    00000593 8Dr16r00         [ 4] 2103 	sta	_UpdatePlayer_playerRealY_10003_175
+    00000596 8Er17r00         [ 4] 2104 	stx	(_UpdatePlayer_playerRealY_10003_175 + 1)
+                                   2105 ;	Raw cost for generated ic 464 : (28, 50.000000) count=0.999946
+                                   2106 ;	src/player.c: 328: if(playerRealX>=(DEVICE_SCREEN_PX_WIDTH>>1)){
+                                   2107 ;	genCmp
+    00000599 ADr14r00         [ 4] 2108 	lda	_UpdatePlayer_playerRealX_10003_175
+    0000059C 38               [ 2] 2109 	sec
+    0000059D E9 80            [ 2] 2110 	sbc	#0x80
+    0000059F ADr15r00         [ 4] 2111 	lda	(_UpdatePlayer_playerRealX_10003_175 + 1)
+    000005A2 E9 00            [ 2] 2112 	sbc	#0x00
+    000005A4 90 47            [ 4] 2113 	bcc	00185$
+                                   2114 ;	Raw cost for generated ic 466 : (16, 19.600000) count=0.999946
+                                   2115 ;	skipping generated iCode
+                                   2116 ;	Raw cost for generated ic 467 : (0, 0.000000) count=0.999946
+                                   2117 ;	src/player.c: 329: uint16_t max = currentLevelWidth-DEVICE_SCREEN_PX_WIDTH;
+                                   2118 ;	genCast
+                                   2119 ;	genCopy
+    000005A6 AEr01r00         [ 4] 2120 	ldx	(_currentLevelWidth + 1)
+    000005A9 ADr00r00         [ 4] 2121 	lda	_currentLevelWidth
+                                   2122 ;	Raw cost for generated ic 470 : (6, 8.000000) count=0.749959
+                                   2123 ;	genMinus
+                                   2124 ;	genMinusDec
+    000005AC 38               [ 2] 2125 	sec
+    000005AD E9 00            [ 2] 2126 	sbc	#0x00
+    000005AF 48               [ 3] 2127 	pha
+    000005B0 8A               [ 2] 2128 	txa
+    000005B1 E9 01            [ 2] 2129 	sbc	#0x01
+    000005B3 AA               [ 2] 2130 	tax
+    000005B4 68               [ 4] 2131 	pla
+                                   2132 ;	Raw cost for generated ic 471 : (9, 17.000000) count=0.749959
+                                   2133 ;	genCast
+                                   2134 ;	genCopy
+    000005B5 8Dr19r00         [ 4] 2135 	sta	_UpdatePlayer_max_30004_205
+    000005B8 8Er1Ar00         [ 4] 2136 	stx	(_UpdatePlayer_max_30004_205 + 1)
+                                   2137 ;	Raw cost for generated ic 472 : (6, 8.000000) count=0.749959
+                                   2138 ;	src/player.c: 330: camera_x=playerRealX-(DEVICE_SCREEN_PX_WIDTH>>1);
+                                   2139 ;	genCast
+                                   2140 ;	genCopy
+    000005BB AEr15r00         [ 4] 2141 	ldx	(_UpdatePlayer_playerRealX_10003_175 + 1)
+    000005BE ADr14r00         [ 4] 2142 	lda	_UpdatePlayer_playerRealX_10003_175
+                                   2143 ;	Raw cost for generated ic 474 : (6, 8.000000) count=0.749959
+                                   2144 ;	genMinus
+                                   2145 ;	genMinusDec
+    000005C1 38               [ 2] 2146 	sec
+    000005C2 E9 80            [ 2] 2147 	sbc	#0x80
+    000005C4 B0 01            [ 4] 2148 	bcs	00641$
+    000005C6 CA               [ 2] 2149 	dex
+    000005C7                       2150 00641$:
+                                   2151 ;	Raw cost for generated ic 475 : (6, 8.600000) count=0.749959
+                                   2152 ;	genCast
+                                   2153 ;	genCopy
+                                   2154 ;	Raw cost for generated ic 476 : (0, 0.000000) count=0.749959
+                                   2155 ;	genAssign
+                                   2156 ;	genAssignLit
+                                   2157 ;	genCopy
+    000005C7 8Dr00r00         [ 4] 2158 	sta	_camera_x
+    000005CA 8Er01r00         [ 4] 2159 	stx	(_camera_x + 1)
+                                   2160 ;	Raw cost for generated ic 478 : (6, 9.000000) count=0.749959
+                                   2161 ;	src/player.c: 333: if(camera_x>max)camera_x=max;
+                                   2162 ;	genCmp
+    000005CD 85*00            [ 3] 2163 	sta	*(REGTEMP+0)
+    000005CF ADr19r00         [ 4] 2164 	lda	_UpdatePlayer_max_30004_205
+    000005D2 38               [ 2] 2165 	sec
+    000005D3 E5*00            [ 3] 2166 	sbc	*(REGTEMP+0)
+    000005D5 ADr1Ar00         [ 4] 2167 	lda	(_UpdatePlayer_max_30004_205 + 1)
+    000005D8 86*00            [ 3] 2168 	stx	*(REGTEMP+0)
+    000005DA E5*00            [ 3] 2169 	sbc	*(REGTEMP+0)
+    000005DC B0 17            [ 4] 2170 	bcs	00186$
+                                   2171 ;	Raw cost for generated ic 479 : (20, 27.600000) count=0.749959
+                                   2172 ;	skipping generated iCode
+                                   2173 ;	Raw cost for generated ic 480 : (0, 0.000000) count=0.749959
+                                   2174 ;	genAssign
+                                   2175 ;	genAssignLit
+                                   2176 ;	genCopy
+    000005DE ADr1Ar00         [ 4] 2177 	lda	(_UpdatePlayer_max_30004_205 + 1)
+    000005E1 8Dr01r00         [ 4] 2178 	sta	(_camera_x + 1)
+    000005E4 ADr19r00         [ 4] 2179 	lda	_UpdatePlayer_max_30004_205
+    000005E7 8Dr00r00         [ 4] 2180 	sta	_camera_x
+                                   2181 ;	Raw cost for generated ic 484 : (12, 17.000000) count=0.562469
+                                   2182 ;	genGoto
+    000005EA 4CrF5r05         [ 3] 2183 	jmp	00186$
+                                   2184 ;	Raw cost for generated ic 486 : (3, 3.000000) count=0.562469
+                                   2185 ;	genLabel
+    000005ED                       2186 00185$:
+                                   2187 ;	Raw cost for generated ic 487 : (0, 0.000000) count=0.249986
+                                   2188 ;	src/player.c: 335: else camera_x=0;
+                                   2189 ;	genAssign
+                                   2190 ;	genAssignLit
+    000005ED A2 00            [ 2] 2191 	ldx	#0x00
+    000005EF 8Er00r00         [ 4] 2192 	stx	_camera_x
+    000005F2 8Er01r00         [ 4] 2193 	stx	(_camera_x + 1)
+                                   2194 ;	Raw cost for generated ic 489 : (8, 11.000000) count=0.249986
+                                   2195 ;	genLabel
+    000005F5                       2196 00186$:
+                                   2197 ;	Raw cost for generated ic 490 : (0, 0.000000) count=0.999946
+                                   2198 ;	src/player.c: 345: uint8_t frame = grounded ? (turning ? 5 :((playerXVelocity>>4)==0 ? 0 : threeFrameCounterValue)) : (playerYVelocity<0 ? 3 : 4);
+                                   2199 ;	genIfx
+    000005F5 ADr18r00         [ 4] 2200 	lda	_UpdatePlayer_grounded_10003_175
+                                   2201 ;	genIfxJump : z
+    000005F8 F0 1B            [ 4] 2202 	beq	00204$
+                                   2203 ;	Raw cost for generated ic 491 : (8, 9.600000) count=0.999946
+                                   2204 ;	genIfx
+    000005FA ADr13r00         [ 4] 2205 	lda	_UpdatePlayer_turning_10002_149
+                                   2206 ;	genIfxJump : z
+    000005FD F0 05            [ 4] 2207 	beq	00206$
+                                   2208 ;	Raw cost for generated ic 492 : (8, 9.600000) count=0.749959
+                                   2209 ;	genAssign
+                                   2210 ;	genAssignLit
+                                   2211 ;	genCopy
+    000005FF A9 05            [ 2] 2212 	lda	#0x05
+                                   2213 ;	Raw cost for generated ic 493 : (2, 2.000000) count=0.562469
+                                   2214 ;	genGoto
+    00000601 4Cr2Ar06         [ 3] 2215 	jmp	00205$
+                                   2216 ;	Raw cost for generated ic 494 : (3, 3.000000) count=0.562469
+                                   2217 ;	genLabel
+    00000604                       2218 00206$:
+                                   2219 ;	Raw cost for generated ic 495 : (0, 0.000000) count=0.187490
+                                   2220 ;	genIfx
+    00000604 A5*0B            [ 3] 2221 	lda	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000606 05*0A            [ 3] 2222 	ora	*_UpdatePlayer_sloc5_1_0
+                                   2223 ;	genIfxJump : z
+    00000608 D0 05            [ 4] 2224 	bne	00208$
+                                   2225 ;	Raw cost for generated ic 498 : (9, 11.600000) count=0.187490
+                                   2226 ;	genAssign
+                                   2227 ;	genAssignLit
+                                   2228 ;	genCopy
+    0000060A A9 00            [ 2] 2229 	lda	#0x00
+                                   2230 ;	Raw cost for generated ic 499 : (2, 2.000000) count=0.140617
+                                   2231 ;	genGoto
+    0000060C 4Cr2Ar06         [ 3] 2232 	jmp	00205$
+                                   2233 ;	Raw cost for generated ic 500 : (3, 3.000000) count=0.140617
+                                   2234 ;	genLabel
+    0000060F                       2235 00208$:
+                                   2236 ;	Raw cost for generated ic 501 : (0, 0.000000) count=0.046867
+                                   2237 ;	genCast
+                                   2238 ;	genCopy
+    0000060F ADr12r00         [ 4] 2239 	lda	_UpdatePlayer_threeFrameCounterValue_10001_146
+                                   2240 ;	Raw cost for generated ic 502 : (3, 4.000000) count=0.046867
+                                   2241 ;	genLabel
+                                   2242 ;	Raw cost for generated ic 504 : (0, 0.000000) count=0.187484
+                                   2243 ;	genCast
+                                   2244 ;	genCopy
+                                   2245 ;	Raw cost for generated ic 505 : (0, 0.000000) count=0.187484
+                                   2246 ;	genLabel
+                                   2247 ;	Raw cost for generated ic 506 : (0, 0.000000) count=0.749953
+                                   2248 ;	genCast
+                                   2249 ;	genCopy
+                                   2250 ;	Raw cost for generated ic 507 : (0, 0.000000) count=0.749953
+                                   2251 ;	genGoto
+    00000612 4Cr2Ar06         [ 3] 2252 	jmp	00205$
+                                   2253 ;	Raw cost for generated ic 508 : (3, 3.000000) count=0.749953
+                                   2254 ;	genLabel
+    00000615                       2255 00204$:
+                                   2256 ;	Raw cost for generated ic 509 : (0, 0.000000) count=0.249986
+                                   2257 ;	genCast
+                                   2258 ;	genCopy
+    00000615 ADr07r00         [ 4] 2259 	lda	(_playerYVelocity + 1)
+    00000618 85*0B            [ 3] 2260 	sta	*(_UpdatePlayer_sloc5_1_0 + 1)
+    0000061A ADr06r00         [ 4] 2261 	lda	_playerYVelocity
+    0000061D 85*0A            [ 3] 2262 	sta	*_UpdatePlayer_sloc5_1_0
+                                   2263 ;	Raw cost for generated ic 510 : (10, 14.000000) count=0.249986
+                                   2264 ;	genCmp
+    0000061F 24*0B            [ 3] 2265 	bit	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000621 10 05            [ 4] 2266 	bpl	00210$
+                                   2267 ;	Raw cost for generated ic 511 : (7, 8.600000) count=0.249986
+                                   2268 ;	skipping generated iCode
+                                   2269 ;	Raw cost for generated ic 512 : (0, 0.000000) count=0.249986
+                                   2270 ;	genAssign
+                                   2271 ;	genAssignLit
+                                   2272 ;	genCopy
+    00000623 A9 03            [ 2] 2273 	lda	#0x03
+                                   2274 ;	Raw cost for generated ic 513 : (2, 2.000000) count=0.187490
+                                   2275 ;	genGoto
+    00000625 4Cr2Ar06         [ 3] 2276 	jmp	00211$
+                                   2277 ;	Raw cost for generated ic 514 : (3, 3.000000) count=0.187490
+                                   2278 ;	genLabel
+    00000628                       2279 00210$:
+                                   2280 ;	Raw cost for generated ic 515 : (0, 0.000000) count=0.062489
+                                   2281 ;	genAssign
+                                   2282 ;	genAssignLit
+                                   2283 ;	genCopy
+    00000628 A9 04            [ 2] 2284 	lda	#0x04
+                                   2285 ;	Raw cost for generated ic 516 : (2, 2.000000) count=0.062489
+                                   2286 ;	genLabel
+    0000062A                       2287 00211$:
+                                   2288 ;	Raw cost for generated ic 517 : (0, 0.000000) count=0.249979
+                                   2289 ;	genCast
+                                   2290 ;	genCopy
+                                   2291 ;	Raw cost for generated ic 518 : (0, 0.000000) count=0.249979
+                                   2292 ;	genLabel
+    0000062A                       2293 00205$:
+                                   2294 ;	Raw cost for generated ic 519 : (0, 0.000000) count=0.999932
+                                   2295 ;	genCast
+                                   2296 ;	genCopy
+                                   2297 ;	Raw cost for generated ic 520 : (0, 0.000000) count=0.999932
+                                   2298 ;	src/player.c: 346: uint8_t directionOffset = facingRight ? 0 : 6;
+                                   2299 ;	genIfx
+    0000062A AEr00r00         [ 4] 2300 	ldx	_facingRight
+                                   2301 ;	genIfxJump : z
+    0000062D F0 05            [ 4] 2302 	beq	00212$
+                                   2303 ;	Raw cost for generated ic 522 : (8, 9.600000) count=0.999932
+                                   2304 ;	genAssign
+                                   2305 ;	genAssignLit
+                                   2306 ;	genCopy
+    0000062F A2 00            [ 2] 2307 	ldx	#0x00
+                                   2308 ;	Raw cost for generated ic 523 : (2, 2.000000) count=0.749949
+                                   2309 ;	genGoto
+    00000631 4Cr36r06         [ 3] 2310 	jmp	00213$
+                                   2311 ;	Raw cost for generated ic 524 : (3, 3.000000) count=0.749949
+                                   2312 ;	genLabel
+    00000634                       2313 00212$:
+                                   2314 ;	Raw cost for generated ic 525 : (0, 0.000000) count=0.249983
+                                   2315 ;	genAssign
+                                   2316 ;	genAssignLit
+                                   2317 ;	genCopy
+    00000634 A2 06            [ 2] 2318 	ldx	#0x06
+                                   2319 ;	Raw cost for generated ic 526 : (2, 2.000000) count=0.249983
+                                   2320 ;	genLabel
+    00000636                       2321 00213$:
+                                   2322 ;	Raw cost for generated ic 527 : (0, 0.000000) count=0.999932
+                                   2323 ;	genCast
+                                   2324 ;	genCopy
+                                   2325 ;	Raw cost for generated ic 528 : (0, 0.000000) count=0.999932
+                                   2326 ;	src/player.c: 348: uint8_t spritesUsed = DrawPlayer(playerRealX,playerRealY,frame+directionOffset);
+                                   2327 ;	genPlus
+                                   2328 ;	genPlusIncr
+    00000636 18               [ 2] 2329 	clc
+    00000637 86*00            [ 3] 2330 	stx	*(REGTEMP+0)
+    00000639 65*00            [ 3] 2331 	adc	*(REGTEMP+0)
+    0000063B 8Dr0Ar00         [ 4] 2332 	sta	_DrawPlayer_PARM_3
+                                   2333 ;	Raw cost for generated ic 530 : (8, 12.000000) count=0.999932
+                                   2334 ;	genAssign
+                                   2335 ;	genAssignLit
+                                   2336 ;	genCopy
+    0000063E ADr17r00         [ 4] 2337 	lda	(_UpdatePlayer_playerRealY_10003_175 + 1)
+    00000641 8Dr09r00         [ 4] 2338 	sta	(_DrawPlayer_PARM_2 + 1)
+    00000644 ADr16r00         [ 4] 2339 	lda	_UpdatePlayer_playerRealY_10003_175
+    00000647 8Dr08r00         [ 4] 2340 	sta	_DrawPlayer_PARM_2
+                                   2341 ;	Raw cost for generated ic 532 : (12, 16.000000) count=0.999932
+                                   2342 ;	Raw cost for generated ic 531 : (0, 0.000000) count=0.999932
+                                   2343 ;	genCall
+                                   2344 ;	genSend
+    0000064A AEr15r00         [ 4] 2345 	ldx	(_UpdatePlayer_playerRealX_10003_175 + 1)
+    0000064D ADr14r00         [ 4] 2346 	lda	_UpdatePlayer_playerRealX_10003_175
+    00000650 20r43r00         [ 6] 2347 	jsr	_DrawPlayer
+                                   2348 ;	assignResultValue
+    00000653 8Dr1Br00         [ 4] 2349 	sta	_UpdatePlayer_spritesUsed_10005_207
+                                   2350 ;	Raw cost for generated ic 534 : (12, 18.000000) count=0.999932
+                                   2351 ;	src/player.c: 351: if(playerRealX>currentLevelWidth-32){
+                                   2352 ;	genCast
+                                   2353 ;	genCopy
+    00000656 AEr01r00         [ 4] 2354 	ldx	(_currentLevelWidth + 1)
+    00000659 ADr00r00         [ 4] 2355 	lda	_currentLevelWidth
+                                   2356 ;	Raw cost for generated ic 536 : (6, 8.000000) count=0.999932
+                                   2357 ;	genMinus
+                                   2358 ;	genMinusDec
+    0000065C 38               [ 2] 2359 	sec
+    0000065D E9 20            [ 2] 2360 	sbc	#0x20
+    0000065F B0 01            [ 4] 2361 	bcs	00652$
+    00000661 CA               [ 2] 2362 	dex
+    00000662                       2363 00652$:
+                                   2364 ;	Raw cost for generated ic 537 : (6, 8.600000) count=0.999932
+                                   2365 ;	genCast
+                                   2366 ;	genCopy
+    00000662 ACr15r00         [ 4] 2367 	ldy	(_UpdatePlayer_playerRealX_10003_175 + 1)
+    00000665 84*0B            [ 3] 2368 	sty	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000667 ACr14r00         [ 4] 2369 	ldy	_UpdatePlayer_playerRealX_10003_175
+    0000066A 84*0A            [ 3] 2370 	sty	*_UpdatePlayer_sloc5_1_0
+                                   2371 ;	Raw cost for generated ic 538 : (10, 14.000000) count=0.999932
+                                   2372 ;	genCmp
+    0000066C 38               [ 2] 2373 	sec
+    0000066D E5*0A            [ 3] 2374 	sbc	*_UpdatePlayer_sloc5_1_0
+    0000066F 8A               [ 2] 2375 	txa
+    00000670 E5*0B            [ 3] 2376 	sbc	*(_UpdatePlayer_sloc5_1_0 + 1)
+    00000672 B0 03            [ 4] 2377 	bcs	00188$
+                                   2378 ;	Raw cost for generated ic 539 : (11, 15.600000) count=0.999932
+                                   2379 ;	skipping generated iCode
+                                   2380 ;	Raw cost for generated ic 540 : (0, 0.000000) count=0.999932
+                                   2381 ;	src/player.c: 352: nextLevel++;
+                                   2382 ;	genPlus
+                                   2383 ;	genPlusIncr
+    00000674 EEr00r00         [ 6] 2384 	inc	_nextLevel
+                                   2385 ;	Raw cost for generated ic 544 : (3, 6.000000) count=0.749949
+                                   2386 ;	genLabel
+    00000677                       2387 00188$:
+                                   2388 ;	Raw cost for generated ic 547 : (0, 0.000000) count=0.999932
+                                   2389 ;	src/player.c: 355: return spritesUsed;
+                                   2390 ;	genRet
+    00000677 ADr1Br00         [ 4] 2391 	lda	_UpdatePlayer_spritesUsed_10005_207
+                                   2392 ;	Raw cost for generated ic 548 : (3, 4.000000) count=0.999932
+                                   2393 ;	genLabel
+                                   2394 ;	Raw cost for generated ic 549 : (0, 0.000000) count=0.999932
+                                   2395 ;	src/player.c: 356: }
+                                   2396 ;	genEndFunction
+    0000067A 60               [ 6] 2397 	rts
+                                   2398 ;	Raw cost for generated ic 550 : (1, 6.000000) count=0.999932
+                                   2399 	.area _CODE_255
+    0000067B                       2400 _baseProp:
+    0000067B 00                    2401 	.db #0x00	; 0
+    0000067C                       2402 _PlayerPalettesGGSMS:
+    0000067C 26                    2403 	.db #0x26	; 38
+    0000067D 20                    2404 	.db #0x20	; 32
+    0000067E 3D                    2405 	.db #0x3d	; 61
+    0000067F 1D                    2406 	.db #0x1d	; 29
+    00000680 17                    2407 	.db #0x17	; 23
+    00000681 19                    2408 	.db #0x19	; 25
+    00000682 02                    2409 	.db #0x02	; 2
+    00000683 29                    2410 	.db #0x29	; 41
+    00000684 2B                    2411 	.db #0x2b	; 43
+    00000685 04                    2412 	.db #0x04	; 4
+    00000686 16                    2413 	.db #0x16	; 22
+    00000687 2A                    2414 	.db #0x2a	; 42
+    00000688 12                    2415 	.db #0x12	; 18
+    00000689 28                    2416 	.db #0x28	; 40
+    0000068A 2C                    2417 	.db #0x2c	; 44
+    0000068B 34                    2418 	.db #0x34	; 52	'4'
+                                   2419 	.area _XINIT
+    00000000                       2420 __xinit__facingRight:
+    00000000 01                    2421 	.db #0x01	; 1
+    00000001                       2422 __xinit__playerJumpIncrease:
+    00000001 00                    2423 	.db #0x00	; 0
+    00000002                       2424 __xinit__threeFrameCounter:
+    00000002 00                    2425 	.db #0x00	; 0
+                                   2426 	.area _CABS    (ABS)

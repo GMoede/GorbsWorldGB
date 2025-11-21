@@ -1,0 +1,327 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module display_system
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _get_system_name
+                                     23 	.globl _gotoxy
+                                     24 	.globl _font_load
+                                     25 	.globl _font_init
+                                     26 	.globl _display_on
+                                     27 	.globl _vsync
+                                     28 	.globl _printf
+                                     29 	.globl _OAMDMA
+                                     30 	.globl _PPUDATA
+                                     31 	.globl _PPUADDR
+                                     32 	.globl _PPUSCROLL
+                                     33 	.globl _OAMDATA
+                                     34 	.globl _OAMADDR
+                                     35 	.globl _PPUSTATUS
+                                     36 	.globl _PPUMASK
+                                     37 	.globl _PPUCTRL
+                                     38 ;--------------------------------------------------------
+                                     39 ; ZP ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _ZP      (PAG)
+                                     42 ;--------------------------------------------------------
+                                     43 ; overlayable items in ram
+                                     44 ;--------------------------------------------------------
+                                     45 ;--------------------------------------------------------
+                                     46 ; uninitialized external ram data
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _BSS
+                         00002000    49 _PPUCTRL	=	0x2000
+                         00002001    50 _PPUMASK	=	0x2001
+                         00002002    51 _PPUSTATUS	=	0x2002
+                         00002003    52 _OAMADDR	=	0x2003
+                         00002004    53 _OAMDATA	=	0x2004
+                         00002005    54 _PPUSCROLL	=	0x2005
+                         00002006    55 _PPUADDR	=	0x2006
+                         00002007    56 _PPUDATA	=	0x2007
+                         00004014    57 _OAMDMA	=	0x4014
+                                     58 ;--------------------------------------------------------
+                                     59 ; absolute external ram data
+                                     60 ;--------------------------------------------------------
+                                     61 	.area _DABS    (ABS)
+                                     62 ;--------------------------------------------------------
+                                     63 ; initialized external ram data
+                                     64 ;--------------------------------------------------------
+                                     65 	.area _DATA
+                                     66 ;--------------------------------------------------------
+                                     67 ; global & static initialisations
+                                     68 ;--------------------------------------------------------
+                                     69 	.area _HOME
+                                     70 	.area _GSINIT
+                                     71 	.area _GSFINAL
+                                     72 	.area _GSINIT
+                                     73 ;--------------------------------------------------------
+                                     74 ; Home
+                                     75 ;--------------------------------------------------------
+                                     76 	.area _HOME
+                                     77 	.area _HOME
+                                     78 ;--------------------------------------------------------
+                                     79 ; code
+                                     80 ;--------------------------------------------------------
+                                     81 	.area _CODE
+                                     82 ;------------------------------------------------------------
+                                     83 ;Allocation info for local variables in function 'get_system_name'
+                                     84 ;------------------------------------------------------------
+                                     85 ;system        Allocated to registers a 
+                                     86 ;------------------------------------------------------------
+                                     87 ;	src/display_system.c: 18: const char* get_system_name(uint8_t system)
+                                     88 ;	genLabel
+                                     89 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                     90 ;	-----------------------------------------
+                                     91 ;	 function get_system_name
+                                     92 ;	-----------------------------------------
+                                     93 ;	Register assignment is optimal.
+                                     94 ;	Stack space usage: 0 bytes.
+    00000000                         95 _get_system_name:
+                                     96 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                     97 ;	genReceive
+                                     98 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                     99 ;	src/display_system.c: 20: switch(system)
+                                    100 ;	genCmpEQorNE
+    00000000 C9 00            [ 2]  101 	cmp	#0x00
+    00000002 F0 07            [ 4]  102 	beq	00101$
+                                    103 ;	Raw cost for generated ic 3 : (7, 7.600000) count=1.000000
+                                    104 ;	skipping generated iCode
+                                    105 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    106 ;	genCmpEQorNE
+    00000004 C9 01            [ 2]  107 	cmp	#0x01
+    00000006 F0 08            [ 4]  108 	beq	00102$
+                                    109 ;	Raw cost for generated ic 5 : (7, 7.600000) count=0.750000
+                                    110 ;	skipping generated iCode
+                                    111 ;	Raw cost for generated ic 6 : (0, 0.000000) count=0.750000
+                                    112 ;	genGoto
+    00000008 4Cr23r00         [ 3]  113 	jmp	00106$
+                                    114 ;	Raw cost for generated ic 7 : (3, 3.000000) count=0.562500
+                                    115 ;	src/display_system.c: 22: case SYSTEM_60HZ:
+                                    116 ;	genLabel
+    0000000B                        117 00101$:
+                                    118 ;	Raw cost for generated ic 8 : (0, 0.000000) count=0.250000
+                                    119 ;	src/display_system.c: 23: return "60 Hz";
+                                    120 ;	skipping iCode since result will be rematerialized
+                                    121 ;	Raw cost for generated ic 9 : (0, 0.000000) count=0.250000
+                                    122 ;	skipping iCode since result will be rematerialized
+                                    123 ;	Raw cost for generated ic 10 : (0, 0.000000) count=0.250000
+                                    124 ;	genRet
+    0000000B A2s00            [ 2]  125 	ldx	#>___str_0
+    0000000D A9r67            [ 2]  126 	lda	#___str_0
+    0000000F 60               [ 6]  127 	rts
+                                    128 ;	Raw cost for generated ic 11 : (7, 7.000000) count=0.250000
+                                    129 ;	src/display_system.c: 24: case SYSTEM_50HZ:
+                                    130 ;	genLabel
+    00000010                        131 00102$:
+                                    132 ;	Raw cost for generated ic 12 : (0, 0.000000) count=0.437500
+                                    133 ;	src/display_system.c: 30: if((_SYSTEM & 0xC0) == SYSTEM_BITS_DENDY)
+                                    134 ;	genCast
+                                    135 ;	genCopy
+    00000010 ADr00r00         [ 4]  136 	lda	__SYSTEM
+                                    137 ;	Raw cost for generated ic 13 : (3, 4.000000) count=0.437500
+                                    138 ;	genAnd
+    00000013 29 C0            [ 2]  139 	and	#0xc0
+                                    140 ;	Raw cost for generated ic 14 : (2, 2.000000) count=0.437500
+                                    141 ;	genCmpEQorNE
+    00000015 C9 80            [ 2]  142 	cmp	#0x80
+    00000017 D0 05            [ 4]  143 	bne	00104$
+                                    144 ;	Raw cost for generated ic 15 : (7, 7.600000) count=0.437500
+                                    145 ;	skipping generated iCode
+                                    146 ;	Raw cost for generated ic 16 : (0, 0.000000) count=0.437500
+                                    147 ;	src/display_system.c: 31: return "50 Hz (Dendy-like)";
+                                    148 ;	skipping iCode since result will be rematerialized
+                                    149 ;	Raw cost for generated ic 19 : (0, 0.000000) count=0.328125
+                                    150 ;	skipping iCode since result will be rematerialized
+                                    151 ;	Raw cost for generated ic 20 : (0, 0.000000) count=0.328125
+                                    152 ;	genRet
+    00000019 A2s00            [ 2]  153 	ldx	#>___str_1
+    0000001B A9r6D            [ 2]  154 	lda	#___str_1
+    0000001D 60               [ 6]  155 	rts
+                                    156 ;	Raw cost for generated ic 21 : (7, 7.000000) count=0.328125
+                                    157 ;	genLabel
+    0000001E                        158 00104$:
+                                    159 ;	Raw cost for generated ic 23 : (0, 0.000000) count=0.437500
+                                    160 ;	src/display_system.c: 33: return "50 Hz";
+                                    161 ;	skipping iCode since result will be rematerialized
+                                    162 ;	Raw cost for generated ic 24 : (0, 0.000000) count=0.437500
+                                    163 ;	skipping iCode since result will be rematerialized
+                                    164 ;	Raw cost for generated ic 25 : (0, 0.000000) count=0.437500
+                                    165 ;	genRet
+    0000001E A2s00            [ 2]  166 	ldx	#>___str_2
+    00000020 A9r80            [ 2]  167 	lda	#___str_2
+    00000022 60               [ 6]  168 	rts
+                                    169 ;	Raw cost for generated ic 26 : (7, 7.000000) count=0.437500
+                                    170 ;	src/display_system.c: 37: default:
+                                    171 ;	genLabel
+    00000023                        172 00106$:
+                                    173 ;	Raw cost for generated ic 28 : (0, 0.000000) count=1.000000
+                                    174 ;	src/display_system.c: 38: return "Unknown";
+                                    175 ;	skipping iCode since result will be rematerialized
+                                    176 ;	Raw cost for generated ic 29 : (0, 0.000000) count=1.000000
+                                    177 ;	skipping iCode since result will be rematerialized
+                                    178 ;	Raw cost for generated ic 30 : (0, 0.000000) count=1.000000
+                                    179 ;	genRet
+    00000023 A2s00            [ 2]  180 	ldx	#>___str_3
+    00000025 A9r86            [ 2]  181 	lda	#___str_3
+                                    182 ;	Raw cost for generated ic 31 : (4, 4.000000) count=1.000000
+                                    183 ;	src/display_system.c: 39: }
+                                    184 ;	genLabel
+                                    185 ;	Raw cost for generated ic 33 : (0, 0.000000) count=1.000000
+                                    186 ;	src/display_system.c: 40: }
+                                    187 ;	genEndFunction
+    00000027 60               [ 6]  188 	rts
+                                    189 ;	Raw cost for generated ic 34 : (1, 6.000000) count=1.000000
+                                    190 ;------------------------------------------------------------
+                                    191 ;Allocation info for local variables in function 'main'
+                                    192 ;------------------------------------------------------------
+                                    193 ;__200000009   Allocated to registers a 
+                                    194 ;ibm_font      Allocated to registers 
+                                    195 ;system        Allocated to registers 
+                                    196 ;------------------------------------------------------------
+                                    197 ;	src/display_system.c: 42: void main(void)
+                                    198 ;	genLabel
+                                    199 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    200 ;	-----------------------------------------
+                                    201 ;	 function main
+                                    202 ;	-----------------------------------------
+                                    203 ;	Register assignment is optimal.
+                                    204 ;	Stack space usage: 0 bytes.
+    00000028                        205 _main:
+                                    206 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    207 ;	src/display_system.c: 45: uint8_t system = get_system();
+                                    208 ;	genIfx
+    00000028 ADr00r00         [ 4]  209 	lda	__SYSTEM
+                                    210 ;	genIfxJump : z
+    0000002B D0 05            [ 4]  211 	bne	00102$
+                                    212 ;	Raw cost for generated ic 2 : (8, 9.600000) count=1.000000
+                                    213 ;	genAssign
+                                    214 ;	genAssignLit
+                                    215 ;	genCopy
+    0000002D A9 00            [ 2]  216 	lda	#0x00
+                                    217 ;	Raw cost for generated ic 5 : (2, 2.000000) count=0.750000
+                                    218 ;	genGoto
+    0000002F 4Cr34r00         [ 3]  219 	jmp	00104$
+                                    220 ;	Raw cost for generated ic 6 : (3, 3.000000) count=0.750000
+                                    221 ;	genLabel
+    00000032                        222 00102$:
+                                    223 ;	Raw cost for generated ic 8 : (0, 0.000000) count=0.250000
+                                    224 ;	genAssign
+                                    225 ;	genAssignLit
+                                    226 ;	genCopy
+    00000032 A9 01            [ 2]  227 	lda	#0x01
+                                    228 ;	Raw cost for generated ic 9 : (2, 2.000000) count=0.250000
+                                    229 ;	genLabel
+    00000034                        230 00104$:
+                                    231 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    232 ;	src/display_system.c: 47: font_init();
+                                    233 ;	genCall
+    00000034 48               [ 3]  234 	pha
+    00000035 20r00r00         [ 6]  235 	jsr	_font_init
+    00000038 68               [ 4]  236 	pla
+                                    237 ;	Raw cost for generated ic 14 : (5, 13.000000) count=1.000000
+                                    238 ;	src/display_system.c: 48: ibm_font = font_load(font_ibm);
+                                    239 ;	skipping iCode since result will be rematerialized
+                                    240 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    241 ;	skipping iCode since result will be rematerialized
+                                    242 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    243 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    244 ;	genCall
+    00000039 48               [ 3]  245 	pha
+                                    246 ;	genSend
+    0000003A A2s00            [ 2]  247 	ldx	#>_font_ibm
+    0000003C A9r00            [ 2]  248 	lda	#_font_ibm
+    0000003E 20r00r00         [ 6]  249 	jsr	_font_load
+    00000041 68               [ 4]  250 	pla
+                                    251 ;	Raw cost for generated ic 18 : (9, 17.000000) count=1.000000
+                                    252 ;	src/display_system.c: 49: DISPLAY_ON;
+                                    253 ;	genCall
+    00000042 48               [ 3]  254 	pha
+    00000043 20r00r00         [ 6]  255 	jsr	_display_on
+                                    256 ;	Raw cost for generated ic 20 : (5, 13.000000) count=1.000000
+                                    257 ;	src/display_system.c: 50: gotoxy(4, 4);
+                                    258 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    259 ;	Raw cost for generated ic 22 : (0, 0.000000) count=1.000000
+                                    260 ;	genCall
+                                    261 ;	genSend
+    00000046 A9 04            [ 2]  262 	lda	#0x04
+    00000048 AA               [ 2]  263 	tax
+    00000049 20r00r00         [ 6]  264 	jsr	_gotoxy
+    0000004C 68               [ 4]  265 	pla
+                                    266 ;	Raw cost for generated ic 23 : (8, 17.000000) count=1.000000
+                                    267 ;	src/display_system.c: 51: printf("System: %s", get_system_name(system));
+                                    268 ;	Raw cost for generated ic 24 : (0, 0.000000) count=1.000000
+                                    269 ;	genCall
+                                    270 ;	genSend
+    0000004D 20r00r00         [ 6]  271 	jsr	_get_system_name
+                                    272 ;	assignResultValue
+                                    273 ;	Raw cost for generated ic 25 : (3, 6.000000) count=1.000000
+                                    274 ;	skipping iCode since result will be rematerialized
+                                    275 ;	Raw cost for generated ic 26 : (0, 0.000000) count=1.000000
+                                    276 ;	skipping iCode since result will be rematerialized
+                                    277 ;	Raw cost for generated ic 27 : (0, 0.000000) count=1.000000
+                                    278 ;	genIpush
+    00000050 85*00            [ 3]  279 	sta	*(REGTEMP+0)
+    00000052 8A               [ 2]  280 	txa
+    00000053 48               [ 3]  281 	pha
+    00000054 A5*00            [ 3]  282 	lda	*(REGTEMP+0)
+    00000056 48               [ 3]  283 	pha
+                                    284 ;	Raw cost for generated ic 28 : (7, 14.000000) count=1.000000
+                                    285 ;	genIpush
+    00000057 A9s00            [ 2]  286 	lda	#>___str_4
+    00000059 48               [ 3]  287 	pha
+    0000005A A9r8E            [ 2]  288 	lda	#___str_4
+    0000005C 48               [ 3]  289 	pha
+                                    290 ;	Raw cost for generated ic 29 : (6, 10.000000) count=1.000000
+                                    291 ;	genCall
+    0000005D 20r00r00         [ 6]  292 	jsr	_printf
+    00000060 68               [ 4]  293 	pla
+    00000061 68               [ 4]  294 	pla
+    00000062 68               [ 4]  295 	pla
+    00000063 68               [ 4]  296 	pla
+                                    297 ;	Raw cost for generated ic 30 : (7, 22.000000) count=1.000000
+                                    298 ;	src/display_system.c: 52: vsync();
+                                    299 ;	genCall
+                                    300 ;	Raw cost for generated ic 31 : (3, 6.000000) count=1.000000
+                                    301 ;	genLabel
+                                    302 ;	Raw cost for generated ic 32 : (0, 0.000000) count=1.000000
+                                    303 ;	src/display_system.c: 53: }
+                                    304 ;	genEndFunction
+    00000064 4Cr00r00         [ 3]  305 	jmp	_vsync
+                                    306 ;	Raw cost for generated ic 33 : (1, 6.000000) count=1.000000
+                                    307 	.area _CODE
+    00000067                        308 ___str_0:
+    00000067 36 30 20 48 7A         309 	.ascii "60 Hz"
+    0000006C 00                     310 	.db 0x00
+    0000006D                        311 ___str_1:
+    0000006D 35 30 20 48 7A 20 28   312 	.ascii "50 Hz (Dendy-like)"
+             44 65 6E 64 79 2D 6C
+             69 6B 65 29
+    0000007F 00                     313 	.db 0x00
+    00000080                        314 ___str_2:
+    00000080 35 30 20 48 7A         315 	.ascii "50 Hz"
+    00000085 00                     316 	.db 0x00
+    00000086                        317 ___str_3:
+    00000086 55 6E 6B 6E 6F 77 6E   318 	.ascii "Unknown"
+    0000008D 00                     319 	.db 0x00
+    0000008E                        320 ___str_4:
+    0000008E 53 79 73 74 65 6D 3A   321 	.ascii "System: %s"
+             20 25 73
+    00000098 00                     322 	.db 0x00
+                                    323 	.area _XINIT
+                                    324 	.area _CABS    (ABS)

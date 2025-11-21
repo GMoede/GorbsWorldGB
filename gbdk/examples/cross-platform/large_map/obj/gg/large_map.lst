@@ -1,0 +1,681 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module large_map
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _init_camera
+                                     12 	.globl _set_camera
+                                     13 	.globl _set_tile_submap
+                                     14 	.globl _set_native_tile_data
+                                     15 	.globl _set_palette
+                                     16 	.globl _joypad
+                                     17 	.globl _vsync
+                                     18 	.globl _redraw
+                                     19 	.globl _old_map_pos_y
+                                     20 	.globl _old_map_pos_x
+                                     21 	.globl _map_pos_y
+                                     22 	.globl _map_pos_x
+                                     23 	.globl _old_camera_y
+                                     24 	.globl _old_camera_x
+                                     25 	.globl _camera_y
+                                     26 	.globl _camera_x
+                                     27 	.globl _joy
+                                     28 ;--------------------------------------------------------
+                                     29 ; special function registers
+                                     30 ;--------------------------------------------------------
+                         00000000    31 _GG_STATE	=	0x0000
+                         00000001    32 _GG_EXT_7BIT	=	0x0001
+                         00000002    33 _GG_EXT_CTL	=	0x0002
+                         00000003    34 _GG_SIO_SEND	=	0x0003
+                         00000004    35 _GG_SIO_RECV	=	0x0004
+                         00000005    36 _GG_SIO_CTL	=	0x0005
+                         00000006    37 _GG_SOUND_PAN	=	0x0006
+                         0000003E    38 _MEMORY_CTL	=	0x003e
+                         0000003F    39 _JOY_CTL	=	0x003f
+                         0000007E    40 _VCOUNTER	=	0x007e
+                         0000007F    41 _PSG	=	0x007f
+                         0000007F    42 _HCOUNTER	=	0x007f
+                         000000BE    43 _VDP_DATA	=	0x00be
+                         000000BF    44 _VDP_CMD	=	0x00bf
+                         000000BF    45 _VDP_STATUS	=	0x00bf
+                         000000DC    46 _JOY_PORT1	=	0x00dc
+                         000000DD    47 _JOY_PORT2	=	0x00dd
+                         000000F0    48 _FMADDRESS	=	0x00f0
+                         000000F1    49 _FMDATA	=	0x00f1
+                         000000F2    50 _AUDIOCTRL	=	0x00f2
+                                     51 ;--------------------------------------------------------
+                                     52 ; ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _DATA
+                         0000FFFC    55 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    56 _GLASSES_3D	=	0xfff8
+                         0000FFFD    57 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    58 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    59 _MAP_FRAME2	=	0xffff
+    00000000                         60 _joy::
+    00000000                         61 	.ds 1
+    00000001                         62 _camera_x::
+    00000001                         63 	.ds 2
+    00000003                         64 _camera_y::
+    00000003                         65 	.ds 2
+    00000005                         66 _old_camera_x::
+    00000005                         67 	.ds 2
+    00000007                         68 _old_camera_y::
+    00000007                         69 	.ds 2
+    00000009                         70 _map_pos_x::
+    00000009                         71 	.ds 1
+    0000000A                         72 _map_pos_y::
+    0000000A                         73 	.ds 1
+    0000000B                         74 _old_map_pos_x::
+    0000000B                         75 	.ds 1
+    0000000C                         76 _old_map_pos_y::
+    0000000C                         77 	.ds 1
+    0000000D                         78 _redraw::
+    0000000D                         79 	.ds 1
+                                     80 ;--------------------------------------------------------
+                                     81 ; ram data
+                                     82 ;--------------------------------------------------------
+                                     83 	.area _INITIALIZED
+                                     84 ;--------------------------------------------------------
+                                     85 ; absolute external ram data
+                                     86 ;--------------------------------------------------------
+                                     87 	.area _DABS (ABS)
+                                     88 ;--------------------------------------------------------
+                                     89 ; global & static initialisations
+                                     90 ;--------------------------------------------------------
+                                     91 	.area _HOME
+                                     92 	.area _GSINIT
+                                     93 	.area _GSFINAL
+                                     94 	.area _GSINIT
+                                     95 ;--------------------------------------------------------
+                                     96 ; Home
+                                     97 ;--------------------------------------------------------
+                                     98 	.area _HOME
+                                     99 	.area _HOME
+                                    100 ;--------------------------------------------------------
+                                    101 ; code
+                                    102 ;--------------------------------------------------------
+                                    103 	.area _CODE
+                                    104 ;src/large_map.c:77: void set_camera(void)
+                                    105 ;	---------------------------------
+                                    106 ; Function set_camera
+                                    107 ; ---------------------------------
+    00000000                        108 _set_camera::
+                                    109 ;src/large_map.c:80: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+    00000000 11 E0 00         [10]  110 	ld	de, #0x00e0
+    00000003 2Ar03r00         [16]  111 	ld	hl, (_camera_y)
+    00000006 CDr00r00         [17]  112 	call	__moduint
+    00000009 3Ar01r00         [13]  113 	ld	a, (_camera_x)
+                                    114 ;../../../include/sms/sms.h:223: __WRITE_VDP_REG(VDP_RSCX, -x);
+    0000000C 21r00r00         [10]  115 	ld	hl, #_shadow_VDP_RSCX
+    0000000F ED 44            [ 8]  116 	neg
+    00000011 77               [ 7]  117 	ld	(hl), a
+    00000012 F3               [ 4]  118 	di
+    00000013 3Ar00r00         [13]  119 	ld	a, (_shadow_VDP_RSCX+0)
+    00000016 D3 BF            [11]  120 	out	(_VDP_CMD), a
+    00000018 3E 88            [ 7]  121 	ld	a, #0x88
+    0000001A D3 BF            [11]  122 	out	(_VDP_CMD), a
+    0000001C FB               [ 4]  123 	ei
+                                    124 ;../../../include/sms/sms.h:224: __WRITE_VDP_REG(VDP_RSCY, y);
+    0000001D FD 21r00r00      [14]  125 	ld	iy, #_shadow_VDP_RSCY
+    00000021 FD 73 00         [19]  126 	ld	0 (iy), e
+    00000024 F3               [ 4]  127 	di
+    00000025 3Ar00r00         [13]  128 	ld	a, (_shadow_VDP_RSCY+0)
+    00000028 D3 BF            [11]  129 	out	(_VDP_CMD), a
+    0000002A 3E 89            [ 7]  130 	ld	a, #0x89
+    0000002C D3 BF            [11]  131 	out	(_VDP_CMD), a
+    0000002E FB               [ 4]  132 	ei
+                                    133 ;src/large_map.c:82: map_pos_y = (uint8_t)(camera_y >> 3u);
+    0000002F 2Ar03r00         [16]  134 	ld	hl, (_camera_y)
+    00000032 CB 3C            [ 8]  135 	srl	h
+    00000034 CB 1D            [ 8]  136 	rr	l
+    00000036 CB 3C            [ 8]  137 	srl	h
+    00000038 CB 1D            [ 8]  138 	rr	l
+    0000003A CB 3C            [ 8]  139 	srl	h
+    0000003C CB 1D            [ 8]  140 	rr	l
+    0000003E 7D               [ 4]  141 	ld	a, l
+    0000003F 32r0Ar00         [13]  142 	ld	(#_map_pos_y), a
+                                    143 ;src/large_map.c:83: if (map_pos_y != old_map_pos_y)
+    00000042 3Ar0Ar00         [13]  144 	ld	a, (_map_pos_y+0)
+    00000045 21r0Cr00         [10]  145 	ld	hl, #_old_map_pos_y
+    00000048 96               [ 7]  146 	sub	a, (hl)
+    00000049 CArD1r00         [10]  147 	jp	Z, 00107$
+                                    148 ;src/large_map.c:87: set_submap_indices(
+    0000004C 3Ar09r00         [13]  149 	ld	a, (_map_pos_x)
+    0000004F 5F               [ 4]  150 	ld	e, a
+    00000050 16 00            [ 7]  151 	ld	d, #0x00
+    00000052 21r09r00         [10]  152 	ld	hl, #_map_pos_x
+    00000055 3E 9C            [ 7]  153 	ld	a, #0x9c
+    00000057 96               [ 7]  154 	sub	a, (hl)
+    00000058 4F               [ 4]  155 	ld	c, a
+    00000059 21 9C 00         [10]  156 	ld	hl, #0x009c
+    0000005C BF               [ 4]  157 	cp	a, a
+    0000005D ED 52            [15]  158 	sbc	hl, de
+    0000005F 3E 15            [ 7]  159 	ld	a, #0x15
+    00000061 BD               [ 4]  160 	cp	a, l
+    00000062 3E 00            [ 7]  161 	ld	a, #0x00
+    00000064 9C               [ 4]  162 	sbc	a, h
+    00000065 E2r6Ar00         [10]  163 	jp	PO, 00201$
+    00000068 EE 80            [ 7]  164 	xor	a, #0x80
+    0000006A                        165 00201$:
+    0000006A 07               [ 4]  166 	rlca
+    0000006B E6 01            [ 7]  167 	and	a,#0x01
+    0000006D 47               [ 4]  168 	ld	b, a
+                                    169 ;src/large_map.c:85: if (camera_y < old_camera_y)
+    0000006E 21r07r00         [10]  170 	ld	hl, #_old_camera_y
+    00000071 3Ar03r00         [13]  171 	ld	a, (_camera_y+0)
+    00000074 96               [ 7]  172 	sub	a, (hl)
+    00000075 23               [ 6]  173 	inc	hl
+    00000076 3Ar04r00         [13]  174 	ld	a, (_camera_y+1)
+    00000079 9E               [ 7]  175 	sbc	a, (hl)
+    0000007A 30 24            [12]  176 	jr	NC, 00104$
+                                    177 ;src/large_map.c:87: set_submap_indices(
+    0000007C 11r00r00         [10]  178 	ld	de, #_bigmap_map+0
+    0000007F 78               [ 4]  179 	ld	a, b
+    00000080 B7               [ 4]  180 	or	a, a
+    00000081 28 04            [12]  181 	jr	Z, 00122$
+    00000083 06 15            [ 7]  182 	ld	b, #0x15
+    00000085 18 01            [12]  183 	jr	00123$
+    00000087                        184 00122$:
+    00000087 41               [ 4]  185 	ld	b, c
+    00000088                        186 00123$:
+    00000088 3Ar0Ar00         [13]  187 	ld	a, (_map_pos_y)
+    0000008B D5               [11]  188 	push	de
+    0000008C 26 9C            [ 7]  189 	ld	h, #0x9c
+    0000008E E5               [11]  190 	push	hl
+    0000008F 33               [ 6]  191 	inc	sp
+    00000090 26 01            [ 7]  192 	ld	h, #0x01
+    00000092 68               [ 4]  193 	ld	l, b
+    00000093 E5               [11]  194 	push	hl
+    00000094 F5               [11]  195 	push	af
+    00000095 33               [ 6]  196 	inc	sp
+    00000096 3Ar09r00         [13]  197 	ld	a, (_map_pos_x)
+    00000099 F5               [11]  198 	push	af
+    0000009A 33               [ 6]  199 	inc	sp
+    0000009B CDr00r00         [17]  200 	call	_set_tile_submap
+    0000009E 18 2B            [12]  201 	jr	00105$
+    000000A0                        202 00104$:
+                                    203 ;src/large_map.c:104: if ((bigmap_mapHeight - DEVICE_SCREEN_HEIGHT) > map_pos_y)
+    000000A0 3Ar0Ar00         [13]  204 	ld	a, (_map_pos_y+0)
+    000000A3 D6 30            [ 7]  205 	sub	a, #0x30
+    000000A5 30 24            [12]  206 	jr	NC, 00105$
+                                    207 ;src/large_map.c:106: set_submap_indices(
+    000000A7 11r00r00         [10]  208 	ld	de, #_bigmap_map+0
+    000000AA 78               [ 4]  209 	ld	a, b
+    000000AB B7               [ 4]  210 	or	a, a
+    000000AC 28 04            [12]  211 	jr	Z, 00124$
+    000000AE 06 15            [ 7]  212 	ld	b, #0x15
+    000000B0 18 01            [12]  213 	jr	00125$
+    000000B2                        214 00124$:
+    000000B2 41               [ 4]  215 	ld	b, c
+    000000B3                        216 00125$:
+                                    217 ;src/large_map.c:74: return map_pos_y + DEVICE_SCREEN_HEIGHT;
+    000000B3 3Ar0Ar00         [13]  218 	ld	a, (_map_pos_y)
+    000000B6 C6 12            [ 7]  219 	add	a, #0x12
+                                    220 ;src/large_map.c:106: set_submap_indices(
+    000000B8 D5               [11]  221 	push	de
+    000000B9 26 9C            [ 7]  222 	ld	h, #0x9c
+    000000BB E5               [11]  223 	push	hl
+    000000BC 33               [ 6]  224 	inc	sp
+    000000BD 26 01            [ 7]  225 	ld	h, #0x01
+    000000BF 68               [ 4]  226 	ld	l, b
+    000000C0 E5               [11]  227 	push	hl
+    000000C1 F5               [11]  228 	push	af
+    000000C2 33               [ 6]  229 	inc	sp
+    000000C3 3Ar09r00         [13]  230 	ld	a, (_map_pos_x)
+    000000C6 F5               [11]  231 	push	af
+    000000C7 33               [ 6]  232 	inc	sp
+    000000C8 CDr00r00         [17]  233 	call	_set_tile_submap
+    000000CB                        234 00105$:
+                                    235 ;src/large_map.c:122: old_map_pos_y = map_pos_y; 
+    000000CB 3Ar0Ar00         [13]  236 	ld	a, (_map_pos_y+0)
+    000000CE 32r0Cr00         [13]  237 	ld	(_old_map_pos_y+0), a
+    000000D1                        238 00107$:
+                                    239 ;src/large_map.c:125: map_pos_x = (uint8_t)(camera_x >> 3u);
+    000000D1 2Ar01r00         [16]  240 	ld	hl, (_camera_x)
+    000000D4 CB 3C            [ 8]  241 	srl	h
+    000000D6 CB 1D            [ 8]  242 	rr	l
+    000000D8 CB 3C            [ 8]  243 	srl	h
+    000000DA CB 1D            [ 8]  244 	rr	l
+    000000DC CB 3C            [ 8]  245 	srl	h
+    000000DE CB 1D            [ 8]  246 	rr	l
+    000000E0 7D               [ 4]  247 	ld	a, l
+    000000E1 32r09r00         [13]  248 	ld	(#_map_pos_x), a
+                                    249 ;src/large_map.c:126: if (map_pos_x != old_map_pos_x)
+    000000E4 3Ar09r00         [13]  250 	ld	a, (_map_pos_x+0)
+    000000E7 21r0Br00         [10]  251 	ld	hl, #_old_map_pos_x
+    000000EA 96               [ 7]  252 	sub	a, (hl)
+    000000EB CAr6Dr01         [10]  253 	jp	Z, 00114$
+                                    254 ;src/large_map.c:130: set_submap_indices(
+    000000EE 3Ar0Ar00         [13]  255 	ld	a, (_map_pos_y)
+    000000F1 5F               [ 4]  256 	ld	e, a
+    000000F2 16 00            [ 7]  257 	ld	d, #0x00
+    000000F4 21r0Ar00         [10]  258 	ld	hl, #_map_pos_y
+    000000F7 3E 42            [ 7]  259 	ld	a, #0x42
+    000000F9 96               [ 7]  260 	sub	a, (hl)
+    000000FA 4F               [ 4]  261 	ld	c, a
+    000000FB 21 42 00         [10]  262 	ld	hl, #0x0042
+    000000FE BF               [ 4]  263 	cp	a, a
+    000000FF ED 52            [15]  264 	sbc	hl, de
+    00000101 3E 13            [ 7]  265 	ld	a, #0x13
+    00000103 BD               [ 4]  266 	cp	a, l
+    00000104 3E 00            [ 7]  267 	ld	a, #0x00
+    00000106 9C               [ 4]  268 	sbc	a, h
+    00000107 E2r0Cr01         [10]  269 	jp	PO, 00203$
+    0000010A EE 80            [ 7]  270 	xor	a, #0x80
+    0000010C                        271 00203$:
+    0000010C 07               [ 4]  272 	rlca
+    0000010D E6 01            [ 7]  273 	and	a,#0x01
+    0000010F 5F               [ 4]  274 	ld	e, a
+                                    275 ;src/large_map.c:128: if (camera_x < old_camera_x)
+    00000110 21r05r00         [10]  276 	ld	hl, #_old_camera_x
+    00000113 3Ar01r00         [13]  277 	ld	a, (_camera_x+0)
+    00000116 96               [ 7]  278 	sub	a, (hl)
+    00000117 23               [ 6]  279 	inc	hl
+    00000118 3Ar02r00         [13]  280 	ld	a, (_camera_x+1)
+    0000011B 9E               [ 7]  281 	sbc	a, (hl)
+    0000011C 30 22            [12]  282 	jr	NC, 00111$
+                                    283 ;src/large_map.c:130: set_submap_indices(
+    0000011E 7B               [ 4]  284 	ld	a, e
+    0000011F B7               [ 4]  285 	or	a, a
+    00000120 28 02            [12]  286 	jr	Z, 00126$
+    00000122 0E 13            [ 7]  287 	ld	c, #0x13
+    00000124                        288 00126$:
+    00000124 3Ar09r00         [13]  289 	ld	a, (_map_pos_x)
+    00000127 47               [ 4]  290 	ld	b, a
+    00000128 21r00r00         [10]  291 	ld	hl, #_bigmap_map
+    0000012B E5               [11]  292 	push	hl
+    0000012C 3E 9C            [ 7]  293 	ld	a, #0x9c
+    0000012E F5               [11]  294 	push	af
+    0000012F 33               [ 6]  295 	inc	sp
+    00000130 61               [ 4]  296 	ld	h, c
+    00000131 2E 01            [ 7]  297 	ld	l, #0x01
+    00000133 E5               [11]  298 	push	hl
+    00000134 3Ar0Ar00         [13]  299 	ld	a, (_map_pos_y)
+    00000137 F5               [11]  300 	push	af
+    00000138 33               [ 6]  301 	inc	sp
+    00000139 C5               [11]  302 	push	bc
+    0000013A 33               [ 6]  303 	inc	sp
+    0000013B CDr00r00         [17]  304 	call	_set_tile_submap
+    0000013E 18 27            [12]  305 	jr	00112$
+    00000140                        306 00111$:
+                                    307 ;src/large_map.c:147: if ((bigmap_mapWidth - DEVICE_SCREEN_WIDTH) > map_pos_x)
+    00000140 3Ar09r00         [13]  308 	ld	a, (_map_pos_x+0)
+    00000143 D6 88            [ 7]  309 	sub	a, #0x88
+    00000145 30 20            [12]  310 	jr	NC, 00112$
+                                    311 ;src/large_map.c:149: set_submap_indices(
+    00000147 7B               [ 4]  312 	ld	a, e
+    00000148 B7               [ 4]  313 	or	a, a
+    00000149 28 02            [12]  314 	jr	Z, 00128$
+    0000014B 0E 13            [ 7]  315 	ld	c, #0x13
+    0000014D                        316 00128$:
+                                    317 ;src/large_map.c:60: return map_pos_x + DEVICE_SCREEN_WIDTH;
+    0000014D 3Ar09r00         [13]  318 	ld	a, (_map_pos_x)
+    00000150 C6 14            [ 7]  319 	add	a, #0x14
+    00000152 5F               [ 4]  320 	ld	e, a
+                                    321 ;src/large_map.c:149: set_submap_indices(
+    00000153 21r00r00         [10]  322 	ld	hl, #_bigmap_map
+    00000156 E5               [11]  323 	push	hl
+    00000157 3E 9C            [ 7]  324 	ld	a, #0x9c
+    00000159 F5               [11]  325 	push	af
+    0000015A 33               [ 6]  326 	inc	sp
+    0000015B 61               [ 4]  327 	ld	h, c
+    0000015C 2E 01            [ 7]  328 	ld	l, #0x01
+    0000015E E5               [11]  329 	push	hl
+    0000015F 3Ar0Ar00         [13]  330 	ld	a, (_map_pos_y)
+    00000162 57               [ 4]  331 	ld	d,a
+    00000163 D5               [11]  332 	push	de
+    00000164 CDr00r00         [17]  333 	call	_set_tile_submap
+    00000167                        334 00112$:
+                                    335 ;src/large_map.c:165: old_map_pos_x = map_pos_x;
+    00000167 3Ar09r00         [13]  336 	ld	a, (_map_pos_x+0)
+    0000016A 32r0Br00         [13]  337 	ld	(_old_map_pos_x+0), a
+    0000016D                        338 00114$:
+                                    339 ;src/large_map.c:168: old_camera_x = camera_x, old_camera_y = camera_y;
+    0000016D 2Ar01r00         [16]  340 	ld	hl, (_camera_x)
+    00000170 22r05r00         [16]  341 	ld	(_old_camera_x), hl
+    00000173 2Ar03r00         [16]  342 	ld	hl, (_camera_y)
+    00000176 22r07r00         [16]  343 	ld	(_old_camera_y), hl
+                                    344 ;src/large_map.c:169: }
+    00000179 C9               [10]  345 	ret
+                                    346 ;src/large_map.c:172: void init_camera(uint8_t x, uint8_t y) {
+                                    347 ;	---------------------------------
+                                    348 ; Function init_camera
+                                    349 ; ---------------------------------
+    0000017A                        350 _init_camera::
+    0000017A DD E5            [15]  351 	push	ix
+    0000017C DD 21 00 00      [14]  352 	ld	ix,#0
+    00000180 DD 39            [15]  353 	add	ix,sp
+    00000182 F5               [11]  354 	push	af
+    00000183 DD 77 FF         [19]  355 	ld	-1 (ix), a
+    00000186 DD 75 FE         [19]  356 	ld	-2 (ix), l
+                                    357 ;src/large_map.c:175: set_native_tile_data(0, bigmap_TILE_COUNT, bigmap_tiles);
+    00000189 21r00r00         [10]  358 	ld	hl, #_bigmap_tiles
+    0000018C E5               [11]  359 	push	hl
+    0000018D 11 D9 00         [10]  360 	ld	de, #0x00d9
+    00000190 21 00 00         [10]  361 	ld	hl, #0x0000
+    00000193 CDr00r00         [17]  362 	call	_set_native_tile_data
+                                    363 ;src/large_map.c:179: __WRITE_VDP_REG(VDP_R2, R2_MAP_0x3800);
+    00000196 FD 21r00r00      [14]  364 	ld	iy, #_shadow_VDP_R2
+    0000019A FD 36 00 FF      [19]  365 	ld	0 (iy), #0xff
+    0000019E F3               [ 4]  366 	di
+    0000019F 3E FF            [ 7]  367 	ld	a, #0xff
+    000001A1 D3 BF            [11]  368 	out	(_VDP_CMD), a
+    000001A3 3E 82            [ 7]  369 	ld	a, #0x82
+    000001A5 D3 BF            [11]  370 	out	(_VDP_CMD), a
+    000001A7 FB               [ 4]  371 	ei
+                                    372 ;src/large_map.c:180: __WRITE_VDP_REG(VDP_R5, R5_SAT_0x3F00);
+    000001A8 FD 21r00r00      [14]  373 	ld	iy, #_shadow_VDP_R5
+    000001AC FD 36 00 FF      [19]  374 	ld	0 (iy), #0xff
+    000001B0 F3               [ 4]  375 	di
+    000001B1 3E FF            [ 7]  376 	ld	a, #0xff
+    000001B3 D3 BF            [11]  377 	out	(_VDP_CMD), a
+    000001B5 3E 85            [ 7]  378 	ld	a, #0x85
+    000001B7 D3 BF            [11]  379 	out	(_VDP_CMD), a
+    000001B9 FB               [ 4]  380 	ei
+                                    381 ;src/large_map.c:181: set_palette(0, bigmap_PALETTE_COUNT, bigmap_palettes);
+    000001BA 21r00r00         [10]  382 	ld	hl, #_bigmap_palettes
+    000001BD E5               [11]  383 	push	hl
+    000001BE 21 00 01         [10]  384 	ld	hl, #0x100
+    000001C1 E5               [11]  385 	push	hl
+    000001C2 CDr00r00         [17]  386 	call	_set_palette
+                                    387 ;src/large_map.c:192: camera_x = x;
+    000001C5 DD 7E FF         [19]  388 	ld	a, -1 (ix)
+    000001C8 32r01r00         [13]  389 	ld	(_camera_x+0), a
+    000001CB AF               [ 4]  390 	xor	a, a
+    000001CC 32r02r00         [13]  391 	ld	(_camera_x+1), a
+                                    392 ;src/large_map.c:193: camera_y = y;
+    000001CF DD 7E FE         [19]  393 	ld	a, -2 (ix)
+    000001D2 32r03r00         [13]  394 	ld	(_camera_y+0), a
+    000001D5 AF               [ 4]  395 	xor	a, a
+    000001D6 32r04r00         [13]  396 	ld	(_camera_y+1), a
+                                    397 ;src/large_map.c:195: if (camera_x > camera_max_x) camera_x = camera_max_x;
+    000001D9 2Ar01r00         [16]  398 	ld	hl, (_camera_x)
+    000001DC 3E 40            [ 7]  399 	ld	a, #0x40
+    000001DE BD               [ 4]  400 	cp	a, l
+    000001DF 3E 04            [ 7]  401 	ld	a, #0x04
+    000001E1 9C               [ 4]  402 	sbc	a, h
+    000001E2 30 06            [12]  403 	jr	NC, 00102$
+    000001E4 21 40 04         [10]  404 	ld	hl, #0x0440
+    000001E7 22r01r00         [16]  405 	ld	(_camera_x), hl
+    000001EA                        406 00102$:
+                                    407 ;src/large_map.c:196: if (camera_y > camera_max_y) camera_y = camera_max_y;
+    000001EA 2Ar03r00         [16]  408 	ld	hl, (_camera_y)
+    000001ED 3E 80            [ 7]  409 	ld	a, #0x80
+    000001EF BD               [ 4]  410 	cp	a, l
+    000001F0 3E 01            [ 7]  411 	ld	a, #0x01
+    000001F2 9C               [ 4]  412 	sbc	a, h
+    000001F3 30 06            [12]  413 	jr	NC, 00104$
+    000001F5 21 80 01         [10]  414 	ld	hl, #0x0180
+    000001F8 22r03r00         [16]  415 	ld	(_camera_y), hl
+    000001FB                        416 00104$:
+                                    417 ;src/large_map.c:197: old_camera_x = camera_x; old_camera_y = camera_y;
+    000001FB 2Ar01r00         [16]  418 	ld	hl, (_camera_x)
+    000001FE 22r05r00         [16]  419 	ld	(_old_camera_x), hl
+    00000201 2Ar03r00         [16]  420 	ld	hl, (_camera_y)
+    00000204 22r07r00         [16]  421 	ld	(_old_camera_y), hl
+                                    422 ;src/large_map.c:199: map_pos_x = camera_x >> 3;
+    00000207 2Ar01r00         [16]  423 	ld	hl, (_camera_x)
+    0000020A CB 3C            [ 8]  424 	srl	h
+    0000020C CB 1D            [ 8]  425 	rr	l
+    0000020E CB 3C            [ 8]  426 	srl	h
+    00000210 CB 1D            [ 8]  427 	rr	l
+    00000212 CB 3C            [ 8]  428 	srl	h
+    00000214 CB 1D            [ 8]  429 	rr	l
+    00000216 7D               [ 4]  430 	ld	a, l
+    00000217 32r09r00         [13]  431 	ld	(#_map_pos_x), a
+                                    432 ;src/large_map.c:200: map_pos_y = camera_y >> 3;
+    0000021A 2Ar03r00         [16]  433 	ld	hl, (_camera_y)
+    0000021D CB 3C            [ 8]  434 	srl	h
+    0000021F CB 1D            [ 8]  435 	rr	l
+    00000221 CB 3C            [ 8]  436 	srl	h
+    00000223 CB 1D            [ 8]  437 	rr	l
+    00000225 CB 3C            [ 8]  438 	srl	h
+    00000227 CB 1D            [ 8]  439 	rr	l
+    00000229 7D               [ 4]  440 	ld	a, l
+    0000022A 32r0Ar00         [13]  441 	ld	(#_map_pos_y), a
+                                    442 ;src/large_map.c:201: old_map_pos_x = old_map_pos_y = 255;
+    0000022D 21r0Cr00         [10]  443 	ld	hl, #_old_map_pos_y
+    00000230 36 FF            [10]  444 	ld	(hl), #0xff
+    00000232 21r0Br00         [10]  445 	ld	hl, #_old_map_pos_x
+    00000235 36 FF            [10]  446 	ld	(hl), #0xff
+                                    447 ;src/large_map.c:202: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+    00000237 11 E0 00         [10]  448 	ld	de, #0x00e0
+    0000023A 2Ar03r00         [16]  449 	ld	hl, (_camera_y)
+    0000023D CDr00r00         [17]  450 	call	__moduint
+    00000240 3Ar01r00         [13]  451 	ld	a, (_camera_x)
+                                    452 ;../../../include/sms/sms.h:223: __WRITE_VDP_REG(VDP_RSCX, -x);
+    00000243 21r00r00         [10]  453 	ld	hl, #_shadow_VDP_RSCX
+    00000246 ED 44            [ 8]  454 	neg
+    00000248 77               [ 7]  455 	ld	(hl), a
+    00000249 F3               [ 4]  456 	di
+    0000024A 3Ar00r00         [13]  457 	ld	a, (_shadow_VDP_RSCX+0)
+    0000024D D3 BF            [11]  458 	out	(_VDP_CMD), a
+    0000024F 3E 88            [ 7]  459 	ld	a, #0x88
+    00000251 D3 BF            [11]  460 	out	(_VDP_CMD), a
+    00000253 FB               [ 4]  461 	ei
+                                    462 ;../../../include/sms/sms.h:224: __WRITE_VDP_REG(VDP_RSCY, y);
+    00000254 FD 21r00r00      [14]  463 	ld	iy, #_shadow_VDP_RSCY
+    00000258 FD 73 00         [19]  464 	ld	0 (iy), e
+    0000025B F3               [ 4]  465 	di
+    0000025C 3Ar00r00         [13]  466 	ld	a, (_shadow_VDP_RSCY+0)
+    0000025F D3 BF            [11]  467 	out	(_VDP_CMD), a
+    00000261 3E 89            [ 7]  468 	ld	a, #0x89
+    00000263 D3 BF            [11]  469 	out	(_VDP_CMD), a
+    00000265 FB               [ 4]  470 	ei
+                                    471 ;src/large_map.c:205: set_submap_indices(
+    00000266 01r00r00         [10]  472 	ld	bc, #_bigmap_map+0
+    00000269 3Ar0Ar00         [13]  473 	ld	a, (_map_pos_y)
+    0000026C 5F               [ 4]  474 	ld	e, a
+    0000026D 16 00            [ 7]  475 	ld	d, #0x00
+    0000026F 21 42 00         [10]  476 	ld	hl, #0x0042
+    00000272 BF               [ 4]  477 	cp	a, a
+    00000273 ED 52            [15]  478 	sbc	hl, de
+    00000275 3E 13            [ 7]  479 	ld	a, #0x13
+    00000277 BD               [ 4]  480 	cp	a, l
+    00000278 3E 00            [ 7]  481 	ld	a, #0x00
+    0000027A 9C               [ 4]  482 	sbc	a, h
+    0000027B 30 04            [12]  483 	jr	NC, 00109$
+    0000027D 16 13            [ 7]  484 	ld	d, #0x13
+    0000027F 18 07            [12]  485 	jr	00110$
+    00000281                        486 00109$:
+    00000281 21r0Ar00         [10]  487 	ld	hl, #_map_pos_y
+    00000284 3E 42            [ 7]  488 	ld	a, #0x42
+    00000286 96               [ 7]  489 	sub	a, (hl)
+    00000287 57               [ 4]  490 	ld	d, a
+    00000288                        491 00110$:
+    00000288 3Ar09r00         [13]  492 	ld	a, (_map_pos_x)
+    0000028B 6F               [ 4]  493 	ld	l, a
+    0000028C 26 00            [ 7]  494 	ld	h, #0x00
+    0000028E 3E 9C            [ 7]  495 	ld	a, #0x9c
+    00000290 95               [ 4]  496 	sub	a, l
+    00000291 5F               [ 4]  497 	ld	e, a
+    00000292 9F               [ 4]  498 	sbc	a, a
+    00000293 94               [ 4]  499 	sub	a, h
+    00000294 6F               [ 4]  500 	ld	l, a
+    00000295 3E 15            [ 7]  501 	ld	a, #0x15
+    00000297 BB               [ 4]  502 	cp	a, e
+    00000298 3E 00            [ 7]  503 	ld	a, #0x00
+    0000029A 9D               [ 4]  504 	sbc	a, l
+    0000029B 30 04            [12]  505 	jr	NC, 00111$
+    0000029D 3E 15            [ 7]  506 	ld	a, #0x15
+    0000029F 18 06            [12]  507 	jr	00112$
+    000002A1                        508 00111$:
+    000002A1 21r09r00         [10]  509 	ld	hl, #_map_pos_x
+    000002A4 3E 9C            [ 7]  510 	ld	a, #0x9c
+    000002A6 96               [ 7]  511 	sub	a, (hl)
+    000002A7                        512 00112$:
+    000002A7 C5               [11]  513 	push	bc
+    000002A8 26 9C            [ 7]  514 	ld	h, #0x9c
+    000002AA 6A               [ 4]  515 	ld	l, d
+    000002AB E5               [11]  516 	push	hl
+    000002AC F5               [11]  517 	push	af
+    000002AD 33               [ 6]  518 	inc	sp
+    000002AE 3Ar0Ar00         [13]  519 	ld	a, (_map_pos_y)
+    000002B1 67               [ 4]  520 	ld	h, a
+    000002B2 3Ar09r00         [13]  521 	ld	a, (_map_pos_x)
+    000002B5 6F               [ 4]  522 	ld	l, a
+    000002B6 E5               [11]  523 	push	hl
+    000002B7 CDr00r00         [17]  524 	call	_set_tile_submap
+                                    525 ;src/large_map.c:221: redraw = FALSE;
+    000002BA AF               [ 4]  526 	xor	a, a
+    000002BB 32r0Dr00         [13]  527 	ld	(_redraw+0), a
+                                    528 ;src/large_map.c:223: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+    000002BE 11 E0 00         [10]  529 	ld	de, #0x00e0
+    000002C1 2Ar03r00         [16]  530 	ld	hl, (_camera_y)
+    000002C4 CDr00r00         [17]  531 	call	__moduint
+    000002C7 3Ar01r00         [13]  532 	ld	a, (_camera_x)
+    000002CA 21r00r00         [10]  533 	ld	hl, #_shadow_VDP_RSCX
+    000002CD ED 44            [ 8]  534 	neg
+    000002CF 77               [ 7]  535 	ld	(hl), a
+    000002D0 F3               [ 4]  536 	di
+    000002D1 3Ar00r00         [13]  537 	ld	a, (_shadow_VDP_RSCX+0)
+    000002D4 D3 BF            [11]  538 	out	(_VDP_CMD), a
+    000002D6 3E 88            [ 7]  539 	ld	a, #0x88
+    000002D8 D3 BF            [11]  540 	out	(_VDP_CMD), a
+    000002DA FB               [ 4]  541 	ei
+                                    542 ;../../../include/sms/sms.h:224: __WRITE_VDP_REG(VDP_RSCY, y);
+    000002DB FD 21r00r00      [14]  543 	ld	iy, #_shadow_VDP_RSCY
+    000002DF FD 73 00         [19]  544 	ld	0 (iy), e
+    000002E2 F3               [ 4]  545 	di
+    000002E3 3Ar00r00         [13]  546 	ld	a, (_shadow_VDP_RSCY+0)
+    000002E6 D3 BF            [11]  547 	out	(_VDP_CMD), a
+    000002E8 3E 89            [ 7]  548 	ld	a, #0x89
+    000002EA D3 BF            [11]  549 	out	(_VDP_CMD), a
+    000002EC FB               [ 4]  550 	ei
+                                    551 ;src/large_map.c:223: move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+                                    552 ;src/large_map.c:230: }
+    000002ED DD F9            [10]  553 	ld	sp, ix
+    000002EF DD E1            [14]  554 	pop	ix
+    000002F1 C9               [10]  555 	ret
+                                    556 ;src/large_map.c:232: void main(void){
+                                    557 ;	---------------------------------
+                                    558 ; Function main
+                                    559 ; ---------------------------------
+    000002F2                        560 _main::
+                                    561 ;../../../include/sms/sms.h:254: __WRITE_VDP_REG(VDP_R1, __READ_VDP_REG(VDP_R1) &= (~R1_DISP_ON));
+    000002F2 3Ar00r00         [13]  562 	ld	a, (_shadow_VDP_R1+0)
+    000002F5 E6 BF            [ 7]  563 	and	a, #0xbf
+    000002F7 32r00r00         [13]  564 	ld	(_shadow_VDP_R1+0), a
+    000002FA F3               [ 4]  565 	di
+    000002FB 3Ar00r00         [13]  566 	ld	a, (_shadow_VDP_R1+0)
+    000002FE D3 BF            [11]  567 	out	(_VDP_CMD), a
+    00000300 3E 81            [ 7]  568 	ld	a, #0x81
+    00000302 D3 BF            [11]  569 	out	(_VDP_CMD), a
+    00000304 FB               [ 4]  570 	ei
+                                    571 ;src/large_map.c:234: init_camera(0, 0);
+    00000305 AF               [ 4]  572 	xor	a, a
+    00000306 6F               [ 4]  573 	ld	l, a
+    00000307 CDr7Ar01         [17]  574 	call	_init_camera
+                                    575 ;src/large_map.c:237: DISPLAY_ON;
+    0000030A 3Ar00r00         [13]  576 	ld	a, (_shadow_VDP_R1+0)
+    0000030D F6 40            [ 7]  577 	or	a, #0x40
+    0000030F 32r00r00         [13]  578 	ld	(_shadow_VDP_R1+0), a
+    00000312 F3               [ 4]  579 	di
+    00000313 3Ar00r00         [13]  580 	ld	a, (_shadow_VDP_R1+0)
+    00000316 D3 BF            [11]  581 	out	(_VDP_CMD), a
+    00000318 3E 81            [ 7]  582 	ld	a, #0x81
+    0000031A D3 BF            [11]  583 	out	(_VDP_CMD), a
+    0000031C FB               [ 4]  584 	ei
+                                    585 ;src/large_map.c:238: while (TRUE) {
+    0000031D                        586 00123$:
+                                    587 ;src/large_map.c:239: joy = joypad();
+    0000031D CDr00r00         [17]  588 	call	_joypad
+    00000320 7D               [ 4]  589 	ld	a, l
+    00000321 32r00r00         [13]  590 	ld	(_joy+0), a
+                                    591 ;src/large_map.c:241: if (joy & J_UP) {
+    00000324 3Ar00r00         [13]  592 	ld	a, (_joy)
+    00000327 5F               [ 4]  593 	ld	e, a
+    00000328 CB 43            [ 8]  594 	bit	0, e
+    0000032A 28 17            [12]  595 	jr	Z, 00108$
+                                    596 ;src/large_map.c:242: if (camera_y) {
+    0000032C 3Ar04r00         [13]  597 	ld	a, (_camera_y+1)
+    0000032F 21r03r00         [10]  598 	ld	hl, #_camera_y
+    00000332 B6               [ 7]  599 	or	a, (hl)
+    00000333 28 29            [12]  600 	jr	Z, 00109$
+                                    601 ;src/large_map.c:243: camera_y--;
+    00000335 2Ar03r00         [16]  602 	ld	hl, (_camera_y)
+    00000338 2B               [ 6]  603 	dec	hl
+    00000339 22r03r00         [16]  604 	ld	(_camera_y), hl
+                                    605 ;src/large_map.c:244: redraw = TRUE;
+    0000033C 21r0Dr00         [10]  606 	ld	hl, #_redraw
+    0000033F 36 01            [10]  607 	ld	(hl), #0x01
+    00000341 18 1B            [12]  608 	jr	00109$
+    00000343                        609 00108$:
+                                    610 ;src/large_map.c:246: } else if (joy & J_DOWN) {
+    00000343 CB 4B            [ 8]  611 	bit	1, e
+    00000345 28 17            [12]  612 	jr	Z, 00109$
+                                    613 ;src/large_map.c:247: if (camera_y < camera_max_y) {
+    00000347 2Ar03r00         [16]  614 	ld	hl, (_camera_y)
+    0000034A 7D               [ 4]  615 	ld	a, l
+    0000034B D6 80            [ 7]  616 	sub	a, #0x80
+    0000034D 7C               [ 4]  617 	ld	a, h
+    0000034E DE 01            [ 7]  618 	sbc	a, #0x01
+    00000350 30 0C            [12]  619 	jr	NC, 00109$
+                                    620 ;src/large_map.c:248: camera_y++;
+    00000352 2Ar03r00         [16]  621 	ld	hl, (_camera_y)
+    00000355 23               [ 6]  622 	inc	hl
+    00000356 22r03r00         [16]  623 	ld	(_camera_y), hl
+                                    624 ;src/large_map.c:249: redraw = TRUE;
+    00000359 21r0Dr00         [10]  625 	ld	hl, #_redraw
+    0000035C 36 01            [10]  626 	ld	(hl), #0x01
+    0000035E                        627 00109$:
+                                    628 ;src/large_map.c:253: if (joy & J_LEFT) {
+    0000035E CB 53            [ 8]  629 	bit	2, e
+    00000360 28 17            [12]  630 	jr	Z, 00117$
+                                    631 ;src/large_map.c:254: if (camera_x) {
+    00000362 3Ar02r00         [13]  632 	ld	a, (_camera_x+1)
+    00000365 21r01r00         [10]  633 	ld	hl, #_camera_x
+    00000368 B6               [ 7]  634 	or	a, (hl)
+    00000369 28 29            [12]  635 	jr	Z, 00118$
+                                    636 ;src/large_map.c:255: camera_x--;
+    0000036B 2Ar01r00         [16]  637 	ld	hl, (_camera_x)
+    0000036E 2B               [ 6]  638 	dec	hl
+    0000036F 22r01r00         [16]  639 	ld	(_camera_x), hl
+                                    640 ;src/large_map.c:256: redraw = TRUE;
+    00000372 21r0Dr00         [10]  641 	ld	hl, #_redraw
+    00000375 36 01            [10]  642 	ld	(hl), #0x01
+    00000377 18 1B            [12]  643 	jr	00118$
+    00000379                        644 00117$:
+                                    645 ;src/large_map.c:258: } else if (joy & J_RIGHT) {
+    00000379 CB 5B            [ 8]  646 	bit	3, e
+    0000037B 28 17            [12]  647 	jr	Z, 00118$
+                                    648 ;src/large_map.c:259: if (camera_x < camera_max_x) {
+    0000037D 2Ar01r00         [16]  649 	ld	hl, (_camera_x)
+    00000380 11 40 04         [10]  650 	ld	de, #0x0440
+    00000383 BF               [ 4]  651 	cp	a, a
+    00000384 ED 52            [15]  652 	sbc	hl, de
+    00000386 30 0C            [12]  653 	jr	NC, 00118$
+                                    654 ;src/large_map.c:260: camera_x++;
+    00000388 2Ar01r00         [16]  655 	ld	hl, (_camera_x)
+    0000038B 23               [ 6]  656 	inc	hl
+    0000038C 22r01r00         [16]  657 	ld	(_camera_x), hl
+                                    658 ;src/large_map.c:261: redraw = TRUE;
+    0000038F 21r0Dr00         [10]  659 	ld	hl, #_redraw
+    00000392 36 01            [10]  660 	ld	(hl), #0x01
+    00000394                        661 00118$:
+                                    662 ;src/large_map.c:264: if (redraw) {
+    00000394 3Ar0Dr00         [13]  663 	ld	a, (_redraw+0)
+    00000397 B7               [ 4]  664 	or	a, a
+    00000398 28 0D            [12]  665 	jr	Z, 00120$
+                                    666 ;src/large_map.c:265: vsync();
+    0000039A CDr00r00         [17]  667 	call	_vsync
+                                    668 ;src/large_map.c:266: set_camera();
+    0000039D CDr00r00         [17]  669 	call	_set_camera
+                                    670 ;src/large_map.c:267: redraw = FALSE;
+    000003A0 AF               [ 4]  671 	xor	a, a
+    000003A1 32r0Dr00         [13]  672 	ld	(_redraw+0), a
+    000003A4 C3r1Dr03         [10]  673 	jp	00123$
+    000003A7                        674 00120$:
+                                    675 ;src/large_map.c:268: } else vsync();
+    000003A7 CDr00r00         [17]  676 	call	_vsync
+                                    677 ;src/large_map.c:270: }
+    000003AA C3r1Dr03         [10]  678 	jp	00123$
+                                    679 	.area _CODE
+                                    680 	.area _INITIALIZER
+                                    681 	.area _CABS (ABS)

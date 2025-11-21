@@ -1,0 +1,1144 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module pong
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _HUD
+                                     22 	.globl _main
+                                     23 	.globl _init_pad
+                                     24 	.globl _printf
+                                     25 	.globl _gotoxy
+                                     26 	.globl _move_sprite
+                                     27 	.globl _set_sprite_tile
+                                     28 	.globl _set_sprite_data
+                                     29 	.globl _vsync
+                                     30 	.globl _joypad_ex
+                                     31 	.globl _joypad_init
+                                     32 	.globl _sprite_data
+                                     33 	.globl _spd_ballY
+                                     34 	.globl _spd_ballX
+                                     35 	.globl _ballY
+                                     36 	.globl _ballX
+                                     37 	.globl _player2_score
+                                     38 	.globl _player1_score
+                                     39 	.globl _player2
+                                     40 	.globl _player1
+                                     41 	.globl _joypads
+                                     42 	.globl _OAMDMA
+                                     43 	.globl _PPUDATA
+                                     44 	.globl _PPUADDR
+                                     45 	.globl _PPUSCROLL
+                                     46 	.globl _OAMDATA
+                                     47 	.globl _OAMADDR
+                                     48 	.globl _PPUSTATUS
+                                     49 	.globl _PPUMASK
+                                     50 	.globl _PPUCTRL
+                                     51 ;--------------------------------------------------------
+                                     52 ; ZP ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _ZP      (PAG)
+    00000000                         55 _main_sloc0_1_0:
+    00000000                         56 	.ds 2
+                                     57 ;--------------------------------------------------------
+                                     58 ; overlayable items in ram
+                                     59 ;--------------------------------------------------------
+                                     60 ;--------------------------------------------------------
+                                     61 ; uninitialized external ram data
+                                     62 ;--------------------------------------------------------
+                                     63 	.area _BSS
+                         00002000    64 _PPUCTRL	=	0x2000
+                         00002001    65 _PPUMASK	=	0x2001
+                         00002002    66 _PPUSTATUS	=	0x2002
+                         00002003    67 _OAMADDR	=	0x2003
+                         00002004    68 _OAMDATA	=	0x2004
+                         00002005    69 _PPUSCROLL	=	0x2005
+                         00002006    70 _PPUADDR	=	0x2006
+                         00002007    71 _PPUDATA	=	0x2007
+                         00004014    72 _OAMDMA	=	0x4014
+    00000000                         73 _init_pad_n_10000_110:
+    00000000                         74 	.ds 1
+    00000001                         75 _joypads::
+    00000001                         76 	.ds 5
+    00000006                         77 _player1::
+    00000006                         78 	.ds 1
+    00000007                         79 _player2::
+    00000007                         80 	.ds 1
+    00000008                         81 _player1_score::
+    00000008                         82 	.ds 2
+    0000000A                         83 _player2_score::
+    0000000A                         84 	.ds 2
+    0000000C                         85 _ballX::
+    0000000C                         86 	.ds 1
+    0000000D                         87 _ballY::
+    0000000D                         88 	.ds 1
+    0000000E                         89 _spd_ballX::
+    0000000E                         90 	.ds 1
+    0000000F                         91 _spd_ballY::
+    0000000F                         92 	.ds 1
+                                     93 ;--------------------------------------------------------
+                                     94 ; absolute external ram data
+                                     95 ;--------------------------------------------------------
+                                     96 	.area _DABS    (ABS)
+                                     97 ;--------------------------------------------------------
+                                     98 ; initialized external ram data
+                                     99 ;--------------------------------------------------------
+                                    100 	.area _DATA
+    00000000                        101 _sprite_data::
+    00000000                        102 	.ds 64
+                                    103 ;--------------------------------------------------------
+                                    104 ; global & static initialisations
+                                    105 ;--------------------------------------------------------
+                                    106 	.area _HOME
+                                    107 	.area _GSINIT
+                                    108 	.area _GSFINAL
+                                    109 	.area _GSINIT
+                                    110 ;--------------------------------------------------------
+                                    111 ; Home
+                                    112 ;--------------------------------------------------------
+                                    113 	.area _HOME
+                                    114 	.area _HOME
+                                    115 ;--------------------------------------------------------
+                                    116 ; code
+                                    117 ;--------------------------------------------------------
+                                    118 	.area _CODE
+                                    119 ;------------------------------------------------------------
+                                    120 ;Allocation info for local variables in function 'init_pad'
+                                    121 ;------------------------------------------------------------
+                                    122 ;n             Allocated with name '_init_pad_n_10000_110'
+                                    123 ;------------------------------------------------------------
+                                    124 ;	src/pong.c: 16: void init_pad(uint8_t n) {
+                                    125 ;	genLabel
+                                    126 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    127 ;	-----------------------------------------
+                                    128 ;	 function init_pad
+                                    129 ;	-----------------------------------------
+                                    130 ;	Register assignment is optimal.
+                                    131 ;	Stack space usage: 0 bytes.
+    00000000                        132 _init_pad:
+                                    133 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    134 ;	genReceive
+                                    135 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    136 ;	src/pong.c: 17: set_sprite_tile(n << 2, n);
+                                    137 ;	genLeftShift
+                                    138 ;	genLeftShiftLiteral
+                                    139 ;	genlshOne
+    00000000 8Dr00r00         [ 4]  140 	sta	_init_pad_n_10000_110
+    00000003 0A               [ 2]  141 	asl	a
+    00000004 0A               [ 2]  142 	asl	a
+                                    143 ;	Raw cost for generated ic 3 : (5, 8.000000) count=1.000000
+                                    144 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    145 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    146 ;	genCall
+    00000005 48               [ 3]  147 	pha
+                                    148 ;	genSend
+    00000006 AEr00r00         [ 4]  149 	ldx	_init_pad_n_10000_110
+    00000009 20r00r00         [ 6]  150 	jsr	_set_sprite_tile
+    0000000C 68               [ 4]  151 	pla
+                                    152 ;	Raw cost for generated ic 6 : (8, 17.000000) count=1.000000
+                                    153 ;	src/pong.c: 18: set_sprite_tile((n << 2) + 1, n);
+                                    154 ;	genCast
+                                    155 ;	genCopy
+                                    156 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    157 ;	genPlus
+                                    158 ;	genPlusIncr
+    0000000D 48               [ 3]  159 	pha
+    0000000E 18               [ 2]  160 	clc
+    0000000F 69 01            [ 2]  161 	adc	#0x01
+                                    162 ;	Raw cost for generated ic 9 : (6, 13.000000) count=1.000000
+                                    163 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    164 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    165 ;	genCall
+                                    166 ;	genSend
+    00000011 A8               [ 2]  167 	tay
+    00000012 AEr00r00         [ 4]  168 	ldx	_init_pad_n_10000_110
+    00000015 20r00r00         [ 6]  169 	jsr	_set_sprite_tile
+    00000018 68               [ 4]  170 	pla
+                                    171 ;	Raw cost for generated ic 12 : (9, 19.000000) count=1.000000
+                                    172 ;	src/pong.c: 19: set_sprite_tile((n << 2) + 2, n);
+                                    173 ;	genPlus
+                                    174 ;	genPlusIncr
+    00000019 18               [ 2]  175 	clc
+    0000001A 69 02            [ 2]  176 	adc	#0x02
+                                    177 ;	Raw cost for generated ic 15 : (3, 4.000000) count=1.000000
+                                    178 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    179 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    180 ;	genCall
+                                    181 ;	genSend
+    0000001C AEr00r00         [ 4]  182 	ldx	_init_pad_n_10000_110
+                                    183 ;	Raw cost for generated ic 18 : (6, 10.000000) count=1.000000
+                                    184 ;	genLabel
+                                    185 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    186 ;	src/pong.c: 20: }
+                                    187 ;	genEndFunction
+    0000001F 4Cr00r00         [ 3]  188 	jmp	_set_sprite_tile
+                                    189 ;	Raw cost for generated ic 20 : (1, 6.000000) count=1.000000
+                                    190 ;------------------------------------------------------------
+                                    191 ;Allocation info for local variables in function 'main'
+                                    192 ;------------------------------------------------------------
+                                    193 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                    194 ;__300000009   Allocated to registers 
+                                    195 ;__300000010   Allocated to registers 
+                                    196 ;__300000011   Allocated to registers x 
+                                    197 ;n             Allocated to registers 
+                                    198 ;x             Allocated to registers 
+                                    199 ;y             Allocated to registers a 
+                                    200 ;__300000013   Allocated to registers 
+                                    201 ;__300000014   Allocated to registers 
+                                    202 ;__300000015   Allocated to registers x 
+                                    203 ;n             Allocated to registers 
+                                    204 ;x             Allocated to registers 
+                                    205 ;y             Allocated to registers a 
+                                    206 ;------------------------------------------------------------
+                                    207 ;	src/pong.c: 51: void main(void) {
+                                    208 ;	genLabel
+                                    209 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    210 ;	-----------------------------------------
+                                    211 ;	 function main
+                                    212 ;	-----------------------------------------
+                                    213 ;	Register assignment is optimal.
+                                    214 ;	Stack space usage: 0 bytes.
+    00000022                        215 _main:
+                                    216 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    217 ;	src/pong.c: 56: set_sprite_data(0, 4, sprite_data);
+                                    218 ;	skipping iCode since result will be rematerialized
+                                    219 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    220 ;	genCast
+                                    221 ;	genCopy
+    00000022 A9s00            [ 2]  222 	lda	#>_sprite_data
+    00000024 8Dr01r00         [ 4]  223 	sta	(_set_sprite_data_PARM_3 + 1)
+    00000027 A9r00            [ 2]  224 	lda	#_sprite_data
+    00000029 8Dr00r00         [ 4]  225 	sta	_set_sprite_data_PARM_3
+                                    226 ;	Raw cost for generated ic 3 : (10, 12.000000) count=1.000000
+                                    227 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    228 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    229 ;	genCall
+                                    230 ;	genSend
+    0000002C A9 00            [ 2]  231 	lda	#0x00
+    0000002E A2 04            [ 2]  232 	ldx	#0x04
+    00000030 20r00r00         [ 6]  233 	jsr	_set_sprite_data
+                                    234 ;	Raw cost for generated ic 7 : (7, 10.000000) count=1.000000
+                                    235 ;	src/pong.c: 59: init_pad(0);
+                                    236 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    237 ;	genCall
+                                    238 ;	genSend
+    00000033 A9 00            [ 2]  239 	lda	#0x00
+    00000035 20r00r00         [ 6]  240 	jsr	_init_pad
+                                    241 ;	Raw cost for generated ic 9 : (5, 8.000000) count=1.000000
+                                    242 ;	src/pong.c: 60: init_pad(1);
+                                    243 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    244 ;	genCall
+                                    245 ;	genSend
+    00000038 A9 01            [ 2]  246 	lda	#0x01
+    0000003A 20r00r00         [ 6]  247 	jsr	_init_pad
+                                    248 ;	Raw cost for generated ic 11 : (5, 8.000000) count=1.000000
+                                    249 ;	src/pong.c: 63: set_sprite_tile(3, 2);
+                                    250 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    251 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    252 ;	genCall
+                                    253 ;	genSend
+    0000003D A9 03            [ 2]  254 	lda	#0x03
+    0000003F A2 02            [ 2]  255 	ldx	#0x02
+    00000041 20r00r00         [ 6]  256 	jsr	_set_sprite_tile
+                                    257 ;	Raw cost for generated ic 14 : (7, 10.000000) count=1.000000
+                                    258 ;	src/pong.c: 66: SHOW_BKG; SHOW_SPRITES;
+                                    259 ;	genOr
+    00000044 ADr00r00         [ 4]  260 	lda	_shadow_PPUMASK
+    00000047 09 08            [ 2]  261 	ora	#0x08
+    00000049 8Dr00r00         [ 4]  262 	sta	_shadow_PPUMASK
+                                    263 ;	Raw cost for generated ic 15 : (8, 10.000000) count=1.000000
+                                    264 ;	genOr
+    0000004C ADr00r00         [ 4]  265 	lda	_shadow_PPUMASK
+    0000004F 09 10            [ 2]  266 	ora	#0x10
+    00000051 8Dr00r00         [ 4]  267 	sta	_shadow_PPUMASK
+                                    268 ;	Raw cost for generated ic 17 : (8, 10.000000) count=1.000000
+                                    269 ;	src/pong.c: 69: if (joypad_init(2, &joypads) != 2) {
+                                    270 ;	skipping iCode since result will be rematerialized
+                                    271 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    272 ;	genCast
+                                    273 ;	genCopy
+    00000054 A9s00            [ 2]  274 	lda	#>_joypads
+    00000056 8Dr01r00         [ 4]  275 	sta	(_joypad_init_PARM_2 + 1)
+    00000059 A9r01            [ 2]  276 	lda	#_joypads
+    0000005B 8Dr00r00         [ 4]  277 	sta	_joypad_init_PARM_2
+                                    278 ;	Raw cost for generated ic 20 : (10, 12.000000) count=1.000000
+                                    279 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    280 ;	genCall
+                                    281 ;	genSend
+    0000005E A9 02            [ 2]  282 	lda	#0x02
+    00000060 20r00r00         [ 6]  283 	jsr	_joypad_init
+                                    284 ;	assignResultValue
+                                    285 ;	Raw cost for generated ic 23 : (5, 8.000000) count=1.000000
+                                    286 ;	genCmpEQorNE
+    00000063 C9 02            [ 2]  287 	cmp	#0x02
+    00000065 F0 0C            [ 4]  288 	beq	00102$
+                                    289 ;	Raw cost for generated ic 24 : (7, 7.600000) count=1.000000
+                                    290 ;	skipping generated iCode
+                                    291 ;	Raw cost for generated ic 25 : (0, 0.000000) count=1.000000
+                                    292 ;	src/pong.c: 70: printf("Device must support\nat least two joypads");
+                                    293 ;	skipping iCode since result will be rematerialized
+                                    294 ;	Raw cost for generated ic 28 : (0, 0.000000) count=0.750000
+                                    295 ;	skipping iCode since result will be rematerialized
+                                    296 ;	Raw cost for generated ic 29 : (0, 0.000000) count=0.750000
+                                    297 ;	genIpush
+    00000067 A9s02            [ 2]  298 	lda	#>___str_0
+    00000069 48               [ 3]  299 	pha
+    0000006A A9rF2            [ 2]  300 	lda	#___str_0
+    0000006C 48               [ 3]  301 	pha
+                                    302 ;	Raw cost for generated ic 30 : (6, 10.000000) count=0.750000
+                                    303 ;	genCall
+    0000006D 20r00r00         [ 6]  304 	jsr	_printf
+    00000070 68               [ 4]  305 	pla
+    00000071 68               [ 4]  306 	pla
+                                    307 ;	Raw cost for generated ic 31 : (5, 14.000000) count=0.750000
+                                    308 ;	src/pong.c: 71: return;
+                                    309 ;	genRet
+    00000072 60               [ 6]  310 	rts
+                                    311 ;	Raw cost for generated ic 32 : (3, 3.000000) count=0.750000
+                                    312 ;	genLabel
+    00000073                        313 00102$:
+                                    314 ;	Raw cost for generated ic 33 : (0, 0.000000) count=1.000000
+                                    315 ;	src/pong.c: 75: player1 = 64, player2 = 64;
+                                    316 ;	genAssign
+                                    317 ;	genAssignLit
+    00000073 A2 40            [ 2]  318 	ldx	#0x40
+    00000075 8Er06r00         [ 4]  319 	stx	_player1
+                                    320 ;	Raw cost for generated ic 35 : (5, 6.000000) count=1.000000
+                                    321 ;	genAssign
+                                    322 ;	genAssignLit
+    00000078 8Er07r00         [ 4]  323 	stx	_player2
+                                    324 ;	Raw cost for generated ic 37 : (3, 4.000000) count=1.000000
+                                    325 ;	src/pong.c: 76: player1_score = player2_score = 0;
+                                    326 ;	genAssign
+                                    327 ;	genAssignLit
+    0000007B A2 00            [ 2]  328 	ldx	#0x00
+    0000007D 8Er0Ar00         [ 4]  329 	stx	_player2_score
+    00000080 8Er0Br00         [ 4]  330 	stx	(_player2_score + 1)
+                                    331 ;	Raw cost for generated ic 39 : (8, 10.000000) count=1.000000
+                                    332 ;	genAssign
+                                    333 ;	genAssignLit
+    00000083 8Er08r00         [ 4]  334 	stx	_player1_score
+    00000086 8Er09r00         [ 4]  335 	stx	(_player1_score + 1)
+                                    336 ;	Raw cost for generated ic 41 : (6, 8.000000) count=1.000000
+                                    337 ;	src/pong.c: 79: printf(HUD, player1_score, player2_score);
+                                    338 ;	skipping iCode since result will be rematerialized
+                                    339 ;	Raw cost for generated ic 42 : (0, 0.000000) count=1.000000
+                                    340 ;	skipping iCode since result will be rematerialized
+                                    341 ;	Raw cost for generated ic 43 : (0, 0.000000) count=1.000000
+                                    342 ;	genIpush
+    00000089 8A               [ 2]  343 	txa
+    0000008A 48               [ 3]  344 	pha
+    0000008B 48               [ 3]  345 	pha
+                                    346 ;	Raw cost for generated ic 44 : (3, 8.000000) count=1.000000
+                                    347 ;	genIpush
+    0000008C 48               [ 3]  348 	pha
+    0000008D 48               [ 3]  349 	pha
+                                    350 ;	Raw cost for generated ic 45 : (2, 6.000000) count=1.000000
+                                    351 ;	genIpush
+    0000008E A9s02            [ 2]  352 	lda	#>_HUD
+    00000090 48               [ 3]  353 	pha
+    00000091 A9rE1            [ 2]  354 	lda	#_HUD
+    00000093 48               [ 3]  355 	pha
+                                    356 ;	Raw cost for generated ic 46 : (6, 10.000000) count=1.000000
+                                    357 ;	genCall
+    00000094 20r00r00         [ 6]  358 	jsr	_printf
+    00000097 68               [ 4]  359 	pla
+    00000098 68               [ 4]  360 	pla
+    00000099 68               [ 4]  361 	pla
+    0000009A 68               [ 4]  362 	pla
+    0000009B 68               [ 4]  363 	pla
+    0000009C 68               [ 4]  364 	pla
+                                    365 ;	Raw cost for generated ic 47 : (9, 30.000000) count=1.000000
+                                    366 ;	src/pong.c: 82: ballX = INITBALLX, ballY = INITBALLY;
+                                    367 ;	genAssign
+                                    368 ;	genAssignLit
+    0000009D A2 54            [ 2]  369 	ldx	#0x54
+    0000009F 8Er0Cr00         [ 4]  370 	stx	_ballX
+                                    371 ;	Raw cost for generated ic 49 : (5, 6.000000) count=1.000000
+                                    372 ;	genAssign
+                                    373 ;	genAssignLit
+    000000A2 A2 48            [ 2]  374 	ldx	#0x48
+    000000A4 8Er0Dr00         [ 4]  375 	stx	_ballY
+                                    376 ;	Raw cost for generated ic 51 : (5, 6.000000) count=1.000000
+                                    377 ;	src/pong.c: 83: spd_ballX = 1, spd_ballY = 1;
+                                    378 ;	genAssign
+                                    379 ;	genAssignLit
+    000000A7 A2 01            [ 2]  380 	ldx	#0x01
+    000000A9 8Er0Er00         [ 4]  381 	stx	_spd_ballX
+                                    382 ;	Raw cost for generated ic 53 : (5, 6.000000) count=1.000000
+                                    383 ;	genAssign
+                                    384 ;	genAssignLit
+    000000AC 8Er0Fr00         [ 4]  385 	stx	_spd_ballY
+                                    386 ;	Raw cost for generated ic 55 : (3, 4.000000) count=1.000000
+                                    387 ;	src/pong.c: 85: while(1) {
+                                    388 ;	genLabel
+    000000AF                        389 00143$:
+                                    390 ;	Raw cost for generated ic 58 : (0, 0.000000) count=72.000000
+                                    391 ;	src/pong.c: 87: joypad_ex(&joypads);
+                                    392 ;	skipping iCode since result will be rematerialized
+                                    393 ;	Raw cost for generated ic 60 : (0, 0.000000) count=72.000000
+                                    394 ;	Raw cost for generated ic 61 : (0, 0.000000) count=72.000000
+                                    395 ;	genCall
+                                    396 ;	genSend
+    000000AF A2s00            [ 2]  397 	ldx	#>_joypads
+    000000B1 A9r01            [ 2]  398 	lda	#_joypads
+    000000B3 20r00r00         [ 6]  399 	jsr	_joypad_ex
+                                    400 ;	Raw cost for generated ic 62 : (7, 10.000000) count=72.000000
+                                    401 ;	src/pong.c: 90: if (joypads.joy0 & J_UP) {
+                                    402 ;	skipping iCode since result will be rematerialized
+                                    403 ;	Raw cost for generated ic 64 : (0, 0.000000) count=72.000000
+                                    404 ;	genPointerGet
+                                    405 ;	genDataPointerGet
+    000000B6 AEr02r00         [ 4]  406 	ldx	(_joypads + 0x0001)
+                                    407 ;	Raw cost for generated ic 65 : (3, 4.000000) count=72.000000
+                                    408 ;	genAnd
+    000000B9 8A               [ 2]  409 	txa
+    000000BA 29 08            [ 2]  410 	and	#0x08
+                                    411 ;	genIfxJump : z
+    000000BC F0 15            [ 4]  412 	beq	00110$
+                                    413 ;	Raw cost for generated ic 67 : (8, 9.600000) count=72.000000
+                                    414 ;	skipping generated iCode
+                                    415 ;	Raw cost for generated ic 68 : (0, 0.000000) count=72.000000
+                                    416 ;	src/pong.c: 91: player1 -= 2;
+                                    417 ;	genCast
+                                    418 ;	genCopy
+    000000BE ADr06r00         [ 4]  419 	lda	_player1
+                                    420 ;	Raw cost for generated ic 71 : (3, 4.000000) count=54.000000
+                                    421 ;	genMinus
+                                    422 ;	genMinusDec
+    000000C1 38               [ 2]  423 	sec
+    000000C2 E9 02            [ 2]  424 	sbc	#0x02
+                                    425 ;	Raw cost for generated ic 72 : (6, 8.000000) count=54.000000
+                                    426 ;	src/pong.c: 92: if (player1 < YMIN) player1 = YMIN;
+                                    427 ;	genCmp
+    000000C4 8Dr06r00         [ 4]  428 	sta	_player1
+    000000C7 C9 1C            [ 2]  429 	cmp	#0x1c
+    000000C9 B0 21            [ 4]  430 	bcs	00111$
+                                    431 ;	Raw cost for generated ic 75 : (10, 11.600000) count=54.000000
+                                    432 ;	skipping generated iCode
+                                    433 ;	Raw cost for generated ic 76 : (0, 0.000000) count=54.000000
+                                    434 ;	genAssign
+                                    435 ;	genAssignLit
+    000000CB A2 1C            [ 2]  436 	ldx	#0x1c
+    000000CD 8Er06r00         [ 4]  437 	stx	_player1
+                                    438 ;	Raw cost for generated ic 80 : (5, 6.000000) count=40.500000
+                                    439 ;	genGoto
+    000000D0 4CrECr00         [ 3]  440 	jmp	00111$
+                                    441 ;	Raw cost for generated ic 82 : (3, 3.000000) count=40.500000
+                                    442 ;	genLabel
+    000000D3                        443 00110$:
+                                    444 ;	Raw cost for generated ic 83 : (0, 0.000000) count=18.000000
+                                    445 ;	src/pong.c: 93: } else if (joypads.joy0 & J_DOWN) {
+                                    446 ;	genAnd
+    000000D3 8A               [ 2]  447 	txa
+    000000D4 29 04            [ 2]  448 	and	#0x04
+                                    449 ;	genIfxJump : z
+    000000D6 F0 14            [ 4]  450 	beq	00111$
+                                    451 ;	Raw cost for generated ic 88 : (8, 9.600000) count=18.000000
+                                    452 ;	skipping generated iCode
+                                    453 ;	Raw cost for generated ic 89 : (0, 0.000000) count=18.000000
+                                    454 ;	src/pong.c: 94: player1 += 2;
+                                    455 ;	genCast
+                                    456 ;	genCopy
+    000000D8 ADr06r00         [ 4]  457 	lda	_player1
+                                    458 ;	Raw cost for generated ic 92 : (3, 4.000000) count=13.500000
+                                    459 ;	genPlus
+                                    460 ;	genPlusIncr
+    000000DB 18               [ 2]  461 	clc
+    000000DC 69 02            [ 2]  462 	adc	#0x02
+                                    463 ;	Raw cost for generated ic 93 : (6, 8.000000) count=13.500000
+                                    464 ;	src/pong.c: 95: if (player1 > YMAX) player1 = YMAX;            
+                                    465 ;	genCmp
+    000000DE 8Dr06r00         [ 4]  466 	sta	_player1
+    000000E1 C9 64            [ 2]  467 	cmp	#0x64
+    000000E3 F0 07            [ 4]  468 	beq	00111$
+    000000E5 90 05            [ 4]  469 	bcc	00111$
+                                    470 ;	Raw cost for generated ic 96 : (12, 14.200001) count=13.500000
+                                    471 ;	skipping generated iCode
+                                    472 ;	Raw cost for generated ic 97 : (0, 0.000000) count=13.500000
+                                    473 ;	genAssign
+                                    474 ;	genAssignLit
+    000000E7 A2 64            [ 2]  475 	ldx	#0x64
+    000000E9 8Er06r00         [ 4]  476 	stx	_player1
+                                    477 ;	Raw cost for generated ic 101 : (5, 6.000000) count=10.125000
+                                    478 ;	genLabel
+    000000EC                        479 00111$:
+                                    480 ;	Raw cost for generated ic 104 : (0, 0.000000) count=72.000000
+                                    481 ;	src/pong.c: 97: draw_pad(0, PLAYER1_X, player1);
+                                    482 ;	genAssign
+                                    483 ;	genAssignLit
+                                    484 ;	genCopy
+    000000EC AEr06r00         [ 4]  485 	ldx	_player1
+                                    486 ;	Raw cost for generated ic 105 : (3, 4.000000) count=72.000000
+                                    487 ;	genAssign
+                                    488 ;	genAssignLit
+                                    489 ;	genCopy
+    000000EF 8A               [ 2]  490 	txa
+                                    491 ;	Raw cost for generated ic 108 : (1, 2.000000) count=72.000000
+                                    492 ;	src/pong.c: 24: move_sprite(n << 2, x, y);
+                                    493 ;	genAssign
+                                    494 ;	genAssignLit
+                                    495 ;	genCopy
+    000000F0 8Er00r00         [ 4]  496 	stx	_move_sprite_PARM_3
+                                    497 ;	Raw cost for generated ic 114 : (3, 4.000000) count=72.000000
+                                    498 ;	Raw cost for generated ic 112 : (0, 0.000000) count=72.000000
+                                    499 ;	Raw cost for generated ic 113 : (0, 0.000000) count=72.000000
+                                    500 ;	genCall
+    000000F3 48               [ 3]  501 	pha
+                                    502 ;	genSend
+    000000F4 A9 00            [ 2]  503 	lda	#0x00
+    000000F6 AA               [ 2]  504 	tax
+    000000F7 20r00r00         [ 6]  505 	jsr	_move_sprite
+    000000FA 68               [ 4]  506 	pla
+                                    507 ;	Raw cost for generated ic 115 : (8, 17.000000) count=72.000000
+                                    508 ;	src/pong.c: 25: move_sprite((n << 2) + 1, x, y + 8);
+                                    509 ;	genCast
+                                    510 ;	genCopy
+                                    511 ;	Raw cost for generated ic 119 : (0, 0.000000) count=72.000000
+                                    512 ;	genPlus
+                                    513 ;	genPlusIncr
+    000000FB 48               [ 3]  514 	pha
+    000000FC 18               [ 2]  515 	clc
+    000000FD 69 08            [ 2]  516 	adc	#0x08
+    000000FF 8Dr00r00         [ 4]  517 	sta	_move_sprite_PARM_3
+                                    518 ;	Raw cost for generated ic 120 : (8, 15.000000) count=72.000000
+                                    519 ;	Raw cost for generated ic 121 : (0, 0.000000) count=72.000000
+                                    520 ;	Raw cost for generated ic 122 : (0, 0.000000) count=72.000000
+                                    521 ;	genCall
+                                    522 ;	genSend
+    00000102 A9 01            [ 2]  523 	lda	#0x01
+    00000104 A2 00            [ 2]  524 	ldx	#0x00
+    00000106 20r00r00         [ 6]  525 	jsr	_move_sprite
+    00000109 68               [ 4]  526 	pla
+                                    527 ;	Raw cost for generated ic 124 : (9, 17.000000) count=72.000000
+                                    528 ;	src/pong.c: 26: move_sprite((n << 2) + 2, x, y + 16);
+                                    529 ;	genPlus
+                                    530 ;	genPlusIncr
+    0000010A 18               [ 2]  531 	clc
+    0000010B 69 10            [ 2]  532 	adc	#0x10
+    0000010D 8Dr00r00         [ 4]  533 	sta	_move_sprite_PARM_3
+                                    534 ;	Raw cost for generated ic 129 : (6, 8.000000) count=72.000000
+                                    535 ;	Raw cost for generated ic 130 : (0, 0.000000) count=72.000000
+                                    536 ;	Raw cost for generated ic 131 : (0, 0.000000) count=72.000000
+                                    537 ;	genCall
+                                    538 ;	genSend
+    00000110 A9 02            [ 2]  539 	lda	#0x02
+    00000112 A2 00            [ 2]  540 	ldx	#0x00
+    00000114 20r00r00         [ 6]  541 	jsr	_move_sprite
+                                    542 ;	Raw cost for generated ic 133 : (7, 10.000000) count=72.000000
+                                    543 ;	src/pong.c: 100: if (joypads.joy1 & J_UP) {
+                                    544 ;	skipping iCode since result will be rematerialized
+                                    545 ;	Raw cost for generated ic 136 : (0, 0.000000) count=72.000000
+                                    546 ;	genPointerGet
+                                    547 ;	genDataPointerGet
+    00000117 AEr03r00         [ 4]  548 	ldx	(_joypads + 0x0002)
+                                    549 ;	Raw cost for generated ic 137 : (3, 4.000000) count=72.000000
+                                    550 ;	genAnd
+    0000011A 8A               [ 2]  551 	txa
+    0000011B 29 08            [ 2]  552 	and	#0x08
+                                    553 ;	genIfxJump : z
+    0000011D F0 15            [ 4]  554 	beq	00119$
+                                    555 ;	Raw cost for generated ic 139 : (8, 9.600000) count=72.000000
+                                    556 ;	skipping generated iCode
+                                    557 ;	Raw cost for generated ic 140 : (0, 0.000000) count=72.000000
+                                    558 ;	src/pong.c: 101: player2 -= 2;
+                                    559 ;	genCast
+                                    560 ;	genCopy
+    0000011F ADr07r00         [ 4]  561 	lda	_player2
+                                    562 ;	Raw cost for generated ic 143 : (3, 4.000000) count=54.000000
+                                    563 ;	genMinus
+                                    564 ;	genMinusDec
+    00000122 38               [ 2]  565 	sec
+    00000123 E9 02            [ 2]  566 	sbc	#0x02
+                                    567 ;	Raw cost for generated ic 144 : (6, 8.000000) count=54.000000
+                                    568 ;	src/pong.c: 102: if (player2 < YMIN) player2 = YMIN;
+                                    569 ;	genCmp
+    00000125 8Dr07r00         [ 4]  570 	sta	_player2
+    00000128 C9 1C            [ 2]  571 	cmp	#0x1c
+    0000012A B0 21            [ 4]  572 	bcs	00120$
+                                    573 ;	Raw cost for generated ic 147 : (10, 11.600000) count=54.000000
+                                    574 ;	skipping generated iCode
+                                    575 ;	Raw cost for generated ic 148 : (0, 0.000000) count=54.000000
+                                    576 ;	genAssign
+                                    577 ;	genAssignLit
+    0000012C A2 1C            [ 2]  578 	ldx	#0x1c
+    0000012E 8Er07r00         [ 4]  579 	stx	_player2
+                                    580 ;	Raw cost for generated ic 152 : (5, 6.000000) count=40.500000
+                                    581 ;	genGoto
+    00000131 4Cr4Dr01         [ 3]  582 	jmp	00120$
+                                    583 ;	Raw cost for generated ic 154 : (3, 3.000000) count=40.500000
+                                    584 ;	genLabel
+    00000134                        585 00119$:
+                                    586 ;	Raw cost for generated ic 155 : (0, 0.000000) count=18.000000
+                                    587 ;	src/pong.c: 103: } else if (joypads.joy1 & J_DOWN) {
+                                    588 ;	genAnd
+    00000134 8A               [ 2]  589 	txa
+    00000135 29 04            [ 2]  590 	and	#0x04
+                                    591 ;	genIfxJump : z
+    00000137 F0 14            [ 4]  592 	beq	00120$
+                                    593 ;	Raw cost for generated ic 160 : (8, 9.600000) count=18.000000
+                                    594 ;	skipping generated iCode
+                                    595 ;	Raw cost for generated ic 161 : (0, 0.000000) count=18.000000
+                                    596 ;	src/pong.c: 104: player2 += 2;
+                                    597 ;	genCast
+                                    598 ;	genCopy
+    00000139 ADr07r00         [ 4]  599 	lda	_player2
+                                    600 ;	Raw cost for generated ic 164 : (3, 4.000000) count=13.500000
+                                    601 ;	genPlus
+                                    602 ;	genPlusIncr
+    0000013C 18               [ 2]  603 	clc
+    0000013D 69 02            [ 2]  604 	adc	#0x02
+                                    605 ;	Raw cost for generated ic 165 : (6, 8.000000) count=13.500000
+                                    606 ;	src/pong.c: 105: if (player2 > YMAX) player2 = YMAX;            
+                                    607 ;	genCmp
+    0000013F 8Dr07r00         [ 4]  608 	sta	_player2
+    00000142 C9 64            [ 2]  609 	cmp	#0x64
+    00000144 F0 07            [ 4]  610 	beq	00120$
+    00000146 90 05            [ 4]  611 	bcc	00120$
+                                    612 ;	Raw cost for generated ic 168 : (12, 14.200001) count=13.500000
+                                    613 ;	skipping generated iCode
+                                    614 ;	Raw cost for generated ic 169 : (0, 0.000000) count=13.500000
+                                    615 ;	genAssign
+                                    616 ;	genAssignLit
+    00000148 A2 64            [ 2]  617 	ldx	#0x64
+    0000014A 8Er07r00         [ 4]  618 	stx	_player2
+                                    619 ;	Raw cost for generated ic 173 : (5, 6.000000) count=10.125000
+                                    620 ;	genLabel
+    0000014D                        621 00120$:
+                                    622 ;	Raw cost for generated ic 176 : (0, 0.000000) count=72.000000
+                                    623 ;	src/pong.c: 107: draw_pad(1, PLAYER2_X, player2);
+                                    624 ;	genAssign
+                                    625 ;	genAssignLit
+                                    626 ;	genCopy
+    0000014D AEr07r00         [ 4]  627 	ldx	_player2
+                                    628 ;	Raw cost for generated ic 177 : (3, 4.000000) count=72.000000
+                                    629 ;	genAssign
+                                    630 ;	genAssignLit
+                                    631 ;	genCopy
+    00000150 8A               [ 2]  632 	txa
+                                    633 ;	Raw cost for generated ic 180 : (1, 2.000000) count=72.000000
+                                    634 ;	src/pong.c: 24: move_sprite(n << 2, x, y);
+                                    635 ;	genAssign
+                                    636 ;	genAssignLit
+                                    637 ;	genCopy
+    00000151 8Er00r00         [ 4]  638 	stx	_move_sprite_PARM_3
+                                    639 ;	Raw cost for generated ic 186 : (3, 4.000000) count=72.000000
+                                    640 ;	Raw cost for generated ic 184 : (0, 0.000000) count=72.000000
+                                    641 ;	Raw cost for generated ic 185 : (0, 0.000000) count=72.000000
+                                    642 ;	genCall
+    00000154 48               [ 3]  643 	pha
+                                    644 ;	genSend
+    00000155 A9 04            [ 2]  645 	lda	#0x04
+    00000157 A2 F8            [ 2]  646 	ldx	#0xf8
+    00000159 20r00r00         [ 6]  647 	jsr	_move_sprite
+    0000015C 68               [ 4]  648 	pla
+                                    649 ;	Raw cost for generated ic 187 : (9, 17.000000) count=72.000000
+                                    650 ;	src/pong.c: 25: move_sprite((n << 2) + 1, x, y + 8);
+                                    651 ;	genCast
+                                    652 ;	genCopy
+                                    653 ;	Raw cost for generated ic 191 : (0, 0.000000) count=72.000000
+                                    654 ;	genPlus
+                                    655 ;	genPlusIncr
+    0000015D 48               [ 3]  656 	pha
+    0000015E 18               [ 2]  657 	clc
+    0000015F 69 08            [ 2]  658 	adc	#0x08
+    00000161 8Dr00r00         [ 4]  659 	sta	_move_sprite_PARM_3
+                                    660 ;	Raw cost for generated ic 192 : (8, 15.000000) count=72.000000
+                                    661 ;	Raw cost for generated ic 193 : (0, 0.000000) count=72.000000
+                                    662 ;	Raw cost for generated ic 194 : (0, 0.000000) count=72.000000
+                                    663 ;	genCall
+                                    664 ;	genSend
+    00000164 A9 05            [ 2]  665 	lda	#0x05
+    00000166 A2 F8            [ 2]  666 	ldx	#0xf8
+    00000168 20r00r00         [ 6]  667 	jsr	_move_sprite
+    0000016B 68               [ 4]  668 	pla
+                                    669 ;	Raw cost for generated ic 196 : (9, 17.000000) count=72.000000
+                                    670 ;	src/pong.c: 26: move_sprite((n << 2) + 2, x, y + 16);
+                                    671 ;	genPlus
+                                    672 ;	genPlusIncr
+    0000016C 18               [ 2]  673 	clc
+    0000016D 69 10            [ 2]  674 	adc	#0x10
+    0000016F 8Dr00r00         [ 4]  675 	sta	_move_sprite_PARM_3
+                                    676 ;	Raw cost for generated ic 201 : (6, 8.000000) count=72.000000
+                                    677 ;	Raw cost for generated ic 202 : (0, 0.000000) count=72.000000
+                                    678 ;	Raw cost for generated ic 203 : (0, 0.000000) count=72.000000
+                                    679 ;	genCall
+                                    680 ;	genSend
+    00000172 A9 06            [ 2]  681 	lda	#0x06
+    00000174 A2 F8            [ 2]  682 	ldx	#0xf8
+    00000176 20r00r00         [ 6]  683 	jsr	_move_sprite
+                                    684 ;	Raw cost for generated ic 205 : (7, 10.000000) count=72.000000
+                                    685 ;	src/pong.c: 110: ballX += spd_ballX, ballY += spd_ballY;
+                                    686 ;	genCast
+                                    687 ;	genCopy
+    00000179 ADr0Cr00         [ 4]  688 	lda	_ballX
+                                    689 ;	Raw cost for generated ic 207 : (3, 4.000000) count=72.000000
+                                    690 ;	genPlus
+                                    691 ;	genPlusIncr
+    0000017C 18               [ 2]  692 	clc
+    0000017D 6Dr0Er00         [ 4]  693 	adc	_spd_ballX
+    00000180 8Dr0Cr00         [ 4]  694 	sta	_ballX
+                                    695 ;	Raw cost for generated ic 208 : (7, 10.000000) count=72.000000
+                                    696 ;	genCast
+                                    697 ;	genCopy
+    00000183 ADr0Dr00         [ 4]  698 	lda	_ballY
+                                    699 ;	Raw cost for generated ic 211 : (3, 4.000000) count=72.000000
+                                    700 ;	genPlus
+                                    701 ;	genPlusIncr
+    00000186 18               [ 2]  702 	clc
+    00000187 6Dr0Fr00         [ 4]  703 	adc	_spd_ballY
+                                    704 ;	Raw cost for generated ic 212 : (7, 10.000000) count=72.000000
+                                    705 ;	src/pong.c: 112: if ((ballY < YMIN) || (ballY > (YMAX + 24))) {
+                                    706 ;	genCmp
+    0000018A 8Dr0Dr00         [ 4]  707 	sta	_ballY
+    0000018D C9 1C            [ 2]  708 	cmp	#0x1c
+    0000018F 90 09            [ 4]  709 	bcc	00121$
+                                    710 ;	Raw cost for generated ic 215 : (10, 11.600000) count=72.000000
+                                    711 ;	skipping generated iCode
+                                    712 ;	Raw cost for generated ic 216 : (0, 0.000000) count=72.000000
+                                    713 ;	genCmp
+    00000191 ADr0Dr00         [ 4]  714 	lda	_ballY
+    00000194 C9 7C            [ 2]  715 	cmp	#0x7c
+    00000196 F0 0D            [ 4]  716 	beq	00122$
+    00000198 90 0B            [ 4]  717 	bcc	00122$
+                                    718 ;	Raw cost for generated ic 219 : (12, 14.200001) count=54.000000
+                                    719 ;	skipping generated iCode
+                                    720 ;	Raw cost for generated ic 220 : (0, 0.000000) count=54.000000
+                                    721 ;	genLabel
+    0000019A                        722 00121$:
+                                    723 ;	Raw cost for generated ic 222 : (0, 0.000000) count=58.500000
+                                    724 ;	src/pong.c: 113: spd_ballY = -spd_ballY; 
+                                    725 ;	genUminus
+    0000019A ADr0Fr00         [ 4]  726 	lda	_spd_ballY
+    0000019D 49 FF            [ 2]  727 	eor	#0xff
+    0000019F 18               [ 2]  728 	clc
+    000001A0 69 01            [ 2]  729 	adc	#0x01
+    000001A2 8Dr0Fr00         [ 4]  730 	sta	_spd_ballY
+                                    731 ;	Raw cost for generated ic 223 : (11, 14.000000) count=58.500000
+                                    732 ;	genLabel
+    000001A5                        733 00122$:
+                                    734 ;	Raw cost for generated ic 226 : (0, 0.000000) count=72.000000
+                                    735 ;	src/pong.c: 116: if (ballX < (PLAYER1_X + 8)) {
+                                    736 ;	genCmp
+    000001A5 ADr0Cr00         [ 4]  737 	lda	_ballX
+    000001A8 C9 08            [ 2]  738 	cmp	#0x08
+    000001AA B0 40            [ 4]  739 	bcs	00135$
+                                    740 ;	Raw cost for generated ic 227 : (10, 11.600000) count=72.000000
+                                    741 ;	skipping generated iCode
+                                    742 ;	Raw cost for generated ic 228 : (0, 0.000000) count=72.000000
+                                    743 ;	src/pong.c: 117: if ((ballY > player1) && (ballY < (player1 + 24)) && (spd_ballX < 0)) 
+                                    744 ;	genCmp
+    000001AC ADr0Dr00         [ 4]  745 	lda	_ballY
+    000001AF CDr06r00         [ 4]  746 	cmp	_player1
+    000001B2 F0 02            [ 4]  747 	beq	00295$
+    000001B4 B0 03            [ 4]  748 	bcs	00294$
+    000001B6                        749 00295$:
+    000001B6 4Cr37r02         [ 3]  750 	jmp	00136$
+    000001B9                        751 00294$:
+                                    752 ;	Raw cost for generated ic 231 : (13, 16.200001) count=54.000000
+                                    753 ;	skipping generated iCode
+                                    754 ;	Raw cost for generated ic 232 : (0, 0.000000) count=54.000000
+                                    755 ;	genCast
+                                    756 ;	genCopy
+    000001B9 A2 00            [ 2]  757 	ldx	#0x00
+    000001BB ADr06r00         [ 4]  758 	lda	_player1
+                                    759 ;	Raw cost for generated ic 235 : (5, 6.000000) count=40.500000
+                                    760 ;	genPlus
+                                    761 ;	genPlusIncr
+    000001BE 18               [ 2]  762 	clc
+    000001BF 69 18            [ 2]  763 	adc	#0x18
+    000001C1 85*00            [ 3]  764 	sta	*_main_sloc0_1_0
+    000001C3 8A               [ 2]  765 	txa
+    000001C4 69 00            [ 2]  766 	adc	#0x00
+    000001C6 85*01            [ 3]  767 	sta	*(_main_sloc0_1_0 + 1)
+                                    768 ;	Raw cost for generated ic 236 : (10, 14.000000) count=40.500000
+                                    769 ;	genCast
+                                    770 ;	genCopy
+    000001C8 ADr0Dr00         [ 4]  771 	lda	_ballY
+                                    772 ;	Raw cost for generated ic 237 : (3, 4.000000) count=40.500000
+                                    773 ;	genCmp
+    000001CB 38               [ 2]  774 	sec
+    000001CC E5*00            [ 3]  775 	sbc	*_main_sloc0_1_0
+    000001CE 8A               [ 2]  776 	txa
+    000001CF E5*01            [ 3]  777 	sbc	*(_main_sloc0_1_0 + 1)
+    000001D1 50 04            [ 4]  778 	bvc	00297$
+    000001D3 10 04            [ 4]  779 	bpl	00296$
+    000001D5 30 60            [ 4]  780 	bmi	00136$
+    000001D7                        781 00297$:
+    000001D7 10 5E            [ 4]  782 	bpl	00136$
+    000001D9                        783 00296$:
+                                    784 ;	Raw cost for generated ic 238 : (17, 23.400002) count=40.500000
+                                    785 ;	skipping generated iCode
+                                    786 ;	Raw cost for generated ic 239 : (0, 0.000000) count=40.500000
+                                    787 ;	genCmp
+    000001D9 2Cr0Er00         [ 4]  788 	bit	_spd_ballX
+    000001DC 10 59            [ 4]  789 	bpl	00136$
+                                    790 ;	Raw cost for generated ic 242 : (8, 9.600000) count=30.375000
+                                    791 ;	skipping generated iCode
+                                    792 ;	Raw cost for generated ic 243 : (0, 0.000000) count=30.375000
+                                    793 ;	src/pong.c: 118: spd_ballX = -spd_ballX;
+                                    794 ;	genUminus
+    000001DE ADr0Er00         [ 4]  795 	lda	_spd_ballX
+    000001E1 49 FF            [ 2]  796 	eor	#0xff
+    000001E3 18               [ 2]  797 	clc
+    000001E4 69 01            [ 2]  798 	adc	#0x01
+    000001E6 8Dr0Er00         [ 4]  799 	sta	_spd_ballX
+                                    800 ;	Raw cost for generated ic 246 : (11, 14.000000) count=22.781250
+                                    801 ;	genGoto
+    000001E9 4Cr37r02         [ 3]  802 	jmp	00136$
+                                    803 ;	Raw cost for generated ic 250 : (3, 3.000000) count=22.781250
+                                    804 ;	genLabel
+    000001EC                        805 00135$:
+                                    806 ;	Raw cost for generated ic 251 : (0, 0.000000) count=18.000000
+                                    807 ;	src/pong.c: 119: } else if (ballX > (PLAYER2_X - 8)) {
+                                    808 ;	genCmp
+    000001EC ADr0Cr00         [ 4]  809 	lda	_ballX
+    000001EF C9 F0            [ 2]  810 	cmp	#0xf0
+    000001F1 F0 44            [ 4]  811 	beq	00136$
+    000001F3 90 42            [ 4]  812 	bcc	00136$
+                                    813 ;	Raw cost for generated ic 252 : (12, 14.200001) count=18.000000
+                                    814 ;	skipping generated iCode
+                                    815 ;	Raw cost for generated ic 253 : (0, 0.000000) count=18.000000
+                                    816 ;	src/pong.c: 120: if ((ballY > player2) && (ballY < (player2 + 24)) && (spd_ballX > 0)) 
+                                    817 ;	genCmp
+    000001F5 ADr0Dr00         [ 4]  818 	lda	_ballY
+    000001F8 CDr07r00         [ 4]  819 	cmp	_player2
+    000001FB F0 3A            [ 4]  820 	beq	00136$
+    000001FD 90 38            [ 4]  821 	bcc	00136$
+                                    822 ;	Raw cost for generated ic 256 : (13, 16.200001) count=13.500000
+                                    823 ;	skipping generated iCode
+                                    824 ;	Raw cost for generated ic 257 : (0, 0.000000) count=13.500000
+                                    825 ;	genCast
+                                    826 ;	genCopy
+    000001FF A2 00            [ 2]  827 	ldx	#0x00
+    00000201 ADr07r00         [ 4]  828 	lda	_player2
+                                    829 ;	Raw cost for generated ic 260 : (5, 6.000000) count=10.125000
+                                    830 ;	genPlus
+                                    831 ;	genPlusIncr
+    00000204 18               [ 2]  832 	clc
+    00000205 69 18            [ 2]  833 	adc	#0x18
+    00000207 85*00            [ 3]  834 	sta	*_main_sloc0_1_0
+    00000209 8A               [ 2]  835 	txa
+    0000020A 69 00            [ 2]  836 	adc	#0x00
+    0000020C 85*01            [ 3]  837 	sta	*(_main_sloc0_1_0 + 1)
+                                    838 ;	Raw cost for generated ic 261 : (10, 14.000000) count=10.125000
+                                    839 ;	genCast
+                                    840 ;	genCopy
+    0000020E ADr0Dr00         [ 4]  841 	lda	_ballY
+                                    842 ;	Raw cost for generated ic 262 : (3, 4.000000) count=10.125000
+                                    843 ;	genCmp
+    00000211 38               [ 2]  844 	sec
+    00000212 E5*00            [ 3]  845 	sbc	*_main_sloc0_1_0
+    00000214 8A               [ 2]  846 	txa
+    00000215 E5*01            [ 3]  847 	sbc	*(_main_sloc0_1_0 + 1)
+    00000217 50 04            [ 4]  848 	bvc	00305$
+    00000219 10 04            [ 4]  849 	bpl	00304$
+    0000021B 30 1A            [ 4]  850 	bmi	00136$
+    0000021D                        851 00305$:
+    0000021D 10 18            [ 4]  852 	bpl	00136$
+    0000021F                        853 00304$:
+                                    854 ;	Raw cost for generated ic 263 : (17, 23.400002) count=10.125000
+                                    855 ;	skipping generated iCode
+                                    856 ;	Raw cost for generated ic 264 : (0, 0.000000) count=10.125000
+                                    857 ;	genCmp
+    0000021F 8A               [ 2]  858 	txa
+    00000220 38               [ 2]  859 	sec
+    00000221 EDr0Er00         [ 4]  860 	sbc	_spd_ballX
+    00000224 50 04            [ 4]  861 	bvc	00308$
+    00000226 10 04            [ 4]  862 	bpl	00307$
+    00000228 30 0D            [ 4]  863 	bmi	00136$
+    0000022A                        864 00308$:
+    0000022A 10 0B            [ 4]  865 	bpl	00136$
+    0000022C                        866 00307$:
+                                    867 ;	Raw cost for generated ic 267 : (16, 21.400002) count=7.593750
+                                    868 ;	skipping generated iCode
+                                    869 ;	Raw cost for generated ic 268 : (0, 0.000000) count=7.593750
+                                    870 ;	src/pong.c: 121: spd_ballX = -spd_ballX;
+                                    871 ;	genUminus
+    0000022C ADr0Er00         [ 4]  872 	lda	_spd_ballX
+    0000022F 49 FF            [ 2]  873 	eor	#0xff
+    00000231 18               [ 2]  874 	clc
+    00000232 69 01            [ 2]  875 	adc	#0x01
+    00000234 8Dr0Er00         [ 4]  876 	sta	_spd_ballX
+                                    877 ;	Raw cost for generated ic 271 : (11, 14.000000) count=5.695312
+                                    878 ;	genLabel
+    00000237                        879 00136$:
+                                    880 ;	Raw cost for generated ic 276 : (0, 0.000000) count=72.000000
+                                    881 ;	src/pong.c: 124: if (ballX <= PLAYER1_X) {
+                                    882 ;	genIfx
+    00000237 ADr0Cr00         [ 4]  883 	lda	_ballX
+                                    884 ;	genIfxJump : z
+    0000023A D0 45            [ 4]  885 	bne	00140$
+                                    886 ;	Raw cost for generated ic 277 : (8, 9.600000) count=72.000000
+                                    887 ;	src/pong.c: 126: ballX = INITBALLX, ballY = INITBALLY;
+                                    888 ;	genAssign
+                                    889 ;	genAssignLit
+    0000023C A2 54            [ 2]  890 	ldx	#0x54
+    0000023E 8Er0Cr00         [ 4]  891 	stx	_ballX
+                                    892 ;	Raw cost for generated ic 281 : (5, 6.000000) count=54.000000
+                                    893 ;	genAssign
+                                    894 ;	genAssignLit
+    00000241 A2 48            [ 2]  895 	ldx	#0x48
+    00000243 8Er0Dr00         [ 4]  896 	stx	_ballY
+                                    897 ;	Raw cost for generated ic 283 : (5, 6.000000) count=54.000000
+                                    898 ;	src/pong.c: 127: spd_ballX = -spd_ballX;
+                                    899 ;	genUminus
+    00000246 ADr0Er00         [ 4]  900 	lda	_spd_ballX
+    00000249 49 FF            [ 2]  901 	eor	#0xff
+    0000024B 18               [ 2]  902 	clc
+    0000024C 69 01            [ 2]  903 	adc	#0x01
+    0000024E 8Dr0Er00         [ 4]  904 	sta	_spd_ballX
+                                    905 ;	Raw cost for generated ic 284 : (11, 14.000000) count=54.000000
+                                    906 ;	src/pong.c: 128: player2_score++;
+                                    907 ;	genPlus
+                                    908 ;	genPlusIncr
+    00000251 EEr0Ar00         [ 6]  909 	inc	_player2_score
+    00000254 D0 03            [ 4]  910 	bne	00312$
+    00000256 EEr0Br00         [ 6]  911 	inc	(_player2_score + 1)
+    00000259                        912 00312$:
+                                    913 ;	Raw cost for generated ic 288 : (8, 14.600000) count=54.000000
+                                    914 ;	src/pong.c: 129: gotoxy(0, 0); printf(HUD, player1_score, player2_score);
+                                    915 ;	Raw cost for generated ic 291 : (0, 0.000000) count=54.000000
+                                    916 ;	Raw cost for generated ic 292 : (0, 0.000000) count=54.000000
+                                    917 ;	genCall
+                                    918 ;	genSend
+    00000259 A9 00            [ 2]  919 	lda	#0x00
+    0000025B AA               [ 2]  920 	tax
+    0000025C 20r00r00         [ 6]  921 	jsr	_gotoxy
+                                    922 ;	Raw cost for generated ic 293 : (6, 10.000000) count=54.000000
+                                    923 ;	skipping iCode since result will be rematerialized
+                                    924 ;	Raw cost for generated ic 295 : (0, 0.000000) count=54.000000
+                                    925 ;	genIpush
+    0000025F ADr0Br00         [ 4]  926 	lda	(_player2_score + 1)
+    00000262 48               [ 3]  927 	pha
+    00000263 ADr0Ar00         [ 4]  928 	lda	_player2_score
+    00000266 48               [ 3]  929 	pha
+                                    930 ;	Raw cost for generated ic 296 : (8, 14.000000) count=54.000000
+                                    931 ;	genIpush
+    00000267 ADr09r00         [ 4]  932 	lda	(_player1_score + 1)
+    0000026A 48               [ 3]  933 	pha
+    0000026B ADr08r00         [ 4]  934 	lda	_player1_score
+    0000026E 48               [ 3]  935 	pha
+                                    936 ;	Raw cost for generated ic 297 : (8, 14.000000) count=54.000000
+                                    937 ;	genIpush
+    0000026F A9s02            [ 2]  938 	lda	#>_HUD
+    00000271 48               [ 3]  939 	pha
+    00000272 A9rE1            [ 2]  940 	lda	#_HUD
+    00000274 48               [ 3]  941 	pha
+                                    942 ;	Raw cost for generated ic 298 : (6, 10.000000) count=54.000000
+                                    943 ;	genCall
+    00000275 20r00r00         [ 6]  944 	jsr	_printf
+    00000278 68               [ 4]  945 	pla
+    00000279 68               [ 4]  946 	pla
+    0000027A 68               [ 4]  947 	pla
+    0000027B 68               [ 4]  948 	pla
+    0000027C 68               [ 4]  949 	pla
+    0000027D 68               [ 4]  950 	pla
+                                    951 ;	Raw cost for generated ic 299 : (9, 30.000000) count=54.000000
+                                    952 ;	genGoto
+    0000027E 4CrCCr02         [ 3]  953 	jmp	00141$
+                                    954 ;	Raw cost for generated ic 300 : (3, 3.000000) count=54.000000
+                                    955 ;	genLabel
+    00000281                        956 00140$:
+                                    957 ;	Raw cost for generated ic 301 : (0, 0.000000) count=18.000000
+                                    958 ;	src/pong.c: 130: } else if (ballX > PLAYER2_X) {
+                                    959 ;	genCmp
+    00000281 ADr0Cr00         [ 4]  960 	lda	_ballX
+    00000284 C9 F8            [ 2]  961 	cmp	#0xf8
+    00000286 F0 44            [ 4]  962 	beq	00141$
+    00000288 90 42            [ 4]  963 	bcc	00141$
+                                    964 ;	Raw cost for generated ic 302 : (12, 14.200001) count=18.000000
+                                    965 ;	skipping generated iCode
+                                    966 ;	Raw cost for generated ic 303 : (0, 0.000000) count=18.000000
+                                    967 ;	src/pong.c: 132: ballX = INITBALLX, ballY = INITBALLY;
+                                    968 ;	genAssign
+                                    969 ;	genAssignLit
+    0000028A A2 54            [ 2]  970 	ldx	#0x54
+    0000028C 8Er0Cr00         [ 4]  971 	stx	_ballX
+                                    972 ;	Raw cost for generated ic 307 : (5, 6.000000) count=13.500000
+                                    973 ;	genAssign
+                                    974 ;	genAssignLit
+    0000028F A2 48            [ 2]  975 	ldx	#0x48
+    00000291 8Er0Dr00         [ 4]  976 	stx	_ballY
+                                    977 ;	Raw cost for generated ic 309 : (5, 6.000000) count=13.500000
+                                    978 ;	src/pong.c: 133: spd_ballX = -spd_ballX;
+                                    979 ;	genUminus
+    00000294 ADr0Er00         [ 4]  980 	lda	_spd_ballX
+    00000297 49 FF            [ 2]  981 	eor	#0xff
+    00000299 18               [ 2]  982 	clc
+    0000029A 69 01            [ 2]  983 	adc	#0x01
+    0000029C 8Dr0Er00         [ 4]  984 	sta	_spd_ballX
+                                    985 ;	Raw cost for generated ic 310 : (11, 14.000000) count=13.500000
+                                    986 ;	src/pong.c: 134: player1_score++;
+                                    987 ;	genPlus
+                                    988 ;	genPlusIncr
+    0000029F EEr08r00         [ 6]  989 	inc	_player1_score
+    000002A2 D0 03            [ 4]  990 	bne	00315$
+    000002A4 EEr09r00         [ 6]  991 	inc	(_player1_score + 1)
+    000002A7                        992 00315$:
+                                    993 ;	Raw cost for generated ic 314 : (8, 14.600000) count=13.500000
+                                    994 ;	src/pong.c: 135: gotoxy(0, 0); printf(HUD, player1_score, player2_score);
+                                    995 ;	Raw cost for generated ic 317 : (0, 0.000000) count=13.500000
+                                    996 ;	Raw cost for generated ic 318 : (0, 0.000000) count=13.500000
+                                    997 ;	genCall
+                                    998 ;	genSend
+    000002A7 A9 00            [ 2]  999 	lda	#0x00
+    000002A9 AA               [ 2] 1000 	tax
+    000002AA 20r00r00         [ 6] 1001 	jsr	_gotoxy
+                                   1002 ;	Raw cost for generated ic 319 : (6, 10.000000) count=13.500000
+                                   1003 ;	skipping iCode since result will be rematerialized
+                                   1004 ;	Raw cost for generated ic 321 : (0, 0.000000) count=13.500000
+                                   1005 ;	genIpush
+    000002AD ADr0Br00         [ 4] 1006 	lda	(_player2_score + 1)
+    000002B0 48               [ 3] 1007 	pha
+    000002B1 ADr0Ar00         [ 4] 1008 	lda	_player2_score
+    000002B4 48               [ 3] 1009 	pha
+                                   1010 ;	Raw cost for generated ic 322 : (8, 14.000000) count=13.500000
+                                   1011 ;	genIpush
+    000002B5 ADr09r00         [ 4] 1012 	lda	(_player1_score + 1)
+    000002B8 48               [ 3] 1013 	pha
+    000002B9 ADr08r00         [ 4] 1014 	lda	_player1_score
+    000002BC 48               [ 3] 1015 	pha
+                                   1016 ;	Raw cost for generated ic 323 : (8, 14.000000) count=13.500000
+                                   1017 ;	genIpush
+    000002BD A9s02            [ 2] 1018 	lda	#>_HUD
+    000002BF 48               [ 3] 1019 	pha
+    000002C0 A9rE1            [ 2] 1020 	lda	#_HUD
+    000002C2 48               [ 3] 1021 	pha
+                                   1022 ;	Raw cost for generated ic 324 : (6, 10.000000) count=13.500000
+                                   1023 ;	genCall
+    000002C3 20r00r00         [ 6] 1024 	jsr	_printf
+    000002C6 68               [ 4] 1025 	pla
+    000002C7 68               [ 4] 1026 	pla
+    000002C8 68               [ 4] 1027 	pla
+    000002C9 68               [ 4] 1028 	pla
+    000002CA 68               [ 4] 1029 	pla
+    000002CB 68               [ 4] 1030 	pla
+                                   1031 ;	Raw cost for generated ic 325 : (9, 30.000000) count=13.500000
+                                   1032 ;	genLabel
+    000002CC                       1033 00141$:
+                                   1034 ;	Raw cost for generated ic 327 : (0, 0.000000) count=72.000000
+                                   1035 ;	src/pong.c: 138: move_sprite(3, ballX, ballY);
+                                   1036 ;	genAssign
+                                   1037 ;	genAssignLit
+                                   1038 ;	genCopy
+    000002CC ADr0Dr00         [ 4] 1039 	lda	_ballY
+    000002CF 8Dr00r00         [ 4] 1040 	sta	_move_sprite_PARM_3
+                                   1041 ;	Raw cost for generated ic 330 : (6, 8.000000) count=72.000000
+                                   1042 ;	Raw cost for generated ic 328 : (0, 0.000000) count=72.000000
+                                   1043 ;	Raw cost for generated ic 329 : (0, 0.000000) count=72.000000
+                                   1044 ;	genCall
+                                   1045 ;	genSend
+    000002D2 A9 03            [ 2] 1046 	lda	#0x03
+    000002D4 AEr0Cr00         [ 4] 1047 	ldx	_ballX
+    000002D7 20r00r00         [ 6] 1048 	jsr	_move_sprite
+                                   1049 ;	Raw cost for generated ic 331 : (8, 12.000000) count=72.000000
+                                   1050 ;	src/pong.c: 141: vsync();
+                                   1051 ;	genCall
+    000002DA 20r00r00         [ 6] 1052 	jsr	_vsync
+                                   1053 ;	Raw cost for generated ic 332 : (3, 6.000000) count=72.000000
+                                   1054 ;	genGoto
+    000002DD 4CrAFr00         [ 3] 1055 	jmp	00143$
+                                   1056 ;	Raw cost for generated ic 333 : (3, 3.000000) count=72.000000
+                                   1057 ;	genLabel
+                                   1058 ;	Raw cost for generated ic 335 : (0, 0.000000) count=0.000000
+                                   1059 ;	src/pong.c: 143: }
+                                   1060 ;	genEndFunction
+    000002E0 60               [ 6] 1061 	rts
+                                   1062 ;	Raw cost for generated ic 336 : (1, 6.000000) count=0.000000
+                                   1063 	.area _CODE
+    000002E1                       1064 _HUD:
+    000002E1 20 70 31 3A 20 25 64  1065 	.ascii " p1: %d   p2: %d"
+             20 20 20 70 32 3A 20
+             25 64
+    000002F1 00                    1066 	.db 0x00
+    000002F2                       1067 ___str_0:
+    000002F2 44 65 76 69 63 65 20  1068 	.ascii "Device must support"
+             6D 75 73 74 20 73 75
+             70 70 6F 72 74
+    00000305 0A                    1069 	.db 0x0a
+    00000306 61 74 20 6C 65 61 73  1070 	.ascii "at least two joypads"
+             74 20 74 77 6F 20 6A
+             6F 79 70 61 64 73
+    0000031A 00                    1071 	.db 0x00
+                                   1072 	.area _XINIT
+    00000000                       1073 __xinit__sprite_data:
+    00000000 3C                    1074 	.db #0x3c	; 60
+    00000001 3C                    1075 	.db #0x3c	; 60
+    00000002 42                    1076 	.db #0x42	; 66	'B'
+    00000003 7E                    1077 	.db #0x7e	; 126
+    00000004 99                    1078 	.db #0x99	; 153
+    00000005 FF                    1079 	.db #0xff	; 255
+    00000006 A9                    1080 	.db #0xa9	; 169
+    00000007 FF                    1081 	.db #0xff	; 255
+    00000008 89                    1082 	.db #0x89	; 137
+    00000009 FF                    1083 	.db #0xff	; 255
+    0000000A 89                    1084 	.db #0x89	; 137
+    0000000B FF                    1085 	.db #0xff	; 255
+    0000000C 42                    1086 	.db #0x42	; 66	'B'
+    0000000D 7E                    1087 	.db #0x7e	; 126
+    0000000E 3C                    1088 	.db #0x3c	; 60
+    0000000F 3C                    1089 	.db #0x3c	; 60
+    00000010 3C                    1090 	.db #0x3c	; 60
+    00000011 3C                    1091 	.db #0x3c	; 60
+    00000012 42                    1092 	.db #0x42	; 66	'B'
+    00000013 7E                    1093 	.db #0x7e	; 126
+    00000014 B9                    1094 	.db #0xb9	; 185
+    00000015 FF                    1095 	.db #0xff	; 255
+    00000016 89                    1096 	.db #0x89	; 137
+    00000017 FF                    1097 	.db #0xff	; 255
+    00000018 91                    1098 	.db #0x91	; 145
+    00000019 FF                    1099 	.db #0xff	; 255
+    0000001A B9                    1100 	.db #0xb9	; 185
+    0000001B FF                    1101 	.db #0xff	; 255
+    0000001C 42                    1102 	.db #0x42	; 66	'B'
+    0000001D 7E                    1103 	.db #0x7e	; 126
+    0000001E 3C                    1104 	.db #0x3c	; 60
+    0000001F 3C                    1105 	.db #0x3c	; 60
+    00000020 3C                    1106 	.db #0x3c	; 60
+    00000021 3C                    1107 	.db #0x3c	; 60
+    00000022 42                    1108 	.db #0x42	; 66	'B'
+    00000023 7E                    1109 	.db #0x7e	; 126
+    00000024 99                    1110 	.db #0x99	; 153
+    00000025 FF                    1111 	.db #0xff	; 255
+    00000026 89                    1112 	.db #0x89	; 137
+    00000027 FF                    1113 	.db #0xff	; 255
+    00000028 99                    1114 	.db #0x99	; 153
+    00000029 FF                    1115 	.db #0xff	; 255
+    0000002A 89                    1116 	.db #0x89	; 137
+    0000002B FF                    1117 	.db #0xff	; 255
+    0000002C 5A                    1118 	.db #0x5a	; 90	'Z'
+    0000002D 7E                    1119 	.db #0x7e	; 126
+    0000002E 3C                    1120 	.db #0x3c	; 60
+    0000002F 3C                    1121 	.db #0x3c	; 60
+    00000030 3C                    1122 	.db #0x3c	; 60
+    00000031 3C                    1123 	.db #0x3c	; 60
+    00000032 42                    1124 	.db #0x42	; 66	'B'
+    00000033 7E                    1125 	.db #0x7e	; 126
+    00000034 A9                    1126 	.db #0xa9	; 169
+    00000035 FF                    1127 	.db #0xff	; 255
+    00000036 A9                    1128 	.db #0xa9	; 169
+    00000037 FF                    1129 	.db #0xff	; 255
+    00000038 B9                    1130 	.db #0xb9	; 185
+    00000039 FF                    1131 	.db #0xff	; 255
+    0000003A 89                    1132 	.db #0x89	; 137
+    0000003B FF                    1133 	.db #0xff	; 255
+    0000003C 42                    1134 	.db #0x42	; 66	'B'
+    0000003D 7E                    1135 	.db #0x7e	; 126
+    0000003E 3C                    1136 	.db #0x3c	; 60
+    0000003F 3C                    1137 	.db #0x3c	; 60
+                                   1138 	.area _CABS    (ABS)

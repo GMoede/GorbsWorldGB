@@ -1,0 +1,382 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module banks
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _bank_fixed
+                                     23 	.globl b_bank_3
+                                     24 	.globl _bank_3
+                                     25 	.globl b_bank_2
+                                     26 	.globl _bank_2
+                                     27 	.globl b_bank_1
+                                     28 	.globl _bank_1
+                                     29 	.globl _puts
+                                     30 	.globl _printf
+                                     31 	.globl _var_internal
+                                     32 	.globl _OAMDMA
+                                     33 	.globl _PPUDATA
+                                     34 	.globl _PPUADDR
+                                     35 	.globl _PPUSCROLL
+                                     36 	.globl _OAMDATA
+                                     37 	.globl _OAMADDR
+                                     38 	.globl _PPUSTATUS
+                                     39 	.globl _PPUMASK
+                                     40 	.globl _PPUCTRL
+                                     41 ;--------------------------------------------------------
+                                     42 ; ZP ram data
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _ZP      (PAG)
+                                     45 ;--------------------------------------------------------
+                                     46 ; overlayable items in ram
+                                     47 ;--------------------------------------------------------
+                                     48 ;--------------------------------------------------------
+                                     49 ; uninitialized external ram data
+                                     50 ;--------------------------------------------------------
+                                     51 	.area _BSS
+                         00002000    52 _PPUCTRL	=	0x2000
+                         00002001    53 _PPUMASK	=	0x2001
+                         00002002    54 _PPUSTATUS	=	0x2002
+                         00002003    55 _OAMADDR	=	0x2003
+                         00002004    56 _OAMDATA	=	0x2004
+                         00002005    57 _PPUSCROLL	=	0x2005
+                         00002006    58 _PPUADDR	=	0x2006
+                         00002007    59 _PPUDATA	=	0x2007
+                         00004014    60 _OAMDMA	=	0x4014
+    00000000                         61 _var_internal::
+    00000000                         62 	.ds 2
+                                     63 ;--------------------------------------------------------
+                                     64 ; absolute external ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _DABS    (ABS)
+                                     67 ;--------------------------------------------------------
+                                     68 ; initialized external ram data
+                                     69 ;--------------------------------------------------------
+                                     70 	.area _DATA
+                                     71 ;--------------------------------------------------------
+                                     72 ; global & static initialisations
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _HOME
+                                     75 	.area _GSINIT
+                                     76 	.area _GSFINAL
+                                     77 	.area _GSINIT
+                                     78 ;--------------------------------------------------------
+                                     79 ; Home
+                                     80 ;--------------------------------------------------------
+                                     81 	.area _HOME
+                                     82 ;	src/banks.c: 18: void bank_fixed(void) NONBANKED
+                                     83 ;	genLabel
+                                     84 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                     85 ;	-----------------------------------------
+                                     86 ;	 function bank_fixed
+                                     87 ;	-----------------------------------------
+                                     88 ;	Register assignment is optimal.
+                                     89 ;	Stack space usage: 0 bytes.
+    00000000                         90 _bank_fixed:
+                                     91 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                     92 ;	src/banks.c: 20: puts("I'm in fixed ROM");
+                                     93 ;	skipping iCode since result will be rematerialized
+                                     94 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                     95 ;	skipping iCode since result will be rematerialized
+                                     96 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                     97 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                     98 ;	genCall
+                                     99 ;	genSend
+    00000000 A2s00            [ 2]  100 	ldx	#>___str_0
+    00000002 A9rBD            [ 2]  101 	lda	#___str_0
+                                    102 ;	Raw cost for generated ic 5 : (7, 10.000000) count=1.000000
+                                    103 ;	genLabel
+                                    104 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    105 ;	src/banks.c: 21: }
+                                    106 ;	genEndFunction
+    00000004 4Cr00r00         [ 3]  107 	jmp	_puts
+                                    108 ;	Raw cost for generated ic 7 : (1, 6.000000) count=1.000000
+                                    109 	.area _HOME
+                                    110 ;--------------------------------------------------------
+                                    111 ; code
+                                    112 ;--------------------------------------------------------
+                                    113 	.area _CODE
+                                    114 ;------------------------------------------------------------
+                                    115 ;Allocation info for local variables in function 'bank_fixed'
+                                    116 ;------------------------------------------------------------
+                                    117 ;------------------------------------------------------------
+                                    118 ;Allocation info for local variables in function 'main'
+                                    119 ;------------------------------------------------------------
+                                    120 ;	src/banks.c: 23: void main(void)
+                                    121 ;	genLabel
+                                    122 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    123 ;	-----------------------------------------
+                                    124 ;	 function main
+                                    125 ;	-----------------------------------------
+                                    126 ;	Register assignment is optimal.
+                                    127 ;	Stack space usage: 0 bytes.
+    00000000                        128 _main:
+                                    129 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    130 ;	src/banks.c: 25: puts("Program Start...");
+                                    131 ;	skipping iCode since result will be rematerialized
+                                    132 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    133 ;	skipping iCode since result will be rematerialized
+                                    134 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    135 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    136 ;	genCall
+                                    137 ;	genSend
+    00000000 A2s00            [ 2]  138 	ldx	#>___str_1
+    00000002 A9rCE            [ 2]  139 	lda	#___str_1
+    00000004 20r00r00         [ 6]  140 	jsr	_puts
+                                    141 ;	Raw cost for generated ic 5 : (7, 10.000000) count=1.000000
+                                    142 ;	src/banks.c: 29: var_internal = 1;
+                                    143 ;	genAssign
+                                    144 ;	genAssignLit
+    00000007 A2 01            [ 2]  145 	ldx	#0x01
+    00000009 8Er00r00         [ 4]  146 	stx	_var_internal
+    0000000C CA               [ 2]  147 	dex
+    0000000D 8Er01r00         [ 4]  148 	stx	(_var_internal + 1)
+                                    149 ;	Raw cost for generated ic 7 : (9, 12.000000) count=1.000000
+                                    150 ;	src/banks.c: 31: var_0 = 2;
+                                    151 ;	genAssign
+                                    152 ;	genAssignLit
+    00000010 A2 02            [ 2]  153 	ldx	#0x02
+    00000012 8Er00r00         [ 4]  154 	stx	_var_0
+    00000015 A2 00            [ 2]  155 	ldx	#0x00
+    00000017 8Er01r00         [ 4]  156 	stx	(_var_0 + 1)
+                                    157 ;	Raw cost for generated ic 9 : (10, 12.000000) count=1.000000
+                                    158 ;	src/banks.c: 33: var_1 = 3;
+                                    159 ;	genAssign
+                                    160 ;	genAssignLit
+    0000001A A2 03            [ 2]  161 	ldx	#0x03
+    0000001C 8Er00r00         [ 4]  162 	stx	_var_1
+    0000001F A2 00            [ 2]  163 	ldx	#0x00
+    00000021 8Er01r00         [ 4]  164 	stx	(_var_1 + 1)
+                                    165 ;	Raw cost for generated ic 11 : (10, 12.000000) count=1.000000
+                                    166 ;	src/banks.c: 35: var_2 = 4;
+                                    167 ;	genAssign
+                                    168 ;	genAssignLit
+    00000024 A2 04            [ 2]  169 	ldx	#0x04
+    00000026 8Er00r00         [ 4]  170 	stx	_var_2
+    00000029 A2 00            [ 2]  171 	ldx	#0x00
+    0000002B 8Er01r00         [ 4]  172 	stx	(_var_2 + 1)
+                                    173 ;	Raw cost for generated ic 13 : (10, 12.000000) count=1.000000
+                                    174 ;	src/banks.c: 37: var_3 = 5;
+                                    175 ;	genAssign
+                                    176 ;	genAssignLit
+    0000002E A2 05            [ 2]  177 	ldx	#0x05
+    00000030 8Er00r00         [ 4]  178 	stx	_var_3
+    00000033 A2 00            [ 2]  179 	ldx	#0x00
+    00000035 8Er01r00         [ 4]  180 	stx	(_var_3 + 1)
+                                    181 ;	Raw cost for generated ic 15 : (10, 12.000000) count=1.000000
+                                    182 ;	src/banks.c: 39: bank_fixed();
+                                    183 ;	genCall
+    00000038 20r00r00         [ 6]  184 	jsr	_bank_fixed
+                                    185 ;	Raw cost for generated ic 16 : (3, 6.000000) count=1.000000
+                                    186 ;	src/banks.c: 40: bank_1();
+                                    187 ;	genCall
+    0000003B 20r00r00         [ 6]  188 	jsr	___sdcc_bcall
+    0000003Er00                     189 	.db	b_bank_1
+    0000003FrFFrFF                  190 	.dw 	_bank_1-1
+                                    191 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    192 ;	src/banks.c: 41: bank_2();
+                                    193 ;	genCall
+    00000041 20r00r00         [ 6]  194 	jsr	___sdcc_bcall
+    00000044r00                     195 	.db	b_bank_2
+    00000045rFFrFF                  196 	.dw 	_bank_2-1
+                                    197 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    198 ;	src/banks.c: 42: bank_3();
+                                    199 ;	genCall
+    00000047 20r00r00         [ 6]  200 	jsr	___sdcc_bcall
+    0000004Ar00                     201 	.db	b_bank_3
+    0000004BrFFrFF                  202 	.dw 	_bank_3-1
+                                    203 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    204 ;	src/banks.c: 44: printf("Var is %u\n", var_internal);
+                                    205 ;	skipping iCode since result will be rematerialized
+                                    206 ;	Raw cost for generated ic 20 : (0, 0.000000) count=1.000000
+                                    207 ;	skipping iCode since result will be rematerialized
+                                    208 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    209 ;	genIpush
+    0000004D ADr01r00         [ 4]  210 	lda	(_var_internal + 1)
+    00000050 48               [ 3]  211 	pha
+    00000051 ADr00r00         [ 4]  212 	lda	_var_internal
+    00000054 48               [ 3]  213 	pha
+                                    214 ;	Raw cost for generated ic 22 : (8, 14.000000) count=1.000000
+                                    215 ;	genIpush
+    00000055 A9s00            [ 2]  216 	lda	#>___str_2
+    00000057 48               [ 3]  217 	pha
+    00000058 A9rDF            [ 2]  218 	lda	#___str_2
+    0000005A 48               [ 3]  219 	pha
+                                    220 ;	Raw cost for generated ic 23 : (6, 10.000000) count=1.000000
+                                    221 ;	genCall
+    0000005B 20r00r00         [ 6]  222 	jsr	_printf
+    0000005E 68               [ 4]  223 	pla
+    0000005F 68               [ 4]  224 	pla
+    00000060 68               [ 4]  225 	pla
+    00000061 68               [ 4]  226 	pla
+                                    227 ;	Raw cost for generated ic 24 : (7, 22.000000) count=1.000000
+                                    228 ;	src/banks.c: 46: printf("Var_0 is %u\n", var_0);
+                                    229 ;	skipping iCode since result will be rematerialized
+                                    230 ;	Raw cost for generated ic 25 : (0, 0.000000) count=1.000000
+                                    231 ;	skipping iCode since result will be rematerialized
+                                    232 ;	Raw cost for generated ic 26 : (0, 0.000000) count=1.000000
+                                    233 ;	genIpush
+    00000062 ADr01r00         [ 4]  234 	lda	(_var_0 + 1)
+    00000065 48               [ 3]  235 	pha
+    00000066 ADr00r00         [ 4]  236 	lda	_var_0
+    00000069 48               [ 3]  237 	pha
+                                    238 ;	Raw cost for generated ic 27 : (8, 14.000000) count=1.000000
+                                    239 ;	genIpush
+    0000006A A9s00            [ 2]  240 	lda	#>___str_3
+    0000006C 48               [ 3]  241 	pha
+    0000006D A9rEA            [ 2]  242 	lda	#___str_3
+    0000006F 48               [ 3]  243 	pha
+                                    244 ;	Raw cost for generated ic 28 : (6, 10.000000) count=1.000000
+                                    245 ;	genCall
+    00000070 20r00r00         [ 6]  246 	jsr	_printf
+    00000073 68               [ 4]  247 	pla
+    00000074 68               [ 4]  248 	pla
+    00000075 68               [ 4]  249 	pla
+    00000076 68               [ 4]  250 	pla
+                                    251 ;	Raw cost for generated ic 29 : (7, 22.000000) count=1.000000
+                                    252 ;	src/banks.c: 48: printf("Var_1 is %u\n", var_1);
+                                    253 ;	skipping iCode since result will be rematerialized
+                                    254 ;	Raw cost for generated ic 30 : (0, 0.000000) count=1.000000
+                                    255 ;	skipping iCode since result will be rematerialized
+                                    256 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                    257 ;	genIpush
+    00000077 ADr01r00         [ 4]  258 	lda	(_var_1 + 1)
+    0000007A 48               [ 3]  259 	pha
+    0000007B ADr00r00         [ 4]  260 	lda	_var_1
+    0000007E 48               [ 3]  261 	pha
+                                    262 ;	Raw cost for generated ic 32 : (8, 14.000000) count=1.000000
+                                    263 ;	genIpush
+    0000007F A9s00            [ 2]  264 	lda	#>___str_4
+    00000081 48               [ 3]  265 	pha
+    00000082 A9rF7            [ 2]  266 	lda	#___str_4
+    00000084 48               [ 3]  267 	pha
+                                    268 ;	Raw cost for generated ic 33 : (6, 10.000000) count=1.000000
+                                    269 ;	genCall
+    00000085 20r00r00         [ 6]  270 	jsr	_printf
+    00000088 68               [ 4]  271 	pla
+    00000089 68               [ 4]  272 	pla
+    0000008A 68               [ 4]  273 	pla
+    0000008B 68               [ 4]  274 	pla
+                                    275 ;	Raw cost for generated ic 34 : (7, 22.000000) count=1.000000
+                                    276 ;	src/banks.c: 50: printf("Var_2 is %u\n", var_2);
+                                    277 ;	skipping iCode since result will be rematerialized
+                                    278 ;	Raw cost for generated ic 35 : (0, 0.000000) count=1.000000
+                                    279 ;	skipping iCode since result will be rematerialized
+                                    280 ;	Raw cost for generated ic 36 : (0, 0.000000) count=1.000000
+                                    281 ;	genIpush
+    0000008C ADr01r00         [ 4]  282 	lda	(_var_2 + 1)
+    0000008F 48               [ 3]  283 	pha
+    00000090 ADr00r00         [ 4]  284 	lda	_var_2
+    00000093 48               [ 3]  285 	pha
+                                    286 ;	Raw cost for generated ic 37 : (8, 14.000000) count=1.000000
+                                    287 ;	genIpush
+    00000094 A9s01            [ 2]  288 	lda	#>___str_5
+    00000096 48               [ 3]  289 	pha
+    00000097 A9r04            [ 2]  290 	lda	#___str_5
+    00000099 48               [ 3]  291 	pha
+                                    292 ;	Raw cost for generated ic 38 : (6, 10.000000) count=1.000000
+                                    293 ;	genCall
+    0000009A 20r00r00         [ 6]  294 	jsr	_printf
+    0000009D 68               [ 4]  295 	pla
+    0000009E 68               [ 4]  296 	pla
+    0000009F 68               [ 4]  297 	pla
+    000000A0 68               [ 4]  298 	pla
+                                    299 ;	Raw cost for generated ic 39 : (7, 22.000000) count=1.000000
+                                    300 ;	src/banks.c: 52: printf("Var_3 is %u\n", var_3);
+                                    301 ;	skipping iCode since result will be rematerialized
+                                    302 ;	Raw cost for generated ic 40 : (0, 0.000000) count=1.000000
+                                    303 ;	skipping iCode since result will be rematerialized
+                                    304 ;	Raw cost for generated ic 41 : (0, 0.000000) count=1.000000
+                                    305 ;	genIpush
+    000000A1 ADr01r00         [ 4]  306 	lda	(_var_3 + 1)
+    000000A4 48               [ 3]  307 	pha
+    000000A5 ADr00r00         [ 4]  308 	lda	_var_3
+    000000A8 48               [ 3]  309 	pha
+                                    310 ;	Raw cost for generated ic 42 : (8, 14.000000) count=1.000000
+                                    311 ;	genIpush
+    000000A9 A9s01            [ 2]  312 	lda	#>___str_6
+    000000AB 48               [ 3]  313 	pha
+    000000AC A9r11            [ 2]  314 	lda	#___str_6
+    000000AE 48               [ 3]  315 	pha
+                                    316 ;	Raw cost for generated ic 43 : (6, 10.000000) count=1.000000
+                                    317 ;	genCall
+    000000AF 20r00r00         [ 6]  318 	jsr	_printf
+    000000B2 68               [ 4]  319 	pla
+    000000B3 68               [ 4]  320 	pla
+    000000B4 68               [ 4]  321 	pla
+    000000B5 68               [ 4]  322 	pla
+                                    323 ;	Raw cost for generated ic 44 : (7, 22.000000) count=1.000000
+                                    324 ;	src/banks.c: 54: puts("The End...");
+                                    325 ;	skipping iCode since result will be rematerialized
+                                    326 ;	Raw cost for generated ic 45 : (0, 0.000000) count=1.000000
+                                    327 ;	skipping iCode since result will be rematerialized
+                                    328 ;	Raw cost for generated ic 46 : (0, 0.000000) count=1.000000
+                                    329 ;	Raw cost for generated ic 47 : (0, 0.000000) count=1.000000
+                                    330 ;	genCall
+                                    331 ;	genSend
+    000000B6 A2s01            [ 2]  332 	ldx	#>___str_7
+    000000B8 A9r1E            [ 2]  333 	lda	#___str_7
+                                    334 ;	Raw cost for generated ic 48 : (7, 10.000000) count=1.000000
+                                    335 ;	genLabel
+                                    336 ;	Raw cost for generated ic 49 : (0, 0.000000) count=1.000000
+                                    337 ;	src/banks.c: 55: }
+                                    338 ;	genEndFunction
+    000000BA 4Cr00r00         [ 3]  339 	jmp	_puts
+                                    340 ;	Raw cost for generated ic 50 : (1, 6.000000) count=1.000000
+                                    341 	.area _CODE
+    000000BD                        342 ___str_0:
+    000000BD 49 27 6D 20 69 6E 20   343 	.ascii "I'm in fixed ROM"
+             66 69 78 65 64 20 52
+             4F 4D
+    000000CD 00                     344 	.db 0x00
+    000000CE                        345 ___str_1:
+    000000CE 50 72 6F 67 72 61 6D   346 	.ascii "Program Start..."
+             20 53 74 61 72 74 2E
+             2E 2E
+    000000DE 00                     347 	.db 0x00
+    000000DF                        348 ___str_2:
+    000000DF 56 61 72 20 69 73 20   349 	.ascii "Var is %u"
+             25 75
+    000000E8 0A                     350 	.db 0x0a
+    000000E9 00                     351 	.db 0x00
+    000000EA                        352 ___str_3:
+    000000EA 56 61 72 5F 30 20 69   353 	.ascii "Var_0 is %u"
+             73 20 25 75
+    000000F5 0A                     354 	.db 0x0a
+    000000F6 00                     355 	.db 0x00
+    000000F7                        356 ___str_4:
+    000000F7 56 61 72 5F 31 20 69   357 	.ascii "Var_1 is %u"
+             73 20 25 75
+    00000102 0A                     358 	.db 0x0a
+    00000103 00                     359 	.db 0x00
+    00000104                        360 ___str_5:
+    00000104 56 61 72 5F 32 20 69   361 	.ascii "Var_2 is %u"
+             73 20 25 75
+    0000010F 0A                     362 	.db 0x0a
+    00000110 00                     363 	.db 0x00
+    00000111                        364 ___str_6:
+    00000111 56 61 72 5F 33 20 69   365 	.ascii "Var_3 is %u"
+             73 20 25 75
+    0000011C 0A                     366 	.db 0x0a
+    0000011D 00                     367 	.db 0x00
+    0000011E                        368 ___str_7:
+    0000011E 54 68 65 20 45 6E 64   369 	.ascii "The End..."
+             2E 2E 2E
+    00000128 00                     370 	.db 0x00
+                                    371 	.area _XINIT
+                                    372 	.area _CABS    (ABS)

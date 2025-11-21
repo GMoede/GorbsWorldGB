@@ -1,0 +1,223 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module irq
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _print_counter
+                                     12 	.globl _tim
+                                     13 	.globl _vbl
+                                     14 	.globl _printf
+                                     15 	.globl _posy
+                                     16 	.globl _gotoxy
+                                     17 	.globl _vsync
+                                     18 	.globl _add_TIM
+                                     19 	.globl _add_VBL
+                                     20 	.globl _set_interrupts
+                                     21 	.globl _tim_cnt
+                                     22 	.globl _vbl_cnt
+                                     23 ;--------------------------------------------------------
+                                     24 ; special function registers
+                                     25 ;--------------------------------------------------------
+                         00000000    26 _GG_STATE	=	0x0000
+                         00000001    27 _GG_EXT_7BIT	=	0x0001
+                         00000002    28 _GG_EXT_CTL	=	0x0002
+                         00000003    29 _GG_SIO_SEND	=	0x0003
+                         00000004    30 _GG_SIO_RECV	=	0x0004
+                         00000005    31 _GG_SIO_CTL	=	0x0005
+                         00000006    32 _GG_SOUND_PAN	=	0x0006
+                         0000003E    33 _MEMORY_CTL	=	0x003e
+                         0000003F    34 _JOY_CTL	=	0x003f
+                         0000007E    35 _VCOUNTER	=	0x007e
+                         0000007F    36 _PSG	=	0x007f
+                         0000007F    37 _HCOUNTER	=	0x007f
+                         000000BE    38 _VDP_DATA	=	0x00be
+                         000000BF    39 _VDP_CMD	=	0x00bf
+                         000000BF    40 _VDP_STATUS	=	0x00bf
+                         000000DC    41 _JOY_PORT1	=	0x00dc
+                         000000DD    42 _JOY_PORT2	=	0x00dd
+                         000000F0    43 _FMADDRESS	=	0x00f0
+                         000000F1    44 _FMDATA	=	0x00f1
+                         000000F2    45 _AUDIOCTRL	=	0x00f2
+                                     46 ;--------------------------------------------------------
+                                     47 ; ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _DATA
+                         0000FFFC    50 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    51 _GLASSES_3D	=	0xfff8
+                         0000FFFD    52 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    53 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    54 _MAP_FRAME2	=	0xffff
+    00000000                         55 _vbl_cnt::
+    00000000                         56 	.ds 2
+    00000002                         57 _tim_cnt::
+    00000002                         58 	.ds 2
+                                     59 ;--------------------------------------------------------
+                                     60 ; ram data
+                                     61 ;--------------------------------------------------------
+                                     62 	.area _INITIALIZED
+                                     63 ;--------------------------------------------------------
+                                     64 ; absolute external ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _DABS (ABS)
+                                     67 ;--------------------------------------------------------
+                                     68 ; global & static initialisations
+                                     69 ;--------------------------------------------------------
+                                     70 	.area _HOME
+                                     71 	.area _GSINIT
+                                     72 	.area _GSFINAL
+                                     73 	.area _GSINIT
+                                     74 ;--------------------------------------------------------
+                                     75 ; Home
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _HOME
+                                     78 	.area _HOME
+                                     79 ;--------------------------------------------------------
+                                     80 ; code
+                                     81 ;--------------------------------------------------------
+                                     82 	.area _CODE
+                                     83 ;src/irq.c:11: void vbl(void)
+                                     84 ;	---------------------------------
+                                     85 ; Function vbl
+                                     86 ; ---------------------------------
+    00000000                         87 _vbl::
+                                     88 ;src/irq.c:14: vbl_cnt++;
+    00000000 2Ar00r00         [16]   89 	ld	hl, (_vbl_cnt)
+    00000003 23               [ 6]   90 	inc	hl
+    00000004 22r00r00         [16]   91 	ld	(_vbl_cnt), hl
+                                     92 ;src/irq.c:15: }
+    00000007 C9               [10]   93 	ret
+                                     94 ;src/irq.c:23: void tim(void)
+                                     95 ;	---------------------------------
+                                     96 ; Function tim
+                                     97 ; ---------------------------------
+    00000008                         98 _tim::
+                                     99 ;src/irq.c:26: tim_cnt++;
+    00000008 2Ar02r00         [16]  100 	ld	hl, (_tim_cnt)
+    0000000B 23               [ 6]  101 	inc	hl
+    0000000C 22r02r00         [16]  102 	ld	(_tim_cnt), hl
+                                    103 ;src/irq.c:27: }
+    0000000F C9               [10]  104 	ret
+                                    105 ;src/irq.c:32: void print_counter(void)
+                                    106 ;	---------------------------------
+                                    107 ; Function print_counter
+                                    108 ; ---------------------------------
+    00000010                        109 _print_counter::
+                                    110 ;src/irq.c:39: }
+    00000010 ED 57            [ 9]  111 	ld	a,i
+    00000012 F3               [ 4]  112 	di
+    00000013 F5               [11]  113 	push	af
+                                    114 ;src/irq.c:38: cnt = tim_cnt; 
+    00000014 2Ar02r00         [16]  115 	ld	hl, (_tim_cnt)
+    00000017 F1               [10]  116 	pop	af
+    00000018 E2r1Cr00         [10]  117 	jp	PO, 00104$
+    0000001B FB               [ 4]  118 	ei
+    0000001C                        119 00104$:
+                                    120 ;src/irq.c:41: printf(" TIM %u", cnt);
+    0000001C 01r48r00         [10]  121 	ld	bc, #___str_0+0
+    0000001F E5               [11]  122 	push	hl
+    00000020 C5               [11]  123 	push	bc
+    00000021 CDr00r00         [17]  124 	call	_printf
+    00000024 F1               [10]  125 	pop	af
+    00000025 F1               [10]  126 	pop	af
+                                    127 ;src/irq.c:42: gotoxy(9, posy());
+    00000026 CDr00r00         [17]  128 	call	_posy
+    00000029 65               [ 4]  129 	ld	h, l
+    0000002A 2E 09            [ 7]  130 	ld	l, #0x09
+    0000002C E5               [11]  131 	push	hl
+    0000002D CDr00r00         [17]  132 	call	_gotoxy
+    00000030 F1               [10]  133 	pop	af
+                                    134 ;src/irq.c:47: }
+    00000031 ED 57            [ 9]  135 	ld	a,i
+    00000033 F3               [ 4]  136 	di
+    00000034 F5               [11]  137 	push	af
+                                    138 ;src/irq.c:46: cnt = vbl_cnt; 
+    00000035 2Ar00r00         [16]  139 	ld	hl, (_vbl_cnt)
+    00000038 F1               [10]  140 	pop	af
+    00000039 E2r3Dr00         [10]  141 	jp	PO, 00106$
+    0000003C FB               [ 4]  142 	ei
+    0000003D                        143 00106$:
+                                    144 ;src/irq.c:49: printf("- VBL %u\n", cnt);
+    0000003D 01r50r00         [10]  145 	ld	bc, #___str_1+0
+    00000040 E5               [11]  146 	push	hl
+    00000041 C5               [11]  147 	push	bc
+    00000042 CDr00r00         [17]  148 	call	_printf
+    00000045 F1               [10]  149 	pop	af
+    00000046 F1               [10]  150 	pop	af
+                                    151 ;src/irq.c:50: }
+    00000047 C9               [10]  152 	ret
+    00000048                        153 ___str_0:
+    00000048 20 54 49 4D 20 25 75   154 	.ascii " TIM %u"
+    0000004F 00                     155 	.db 0x00
+    00000050                        156 ___str_1:
+    00000050 2D 20 56 42 4C 20 25   157 	.ascii "- VBL %u"
+             75
+    00000058 0A                     158 	.db 0x0a
+    00000059 00                     159 	.db 0x00
+                                    160 ;src/irq.c:52: void main(void)
+                                    161 ;	---------------------------------
+                                    162 ; Function main
+                                    163 ; ---------------------------------
+    0000005A                        164 _main::
+                                    165 ;src/irq.c:74: }
+    0000005A ED 57            [ 9]  166 	ld	a,i
+    0000005C F3               [ 4]  167 	di
+    0000005D F5               [11]  168 	push	af
+                                    169 ;src/irq.c:71: vbl_cnt = tim_cnt = 0;
+    0000005E 21 00 00         [10]  170 	ld	hl, #0x0000
+    00000061 22r02r00         [16]  171 	ld	(_tim_cnt), hl
+    00000064 22r00r00         [16]  172 	ld	(_vbl_cnt), hl
+                                    173 ;src/irq.c:72: add_VBL(vbl);
+    00000067 21r00r00         [10]  174 	ld	hl, #_vbl
+    0000006A CDr00r00         [17]  175 	call	_add_VBL
+                                    176 ;src/irq.c:73: add_TIM(tim);
+    0000006D 21r08r00         [10]  177 	ld	hl, #_tim
+    00000070 CDr00r00         [17]  178 	call	_add_TIM
+    00000073 F1               [10]  179 	pop	af
+    00000074 E2r78r00         [10]  180 	jp	PO, 00142$
+    00000077 FB               [ 4]  181 	ei
+    00000078                        182 00142$:
+                                    183 ;src/irq.c:82: TMA_REG = 0xFCU;
+    00000078 21r00r00         [10]  184 	ld	hl, #_TMA_REG
+    0000007B 36 FC            [10]  185 	ld	(hl), #0xfc
+                                    186 ;src/irq.c:86: set_interrupts(VBL_IFLAG | TIM_IFLAG);
+    0000007D 2E 05            [ 7]  187 	ld	l, #0x05
+    0000007F CDr00r00         [17]  188 	call	_set_interrupts
+    00000082                        189 00107$:
+                                    190 ;src/irq.c:89: uint8_t num_frames = (get_system() == SYSTEM_50HZ) ? 50 : 60;
+    00000082 3Ar00r00         [13]  191 	ld	a, (__SYSTEM)
+    00000085 3D               [ 4]  192 	dec	a
+    00000086 0E 32            [ 7]  193 	ld	c, #0x32
+    00000088 28 02            [12]  194 	jr	Z, 00112$
+    0000008A 0E 3C            [ 7]  195 	ld	c, #0x3c
+    0000008C                        196 00112$:
+                                    197 ;src/irq.c:90: print_counter();
+    0000008C C5               [11]  198 	push	bc
+    0000008D CDr10r00         [17]  199 	call	_print_counter
+    00000090 C1               [10]  200 	pop	bc
+                                    201 ;src/irq.c:92: for(int i = 0; i < num_frames; i++) {
+    00000091 11 00 00         [10]  202 	ld	de, #0x0000
+    00000094                        203 00105$:
+    00000094 41               [ 4]  204 	ld	b, c
+    00000095 2E 00            [ 7]  205 	ld	l, #0x00
+    00000097 7B               [ 4]  206 	ld	a, e
+    00000098 90               [ 4]  207 	sub	a, b
+    00000099 7A               [ 4]  208 	ld	a, d
+    0000009A 9D               [ 4]  209 	sbc	a, l
+    0000009B E2rA0r00         [10]  210 	jp	PO, 00145$
+    0000009E EE 80            [ 7]  211 	xor	a, #0x80
+    000000A0                        212 00145$:
+    000000A0 F2r82r00         [10]  213 	jp	P, 00107$
+                                    214 ;src/irq.c:93: vsync();
+    000000A3 CDr00r00         [17]  215 	call	_vsync
+                                    216 ;src/irq.c:92: for(int i = 0; i < num_frames; i++) {
+    000000A6 13               [ 6]  217 	inc	de
+                                    218 ;src/irq.c:96: }
+    000000A7 18 EB            [12]  219 	jr	00105$
+                                    220 	.area _CODE
+                                    221 	.area _INITIALIZER
+                                    222 	.area _CABS (ABS)

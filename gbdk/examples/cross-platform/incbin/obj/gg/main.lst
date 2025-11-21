@@ -1,0 +1,226 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _init_gfx
+                                     12 	.globl b___func_blank_tile_data
+                                     13 	.globl ___func_blank_tile_data
+                                     14 	.globl b___func_logo_map
+                                     15 	.globl ___func_logo_map
+                                     16 	.globl b___func_logo_tiles_data
+                                     17 	.globl ___func_logo_tiles_data
+                                     18 	.globl _fill_rect_compat
+                                     19 	.globl _set_tile_map_compat
+                                     20 	.globl _set_tile_2bpp_data
+                                     21 	.globl _vsync
+                                     22 ;--------------------------------------------------------
+                                     23 ; special function registers
+                                     24 ;--------------------------------------------------------
+                         00000000    25 _GG_STATE	=	0x0000
+                         00000001    26 _GG_EXT_7BIT	=	0x0001
+                         00000002    27 _GG_EXT_CTL	=	0x0002
+                         00000003    28 _GG_SIO_SEND	=	0x0003
+                         00000004    29 _GG_SIO_RECV	=	0x0004
+                         00000005    30 _GG_SIO_CTL	=	0x0005
+                         00000006    31 _GG_SOUND_PAN	=	0x0006
+                         0000003E    32 _MEMORY_CTL	=	0x003e
+                         0000003F    33 _JOY_CTL	=	0x003f
+                         0000007E    34 _VCOUNTER	=	0x007e
+                         0000007F    35 _PSG	=	0x007f
+                         0000007F    36 _HCOUNTER	=	0x007f
+                         000000BE    37 _VDP_DATA	=	0x00be
+                         000000BF    38 _VDP_CMD	=	0x00bf
+                         000000BF    39 _VDP_STATUS	=	0x00bf
+                         000000DC    40 _JOY_PORT1	=	0x00dc
+                         000000DD    41 _JOY_PORT2	=	0x00dd
+                         000000F0    42 _FMADDRESS	=	0x00f0
+                         000000F1    43 _FMDATA	=	0x00f1
+                         000000F2    44 _AUDIOCTRL	=	0x00f2
+                                     45 ;--------------------------------------------------------
+                                     46 ; ram data
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _DATA
+                         0000FFFC    49 _RAM_CONTROL	=	0xfffc
+                         0000FFF8    50 _GLASSES_3D	=	0xfff8
+                         0000FFFD    51 _MAP_FRAME0	=	0xfffd
+                         0000FFFE    52 _MAP_FRAME1	=	0xfffe
+                         0000FFFF    53 _MAP_FRAME2	=	0xffff
+                                     54 ;--------------------------------------------------------
+                                     55 ; ram data
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _INITIALIZED
+                                     58 ;--------------------------------------------------------
+                                     59 ; absolute external ram data
+                                     60 ;--------------------------------------------------------
+                                     61 	.area _DABS (ABS)
+                                     62 ;--------------------------------------------------------
+                                     63 ; global & static initialisations
+                                     64 ;--------------------------------------------------------
+                                     65 	.area _HOME
+                                     66 	.area _GSINIT
+                                     67 	.area _GSFINAL
+                                     68 	.area _GSINIT
+                                     69 ;--------------------------------------------------------
+                                     70 ; Home
+                                     71 ;--------------------------------------------------------
+                                     72 	.area _HOME
+                                     73 	.area _HOME
+                                     74 ;--------------------------------------------------------
+                                     75 ; code
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _CODE
+                                     78 ;src/main.c:6: INCBIN(logo_tiles_data, "res/gbdk2020.bin") // Variable name to use, Path to file
+                                     79 ;	---------------------------------
+                                     80 ; Function __func_logo_tiles_data
+                                     81 ; ---------------------------------
+                         00000000    82 	b___func_logo_tiles_data	= 0
+    00000000                         83 ___func_logo_tiles_data::
+    00000000                         84 _logo_tiles_data::
+    00000000                         85 1$:
+    00000000 3F 3F 60 7F C0 C0 80    86 	.incbin "res/gbdk2020.bin" 
+             C0 80 C0 80 C0 80 C0
+             80 C0 FF FF 00 FF 00
+             00 00 00 00 00 00 00
+             00 00 00 00 FC FC 06
+             FE 03 03 01 03 01 03
+             01 03 01 03 01 03 80
+             C0 83 C3 83 C7 83 C7
+             83 C7 83 C7 83 C7 83
+             C7 00 00 FF FF FF FF
+             FF FF FF FF F8 FF FF
+             F8 FF F8 00 00 FF FF
+             FF FF FF FF FF FF 00
+             FF FF 00 FF 00 00 00
+             FF FF FF FF FF FF FF
+             FF 0F FF EF 1F EF 1F
+             01 03 C1 C3 C1 C3 C1
+             C3 C1 C3 C1 C3 C1 C3
+             C1 C3
+    00000320                         87 2$:
+                         00000320    88 	___size_logo_tiles_data = (2$-1$) 
+                                     89 	.globl ___size_logo_tiles_data 
+                                     90 	.local b___func_logo_tiles_data 
+                         00000000    91 	___bank_logo_tiles_data = b___func_logo_tiles_data 
+                                     92 	.globl ___bank_logo_tiles_data 
+                                     93 ;src/main.c:9: INCBIN(logo_map, "res/gbdk2020_map.bin")
+                                     94 ;	---------------------------------
+                                     95 ; Function __func_logo_map
+                                     96 ; ---------------------------------
+                         00000000    97 	b___func_logo_map	= 0
+    00000320                         98 ___func_logo_map::
+    00000320                         99 _logo_map::
+    00000320                        100 1$:
+    00000320 00 01 01 01 01 01 02   101 	.incbin "res/gbdk2020_map.bin" 
+             03 04 05 05 05 06 07
+             08 09 0A 0A 0A 0B 0C
+             0D 0E 0A 0A 0A 0B 0C
+             0D 0E 0A 0A 0A 0B 0C
+             0F 10 11 11 11 12 13
+             14 15 15 15 15 15 16
+             17 18 19 15 1A 1B 1C
+             1D 1E 1F 15 20 21 22
+             14 15 23 24 25 26 27
+             14 15 28 29 2A 2B 2C
+             2D 2E 2E 2E 2F 30 31
+    00000374                        102 2$:
+                         00000054   103 	___size_logo_map = (2$-1$) 
+                                    104 	.globl ___size_logo_map 
+                                    105 	.local b___func_logo_map 
+                         00000000   106 	___bank_logo_map = b___func_logo_map 
+                                    107 	.globl ___bank_logo_map 
+                                    108 ;src/main.c:12: INCBIN(blank_tile_data, "res/blanktile.bin")
+                                    109 ;	---------------------------------
+                                    110 ; Function __func_blank_tile_data
+                                    111 ; ---------------------------------
+                         00000000   112 	b___func_blank_tile_data	= 0
+    00000374                        113 ___func_blank_tile_data::
+    00000374                        114 _blank_tile_data::
+    00000374                        115 1$:
+    00000374 00 00 00 00 00 00 00   116 	.incbin "res/blanktile.bin" 
+             00 00 00 00 00 00 00
+             00 00
+    00000384                        117 2$:
+                         00000010   118 	___size_blank_tile_data = (2$-1$) 
+                                    119 	.globl ___size_blank_tile_data 
+                                    120 	.local b___func_blank_tile_data 
+                         00000000   121 	___bank_blank_tile_data = b___func_blank_tile_data 
+                                    122 	.globl ___bank_blank_tile_data 
+                                    123 ;src/main.c:28: void init_gfx(void) {
+                                    124 ;	---------------------------------
+                                    125 ; Function init_gfx
+                                    126 ; ---------------------------------
+    00000384                        127 _init_gfx::
+                                    128 ;src/main.c:30: set_bkg_data(0x80u, 1u, blank_tile_data); // The first 0x80u here is the tile ID
+                                    129 ;../../../include/sms/sms.h:641: set_tile_2bpp_data(start, ntiles, src, _current_2bpp_palette);
+    00000384 2Ar00r00         [16]  130 	ld	hl, (__current_2bpp_palette)
+    00000387 E5               [11]  131 	push	hl
+    00000388 21r74r03         [10]  132 	ld	hl, #_blank_tile_data
+    0000038B E5               [11]  133 	push	hl
+    0000038C 21 01 00         [10]  134 	ld	hl, #0x0001
+    0000038F E5               [11]  135 	push	hl
+    00000390 2E 80            [ 7]  136 	ld	l, #0x80
+    00000392 E5               [11]  137 	push	hl
+    00000393 CDr00r00         [17]  138 	call	_set_tile_2bpp_data
+                                    139 ;src/main.c:31: fill_bkg_rect(0u, 0u, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, 0x80u);   // The last 0x80u here is the tile ID 
+    00000396 21 80 00         [10]  140 	ld	hl, #0x0080
+    00000399 E5               [11]  141 	push	hl
+    0000039A 21 14 12         [10]  142 	ld	hl, #0x1214
+    0000039D E5               [11]  143 	push	hl
+    0000039E 21 00 00         [10]  144 	ld	hl, #0x00
+    000003A1 E5               [11]  145 	push	hl
+    000003A2 CDr00r00         [17]  146 	call	_fill_rect_compat
+                                    147 ;src/main.c:35: set_bkg_data(0u, INCBIN_SIZE(logo_tiles_data) / TILE_BYTES, logo_tiles_data);
+    000003A5 21r00r00         [10]  148 	ld	hl, #___size_logo_tiles_data+0
+    000003A8 AF               [ 4]  149 	xor	a, a
+    000003A9 29               [11]  150 	add	hl, hl
+    000003AA 17               [ 4]  151 	rla
+    000003AB 29               [11]  152 	add	hl, hl
+    000003AC 17               [ 4]  153 	rla
+    000003AD 29               [11]  154 	add	hl, hl
+    000003AE 17               [ 4]  155 	rla
+    000003AF 29               [11]  156 	add	hl, hl
+    000003B0 17               [ 4]  157 	rla
+    000003B1 47               [ 4]  158 	ld	b, a
+    000003B2 4C               [ 4]  159 	ld	c, h
+                                    160 ;../../../include/sms/sms.h:641: set_tile_2bpp_data(start, ntiles, src, _current_2bpp_palette);
+    000003B3 2Ar00r00         [16]  161 	ld	hl, (__current_2bpp_palette)
+    000003B6 E5               [11]  162 	push	hl
+    000003B7 21r00r00         [10]  163 	ld	hl, #_logo_tiles_data
+    000003BA E5               [11]  164 	push	hl
+    000003BB C5               [11]  165 	push	bc
+    000003BC 21 00 00         [10]  166 	ld	hl, #0x0000
+    000003BF E5               [11]  167 	push	hl
+    000003C0 CDr00r00         [17]  168 	call	_set_tile_2bpp_data
+                                    169 ;src/main.c:38: logo_map);
+                                    170 ;src/main.c:36: set_bkg_tiles(LOGO_MAP_X, LOGO_MAP_Y,
+    000003C3 21r20r03         [10]  171 	ld	hl, #_logo_map
+    000003C6 E5               [11]  172 	push	hl
+    000003C7 21 07 0C         [10]  173 	ld	hl, #0xc07
+    000003CA E5               [11]  174 	push	hl
+    000003CB 21 06 03         [10]  175 	ld	hl, #0x306
+    000003CE E5               [11]  176 	push	hl
+    000003CF CDr00r00         [17]  177 	call	_set_tile_map_compat
+                                    178 ;src/main.c:42: }
+    000003D2 C9               [10]  179 	ret
+                                    180 ;src/main.c:46: void main(void)
+                                    181 ;	---------------------------------
+                                    182 ; Function main
+                                    183 ; ---------------------------------
+    000003D3                        184 _main::
+                                    185 ;src/main.c:48: init_gfx();
+    000003D3 CDr84r03         [17]  186 	call	_init_gfx
+                                    187 ;src/main.c:51: while(1) {
+    000003D6                        188 00102$:
+                                    189 ;src/main.c:56: vsync();
+    000003D6 CDr00r00         [17]  190 	call	_vsync
+                                    191 ;src/main.c:58: }
+    000003D9 18 FB            [12]  192 	jr	00102$
+                                    193 	.area _CODE
+                                    194 	.area _INITIALIZER
+                                    195 	.area _CABS (ABS)

@@ -1,0 +1,481 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;--------------------------------------------------------
+                                      8 ; Public variables in this module
+                                      9 ;--------------------------------------------------------
+                                     10 	.globl _main
+                                     11 	.globl _duck_io_get_rtc
+                                     12 	.globl _duck_io_set_rtc
+                                     13 	.globl _duck_io_laptop_init
+                                     14 	.globl _puts
+                                     15 	.globl _printf
+                                     16 	.globl _gotoxy
+                                     17 	.globl _vsync
+                                     18 	.globl _waitpadup
+                                     19 	.globl _joypad
+                                     20 	.globl _rtc
+                                     21 ;--------------------------------------------------------
+                                     22 ; special function registers
+                                     23 ;--------------------------------------------------------
+                                     24 ;--------------------------------------------------------
+                                     25 ; ram data
+                                     26 ;--------------------------------------------------------
+                                     27 	.area _DATA
+    00000000                         28 _rtc::
+    00000000                         29 	.ds 9
+                                     30 ;--------------------------------------------------------
+                                     31 ; ram data
+                                     32 ;--------------------------------------------------------
+                                     33 	.area _INITIALIZED
+                                     34 ;--------------------------------------------------------
+                                     35 ; absolute external ram data
+                                     36 ;--------------------------------------------------------
+                                     37 	.area _DABS (ABS)
+                                     38 ;--------------------------------------------------------
+                                     39 ; global & static initialisations
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _HOME
+                                     42 	.area _GSINIT
+                                     43 	.area _GSFINAL
+                                     44 	.area _GSINIT
+                                     45 ;--------------------------------------------------------
+                                     46 ; Home
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _HOME
+                                     49 	.area _HOME
+                                     50 ;--------------------------------------------------------
+                                     51 ; code
+                                     52 ;--------------------------------------------------------
+                                     53 	.area _CODE
+                                     54 ;src/main.c:20: static void use_rtc_data(duck_rtc_data_t * p_rtc) {
+                                     55 ;	---------------------------------
+                                     56 ; Function use_rtc_data
+                                     57 ; ---------------------------------
+    00000000                         58 _use_rtc_data:
+    00000000 E8 E0            [16]   59 	add	sp, #-32
+    00000002 4B               [ 4]   60 	ld	c, e
+    00000003 42               [ 4]   61 	ld	b, d
+                                     62 ;src/main.c:22: const char * ampm_str[] = {"am", "pm"};
+    00000004 F8 00            [12]   63 	ldhl	sp,	#0
+    00000006 3ErEC            [ 8]   64 	ld	a, #<(___str_0)
+    00000008 22               [ 8]   65 	ld	(hl+), a
+    00000009 3Es00            [ 8]   66 	ld	a, #>(___str_0)
+    0000000B 22               [ 8]   67 	ld	(hl+), a
+    0000000C 3ErEF            [ 8]   68 	ld	a, #<(___str_1)
+    0000000E 22               [ 8]   69 	ld	(hl+), a
+                                     70 ;src/main.c:23: const char * dow_str[]  = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    0000000F 3Es00            [ 8]   71 	ld	a, #>(___str_1)
+    00000011 22               [ 8]   72 	ld	(hl+), a
+    00000012 3ErF2            [ 8]   73 	ld	a, #<(___str_2)
+    00000014 22               [ 8]   74 	ld	(hl+), a
+    00000015 3Es00            [ 8]   75 	ld	a, #>(___str_2)
+    00000017 22               [ 8]   76 	ld	(hl+), a
+    00000018 3ErF9            [ 8]   77 	ld	a, #<(___str_3)
+    0000001A 22               [ 8]   78 	ld	(hl+), a
+    0000001B 3Es00            [ 8]   79 	ld	a, #>(___str_3)
+    0000001D 22               [ 8]   80 	ld	(hl+), a
+    0000001E 3Er00            [ 8]   81 	ld	a, #<(___str_4)
+    00000020 22               [ 8]   82 	ld	(hl+), a
+    00000021 3Es01            [ 8]   83 	ld	a, #>(___str_4)
+    00000023 22               [ 8]   84 	ld	(hl+), a
+    00000024 3Er08            [ 8]   85 	ld	a, #<(___str_5)
+    00000026 22               [ 8]   86 	ld	(hl+), a
+    00000027 3Es01            [ 8]   87 	ld	a, #>(___str_5)
+    00000029 22               [ 8]   88 	ld	(hl+), a
+    0000002A 3Er12            [ 8]   89 	ld	a, #<(___str_6)
+    0000002C 22               [ 8]   90 	ld	(hl+), a
+    0000002D 3Es01            [ 8]   91 	ld	a, #>(___str_6)
+    0000002F 22               [ 8]   92 	ld	(hl+), a
+    00000030 3Er1B            [ 8]   93 	ld	a, #<(___str_7)
+    00000032 22               [ 8]   94 	ld	(hl+), a
+    00000033 3Es01            [ 8]   95 	ld	a, #>(___str_7)
+    00000035 22               [ 8]   96 	ld	(hl+), a
+    00000036 3Er22            [ 8]   97 	ld	a, #<(___str_8)
+    00000038 22               [ 8]   98 	ld	(hl+), a
+    00000039 36s01            [12]   99 	ld	(hl), #>(___str_8)
+                                    100 ;src/main.c:25: gotoxy(0,6);
+    0000003B C5               [16]  101 	push	bc
+    0000003C 21 00 06         [12]  102 	ld	hl, #0x600
+    0000003F E5               [16]  103 	push	hl
+    00000040 CDr00r00         [24]  104 	call	_gotoxy
+    00000043 E1               [12]  105 	pop	hl
+    00000044 C1               [12]  106 	pop	bc
+                                    107 ;src/main.c:40: ampm_str[p_rtc->ampm] );
+    00000045 21 05 00         [12]  108 	ld	hl, #0x0005
+    00000048 09               [ 8]  109 	add	hl, bc
+    00000049 6E               [ 8]  110 	ld	l, (hl)
+    0000004A 26 00            [ 8]  111 	ld	h, #0x00
+    0000004C 29               [ 8]  112 	add	hl, hl
+    0000004D 5D               [ 4]  113 	ld	e, l
+    0000004E 54               [ 4]  114 	ld	d, h
+    0000004F 21 00 00         [12]  115 	ld	hl, #0
+    00000052 39               [ 8]  116 	add	hl, sp
+    00000053 19               [ 8]  117 	add	hl, de
+    00000054 5D               [ 4]  118 	ld	e, l
+    00000055 54               [ 4]  119 	ld	d, h
+    00000056 1A               [ 8]  120 	ld	a, (de)
+    00000057 F8 12            [12]  121 	ldhl	sp,	#18
+    00000059 22               [ 8]  122 	ld	(hl+), a
+    0000005A 13               [ 8]  123 	inc	de
+    0000005B 1A               [ 8]  124 	ld	a, (de)
+    0000005C 77               [ 8]  125 	ld	(hl), a
+                                    126 ;src/main.c:39: (uint16_t)p_rtc->sec,
+    0000005D 21 08 00         [12]  127 	ld	hl, #0x0008
+    00000060 09               [ 8]  128 	add	hl, bc
+    00000061 7E               [ 8]  129 	ld	a, (hl)
+    00000062 F8 14            [12]  130 	ldhl	sp,	#20
+    00000064 22               [ 8]  131 	ld	(hl+), a
+    00000065 36 00            [12]  132 	ld	(hl), #0x00
+                                    133 ;src/main.c:38: (uint16_t)p_rtc->min,
+    00000067 21 07 00         [12]  134 	ld	hl, #0x0007
+    0000006A 09               [ 8]  135 	add	hl, bc
+    0000006B 7E               [ 8]  136 	ld	a, (hl)
+    0000006C F8 16            [12]  137 	ldhl	sp,	#22
+    0000006E 22               [ 8]  138 	ld	(hl+), a
+    0000006F 36 00            [12]  139 	ld	(hl), #0x00
+                                    140 ;src/main.c:37: (uint16_t)p_rtc->hour,
+    00000071 21 06 00         [12]  141 	ld	hl, #0x0006
+    00000074 09               [ 8]  142 	add	hl, bc
+    00000075 7E               [ 8]  143 	ld	a, (hl)
+    00000076 F8 18            [12]  144 	ldhl	sp,	#24
+    00000078 22               [ 8]  145 	ld	(hl+), a
+    00000079 36 00            [12]  146 	ld	(hl), #0x00
+                                    147 ;src/main.c:35: (uint16_t)dow_str[p_rtc->weekday],
+    0000007B 21 04 00         [12]  148 	ld	hl, #0x0004
+    0000007E 09               [ 8]  149 	add	hl, bc
+    0000007F 6E               [ 8]  150 	ld	l, (hl)
+    00000080 26 00            [ 8]  151 	ld	h, #0x00
+    00000082 29               [ 8]  152 	add	hl, hl
+    00000083 5D               [ 4]  153 	ld	e, l
+    00000084 54               [ 4]  154 	ld	d, h
+    00000085 21 04 00         [12]  155 	ld	hl, #4
+    00000088 39               [ 8]  156 	add	hl, sp
+    00000089 19               [ 8]  157 	add	hl, de
+    0000008A 5D               [ 4]  158 	ld	e, l
+    0000008B 54               [ 4]  159 	ld	d, h
+    0000008C 1A               [ 8]  160 	ld	a, (de)
+    0000008D F8 1E            [12]  161 	ldhl	sp,	#30
+    0000008F 22               [ 8]  162 	ld	(hl+), a
+    00000090 13               [ 8]  163 	inc	de
+    00000091 1A               [ 8]  164 	ld	a, (de)
+    00000092 77               [ 8]  165 	ld	(hl), a
+    00000093 F8 1E            [12]  166 	ldhl	sp,	#30
+    00000095 7E               [ 8]  167 	ld	a, (hl)
+    00000096 F8 1A            [12]  168 	ldhl	sp,	#26
+    00000098 77               [ 8]  169 	ld	(hl), a
+    00000099 F8 1F            [12]  170 	ldhl	sp,	#31
+    0000009B 7E               [ 8]  171 	ld	a, (hl)
+    0000009C F8 1B            [12]  172 	ldhl	sp,	#27
+    0000009E 77               [ 8]  173 	ld	(hl), a
+                                    174 ;src/main.c:34: (uint16_t)p_rtc->day,
+    0000009F 69               [ 4]  175 	ld	l, c
+    000000A0 60               [ 4]  176 	ld	h, b
+    000000A1 23               [ 8]  177 	inc	hl
+    000000A2 23               [ 8]  178 	inc	hl
+    000000A3 23               [ 8]  179 	inc	hl
+    000000A4 7E               [ 8]  180 	ld	a, (hl)
+    000000A5 F8 1C            [12]  181 	ldhl	sp,	#28
+    000000A7 22               [ 8]  182 	ld	(hl+), a
+    000000A8 36 00            [12]  183 	ld	(hl), #0x00
+                                    184 ;src/main.c:33: (uint16_t)p_rtc->mon,
+    000000AA 69               [ 4]  185 	ld	l, c
+    000000AB 60               [ 4]  186 	ld	h, b
+    000000AC 23               [ 8]  187 	inc	hl
+    000000AD 23               [ 8]  188 	inc	hl
+    000000AE 7E               [ 8]  189 	ld	a, (hl)
+    000000AF F8 1E            [12]  190 	ldhl	sp,	#30
+    000000B1 22               [ 8]  191 	ld	(hl+), a
+    000000B2 36 00            [12]  192 	ld	(hl), #0x00
+                                    193 ;src/main.c:32: (uint16_t)p_rtc->year,
+    000000B4 69               [ 4]  194 	ld	l, c
+    000000B5 60               [ 4]  195 	ld	h, b
+    000000B6 2A               [ 8]  196 	ld	a, (hl+)
+    000000B7 4F               [ 4]  197 	ld	c, a
+    000000B8 46               [ 8]  198 	ld	b, (hl)
+                                    199 ;src/main.c:31: "Time:  %d:%d:%d %s   \n",
+    000000B9 F8 12            [12]  200 	ldhl	sp,	#18
+    000000BB 2A               [ 8]  201 	ld	a, (hl+)
+    000000BC 5F               [ 4]  202 	ld	e, a
+    000000BD 2A               [ 8]  203 	ld	a, (hl+)
+    000000BE 57               [ 4]  204 	ld	d, a
+    000000BF D5               [16]  205 	push	de
+    000000C0 2A               [ 8]  206 	ld	a, (hl+)
+    000000C1 23               [ 8]  207 	inc	hl
+    000000C2 5F               [ 4]  208 	ld	e, a
+    000000C3 16 00            [ 8]  209 	ld	d, #0x00
+    000000C5 D5               [16]  210 	push	de
+    000000C6 2A               [ 8]  211 	ld	a, (hl+)
+    000000C7 23               [ 8]  212 	inc	hl
+    000000C8 5F               [ 4]  213 	ld	e, a
+    000000C9 16 00            [ 8]  214 	ld	d, #0x00
+    000000CB D5               [16]  215 	push	de
+    000000CC 2A               [ 8]  216 	ld	a, (hl+)
+    000000CD 23               [ 8]  217 	inc	hl
+    000000CE 5F               [ 4]  218 	ld	e, a
+    000000CF 16 00            [ 8]  219 	ld	d, #0x00
+    000000D1 D5               [16]  220 	push	de
+    000000D2 2A               [ 8]  221 	ld	a, (hl+)
+    000000D3 5F               [ 4]  222 	ld	e, a
+    000000D4 2A               [ 8]  223 	ld	a, (hl+)
+    000000D5 57               [ 4]  224 	ld	d, a
+    000000D6 D5               [16]  225 	push	de
+    000000D7 2A               [ 8]  226 	ld	a, (hl+)
+    000000D8 23               [ 8]  227 	inc	hl
+    000000D9 5F               [ 4]  228 	ld	e, a
+    000000DA 16 00            [ 8]  229 	ld	d, #0x00
+    000000DC D5               [16]  230 	push	de
+    000000DD 5E               [ 8]  231 	ld	e, (hl)
+    000000DE 16 00            [ 8]  232 	ld	d, #0x00
+    000000E0 D5               [16]  233 	push	de
+    000000E1 C5               [16]  234 	push	bc
+    000000E2 11r2Br01         [12]  235 	ld	de, #___str_9
+    000000E5 D5               [16]  236 	push	de
+    000000E6 CDr00r00         [24]  237 	call	_printf
+                                    238 ;src/main.c:41: }
+    000000E9 E8 32            [16]  239 	add	sp, #50
+    000000EB C9               [16]  240 	ret
+    000000EC                        241 ___str_0:
+    000000EC 61 6D                  242 	.ascii "am"
+    000000EE 00                     243 	.db 0x00
+    000000EF                        244 ___str_1:
+    000000EF 70 6D                  245 	.ascii "pm"
+    000000F1 00                     246 	.db 0x00
+    000000F2                        247 ___str_2:
+    000000F2 53 75 6E 64 61 79      248 	.ascii "Sunday"
+    000000F8 00                     249 	.db 0x00
+    000000F9                        250 ___str_3:
+    000000F9 4D 6F 6E 64 61 79      251 	.ascii "Monday"
+    000000FF 00                     252 	.db 0x00
+    00000100                        253 ___str_4:
+    00000100 54 75 65 73 64 61 79   254 	.ascii "Tuesday"
+    00000107 00                     255 	.db 0x00
+    00000108                        256 ___str_5:
+    00000108 57 65 64 6E 65 73 64   257 	.ascii "Wednesday"
+             61 79
+    00000111 00                     258 	.db 0x00
+    00000112                        259 ___str_6:
+    00000112 54 68 75 72 73 64 61   260 	.ascii "Thursday"
+             79
+    0000011A 00                     261 	.db 0x00
+    0000011B                        262 ___str_7:
+    0000011B 46 72 69 64 61 79      263 	.ascii "Friday"
+    00000121 00                     264 	.db 0x00
+    00000122                        265 ___str_8:
+    00000122 53 61 74 75 72 64 61   266 	.ascii "Saturday"
+             79
+    0000012A 00                     267 	.db 0x00
+    0000012B                        268 ___str_9:
+    0000012B 59 65 61 72 3A 20 20   269 	.ascii "Year:  %d  "
+             25 64 20 20
+    00000136 0A                     270 	.db 0x0a
+    00000137 4D 6F 6E 74 68 3A 20   271 	.ascii "Month: %d  "
+             25 64 20 20
+    00000142 0A                     272 	.db 0x0a
+    00000143 44 61 79 3A 20 20 20   273 	.ascii "Day:   %d  "
+             25 64 20 20
+    0000014E 0A                     274 	.db 0x0a
+    0000014F 44 6F 57 3A 20 20 20   275 	.ascii "DoW:   %s  "
+             25 73 20 20
+    0000015A 0A                     276 	.db 0x0a
+    0000015B 54 69 6D 65 3A 20 20   277 	.ascii "Time:  %d:%d:%d %s   "
+             25 64 3A 25 64 3A 25
+             64 20 25 73 20 20 20
+    00000170 0A                     278 	.db 0x0a
+    00000171 00                     279 	.db 0x00
+                                    280 ;src/main.c:45: static void send_some_rtc_data(duck_rtc_data_t * p_rtc) {
+                                    281 ;	---------------------------------
+                                    282 ; Function send_some_rtc_data
+                                    283 ; ---------------------------------
+    00000172                        284 _send_some_rtc_data:
+                                    285 ;src/main.c:49: p_rtc->year    = 1993u;
+    00000172 6B               [ 4]  286 	ld	l, e
+    00000173 62               [ 4]  287 	ld	h, d
+    00000174 3E C9            [ 8]  288 	ld	a, #0xc9
+    00000176 22               [ 8]  289 	ld	(hl+), a
+    00000177 36 07            [12]  290 	ld	(hl), #0x07
+                                    291 ;src/main.c:50: p_rtc->mon     = 6u; // June
+    00000179 6B               [ 4]  292 	ld	l, e
+    0000017A 62               [ 4]  293 	ld	h, d
+    0000017B 23               [ 8]  294 	inc	hl
+    0000017C 23               [ 8]  295 	inc	hl
+    0000017D 36 06            [12]  296 	ld	(hl), #0x06
+                                    297 ;src/main.c:51: p_rtc->day     = 1u; // 1st
+    0000017F 6B               [ 4]  298 	ld	l, e
+    00000180 62               [ 4]  299 	ld	h, d
+    00000181 23               [ 8]  300 	inc	hl
+    00000182 23               [ 8]  301 	inc	hl
+    00000183 23               [ 8]  302 	inc	hl
+    00000184 36 01            [12]  303 	ld	(hl), #0x01
+                                    304 ;src/main.c:52: p_rtc->weekday = 2u; // Tuesday
+    00000186 21 04 00         [12]  305 	ld	hl, #0x0004
+    00000189 19               [ 8]  306 	add	hl, de
+    0000018A 36 02            [12]  307 	ld	(hl), #0x02
+                                    308 ;src/main.c:54: p_rtc->ampm    = 0u; // AM
+    0000018C 21 05 00         [12]  309 	ld	hl, #0x0005
+    0000018F 19               [ 8]  310 	add	hl, de
+    00000190 36 00            [12]  311 	ld	(hl), #0x00
+                                    312 ;src/main.c:55: p_rtc->hour    = 0u;
+    00000192 21 06 00         [12]  313 	ld	hl, #0x0006
+    00000195 19               [ 8]  314 	add	hl, de
+    00000196 36 00            [12]  315 	ld	(hl), #0x00
+                                    316 ;src/main.c:56: p_rtc->min     = 0u;
+    00000198 21 07 00         [12]  317 	ld	hl, #0x0007
+    0000019B 19               [ 8]  318 	add	hl, de
+    0000019C 36 00            [12]  319 	ld	(hl), #0x00
+                                    320 ;src/main.c:57: p_rtc->sec     = 0u;
+    0000019E 21 08 00         [12]  321 	ld	hl, #0x0008
+    000001A1 19               [ 8]  322 	add	hl, de
+    000001A2 36 00            [12]  323 	ld	(hl), #0x00
+                                    324 ;src/main.c:59: gotoxy(0,12);
+    000001A4 D5               [16]  325 	push	de
+    000001A5 21 00 0C         [12]  326 	ld	hl, #0xc00
+    000001A8 E5               [16]  327 	push	hl
+    000001A9 CDr00r00         [24]  328 	call	_gotoxy
+    000001AC E1               [12]  329 	pop	hl
+    000001AD D1               [12]  330 	pop	de
+                                    331 ;src/main.c:61: if (duck_io_set_rtc(p_rtc)) {
+    000001AE CDr00r00         [24]  332 	call	_duck_io_set_rtc
+    000001B1 CB 47            [ 8]  333 	bit	0,a
+    000001B3 28 09            [12]  334 	jr	Z, 00102$
+                                    335 ;src/main.c:62: printf("Send RTC: Success");
+    000001B5 11rC7r01         [12]  336 	ld	de, #___str_10
+    000001B8 D5               [16]  337 	push	de
+    000001B9 CDr00r00         [24]  338 	call	_printf
+    000001BC E1               [12]  339 	pop	hl
+    000001BD C9               [16]  340 	ret
+    000001BE                        341 00102$:
+                                    342 ;src/main.c:65: printf("Send RTC: Failed!");
+    000001BE 11rD9r01         [12]  343 	ld	de, #___str_11
+    000001C1 D5               [16]  344 	push	de
+    000001C2 CDr00r00         [24]  345 	call	_printf
+    000001C5 E1               [12]  346 	pop	hl
+                                    347 ;src/main.c:67: }
+    000001C6 C9               [16]  348 	ret
+    000001C7                        349 ___str_10:
+    000001C7 53 65 6E 64 20 52 54   350 	.ascii "Send RTC: Success"
+             43 3A 20 53 75 63 63
+             65 73 73
+    000001D8 00                     351 	.db 0x00
+    000001D9                        352 ___str_11:
+    000001D9 53 65 6E 64 20 52 54   353 	.ascii "Send RTC: Failed!"
+             43 3A 20 46 61 69 6C
+             65 64 21
+    000001EA 00                     354 	.db 0x00
+                                    355 ;src/main.c:70: void main(void) {
+                                    356 ;	---------------------------------
+                                    357 ; Function main
+                                    358 ; ---------------------------------
+    000001EB                        359 _main::
+                                    360 ;src/main.c:74: bool megaduck_laptop_init_ok = duck_io_laptop_init();
+    000001EB CDr00r00         [24]  361 	call	_duck_io_laptop_init
+    000001EE 4F               [ 4]  362 	ld	c, a
+                                    363 ;src/main.c:76: SPRITES_8x8;
+    000001EF F0r00            [12]  364 	ldh	a, (_LCDC_REG + 0)
+    000001F1 E6 FD            [ 8]  365 	and	a, #0xfd
+    000001F3 E0r00            [12]  366 	ldh	(_LCDC_REG + 0), a
+                                    367 ;src/main.c:77: SHOW_SPRITES;
+    000001F5 F0r00            [12]  368 	ldh	a, (_LCDC_REG + 0)
+    000001F7 F6 01            [ 8]  369 	or	a, #0x01
+    000001F9 E0r00            [12]  370 	ldh	(_LCDC_REG + 0), a
+                                    371 ;src/main.c:78: SHOW_BKG;
+    000001FB F0r00            [12]  372 	ldh	a, (_LCDC_REG + 0)
+    000001FD F6 40            [ 8]  373 	or	a, #0x40
+    000001FF E0r00            [12]  374 	ldh	(_LCDC_REG + 0), a
+                                    375 ;src/main.c:79: printf("Initializing..\n");
+    00000201 C5               [16]  376 	push	bc
+    00000202 11r5Ar02         [12]  377 	ld	de, #___str_13
+    00000205 CDr00r00         [24]  378 	call	_puts
+    00000208 C1               [12]  379 	pop	bc
+                                    380 ;src/main.c:81: if (!megaduck_laptop_init_ok) {
+    00000209 CB 41            [ 8]  381 	bit	0, c
+    0000020B 20 0D            [12]  382 	jr	NZ, 00105$
+                                    383 ;src/main.c:85: "or Failed to Initialize");
+    0000020D 11r69r02         [12]  384 	ld	de, #___str_14
+    00000210 D5               [16]  385 	push	de
+    00000211 CDr00r00         [24]  386 	call	_printf
+    00000214 E1               [12]  387 	pop	hl
+                                    388 ;src/main.c:86: while(1) {
+    00000215                        389 00102$:
+                                    390 ;src/main.c:87: vsync();
+    00000215 CDr00r00         [24]  391 	call	_vsync
+    00000218 18 FB            [12]  392 	jr	00102$
+    0000021A                        393 00105$:
+                                    394 ;src/main.c:92: printf("Laptop Detected!\n");
+    0000021A 11r95r02         [12]  395 	ld	de, #___str_16
+    0000021D CDr00r00         [24]  396 	call	_puts
+                                    397 ;src/main.c:94: printf("\n*SELECT to Send RTC\n Sys rom defaults");
+    00000220 11rA6r02         [12]  398 	ld	de, #___str_17
+    00000223 D5               [16]  399 	push	de
+    00000224 CDr00r00         [24]  400 	call	_printf
+    00000227 E1               [12]  401 	pop	hl
+                                    402 ;src/main.c:96: while(1) {
+    00000228                        403 00114$:
+                                    404 ;src/main.c:97: vsync();
+    00000228 CDr00r00         [24]  405 	call	_vsync
+                                    406 ;src/main.c:98: gamepad = joypad();
+    0000022B CDr00r00         [24]  407 	call	_joypad
+    0000022E 4F               [ 4]  408 	ld	c, a
+                                    409 ;src/main.c:102: if (sys_time & 0x01u) {
+    0000022F FAr00r00         [16]  410 	ld	a, (_sys_time)
+    00000232 21r01r00         [12]  411 	ld	hl, #_sys_time + 1
+    00000235 46               [ 8]  412 	ld	b, (hl)
+    00000236 0F               [ 4]  413 	rrca
+    00000237 30 EF            [12]  414 	jr	NC, 00114$
+                                    415 ;src/main.c:106: if (gamepad & J_SELECT) {
+    00000239 CB 71            [ 8]  416 	bit	6, c
+    0000023B 28 0B            [12]  417 	jr	Z, 00109$
+                                    418 ;src/main.c:107: send_some_rtc_data(&rtc);
+    0000023D 11r00r00         [12]  419 	ld	de, #_rtc
+    00000240 CDr72r01         [24]  420 	call	_send_some_rtc_data
+                                    421 ;src/main.c:110: waitpadup();
+    00000243 CDr00r00         [24]  422 	call	_waitpadup
+    00000246 18 E0            [12]  423 	jr	00114$
+    00000248                        424 00109$:
+                                    425 ;src/main.c:113: if (duck_io_get_rtc(&rtc)) {
+    00000248 11r00r00         [12]  426 	ld	de, #_rtc
+    0000024B D5               [16]  427 	push	de
+    0000024C CDr00r00         [24]  428 	call	_duck_io_get_rtc
+    0000024F 4F               [ 4]  429 	ld	c, a
+    00000250 D1               [12]  430 	pop	de
+    00000251 CB 41            [ 8]  431 	bit	0, c
+    00000253 28 D3            [12]  432 	jr	Z, 00114$
+                                    433 ;src/main.c:114: use_rtc_data(&rtc);
+    00000255 CDr00r00         [24]  434 	call	_use_rtc_data
+                                    435 ;src/main.c:119: }
+    00000258 18 CE            [12]  436 	jr	00114$
+    0000025A                        437 ___str_13:
+    0000025A 49 6E 69 74 69 61 6C   438 	.ascii "Initializing.."
+             69 7A 69 6E 67 2E 2E
+    00000268 00                     439 	.db 0x00
+    00000269                        440 ___str_14:
+    00000269 4C 61 70 74 6F 70 20   441 	.ascii "Laptop not detected"
+             6E 6F 74 20 64 65 74
+             65 63 74 65 64
+    0000027C 0A                     442 	.db 0x0a
+    0000027D 6F 72 20 46 61 69 6C   443 	.ascii "or Failed to Initialize"
+             65 64 20 74 6F 20 49
+             6E 69 74 69 61 6C 69
+             7A 65
+    00000294 00                     444 	.db 0x00
+    00000295                        445 ___str_16:
+    00000295 4C 61 70 74 6F 70 20   446 	.ascii "Laptop Detected!"
+             44 65 74 65 63 74 65
+             64 21
+    000002A5 00                     447 	.db 0x00
+    000002A6                        448 ___str_17:
+    000002A6 0A                     449 	.db 0x0a
+    000002A7 2A 53 45 4C 45 43 54   450 	.ascii "*SELECT to Send RTC"
+             20 74 6F 20 53 65 6E
+             64 20 52 54 43
+    000002BA 0A                     451 	.db 0x0a
+    000002BB 20 53 79 73 20 72 6F   452 	.ascii " Sys rom defaults"
+             6D 20 64 65 66 61 75
+             6C 74 73
+    000002CC 00                     453 	.db 0x00
+                                    454 	.area _CODE
+                                    455 	.area _INITIALIZER
+                                    456 	.area _CABS (ABS)

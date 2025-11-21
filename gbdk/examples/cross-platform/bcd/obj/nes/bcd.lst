@@ -1,0 +1,421 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module bcd
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _bcd2text
+                                     23 	.globl _bcd_sub
+                                     24 	.globl _bcd_add
+                                     25 	.globl _uint2bcd
+                                     26 	.globl _font_set
+                                     27 	.globl _font_load
+                                     28 	.globl _font_init
+                                     29 	.globl _set_bkg_tiles
+                                     30 	.globl _len
+                                     31 	.globl _bcd3
+                                     32 	.globl _bcd2
+                                     33 	.globl _bcd
+                                     34 	.globl _buf
+                                     35 	.globl _OAMDMA
+                                     36 	.globl _PPUDATA
+                                     37 	.globl _PPUADDR
+                                     38 	.globl _PPUSCROLL
+                                     39 	.globl _OAMDATA
+                                     40 	.globl _OAMADDR
+                                     41 	.globl _PPUSTATUS
+                                     42 	.globl _PPUMASK
+                                     43 	.globl _PPUCTRL
+                                     44 ;--------------------------------------------------------
+                                     45 ; ZP ram data
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _ZP      (PAG)
+                                     48 ;--------------------------------------------------------
+                                     49 ; overlayable items in ram
+                                     50 ;--------------------------------------------------------
+                                     51 ;--------------------------------------------------------
+                                     52 ; uninitialized external ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _BSS
+                         00002000    55 _PPUCTRL	=	0x2000
+                         00002001    56 _PPUMASK	=	0x2001
+                         00002002    57 _PPUSTATUS	=	0x2002
+                         00002003    58 _OAMADDR	=	0x2003
+                         00002004    59 _OAMDATA	=	0x2004
+                         00002005    60 _PPUSCROLL	=	0x2005
+                         00002006    61 _PPUADDR	=	0x2006
+                         00002007    62 _PPUDATA	=	0x2007
+                         00004014    63 _OAMDMA	=	0x4014
+    00000000                         64 _buf::
+    00000000                         65 	.ds 10
+                                     66 ;--------------------------------------------------------
+                                     67 ; absolute external ram data
+                                     68 ;--------------------------------------------------------
+                                     69 	.area _DABS    (ABS)
+                                     70 ;--------------------------------------------------------
+                                     71 ; initialized external ram data
+                                     72 ;--------------------------------------------------------
+                                     73 	.area _DATA
+    00000000                         74 _bcd::
+    00000000                         75 	.ds 4
+    00000004                         76 _bcd2::
+    00000004                         77 	.ds 4
+    00000008                         78 _bcd3::
+    00000008                         79 	.ds 4
+    0000000C                         80 _len::
+    0000000C                         81 	.ds 1
+                                     82 ;--------------------------------------------------------
+                                     83 ; global & static initialisations
+                                     84 ;--------------------------------------------------------
+                                     85 	.area _HOME
+                                     86 	.area _GSINIT
+                                     87 	.area _GSFINAL
+                                     88 	.area _GSINIT
+                                     89 ;--------------------------------------------------------
+                                     90 ; Home
+                                     91 ;--------------------------------------------------------
+                                     92 	.area _HOME
+                                     93 	.area _HOME
+                                     94 ;--------------------------------------------------------
+                                     95 ; code
+                                     96 ;--------------------------------------------------------
+                                     97 	.area _CODE
+                                     98 ;------------------------------------------------------------
+                                     99 ;Allocation info for local variables in function 'main'
+                                    100 ;------------------------------------------------------------
+                                    101 ;	src/bcd.c: 15: void main(void) {
+                                    102 ;	genLabel
+                                    103 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    104 ;	-----------------------------------------
+                                    105 ;	 function main
+                                    106 ;	-----------------------------------------
+                                    107 ;	Register assignment is optimal.
+                                    108 ;	Stack space usage: 0 bytes.
+    00000000                        109 _main:
+                                    110 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    111 ;	src/bcd.c: 16: font_init();
+                                    112 ;	genCall
+    00000000 20r00r00         [ 6]  113 	jsr	_font_init
+                                    114 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                    115 ;	src/bcd.c: 17: font_set(font_load(font_spect));
+                                    116 ;	skipping iCode since result will be rematerialized
+                                    117 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    118 ;	skipping iCode since result will be rematerialized
+                                    119 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    120 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    121 ;	genCall
+                                    122 ;	genSend
+    00000003 A2s00            [ 2]  123 	ldx	#>_font_spect
+    00000005 A9r00            [ 2]  124 	lda	#_font_spect
+    00000007 20r00r00         [ 6]  125 	jsr	_font_load
+                                    126 ;	assignResultValue
+                                    127 ;	Raw cost for generated ic 6 : (7, 10.000000) count=1.000000
+                                    128 ;	Raw cost for generated ic 7 : (0, 0.000000) count=1.000000
+                                    129 ;	genCall
+                                    130 ;	genSend
+    0000000A 20r00r00         [ 6]  131 	jsr	_font_set
+                                    132 ;	Raw cost for generated ic 8 : (3, 6.000000) count=1.000000
+                                    133 ;	src/bcd.c: 19: len = bcd2text(&bcd, 0x10, buf);
+                                    134 ;	skipping iCode since result will be rematerialized
+                                    135 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    136 ;	skipping iCode since result will be rematerialized
+                                    137 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    138 ;	skipping iCode since result will be rematerialized
+                                    139 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    140 ;	genCast
+                                    141 ;	genCopy
+    0000000D A9s00            [ 2]  142 	lda	#>_buf
+    0000000F 8Dr01r00         [ 4]  143 	sta	(_bcd2text_PARM_3 + 1)
+    00000012 A9r00            [ 2]  144 	lda	#_buf
+    00000014 8Dr00r00         [ 4]  145 	sta	_bcd2text_PARM_3
+                                    146 ;	Raw cost for generated ic 12 : (10, 12.000000) count=1.000000
+                                    147 ;	genAssign
+                                    148 ;	genAssignLit
+    00000017 A2 10            [ 2]  149 	ldx	#0x10
+    00000019 8Er00r00         [ 4]  150 	stx	_bcd2text_PARM_2
+                                    151 ;	Raw cost for generated ic 14 : (5, 6.000000) count=1.000000
+                                    152 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    153 ;	genCall
+                                    154 ;	genSend
+    0000001C A2s00            [ 2]  155 	ldx	#>_bcd
+    0000001E A9r00            [ 2]  156 	lda	#_bcd
+    00000020 20r00r00         [ 6]  157 	jsr	_bcd2text
+                                    158 ;	assignResultValue
+                                    159 ;	Raw cost for generated ic 16 : (7, 10.000000) count=1.000000
+                                    160 ;	genAssign
+                                    161 ;	genAssignLit
+                                    162 ;	genCopy
+    00000023 8Dr0Cr00         [ 4]  163 	sta	_len
+                                    164 ;	Raw cost for generated ic 18 : (3, 4.000000) count=1.000000
+                                    165 ;	src/bcd.c: 20: set_bkg_tiles(5, 5, len, 1, buf);
+                                    166 ;	genCast
+                                    167 ;	genCopy
+    00000026 A2s00            [ 2]  168 	ldx	#>_buf
+    00000028 8Er01r00         [ 4]  169 	stx	(_set_bkg_tiles_PARM_5 + 1)
+    0000002B A2r00            [ 2]  170 	ldx	#_buf
+    0000002D 8Er00r00         [ 4]  171 	stx	_set_bkg_tiles_PARM_5
+                                    172 ;	Raw cost for generated ic 20 : (10, 12.000000) count=1.000000
+                                    173 ;	genAssign
+                                    174 ;	genAssignLit
+                                    175 ;	genCopy
+    00000030 8Dr00r00         [ 4]  176 	sta	_set_bkg_tiles_PARM_3
+                                    177 ;	Raw cost for generated ic 23 : (3, 4.000000) count=1.000000
+                                    178 ;	genAssign
+                                    179 ;	genAssignLit
+    00000033 A2 01            [ 2]  180 	ldx	#0x01
+    00000035 8Er00r00         [ 4]  181 	stx	_set_bkg_tiles_PARM_4
+                                    182 ;	Raw cost for generated ic 24 : (5, 6.000000) count=1.000000
+                                    183 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    184 ;	Raw cost for generated ic 22 : (0, 0.000000) count=1.000000
+                                    185 ;	genCall
+                                    186 ;	genSend
+    00000038 A9 05            [ 2]  187 	lda	#0x05
+    0000003A AA               [ 2]  188 	tax
+    0000003B 20r00r00         [ 6]  189 	jsr	_set_bkg_tiles
+                                    190 ;	Raw cost for generated ic 26 : (6, 10.000000) count=1.000000
+                                    191 ;	src/bcd.c: 22: bcd_add(&bcd, &bcd2);
+                                    192 ;	skipping iCode since result will be rematerialized
+                                    193 ;	Raw cost for generated ic 28 : (0, 0.000000) count=1.000000
+                                    194 ;	skipping iCode since result will be rematerialized
+                                    195 ;	Raw cost for generated ic 29 : (0, 0.000000) count=1.000000
+                                    196 ;	genCast
+                                    197 ;	genCopy
+    0000003E A9s00            [ 2]  198 	lda	#>_bcd2
+    00000040 8Dr01r00         [ 4]  199 	sta	(_bcd_add_PARM_2 + 1)
+    00000043 A9r04            [ 2]  200 	lda	#_bcd2
+    00000045 8Dr00r00         [ 4]  201 	sta	_bcd_add_PARM_2
+                                    202 ;	Raw cost for generated ic 30 : (10, 12.000000) count=1.000000
+                                    203 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                    204 ;	genCall
+                                    205 ;	genSend
+    00000048 A2s00            [ 2]  206 	ldx	#>_bcd
+    0000004A A9r00            [ 2]  207 	lda	#_bcd
+    0000004C 20r00r00         [ 6]  208 	jsr	_bcd_add
+                                    209 ;	Raw cost for generated ic 33 : (7, 10.000000) count=1.000000
+                                    210 ;	src/bcd.c: 24: len = bcd2text(&bcd, 0x10, buf);
+                                    211 ;	skipping iCode since result will be rematerialized
+                                    212 ;	Raw cost for generated ic 35 : (0, 0.000000) count=1.000000
+                                    213 ;	genCast
+                                    214 ;	genCopy
+    0000004F A9s00            [ 2]  215 	lda	#>_buf
+    00000051 8Dr01r00         [ 4]  216 	sta	(_bcd2text_PARM_3 + 1)
+    00000054 A9r00            [ 2]  217 	lda	#_buf
+    00000056 8Dr00r00         [ 4]  218 	sta	_bcd2text_PARM_3
+                                    219 ;	Raw cost for generated ic 37 : (10, 12.000000) count=1.000000
+                                    220 ;	genAssign
+                                    221 ;	genAssignLit
+    00000059 A2 10            [ 2]  222 	ldx	#0x10
+    0000005B 8Er00r00         [ 4]  223 	stx	_bcd2text_PARM_2
+                                    224 ;	Raw cost for generated ic 39 : (5, 6.000000) count=1.000000
+                                    225 ;	Raw cost for generated ic 38 : (0, 0.000000) count=1.000000
+                                    226 ;	genCall
+                                    227 ;	genSend
+    0000005E A2s00            [ 2]  228 	ldx	#>_bcd
+    00000060 A9r00            [ 2]  229 	lda	#_bcd
+    00000062 20r00r00         [ 6]  230 	jsr	_bcd2text
+                                    231 ;	assignResultValue
+                                    232 ;	Raw cost for generated ic 41 : (7, 10.000000) count=1.000000
+                                    233 ;	genAssign
+                                    234 ;	genAssignLit
+                                    235 ;	genCopy
+    00000065 8Dr0Cr00         [ 4]  236 	sta	_len
+                                    237 ;	Raw cost for generated ic 43 : (3, 4.000000) count=1.000000
+                                    238 ;	src/bcd.c: 25: set_bkg_tiles(5, 6, len, 1, buf);
+                                    239 ;	genCast
+                                    240 ;	genCopy
+    00000068 A2s00            [ 2]  241 	ldx	#>_buf
+    0000006A 8Er01r00         [ 4]  242 	stx	(_set_bkg_tiles_PARM_5 + 1)
+    0000006D A2r00            [ 2]  243 	ldx	#_buf
+    0000006F 8Er00r00         [ 4]  244 	stx	_set_bkg_tiles_PARM_5
+                                    245 ;	Raw cost for generated ic 45 : (10, 12.000000) count=1.000000
+                                    246 ;	genAssign
+                                    247 ;	genAssignLit
+                                    248 ;	genCopy
+    00000072 8Dr00r00         [ 4]  249 	sta	_set_bkg_tiles_PARM_3
+                                    250 ;	Raw cost for generated ic 48 : (3, 4.000000) count=1.000000
+                                    251 ;	genAssign
+                                    252 ;	genAssignLit
+    00000075 A2 01            [ 2]  253 	ldx	#0x01
+    00000077 8Er00r00         [ 4]  254 	stx	_set_bkg_tiles_PARM_4
+                                    255 ;	Raw cost for generated ic 49 : (5, 6.000000) count=1.000000
+                                    256 ;	Raw cost for generated ic 46 : (0, 0.000000) count=1.000000
+                                    257 ;	Raw cost for generated ic 47 : (0, 0.000000) count=1.000000
+                                    258 ;	genCall
+                                    259 ;	genSend
+    0000007A A9 05            [ 2]  260 	lda	#0x05
+    0000007C A2 06            [ 2]  261 	ldx	#0x06
+    0000007E 20r00r00         [ 6]  262 	jsr	_set_bkg_tiles
+                                    263 ;	Raw cost for generated ic 51 : (7, 10.000000) count=1.000000
+                                    264 ;	src/bcd.c: 27: bcd_sub(&bcd, &bcd3);
+                                    265 ;	skipping iCode since result will be rematerialized
+                                    266 ;	Raw cost for generated ic 53 : (0, 0.000000) count=1.000000
+                                    267 ;	skipping iCode since result will be rematerialized
+                                    268 ;	Raw cost for generated ic 54 : (0, 0.000000) count=1.000000
+                                    269 ;	genCast
+                                    270 ;	genCopy
+    00000081 A9s00            [ 2]  271 	lda	#>_bcd3
+    00000083 8Dr01r00         [ 4]  272 	sta	(_bcd_sub_PARM_2 + 1)
+    00000086 A9r08            [ 2]  273 	lda	#_bcd3
+    00000088 8Dr00r00         [ 4]  274 	sta	_bcd_sub_PARM_2
+                                    275 ;	Raw cost for generated ic 55 : (10, 12.000000) count=1.000000
+                                    276 ;	Raw cost for generated ic 56 : (0, 0.000000) count=1.000000
+                                    277 ;	genCall
+                                    278 ;	genSend
+    0000008B A2s00            [ 2]  279 	ldx	#>_bcd
+    0000008D A9r00            [ 2]  280 	lda	#_bcd
+    0000008F 20r00r00         [ 6]  281 	jsr	_bcd_sub
+                                    282 ;	Raw cost for generated ic 58 : (7, 10.000000) count=1.000000
+                                    283 ;	src/bcd.c: 29: len = bcd2text(&bcd, 0x10, buf);
+                                    284 ;	skipping iCode since result will be rematerialized
+                                    285 ;	Raw cost for generated ic 60 : (0, 0.000000) count=1.000000
+                                    286 ;	genCast
+                                    287 ;	genCopy
+    00000092 A9s00            [ 2]  288 	lda	#>_buf
+    00000094 8Dr01r00         [ 4]  289 	sta	(_bcd2text_PARM_3 + 1)
+    00000097 A9r00            [ 2]  290 	lda	#_buf
+    00000099 8Dr00r00         [ 4]  291 	sta	_bcd2text_PARM_3
+                                    292 ;	Raw cost for generated ic 62 : (10, 12.000000) count=1.000000
+                                    293 ;	genAssign
+                                    294 ;	genAssignLit
+    0000009C A2 10            [ 2]  295 	ldx	#0x10
+    0000009E 8Er00r00         [ 4]  296 	stx	_bcd2text_PARM_2
+                                    297 ;	Raw cost for generated ic 64 : (5, 6.000000) count=1.000000
+                                    298 ;	Raw cost for generated ic 63 : (0, 0.000000) count=1.000000
+                                    299 ;	genCall
+                                    300 ;	genSend
+    000000A1 A2s00            [ 2]  301 	ldx	#>_bcd
+    000000A3 A9r00            [ 2]  302 	lda	#_bcd
+    000000A5 20r00r00         [ 6]  303 	jsr	_bcd2text
+                                    304 ;	assignResultValue
+                                    305 ;	Raw cost for generated ic 66 : (7, 10.000000) count=1.000000
+                                    306 ;	genAssign
+                                    307 ;	genAssignLit
+                                    308 ;	genCopy
+    000000A8 8Dr0Cr00         [ 4]  309 	sta	_len
+                                    310 ;	Raw cost for generated ic 68 : (3, 4.000000) count=1.000000
+                                    311 ;	src/bcd.c: 30: set_bkg_tiles(5, 7, len, 1, buf);
+                                    312 ;	genCast
+                                    313 ;	genCopy
+    000000AB A2s00            [ 2]  314 	ldx	#>_buf
+    000000AD 8Er01r00         [ 4]  315 	stx	(_set_bkg_tiles_PARM_5 + 1)
+    000000B0 A2r00            [ 2]  316 	ldx	#_buf
+    000000B2 8Er00r00         [ 4]  317 	stx	_set_bkg_tiles_PARM_5
+                                    318 ;	Raw cost for generated ic 70 : (10, 12.000000) count=1.000000
+                                    319 ;	genAssign
+                                    320 ;	genAssignLit
+                                    321 ;	genCopy
+    000000B5 8Dr00r00         [ 4]  322 	sta	_set_bkg_tiles_PARM_3
+                                    323 ;	Raw cost for generated ic 73 : (3, 4.000000) count=1.000000
+                                    324 ;	genAssign
+                                    325 ;	genAssignLit
+    000000B8 A2 01            [ 2]  326 	ldx	#0x01
+    000000BA 8Er00r00         [ 4]  327 	stx	_set_bkg_tiles_PARM_4
+                                    328 ;	Raw cost for generated ic 74 : (5, 6.000000) count=1.000000
+                                    329 ;	Raw cost for generated ic 71 : (0, 0.000000) count=1.000000
+                                    330 ;	Raw cost for generated ic 72 : (0, 0.000000) count=1.000000
+                                    331 ;	genCall
+                                    332 ;	genSend
+    000000BD A9 05            [ 2]  333 	lda	#0x05
+    000000BF A2 07            [ 2]  334 	ldx	#0x07
+    000000C1 20r00r00         [ 6]  335 	jsr	_set_bkg_tiles
+                                    336 ;	Raw cost for generated ic 76 : (7, 10.000000) count=1.000000
+                                    337 ;	src/bcd.c: 32: uint2bcd(12345, &bcd);
+                                    338 ;	genCast
+                                    339 ;	genCopy
+    000000C4 A9s00            [ 2]  340 	lda	#>_bcd
+    000000C6 8Dr01r00         [ 4]  341 	sta	(_uint2bcd_PARM_2 + 1)
+    000000C9 A9r00            [ 2]  342 	lda	#_bcd
+    000000CB 8Dr00r00         [ 4]  343 	sta	_uint2bcd_PARM_2
+                                    344 ;	Raw cost for generated ic 78 : (10, 12.000000) count=1.000000
+                                    345 ;	Raw cost for generated ic 79 : (0, 0.000000) count=1.000000
+                                    346 ;	genCall
+                                    347 ;	genSend
+    000000CE A2 30            [ 2]  348 	ldx	#0x30
+    000000D0 A9 39            [ 2]  349 	lda	#0x39
+    000000D2 20r00r00         [ 6]  350 	jsr	_uint2bcd
+                                    351 ;	Raw cost for generated ic 81 : (7, 10.000000) count=1.000000
+                                    352 ;	src/bcd.c: 34: len = bcd2text(&bcd, 0x10, buf);
+                                    353 ;	skipping iCode since result will be rematerialized
+                                    354 ;	Raw cost for generated ic 83 : (0, 0.000000) count=1.000000
+                                    355 ;	genCast
+                                    356 ;	genCopy
+    000000D5 A9s00            [ 2]  357 	lda	#>_buf
+    000000D7 8Dr01r00         [ 4]  358 	sta	(_bcd2text_PARM_3 + 1)
+    000000DA A9r00            [ 2]  359 	lda	#_buf
+    000000DC 8Dr00r00         [ 4]  360 	sta	_bcd2text_PARM_3
+                                    361 ;	Raw cost for generated ic 85 : (10, 12.000000) count=1.000000
+                                    362 ;	genAssign
+                                    363 ;	genAssignLit
+    000000DF A2 10            [ 2]  364 	ldx	#0x10
+    000000E1 8Er00r00         [ 4]  365 	stx	_bcd2text_PARM_2
+                                    366 ;	Raw cost for generated ic 87 : (5, 6.000000) count=1.000000
+                                    367 ;	Raw cost for generated ic 86 : (0, 0.000000) count=1.000000
+                                    368 ;	genCall
+                                    369 ;	genSend
+    000000E4 A2s00            [ 2]  370 	ldx	#>_bcd
+    000000E6 A9r00            [ 2]  371 	lda	#_bcd
+    000000E8 20r00r00         [ 6]  372 	jsr	_bcd2text
+                                    373 ;	assignResultValue
+                                    374 ;	Raw cost for generated ic 89 : (7, 10.000000) count=1.000000
+                                    375 ;	genAssign
+                                    376 ;	genAssignLit
+                                    377 ;	genCopy
+    000000EB 8Dr0Cr00         [ 4]  378 	sta	_len
+                                    379 ;	Raw cost for generated ic 91 : (3, 4.000000) count=1.000000
+                                    380 ;	src/bcd.c: 35: set_bkg_tiles(5, 8, len, 1, buf);
+                                    381 ;	genCast
+                                    382 ;	genCopy
+    000000EE A2s00            [ 2]  383 	ldx	#>_buf
+    000000F0 8Er01r00         [ 4]  384 	stx	(_set_bkg_tiles_PARM_5 + 1)
+    000000F3 A2r00            [ 2]  385 	ldx	#_buf
+    000000F5 8Er00r00         [ 4]  386 	stx	_set_bkg_tiles_PARM_5
+                                    387 ;	Raw cost for generated ic 93 : (10, 12.000000) count=1.000000
+                                    388 ;	genAssign
+                                    389 ;	genAssignLit
+                                    390 ;	genCopy
+    000000F8 8Dr00r00         [ 4]  391 	sta	_set_bkg_tiles_PARM_3
+                                    392 ;	Raw cost for generated ic 96 : (3, 4.000000) count=1.000000
+                                    393 ;	genAssign
+                                    394 ;	genAssignLit
+    000000FB A2 01            [ 2]  395 	ldx	#0x01
+    000000FD 8Er00r00         [ 4]  396 	stx	_set_bkg_tiles_PARM_4
+                                    397 ;	Raw cost for generated ic 97 : (5, 6.000000) count=1.000000
+                                    398 ;	Raw cost for generated ic 94 : (0, 0.000000) count=1.000000
+                                    399 ;	Raw cost for generated ic 95 : (0, 0.000000) count=1.000000
+                                    400 ;	genCall
+                                    401 ;	genSend
+    00000100 A9 05            [ 2]  402 	lda	#0x05
+    00000102 A2 08            [ 2]  403 	ldx	#0x08
+                                    404 ;	Raw cost for generated ic 99 : (7, 10.000000) count=1.000000
+                                    405 ;	genLabel
+                                    406 ;	Raw cost for generated ic 100 : (0, 0.000000) count=1.000000
+                                    407 ;	src/bcd.c: 36: }
+                                    408 ;	genEndFunction
+    00000104 4Cr00r00         [ 3]  409 	jmp	_set_bkg_tiles
+                                    410 ;	Raw cost for generated ic 101 : (1, 6.000000) count=1.000000
+                                    411 	.area _CODE
+                                    412 	.area _XINIT
+    00000000                        413 __xinit__bcd:
+    00000000 40 30 20 10            414 	.byte #0x40, #0x30, #0x20, #0x10	; 270544960
+    00000004                        415 __xinit__bcd2:
+    00000004 08 07 06 05            416 	.byte #0x08, #0x07, #0x06, #0x05	; 84281096
+    00000008                        417 __xinit__bcd3:
+    00000008 11 11 11 11            418 	.byte #0x11, #0x11, #0x11, #0x11	; 286331153
+    0000000C                        419 __xinit__len:
+    0000000C 00                     420 	.db #0x00	; 0
+                                    421 	.area _CABS    (ABS)

@@ -1,0 +1,118 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module bank_ba1_bo3
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl b_bank_3
+                                     22 	.globl _bank_3
+                                     23 	.globl _puts
+                                     24 	.globl _var_3
+                                     25 	.globl _OAMDMA
+                                     26 	.globl _PPUDATA
+                                     27 	.globl _PPUADDR
+                                     28 	.globl _PPUSCROLL
+                                     29 	.globl _OAMDATA
+                                     30 	.globl _OAMADDR
+                                     31 	.globl _PPUSTATUS
+                                     32 	.globl _PPUMASK
+                                     33 	.globl _PPUCTRL
+                                     34 ;--------------------------------------------------------
+                                     35 ; ZP ram data
+                                     36 ;--------------------------------------------------------
+                                     37 	.area _ZP      (PAG)
+                                     38 ;--------------------------------------------------------
+                                     39 ; overlayable items in ram
+                                     40 ;--------------------------------------------------------
+                                     41 ;--------------------------------------------------------
+                                     42 ; uninitialized external ram data
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _BSS
+                         00002000    45 _PPUCTRL	=	0x2000
+                         00002001    46 _PPUMASK	=	0x2001
+                         00002002    47 _PPUSTATUS	=	0x2002
+                         00002003    48 _OAMADDR	=	0x2003
+                         00002004    49 _OAMDATA	=	0x2004
+                         00002005    50 _PPUSCROLL	=	0x2005
+                         00002006    51 _PPUADDR	=	0x2006
+                         00002007    52 _PPUDATA	=	0x2007
+                         00004014    53 _OAMDMA	=	0x4014
+    00000000                         54 _var_3::
+    00000000                         55 	.ds 2
+                                     56 ;--------------------------------------------------------
+                                     57 ; absolute external ram data
+                                     58 ;--------------------------------------------------------
+                                     59 	.area _DABS    (ABS)
+                                     60 ;--------------------------------------------------------
+                                     61 ; initialized external ram data
+                                     62 ;--------------------------------------------------------
+                                     63 	.area _DATA
+                                     64 ;--------------------------------------------------------
+                                     65 ; global & static initialisations
+                                     66 ;--------------------------------------------------------
+                                     67 	.area _HOME
+                                     68 	.area _GSINIT
+                                     69 	.area _GSFINAL
+                                     70 	.area _GSINIT
+                                     71 ;--------------------------------------------------------
+                                     72 ; Home
+                                     73 ;--------------------------------------------------------
+                                     74 	.area _HOME
+                                     75 	.area _HOME
+                                     76 ;--------------------------------------------------------
+                                     77 ; code
+                                     78 ;--------------------------------------------------------
+                                     79 	.area _CODE
+                                     80 ;------------------------------------------------------------
+                                     81 ;Allocation info for local variables in function 'bank_3'
+                                     82 ;------------------------------------------------------------
+                                     83 ;	src/bank.ba1.bo3.c: 7: void bank_3(void) BANKED /* In ROM bank 3 */
+                                     84 ;	genLabel
+                                     85 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                     86 ;	-----------------------------------------
+                                     87 ;	 function bank_3
+                                     88 ;	-----------------------------------------
+                                     89 ;	Register assignment is optimal.
+                                     90 ;	Stack space usage: 0 bytes.
+                         00000000    91 	b_bank_3	= 0
+    00000000                         92 _bank_3:
+                                     93 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                     94 ;	src/bank.ba1.bo3.c: 9: puts("I'm in ROM bank 3");
+                                     95 ;	skipping iCode since result will be rematerialized
+                                     96 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                     97 ;	skipping iCode since result will be rematerialized
+                                     98 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                     99 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    100 ;	genCall
+                                    101 ;	genSend
+    00000000 A2s00            [ 2]  102 	ldx	#>___str_0
+    00000002 A9r07            [ 2]  103 	lda	#___str_0
+                                    104 ;	Raw cost for generated ic 5 : (7, 10.000000) count=1.000000
+                                    105 ;	genLabel
+                                    106 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    107 ;	src/bank.ba1.bo3.c: 10: }
+                                    108 ;	genEndFunction
+    00000004 4Cr00r00         [ 3]  109 	jmp	_puts
+                                    110 ;	Raw cost for generated ic 7 : (1, 6.000000) count=1.000000
+                                    111 	.area _CODE
+    00000007                        112 ___str_0:
+    00000007 49 27 6D 20 69 6E 20   113 	.ascii "I'm in ROM bank 3"
+             52 4F 4D 20 62 61 6E
+             6B 20 33
+    00000018 00                     114 	.db 0x00
+                                    115 	.area _XINIT
+                                    116 	.area _CABS    (ABS)

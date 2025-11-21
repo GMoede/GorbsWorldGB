@@ -1,0 +1,967 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module libc_memcpy
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _memcpy_src
+                                     22 	.globl _main
+                                     23 	.globl _benchmark_memcpy
+                                     24 	.globl _font_set
+                                     25 	.globl _font_load
+                                     26 	.globl _font_init
+                                     27 	.globl _memset
+                                     28 	.globl _memmove
+                                     29 	.globl ___memcpy
+                                     30 	.globl _printf
+                                     31 	.globl _benchmark_memcpy_PARM_2
+                                     32 	.globl _memcpy_dst
+                                     33 	.globl _OAMDMA
+                                     34 	.globl _PPUDATA
+                                     35 	.globl _PPUADDR
+                                     36 	.globl _PPUSCROLL
+                                     37 	.globl _OAMDATA
+                                     38 	.globl _OAMADDR
+                                     39 	.globl _PPUSTATUS
+                                     40 	.globl _PPUMASK
+                                     41 	.globl _PPUCTRL
+                                     42 ;--------------------------------------------------------
+                                     43 ; ZP ram data
+                                     44 ;--------------------------------------------------------
+                                     45 	.area _ZP      (PAG)
+    00000000                         46 _benchmark_memcpy_sloc0_1_0:
+    00000000                         47 	.ds 2
+                                     48 ;--------------------------------------------------------
+                                     49 ; overlayable items in ram
+                                     50 ;--------------------------------------------------------
+                                     51 ;--------------------------------------------------------
+                                     52 ; uninitialized external ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area _BSS
+                         00002000    55 _PPUCTRL	=	0x2000
+                         00002001    56 _PPUMASK	=	0x2001
+                         00002002    57 _PPUSTATUS	=	0x2002
+                         00002003    58 _OAMADDR	=	0x2003
+                         00002004    59 _OAMDATA	=	0x2004
+                         00002005    60 _PPUSCROLL	=	0x2005
+                         00002006    61 _PPUADDR	=	0x2006
+                         00002007    62 _PPUDATA	=	0x2007
+                         00004014    63 _OAMDMA	=	0x4014
+    00000000                         64 _memcpy_dst::
+    00000000                         65 	.ds 300
+    0000012C                         66 _benchmark_memcpy_PARM_2:
+    0000012C                         67 	.ds 2
+    0000012E                         68 _benchmark_memcpy_num_10000_126:
+    0000012E                         69 	.ds 2
+    00000130                         70 _benchmark_memcpy_start_time_10000_127:
+    00000130                         71 	.ds 2
+    00000132                         72 _main_dst_20000_131:
+    00000132                         73 	.ds 4
+    00000136                         74 _main_dst_20000_132:
+    00000136                         75 	.ds 4
+    0000013A                         76 _main_dst_20000_133:
+    0000013A                         77 	.ds 4
+                                     78 ;--------------------------------------------------------
+                                     79 ; absolute external ram data
+                                     80 ;--------------------------------------------------------
+                                     81 	.area _DABS    (ABS)
+                                     82 ;--------------------------------------------------------
+                                     83 ; initialized external ram data
+                                     84 ;--------------------------------------------------------
+                                     85 	.area _DATA
+                                     86 ;--------------------------------------------------------
+                                     87 ; global & static initialisations
+                                     88 ;--------------------------------------------------------
+                                     89 	.area _HOME
+                                     90 	.area _GSINIT
+                                     91 	.area _GSFINAL
+                                     92 	.area _GSINIT
+                                     93 ;--------------------------------------------------------
+                                     94 ; Home
+                                     95 ;--------------------------------------------------------
+                                     96 	.area _HOME
+                                     97 	.area _HOME
+                                     98 ;--------------------------------------------------------
+                                     99 ; code
+                                    100 ;--------------------------------------------------------
+                                    101 	.area _CODE
+                                    102 ;------------------------------------------------------------
+                                    103 ;Allocation info for local variables in function 'benchmark_memcpy'
+                                    104 ;------------------------------------------------------------
+                                    105 ;sloc0         Allocated with name '_benchmark_memcpy_sloc0_1_0'
+                                    106 ;size          Allocated with name '_benchmark_memcpy_PARM_2'
+                                    107 ;num           Allocated with name '_benchmark_memcpy_num_10000_126'
+                                    108 ;i             Allocated to registers 
+                                    109 ;start_time    Allocated with name '_benchmark_memcpy_start_time_10000_127'
+                                    110 ;------------------------------------------------------------
+                                    111 ;	src/libc_memcpy.c: 16: int benchmark_memcpy(int num, int size)
+                                    112 ;	genLabel
+                                    113 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    114 ;	-----------------------------------------
+                                    115 ;	 function benchmark_memcpy
+                                    116 ;	-----------------------------------------
+                                    117 ;	Register assignment is optimal.
+                                    118 ;	Stack space usage: 0 bytes.
+    00000000                        119 _benchmark_memcpy:
+                                    120 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    121 ;	genReceive
+    00000000 8Dr2Er01         [ 4]  122 	sta	_benchmark_memcpy_num_10000_126
+    00000003 8Er2Fr01         [ 4]  123 	stx	(_benchmark_memcpy_num_10000_126 + 1)
+                                    124 ;	Raw cost for generated ic 2 : (6, 8.000000) count=1.000000
+                                    125 ;	src/libc_memcpy.c: 19: uint16_t start_time = sys_time;
+                                    126 ;	genAssign
+                                    127 ;	genAssignLit
+                                    128 ;	genCopy
+    00000006 ADr01r00         [ 4]  129 	lda	(_sys_time + 1)
+    00000009 8Dr31r01         [ 4]  130 	sta	(_benchmark_memcpy_start_time_10000_127 + 1)
+    0000000C ADr00r00         [ 4]  131 	lda	_sys_time
+    0000000F 8Dr30r01         [ 4]  132 	sta	_benchmark_memcpy_start_time_10000_127
+                                    133 ;	Raw cost for generated ic 3 : (12, 16.000000) count=1.000000
+                                    134 ;	src/libc_memcpy.c: 20: for(i = 0; i < num; i++)
+                                    135 ;	skipping iCode since result will be rematerialized
+                                    136 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    137 ;	skipping iCode since result will be rematerialized
+                                    138 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    139 ;	genAssign
+                                    140 ;	genAssignLit
+    00000012 A2 00            [ 2]  141 	ldx	#0x00
+    00000014 86*00            [ 3]  142 	stx	*_benchmark_memcpy_sloc0_1_0
+    00000016 86*01            [ 3]  143 	stx	*(_benchmark_memcpy_sloc0_1_0 + 1)
+                                    144 ;	Raw cost for generated ic 30 : (6, 8.000000) count=1.000000
+                                    145 ;	genLabel
+    00000018                        146 00103$:
+                                    147 ;	Raw cost for generated ic 5 : (0, 0.000000) count=3.999997
+                                    148 ;	genCmp
+    00000018 A5*00            [ 3]  149 	lda	*_benchmark_memcpy_sloc0_1_0
+    0000001A 38               [ 2]  150 	sec
+    0000001B EDr2Er01         [ 4]  151 	sbc	_benchmark_memcpy_num_10000_126
+    0000001E A5*01            [ 3]  152 	lda	*(_benchmark_memcpy_sloc0_1_0 + 1)
+    00000020 EDr2Fr01         [ 4]  153 	sbc	(_benchmark_memcpy_num_10000_126 + 1)
+    00000023 50 04            [ 4]  154 	bvc	00121$
+    00000025 10 04            [ 4]  155 	bpl	00120$
+    00000027 30 28            [ 4]  156 	bmi	00101$
+    00000029                        157 00121$:
+    00000029 10 26            [ 4]  158 	bpl	00101$
+    0000002B                        159 00120$:
+                                    160 ;	Raw cost for generated ic 6 : (22, 29.400002) count=3.999997
+                                    161 ;	skipping generated iCode
+                                    162 ;	Raw cost for generated ic 7 : (0, 0.000000) count=3.999997
+                                    163 ;	src/libc_memcpy.c: 21: memcpy(memcpy_dst, memcpy_src, size);
+                                    164 ;	skipping iCode since result will be rematerialized
+                                    165 ;	Raw cost for generated ic 11 : (0, 0.000000) count=2.999997
+                                    166 ;	genCast
+                                    167 ;	genCopy
+    0000002B A9s01            [ 2]  168 	lda	#>_memcpy_src
+    0000002D 8Dr01r00         [ 4]  169 	sta	(___memcpy_PARM_2 + 1)
+    00000030 A9r89            [ 2]  170 	lda	#_memcpy_src
+    00000032 8Dr00r00         [ 4]  171 	sta	___memcpy_PARM_2
+                                    172 ;	Raw cost for generated ic 13 : (10, 12.000000) count=2.999997
+                                    173 ;	genAssign
+                                    174 ;	genAssignLit
+                                    175 ;	genCopy
+    00000035 ADr2Dr01         [ 4]  176 	lda	(_benchmark_memcpy_PARM_2 + 1)
+    00000038 8Dr01r00         [ 4]  177 	sta	(___memcpy_PARM_3 + 1)
+    0000003B ADr2Cr01         [ 4]  178 	lda	_benchmark_memcpy_PARM_2
+    0000003E 8Dr00r00         [ 4]  179 	sta	___memcpy_PARM_3
+                                    180 ;	Raw cost for generated ic 16 : (12, 16.000000) count=2.999997
+                                    181 ;	Raw cost for generated ic 14 : (0, 0.000000) count=2.999997
+                                    182 ;	genCall
+                                    183 ;	genSend
+    00000041 A2s00            [ 2]  184 	ldx	#>_memcpy_dst
+    00000043 A9r00            [ 2]  185 	lda	#_memcpy_dst
+    00000045 20r00r00         [ 6]  186 	jsr	___memcpy
+                                    187 ;	Raw cost for generated ic 17 : (7, 10.000000) count=2.999997
+                                    188 ;	src/libc_memcpy.c: 20: for(i = 0; i < num; i++)
+                                    189 ;	genPlus
+                                    190 ;	genPlusIncr
+    00000048 E6*00            [ 5]  191 	inc	*_benchmark_memcpy_sloc0_1_0
+    0000004A D0 CC            [ 4]  192 	bne	00103$
+    0000004C E6*01            [ 5]  193 	inc	*(_benchmark_memcpy_sloc0_1_0 + 1)
+                                    194 ;	Raw cost for generated ic 20 : (6, 12.600000) count=2.999997
+                                    195 ;	genGoto
+    0000004E 4Cr18r00         [ 3]  196 	jmp	00103$
+                                    197 ;	Raw cost for generated ic 22 : (3, 3.000000) count=2.999997
+                                    198 ;	genLabel
+    00000051                        199 00101$:
+                                    200 ;	Raw cost for generated ic 23 : (0, 0.000000) count=0.999999
+                                    201 ;	src/libc_memcpy.c: 22: return (int)(sys_time - start_time);
+                                    202 ;	genMinus
+                                    203 ;	genMinusDec
+    00000051 ADr00r00         [ 4]  204 	lda	_sys_time
+    00000054 38               [ 2]  205 	sec
+    00000055 EDr30r01         [ 4]  206 	sbc	_benchmark_memcpy_start_time_10000_127
+    00000058 48               [ 3]  207 	pha
+    00000059 ADr01r00         [ 4]  208 	lda	(_sys_time + 1)
+    0000005C EDr31r01         [ 4]  209 	sbc	(_benchmark_memcpy_start_time_10000_127 + 1)
+    0000005F AA               [ 2]  210 	tax
+    00000060 68               [ 4]  211 	pla
+                                    212 ;	Raw cost for generated ic 24 : (16, 27.000000) count=0.999999
+                                    213 ;	genCast
+                                    214 ;	genCopy
+                                    215 ;	Raw cost for generated ic 25 : (0, 0.000000) count=0.999999
+                                    216 ;	genRet
+                                    217 ;	Raw cost for generated ic 26 : (0, 0.000000) count=0.999999
+                                    218 ;	genLabel
+                                    219 ;	Raw cost for generated ic 27 : (0, 0.000000) count=0.999999
+                                    220 ;	src/libc_memcpy.c: 23: }
+                                    221 ;	genEndFunction
+    00000061 60               [ 6]  222 	rts
+                                    223 ;	Raw cost for generated ic 28 : (1, 6.000000) count=0.999999
+                                    224 ;------------------------------------------------------------
+                                    225 ;Allocation info for local variables in function 'main'
+                                    226 ;------------------------------------------------------------
+                                    227 ;ibm_font      Allocated to registers a x 
+                                    228 ;dst           Allocated with name '_main_dst_20000_131'
+                                    229 ;src           Allocated to registers 
+                                    230 ;dst           Allocated with name '_main_dst_20000_132'
+                                    231 ;src           Allocated to registers 
+                                    232 ;dst           Allocated with name '_main_dst_20000_133'
+                                    233 ;------------------------------------------------------------
+                                    234 ;	src/libc_memcpy.c: 25: void main(void)
+                                    235 ;	genLabel
+                                    236 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    237 ;	-----------------------------------------
+                                    238 ;	 function main
+                                    239 ;	-----------------------------------------
+                                    240 ;	Register assignment is optimal.
+                                    241 ;	Stack space usage: 0 bytes.
+    00000062                        242 _main:
+                                    243 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    244 ;	src/libc_memcpy.c: 30: font_init();
+                                    245 ;	genCall
+    00000062 20r00r00         [ 6]  246 	jsr	_font_init
+                                    247 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                    248 ;	src/libc_memcpy.c: 31: ibm_font = font_load(font_ibm);
+                                    249 ;	skipping iCode since result will be rematerialized
+                                    250 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    251 ;	skipping iCode since result will be rematerialized
+                                    252 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    253 ;	Raw cost for generated ic 5 : (0, 0.000000) count=1.000000
+                                    254 ;	genCall
+                                    255 ;	genSend
+    00000065 A2s00            [ 2]  256 	ldx	#>_font_ibm
+    00000067 A9r00            [ 2]  257 	lda	#_font_ibm
+    00000069 20r00r00         [ 6]  258 	jsr	_font_load
+                                    259 ;	assignResultValue
+                                    260 ;	Raw cost for generated ic 6 : (7, 10.000000) count=1.000000
+                                    261 ;	src/libc_memcpy.c: 32: font_set(ibm_font);
+                                    262 ;	Raw cost for generated ic 8 : (0, 0.000000) count=1.000000
+                                    263 ;	genCall
+                                    264 ;	genSend
+    0000006C 20r00r00         [ 6]  265 	jsr	_font_set
+                                    266 ;	Raw cost for generated ic 9 : (3, 6.000000) count=1.000000
+                                    267 ;	src/libc_memcpy.c: 36: char dst[4] = "dst";
+                                    268 ;	skipping iCode since result will be rematerialized
+                                    269 ;	Raw cost for generated ic 10 : (0, 0.000000) count=1.000000
+                                    270 ;	genPointerSet
+                                    271 ;	genDataPointerSet
+    0000006F A2 64            [ 2]  272 	ldx	#0x64
+    00000071 8Er32r01         [ 4]  273 	stx	_main_dst_20000_131
+                                    274 ;	Raw cost for generated ic 11 : (5, 6.000000) count=1.000000
+                                    275 ;	skipping iCode since result will be rematerialized
+                                    276 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    277 ;	genPointerSet
+                                    278 ;	genDataPointerSet
+    00000074 A2 73            [ 2]  279 	ldx	#0x73
+    00000076 8Er33r01         [ 4]  280 	stx	(_main_dst_20000_131 + 0x0001)
+                                    281 ;	Raw cost for generated ic 14 : (5, 6.000000) count=1.000000
+                                    282 ;	skipping iCode since result will be rematerialized
+                                    283 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    284 ;	genPointerSet
+                                    285 ;	genDataPointerSet
+    00000079 E8               [ 2]  286 	inx
+    0000007A 8Er34r01         [ 4]  287 	stx	(_main_dst_20000_131 + 0x0002)
+                                    288 ;	Raw cost for generated ic 17 : (4, 6.000000) count=1.000000
+                                    289 ;	skipping iCode since result will be rematerialized
+                                    290 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    291 ;	genPointerSet
+                                    292 ;	genDataPointerSet
+    0000007D A2 00            [ 2]  293 	ldx	#0x00
+    0000007F 8Er35r01         [ 4]  294 	stx	(_main_dst_20000_131 + 0x0003)
+                                    295 ;	Raw cost for generated ic 20 : (5, 6.000000) count=1.000000
+                                    296 ;	src/libc_memcpy.c: 37: const char* src = "src";
+                                    297 ;	skipping iCode since result will be rematerialized
+                                    298 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    299 ;	skipping iCode since result will be rematerialized
+                                    300 ;	Raw cost for generated ic 22 : (0, 0.000000) count=1.000000
+                                    301 ;	skipping iCode since result will be rematerialized
+                                    302 ;	Raw cost for generated ic 23 : (0, 0.000000) count=1.000000
+                                    303 ;	src/libc_memcpy.c: 38: printf("memcpy(dst,src,2)\n-> %s\n", memcpy(dst, src, 2));
+                                    304 ;	skipping iCode since result will be rematerialized
+                                    305 ;	Raw cost for generated ic 25 : (0, 0.000000) count=1.000000
+                                    306 ;	genCast
+                                    307 ;	genCopy
+    00000082 A9s02            [ 2]  308 	lda	#>___str_1
+    00000084 8Dr01r00         [ 4]  309 	sta	(___memcpy_PARM_2 + 1)
+    00000087 A9rB5            [ 2]  310 	lda	#___str_1
+    00000089 8Dr00r00         [ 4]  311 	sta	___memcpy_PARM_2
+                                    312 ;	Raw cost for generated ic 26 : (10, 12.000000) count=1.000000
+                                    313 ;	genAssign
+                                    314 ;	genAssignLit
+    0000008C A2 02            [ 2]  315 	ldx	#0x02
+    0000008E 8Er00r00         [ 4]  316 	stx	___memcpy_PARM_3
+    00000091 A2 00            [ 2]  317 	ldx	#0x00
+    00000093 8Er01r00         [ 4]  318 	stx	(___memcpy_PARM_3 + 1)
+                                    319 ;	Raw cost for generated ic 29 : (10, 12.000000) count=1.000000
+                                    320 ;	Raw cost for generated ic 27 : (0, 0.000000) count=1.000000
+                                    321 ;	genCall
+                                    322 ;	genSend
+    00000096 A2s01            [ 2]  323 	ldx	#>_main_dst_20000_131
+    00000098 A9r32            [ 2]  324 	lda	#_main_dst_20000_131
+    0000009A 20r00r00         [ 6]  325 	jsr	___memcpy
+                                    326 ;	assignResultValue
+                                    327 ;	Raw cost for generated ic 30 : (7, 10.000000) count=1.000000
+                                    328 ;	skipping iCode since result will be rematerialized
+                                    329 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                    330 ;	skipping iCode since result will be rematerialized
+                                    331 ;	Raw cost for generated ic 32 : (0, 0.000000) count=1.000000
+                                    332 ;	genIpush
+    0000009D 85*00            [ 3]  333 	sta	*(REGTEMP+0)
+    0000009F 8A               [ 2]  334 	txa
+    000000A0 48               [ 3]  335 	pha
+    000000A1 A5*00            [ 3]  336 	lda	*(REGTEMP+0)
+    000000A3 48               [ 3]  337 	pha
+                                    338 ;	Raw cost for generated ic 33 : (7, 14.000000) count=1.000000
+                                    339 ;	genIpush
+    000000A4 A9s02            [ 2]  340 	lda	#>___str_4
+    000000A6 48               [ 3]  341 	pha
+    000000A7 A9rB9            [ 2]  342 	lda	#___str_4
+    000000A9 48               [ 3]  343 	pha
+                                    344 ;	Raw cost for generated ic 34 : (6, 10.000000) count=1.000000
+                                    345 ;	genCall
+    000000AA 20r00r00         [ 6]  346 	jsr	_printf
+    000000AD 68               [ 4]  347 	pla
+    000000AE 68               [ 4]  348 	pla
+    000000AF 68               [ 4]  349 	pla
+    000000B0 68               [ 4]  350 	pla
+                                    351 ;	Raw cost for generated ic 35 : (7, 22.000000) count=1.000000
+                                    352 ;	src/libc_memcpy.c: 42: char dst[4] = "dst";
+                                    353 ;	skipping iCode since result will be rematerialized
+                                    354 ;	Raw cost for generated ic 36 : (0, 0.000000) count=1.000000
+                                    355 ;	genPointerSet
+                                    356 ;	genDataPointerSet
+    000000B1 A2 64            [ 2]  357 	ldx	#0x64
+    000000B3 8Er36r01         [ 4]  358 	stx	_main_dst_20000_132
+                                    359 ;	Raw cost for generated ic 37 : (5, 6.000000) count=1.000000
+                                    360 ;	skipping iCode since result will be rematerialized
+                                    361 ;	Raw cost for generated ic 39 : (0, 0.000000) count=1.000000
+                                    362 ;	genPointerSet
+                                    363 ;	genDataPointerSet
+    000000B6 A2 73            [ 2]  364 	ldx	#0x73
+    000000B8 8Er37r01         [ 4]  365 	stx	(_main_dst_20000_132 + 0x0001)
+                                    366 ;	Raw cost for generated ic 40 : (5, 6.000000) count=1.000000
+                                    367 ;	skipping iCode since result will be rematerialized
+                                    368 ;	Raw cost for generated ic 42 : (0, 0.000000) count=1.000000
+                                    369 ;	genPointerSet
+                                    370 ;	genDataPointerSet
+    000000BB E8               [ 2]  371 	inx
+    000000BC 8Er38r01         [ 4]  372 	stx	(_main_dst_20000_132 + 0x0002)
+                                    373 ;	Raw cost for generated ic 43 : (4, 6.000000) count=1.000000
+                                    374 ;	skipping iCode since result will be rematerialized
+                                    375 ;	Raw cost for generated ic 45 : (0, 0.000000) count=1.000000
+                                    376 ;	genPointerSet
+                                    377 ;	genDataPointerSet
+    000000BF A2 00            [ 2]  378 	ldx	#0x00
+    000000C1 8Er39r01         [ 4]  379 	stx	(_main_dst_20000_132 + 0x0003)
+                                    380 ;	Raw cost for generated ic 46 : (5, 6.000000) count=1.000000
+                                    381 ;	src/libc_memcpy.c: 43: const char* src = "src";
+                                    382 ;	skipping iCode since result will be rematerialized
+                                    383 ;	Raw cost for generated ic 49 : (0, 0.000000) count=1.000000
+                                    384 ;	src/libc_memcpy.c: 44: printf("memmove(dst,src,2)\n-> %s\n", memmove(dst, src, 2));
+                                    385 ;	skipping iCode since result will be rematerialized
+                                    386 ;	Raw cost for generated ic 51 : (0, 0.000000) count=1.000000
+                                    387 ;	genCast
+                                    388 ;	genCopy
+    000000C4 A9s02            [ 2]  389 	lda	#>___str_1
+    000000C6 8Dr01r00         [ 4]  390 	sta	(_memmove_PARM_2 + 1)
+    000000C9 A9rB5            [ 2]  391 	lda	#___str_1
+    000000CB 8Dr00r00         [ 4]  392 	sta	_memmove_PARM_2
+                                    393 ;	Raw cost for generated ic 52 : (10, 12.000000) count=1.000000
+                                    394 ;	genAssign
+                                    395 ;	genAssignLit
+    000000CE A2 02            [ 2]  396 	ldx	#0x02
+    000000D0 8Er00r00         [ 4]  397 	stx	_memmove_PARM_3
+    000000D3 A2 00            [ 2]  398 	ldx	#0x00
+    000000D5 8Er01r00         [ 4]  399 	stx	(_memmove_PARM_3 + 1)
+                                    400 ;	Raw cost for generated ic 55 : (10, 12.000000) count=1.000000
+                                    401 ;	Raw cost for generated ic 53 : (0, 0.000000) count=1.000000
+                                    402 ;	genCall
+                                    403 ;	genSend
+    000000D8 A2s01            [ 2]  404 	ldx	#>_main_dst_20000_132
+    000000DA A9r36            [ 2]  405 	lda	#_main_dst_20000_132
+    000000DC 20r00r00         [ 6]  406 	jsr	_memmove
+                                    407 ;	assignResultValue
+                                    408 ;	Raw cost for generated ic 56 : (7, 10.000000) count=1.000000
+                                    409 ;	skipping iCode since result will be rematerialized
+                                    410 ;	Raw cost for generated ic 57 : (0, 0.000000) count=1.000000
+                                    411 ;	skipping iCode since result will be rematerialized
+                                    412 ;	Raw cost for generated ic 58 : (0, 0.000000) count=1.000000
+                                    413 ;	genIpush
+    000000DF 85*00            [ 3]  414 	sta	*(REGTEMP+0)
+    000000E1 8A               [ 2]  415 	txa
+    000000E2 48               [ 3]  416 	pha
+    000000E3 A5*00            [ 3]  417 	lda	*(REGTEMP+0)
+    000000E5 48               [ 3]  418 	pha
+                                    419 ;	Raw cost for generated ic 59 : (7, 14.000000) count=1.000000
+                                    420 ;	genIpush
+    000000E6 A9s02            [ 2]  421 	lda	#>___str_5
+    000000E8 48               [ 3]  422 	pha
+    000000E9 A9rD2            [ 2]  423 	lda	#___str_5
+    000000EB 48               [ 3]  424 	pha
+                                    425 ;	Raw cost for generated ic 60 : (6, 10.000000) count=1.000000
+                                    426 ;	genCall
+    000000EC 20r00r00         [ 6]  427 	jsr	_printf
+    000000EF 68               [ 4]  428 	pla
+    000000F0 68               [ 4]  429 	pla
+    000000F1 68               [ 4]  430 	pla
+    000000F2 68               [ 4]  431 	pla
+                                    432 ;	Raw cost for generated ic 61 : (7, 22.000000) count=1.000000
+                                    433 ;	src/libc_memcpy.c: 48: char dst[4] = "dst";
+                                    434 ;	skipping iCode since result will be rematerialized
+                                    435 ;	Raw cost for generated ic 62 : (0, 0.000000) count=1.000000
+                                    436 ;	genPointerSet
+                                    437 ;	genDataPointerSet
+    000000F3 A2 64            [ 2]  438 	ldx	#0x64
+    000000F5 8Er3Ar01         [ 4]  439 	stx	_main_dst_20000_133
+                                    440 ;	Raw cost for generated ic 63 : (5, 6.000000) count=1.000000
+                                    441 ;	skipping iCode since result will be rematerialized
+                                    442 ;	Raw cost for generated ic 65 : (0, 0.000000) count=1.000000
+                                    443 ;	genPointerSet
+                                    444 ;	genDataPointerSet
+    000000F8 A2 73            [ 2]  445 	ldx	#0x73
+    000000FA 8Er3Br01         [ 4]  446 	stx	(_main_dst_20000_133 + 0x0001)
+                                    447 ;	Raw cost for generated ic 66 : (5, 6.000000) count=1.000000
+                                    448 ;	skipping iCode since result will be rematerialized
+                                    449 ;	Raw cost for generated ic 68 : (0, 0.000000) count=1.000000
+                                    450 ;	genPointerSet
+                                    451 ;	genDataPointerSet
+    000000FD E8               [ 2]  452 	inx
+    000000FE 8Er3Cr01         [ 4]  453 	stx	(_main_dst_20000_133 + 0x0002)
+                                    454 ;	Raw cost for generated ic 69 : (4, 6.000000) count=1.000000
+                                    455 ;	skipping iCode since result will be rematerialized
+                                    456 ;	Raw cost for generated ic 71 : (0, 0.000000) count=1.000000
+                                    457 ;	genPointerSet
+                                    458 ;	genDataPointerSet
+    00000101 A2 00            [ 2]  459 	ldx	#0x00
+    00000103 8Er3Dr01         [ 4]  460 	stx	(_main_dst_20000_133 + 0x0003)
+                                    461 ;	Raw cost for generated ic 72 : (5, 6.000000) count=1.000000
+                                    462 ;	src/libc_memcpy.c: 49: printf("memset(dst,x,2)\n-> %s\n", memset(dst, 'x', 2));
+                                    463 ;	skipping iCode since result will be rematerialized
+                                    464 ;	Raw cost for generated ic 74 : (0, 0.000000) count=1.000000
+                                    465 ;	genAssign
+                                    466 ;	genAssignLit
+    00000106 A2 78            [ 2]  467 	ldx	#0x78
+    00000108 8Er00r00         [ 4]  468 	stx	_memset_PARM_2
+    0000010B A2 00            [ 2]  469 	ldx	#0x00
+    0000010D 8Er01r00         [ 4]  470 	stx	(_memset_PARM_2 + 1)
+                                    471 ;	Raw cost for generated ic 76 : (10, 12.000000) count=1.000000
+                                    472 ;	genAssign
+                                    473 ;	genAssignLit
+    00000110 A2 02            [ 2]  474 	ldx	#0x02
+    00000112 8Er00r00         [ 4]  475 	stx	_memset_PARM_3
+    00000115 A2 00            [ 2]  476 	ldx	#0x00
+    00000117 8Er01r00         [ 4]  477 	stx	(_memset_PARM_3 + 1)
+                                    478 ;	Raw cost for generated ic 77 : (10, 12.000000) count=1.000000
+                                    479 ;	Raw cost for generated ic 75 : (0, 0.000000) count=1.000000
+                                    480 ;	genCall
+                                    481 ;	genSend
+    0000011A A2s01            [ 2]  482 	ldx	#>_main_dst_20000_133
+    0000011C A9r3A            [ 2]  483 	lda	#_main_dst_20000_133
+    0000011E 20r00r00         [ 6]  484 	jsr	_memset
+                                    485 ;	assignResultValue
+                                    486 ;	Raw cost for generated ic 78 : (7, 10.000000) count=1.000000
+                                    487 ;	skipping iCode since result will be rematerialized
+                                    488 ;	Raw cost for generated ic 79 : (0, 0.000000) count=1.000000
+                                    489 ;	skipping iCode since result will be rematerialized
+                                    490 ;	Raw cost for generated ic 80 : (0, 0.000000) count=1.000000
+                                    491 ;	genIpush
+    00000121 85*00            [ 3]  492 	sta	*(REGTEMP+0)
+    00000123 8A               [ 2]  493 	txa
+    00000124 48               [ 3]  494 	pha
+    00000125 A5*00            [ 3]  495 	lda	*(REGTEMP+0)
+    00000127 48               [ 3]  496 	pha
+                                    497 ;	Raw cost for generated ic 81 : (7, 14.000000) count=1.000000
+                                    498 ;	genIpush
+    00000128 A9s02            [ 2]  499 	lda	#>___str_6
+    0000012A 48               [ 3]  500 	pha
+    0000012B A9rEC            [ 2]  501 	lda	#___str_6
+    0000012D 48               [ 3]  502 	pha
+                                    503 ;	Raw cost for generated ic 82 : (6, 10.000000) count=1.000000
+                                    504 ;	genCall
+    0000012E 20r00r00         [ 6]  505 	jsr	_printf
+    00000131 68               [ 4]  506 	pla
+    00000132 68               [ 4]  507 	pla
+    00000133 68               [ 4]  508 	pla
+    00000134 68               [ 4]  509 	pla
+                                    510 ;	Raw cost for generated ic 83 : (7, 22.000000) count=1.000000
+                                    511 ;	src/libc_memcpy.c: 52: printf("\nBenchmark memcpy:\n");
+                                    512 ;	skipping iCode since result will be rematerialized
+                                    513 ;	Raw cost for generated ic 84 : (0, 0.000000) count=1.000000
+                                    514 ;	skipping iCode since result will be rematerialized
+                                    515 ;	Raw cost for generated ic 85 : (0, 0.000000) count=1.000000
+                                    516 ;	genIpush
+    00000135 A9s03            [ 2]  517 	lda	#>___str_7
+    00000137 48               [ 3]  518 	pha
+    00000138 A9r03            [ 2]  519 	lda	#___str_7
+    0000013A 48               [ 3]  520 	pha
+                                    521 ;	Raw cost for generated ic 86 : (6, 10.000000) count=1.000000
+                                    522 ;	genCall
+    0000013B 20r00r00         [ 6]  523 	jsr	_printf
+    0000013E 68               [ 4]  524 	pla
+    0000013F 68               [ 4]  525 	pla
+                                    526 ;	Raw cost for generated ic 87 : (5, 14.000000) count=1.000000
+                                    527 ;	src/libc_memcpy.c: 54: printf("800*memcpy(d,s,150)\n-> %d frames\n", benchmark_memcpy(800, 150));
+                                    528 ;	genAssign
+                                    529 ;	genAssignLit
+    00000140 A2 96            [ 2]  530 	ldx	#0x96
+    00000142 8Er2Cr01         [ 4]  531 	stx	_benchmark_memcpy_PARM_2
+    00000145 A2 00            [ 2]  532 	ldx	#0x00
+    00000147 8Er2Dr01         [ 4]  533 	stx	(_benchmark_memcpy_PARM_2 + 1)
+                                    534 ;	Raw cost for generated ic 89 : (10, 12.000000) count=1.000000
+                                    535 ;	Raw cost for generated ic 88 : (0, 0.000000) count=1.000000
+                                    536 ;	genCall
+                                    537 ;	genSend
+    0000014A A2 03            [ 2]  538 	ldx	#0x03
+    0000014C A9 20            [ 2]  539 	lda	#0x20
+    0000014E 20r00r00         [ 6]  540 	jsr	_benchmark_memcpy
+                                    541 ;	assignResultValue
+                                    542 ;	Raw cost for generated ic 90 : (7, 10.000000) count=1.000000
+                                    543 ;	skipping iCode since result will be rematerialized
+                                    544 ;	Raw cost for generated ic 91 : (0, 0.000000) count=1.000000
+                                    545 ;	skipping iCode since result will be rematerialized
+                                    546 ;	Raw cost for generated ic 92 : (0, 0.000000) count=1.000000
+                                    547 ;	genIpush
+    00000151 85*00            [ 3]  548 	sta	*(REGTEMP+0)
+    00000153 8A               [ 2]  549 	txa
+    00000154 48               [ 3]  550 	pha
+    00000155 A5*00            [ 3]  551 	lda	*(REGTEMP+0)
+    00000157 48               [ 3]  552 	pha
+                                    553 ;	Raw cost for generated ic 93 : (7, 14.000000) count=1.000000
+                                    554 ;	genIpush
+    00000158 A9s03            [ 2]  555 	lda	#>___str_8
+    0000015A 48               [ 3]  556 	pha
+    0000015B A9r17            [ 2]  557 	lda	#___str_8
+    0000015D 48               [ 3]  558 	pha
+                                    559 ;	Raw cost for generated ic 94 : (6, 10.000000) count=1.000000
+                                    560 ;	genCall
+    0000015E 20r00r00         [ 6]  561 	jsr	_printf
+    00000161 68               [ 4]  562 	pla
+    00000162 68               [ 4]  563 	pla
+    00000163 68               [ 4]  564 	pla
+    00000164 68               [ 4]  565 	pla
+                                    566 ;	Raw cost for generated ic 95 : (7, 22.000000) count=1.000000
+                                    567 ;	src/libc_memcpy.c: 55: printf("400*memcpy(d,s,300)\n-> %d frames\n", benchmark_memcpy(400, 300));
+                                    568 ;	genAssign
+                                    569 ;	genAssignLit
+    00000165 A2 2C            [ 2]  570 	ldx	#0x2c
+    00000167 8Er2Cr01         [ 4]  571 	stx	_benchmark_memcpy_PARM_2
+    0000016A A2 01            [ 2]  572 	ldx	#0x01
+    0000016C 8Er2Dr01         [ 4]  573 	stx	(_benchmark_memcpy_PARM_2 + 1)
+                                    574 ;	Raw cost for generated ic 97 : (10, 12.000000) count=1.000000
+                                    575 ;	Raw cost for generated ic 96 : (0, 0.000000) count=1.000000
+                                    576 ;	genCall
+                                    577 ;	genSend
+    0000016F A9 90            [ 2]  578 	lda	#0x90
+    00000171 20r00r00         [ 6]  579 	jsr	_benchmark_memcpy
+                                    580 ;	assignResultValue
+                                    581 ;	Raw cost for generated ic 98 : (5, 8.000000) count=1.000000
+                                    582 ;	skipping iCode since result will be rematerialized
+                                    583 ;	Raw cost for generated ic 99 : (0, 0.000000) count=1.000000
+                                    584 ;	skipping iCode since result will be rematerialized
+                                    585 ;	Raw cost for generated ic 100 : (0, 0.000000) count=1.000000
+                                    586 ;	genIpush
+    00000174 85*00            [ 3]  587 	sta	*(REGTEMP+0)
+    00000176 8A               [ 2]  588 	txa
+    00000177 48               [ 3]  589 	pha
+    00000178 A5*00            [ 3]  590 	lda	*(REGTEMP+0)
+    0000017A 48               [ 3]  591 	pha
+                                    592 ;	Raw cost for generated ic 101 : (7, 14.000000) count=1.000000
+                                    593 ;	genIpush
+    0000017B A9s03            [ 2]  594 	lda	#>___str_9
+    0000017D 48               [ 3]  595 	pha
+    0000017E A9r39            [ 2]  596 	lda	#___str_9
+    00000180 48               [ 3]  597 	pha
+                                    598 ;	Raw cost for generated ic 102 : (6, 10.000000) count=1.000000
+                                    599 ;	genCall
+    00000181 20r00r00         [ 6]  600 	jsr	_printf
+    00000184 68               [ 4]  601 	pla
+    00000185 68               [ 4]  602 	pla
+    00000186 68               [ 4]  603 	pla
+    00000187 68               [ 4]  604 	pla
+                                    605 ;	Raw cost for generated ic 103 : (7, 22.000000) count=1.000000
+                                    606 ;	genLabel
+                                    607 ;	Raw cost for generated ic 104 : (0, 0.000000) count=1.000000
+                                    608 ;	src/libc_memcpy.c: 57: }
+                                    609 ;	genEndFunction
+    00000188 60               [ 6]  610 	rts
+                                    611 ;	Raw cost for generated ic 105 : (1, 6.000000) count=1.000000
+                                    612 	.area _CODE
+    00000189                        613 _memcpy_src:
+    00000189 00                     614 	.db #0x00	; 0
+    0000018A 00                     615 	.db 0x00
+    0000018B 00                     616 	.db 0x00
+    0000018C 00                     617 	.db 0x00
+    0000018D 00                     618 	.db 0x00
+    0000018E 00                     619 	.db 0x00
+    0000018F 00                     620 	.db 0x00
+    00000190 00                     621 	.db 0x00
+    00000191 00                     622 	.db 0x00
+    00000192 00                     623 	.db 0x00
+    00000193 00                     624 	.db 0x00
+    00000194 00                     625 	.db 0x00
+    00000195 00                     626 	.db 0x00
+    00000196 00                     627 	.db 0x00
+    00000197 00                     628 	.db 0x00
+    00000198 00                     629 	.db 0x00
+    00000199 00                     630 	.db 0x00
+    0000019A 00                     631 	.db 0x00
+    0000019B 00                     632 	.db 0x00
+    0000019C 00                     633 	.db 0x00
+    0000019D 00                     634 	.db 0x00
+    0000019E 00                     635 	.db 0x00
+    0000019F 00                     636 	.db 0x00
+    000001A0 00                     637 	.db 0x00
+    000001A1 00                     638 	.db 0x00
+    000001A2 00                     639 	.db 0x00
+    000001A3 00                     640 	.db 0x00
+    000001A4 00                     641 	.db 0x00
+    000001A5 00                     642 	.db 0x00
+    000001A6 00                     643 	.db 0x00
+    000001A7 00                     644 	.db 0x00
+    000001A8 00                     645 	.db 0x00
+    000001A9 00                     646 	.db 0x00
+    000001AA 00                     647 	.db 0x00
+    000001AB 00                     648 	.db 0x00
+    000001AC 00                     649 	.db 0x00
+    000001AD 00                     650 	.db 0x00
+    000001AE 00                     651 	.db 0x00
+    000001AF 00                     652 	.db 0x00
+    000001B0 00                     653 	.db 0x00
+    000001B1 00                     654 	.db 0x00
+    000001B2 00                     655 	.db 0x00
+    000001B3 00                     656 	.db 0x00
+    000001B4 00                     657 	.db 0x00
+    000001B5 00                     658 	.db 0x00
+    000001B6 00                     659 	.db 0x00
+    000001B7 00                     660 	.db 0x00
+    000001B8 00                     661 	.db 0x00
+    000001B9 00                     662 	.db 0x00
+    000001BA 00                     663 	.db 0x00
+    000001BB 00                     664 	.db 0x00
+    000001BC 00                     665 	.db 0x00
+    000001BD 00                     666 	.db 0x00
+    000001BE 00                     667 	.db 0x00
+    000001BF 00                     668 	.db 0x00
+    000001C0 00                     669 	.db 0x00
+    000001C1 00                     670 	.db 0x00
+    000001C2 00                     671 	.db 0x00
+    000001C3 00                     672 	.db 0x00
+    000001C4 00                     673 	.db 0x00
+    000001C5 00                     674 	.db 0x00
+    000001C6 00                     675 	.db 0x00
+    000001C7 00                     676 	.db 0x00
+    000001C8 00                     677 	.db 0x00
+    000001C9 00                     678 	.db 0x00
+    000001CA 00                     679 	.db 0x00
+    000001CB 00                     680 	.db 0x00
+    000001CC 00                     681 	.db 0x00
+    000001CD 00                     682 	.db 0x00
+    000001CE 00                     683 	.db 0x00
+    000001CF 00                     684 	.db 0x00
+    000001D0 00                     685 	.db 0x00
+    000001D1 00                     686 	.db 0x00
+    000001D2 00                     687 	.db 0x00
+    000001D3 00                     688 	.db 0x00
+    000001D4 00                     689 	.db 0x00
+    000001D5 00                     690 	.db 0x00
+    000001D6 00                     691 	.db 0x00
+    000001D7 00                     692 	.db 0x00
+    000001D8 00                     693 	.db 0x00
+    000001D9 00                     694 	.db 0x00
+    000001DA 00                     695 	.db 0x00
+    000001DB 00                     696 	.db 0x00
+    000001DC 00                     697 	.db 0x00
+    000001DD 00                     698 	.db 0x00
+    000001DE 00                     699 	.db 0x00
+    000001DF 00                     700 	.db 0x00
+    000001E0 00                     701 	.db 0x00
+    000001E1 00                     702 	.db 0x00
+    000001E2 00                     703 	.db 0x00
+    000001E3 00                     704 	.db 0x00
+    000001E4 00                     705 	.db 0x00
+    000001E5 00                     706 	.db 0x00
+    000001E6 00                     707 	.db 0x00
+    000001E7 00                     708 	.db 0x00
+    000001E8 00                     709 	.db 0x00
+    000001E9 00                     710 	.db 0x00
+    000001EA 00                     711 	.db 0x00
+    000001EB 00                     712 	.db 0x00
+    000001EC 00                     713 	.db 0x00
+    000001ED 00                     714 	.db 0x00
+    000001EE 00                     715 	.db 0x00
+    000001EF 00                     716 	.db 0x00
+    000001F0 00                     717 	.db 0x00
+    000001F1 00                     718 	.db 0x00
+    000001F2 00                     719 	.db 0x00
+    000001F3 00                     720 	.db 0x00
+    000001F4 00                     721 	.db 0x00
+    000001F5 00                     722 	.db 0x00
+    000001F6 00                     723 	.db 0x00
+    000001F7 00                     724 	.db 0x00
+    000001F8 00                     725 	.db 0x00
+    000001F9 00                     726 	.db 0x00
+    000001FA 00                     727 	.db 0x00
+    000001FB 00                     728 	.db 0x00
+    000001FC 00                     729 	.db 0x00
+    000001FD 00                     730 	.db 0x00
+    000001FE 00                     731 	.db 0x00
+    000001FF 00                     732 	.db 0x00
+    00000200 00                     733 	.db 0x00
+    00000201 00                     734 	.db 0x00
+    00000202 00                     735 	.db 0x00
+    00000203 00                     736 	.db 0x00
+    00000204 00                     737 	.db 0x00
+    00000205 00                     738 	.db 0x00
+    00000206 00                     739 	.db 0x00
+    00000207 00                     740 	.db 0x00
+    00000208 00                     741 	.db 0x00
+    00000209 00                     742 	.db 0x00
+    0000020A 00                     743 	.db 0x00
+    0000020B 00                     744 	.db 0x00
+    0000020C 00                     745 	.db 0x00
+    0000020D 00                     746 	.db 0x00
+    0000020E 00                     747 	.db 0x00
+    0000020F 00                     748 	.db 0x00
+    00000210 00                     749 	.db 0x00
+    00000211 00                     750 	.db 0x00
+    00000212 00                     751 	.db 0x00
+    00000213 00                     752 	.db 0x00
+    00000214 00                     753 	.db 0x00
+    00000215 00                     754 	.db 0x00
+    00000216 00                     755 	.db 0x00
+    00000217 00                     756 	.db 0x00
+    00000218 00                     757 	.db 0x00
+    00000219 00                     758 	.db 0x00
+    0000021A 00                     759 	.db 0x00
+    0000021B 00                     760 	.db 0x00
+    0000021C 00                     761 	.db 0x00
+    0000021D 00                     762 	.db 0x00
+    0000021E 00                     763 	.db 0x00
+    0000021F 00                     764 	.db 0x00
+    00000220 00                     765 	.db 0x00
+    00000221 00                     766 	.db 0x00
+    00000222 00                     767 	.db 0x00
+    00000223 00                     768 	.db 0x00
+    00000224 00                     769 	.db 0x00
+    00000225 00                     770 	.db 0x00
+    00000226 00                     771 	.db 0x00
+    00000227 00                     772 	.db 0x00
+    00000228 00                     773 	.db 0x00
+    00000229 00                     774 	.db 0x00
+    0000022A 00                     775 	.db 0x00
+    0000022B 00                     776 	.db 0x00
+    0000022C 00                     777 	.db 0x00
+    0000022D 00                     778 	.db 0x00
+    0000022E 00                     779 	.db 0x00
+    0000022F 00                     780 	.db 0x00
+    00000230 00                     781 	.db 0x00
+    00000231 00                     782 	.db 0x00
+    00000232 00                     783 	.db 0x00
+    00000233 00                     784 	.db 0x00
+    00000234 00                     785 	.db 0x00
+    00000235 00                     786 	.db 0x00
+    00000236 00                     787 	.db 0x00
+    00000237 00                     788 	.db 0x00
+    00000238 00                     789 	.db 0x00
+    00000239 00                     790 	.db 0x00
+    0000023A 00                     791 	.db 0x00
+    0000023B 00                     792 	.db 0x00
+    0000023C 00                     793 	.db 0x00
+    0000023D 00                     794 	.db 0x00
+    0000023E 00                     795 	.db 0x00
+    0000023F 00                     796 	.db 0x00
+    00000240 00                     797 	.db 0x00
+    00000241 00                     798 	.db 0x00
+    00000242 00                     799 	.db 0x00
+    00000243 00                     800 	.db 0x00
+    00000244 00                     801 	.db 0x00
+    00000245 00                     802 	.db 0x00
+    00000246 00                     803 	.db 0x00
+    00000247 00                     804 	.db 0x00
+    00000248 00                     805 	.db 0x00
+    00000249 00                     806 	.db 0x00
+    0000024A 00                     807 	.db 0x00
+    0000024B 00                     808 	.db 0x00
+    0000024C 00                     809 	.db 0x00
+    0000024D 00                     810 	.db 0x00
+    0000024E 00                     811 	.db 0x00
+    0000024F 00                     812 	.db 0x00
+    00000250 00                     813 	.db 0x00
+    00000251 00                     814 	.db 0x00
+    00000252 00                     815 	.db 0x00
+    00000253 00                     816 	.db 0x00
+    00000254 00                     817 	.db 0x00
+    00000255 00                     818 	.db 0x00
+    00000256 00                     819 	.db 0x00
+    00000257 00                     820 	.db 0x00
+    00000258 00                     821 	.db 0x00
+    00000259 00                     822 	.db 0x00
+    0000025A 00                     823 	.db 0x00
+    0000025B 00                     824 	.db 0x00
+    0000025C 00                     825 	.db 0x00
+    0000025D 00                     826 	.db 0x00
+    0000025E 00                     827 	.db 0x00
+    0000025F 00                     828 	.db 0x00
+    00000260 00                     829 	.db 0x00
+    00000261 00                     830 	.db 0x00
+    00000262 00                     831 	.db 0x00
+    00000263 00                     832 	.db 0x00
+    00000264 00                     833 	.db 0x00
+    00000265 00                     834 	.db 0x00
+    00000266 00                     835 	.db 0x00
+    00000267 00                     836 	.db 0x00
+    00000268 00                     837 	.db 0x00
+    00000269 00                     838 	.db 0x00
+    0000026A 00                     839 	.db 0x00
+    0000026B 00                     840 	.db 0x00
+    0000026C 00                     841 	.db 0x00
+    0000026D 00                     842 	.db 0x00
+    0000026E 00                     843 	.db 0x00
+    0000026F 00                     844 	.db 0x00
+    00000270 00                     845 	.db 0x00
+    00000271 00                     846 	.db 0x00
+    00000272 00                     847 	.db 0x00
+    00000273 00                     848 	.db 0x00
+    00000274 00                     849 	.db 0x00
+    00000275 00                     850 	.db 0x00
+    00000276 00                     851 	.db 0x00
+    00000277 00                     852 	.db 0x00
+    00000278 00                     853 	.db 0x00
+    00000279 00                     854 	.db 0x00
+    0000027A 00                     855 	.db 0x00
+    0000027B 00                     856 	.db 0x00
+    0000027C 00                     857 	.db 0x00
+    0000027D 00                     858 	.db 0x00
+    0000027E 00                     859 	.db 0x00
+    0000027F 00                     860 	.db 0x00
+    00000280 00                     861 	.db 0x00
+    00000281 00                     862 	.db 0x00
+    00000282 00                     863 	.db 0x00
+    00000283 00                     864 	.db 0x00
+    00000284 00                     865 	.db 0x00
+    00000285 00                     866 	.db 0x00
+    00000286 00                     867 	.db 0x00
+    00000287 00                     868 	.db 0x00
+    00000288 00                     869 	.db 0x00
+    00000289 00                     870 	.db 0x00
+    0000028A 00                     871 	.db 0x00
+    0000028B 00                     872 	.db 0x00
+    0000028C 00                     873 	.db 0x00
+    0000028D 00                     874 	.db 0x00
+    0000028E 00                     875 	.db 0x00
+    0000028F 00                     876 	.db 0x00
+    00000290 00                     877 	.db 0x00
+    00000291 00                     878 	.db 0x00
+    00000292 00                     879 	.db 0x00
+    00000293 00                     880 	.db 0x00
+    00000294 00                     881 	.db 0x00
+    00000295 00                     882 	.db 0x00
+    00000296 00                     883 	.db 0x00
+    00000297 00                     884 	.db 0x00
+    00000298 00                     885 	.db 0x00
+    00000299 00                     886 	.db 0x00
+    0000029A 00                     887 	.db 0x00
+    0000029B 00                     888 	.db 0x00
+    0000029C 00                     889 	.db 0x00
+    0000029D 00                     890 	.db 0x00
+    0000029E 00                     891 	.db 0x00
+    0000029F 00                     892 	.db 0x00
+    000002A0 00                     893 	.db 0x00
+    000002A1 00                     894 	.db 0x00
+    000002A2 00                     895 	.db 0x00
+    000002A3 00                     896 	.db 0x00
+    000002A4 00                     897 	.db 0x00
+    000002A5 00                     898 	.db 0x00
+    000002A6 00                     899 	.db 0x00
+    000002A7 00                     900 	.db 0x00
+    000002A8 00                     901 	.db 0x00
+    000002A9 00                     902 	.db 0x00
+    000002AA 00                     903 	.db 0x00
+    000002AB 00                     904 	.db 0x00
+    000002AC 00                     905 	.db 0x00
+    000002AD 00                     906 	.db 0x00
+    000002AE 00                     907 	.db 0x00
+    000002AF 00                     908 	.db 0x00
+    000002B0 00                     909 	.db 0x00
+    000002B1 00                     910 	.db 0x00
+    000002B2 00                     911 	.db 0x00
+    000002B3 00                     912 	.db 0x00
+    000002B4 00                     913 	.db 0x00
+    000002B5                        914 ___str_1:
+    000002B5 73 72 63               915 	.ascii "src"
+    000002B8 00                     916 	.db 0x00
+    000002B9                        917 ___str_4:
+    000002B9 6D 65 6D 63 70 79 28   918 	.ascii "memcpy(dst,src,2)"
+             64 73 74 2C 73 72 63
+             2C 32 29
+    000002CA 0A                     919 	.db 0x0a
+    000002CB 2D 3E 20 25 73         920 	.ascii "-> %s"
+    000002D0 0A                     921 	.db 0x0a
+    000002D1 00                     922 	.db 0x00
+    000002D2                        923 ___str_5:
+    000002D2 6D 65 6D 6D 6F 76 65   924 	.ascii "memmove(dst,src,2)"
+             28 64 73 74 2C 73 72
+             63 2C 32 29
+    000002E4 0A                     925 	.db 0x0a
+    000002E5 2D 3E 20 25 73         926 	.ascii "-> %s"
+    000002EA 0A                     927 	.db 0x0a
+    000002EB 00                     928 	.db 0x00
+    000002EC                        929 ___str_6:
+    000002EC 6D 65 6D 73 65 74 28   930 	.ascii "memset(dst,x,2)"
+             64 73 74 2C 78 2C 32
+             29
+    000002FB 0A                     931 	.db 0x0a
+    000002FC 2D 3E 20 25 73         932 	.ascii "-> %s"
+    00000301 0A                     933 	.db 0x0a
+    00000302 00                     934 	.db 0x00
+    00000303                        935 ___str_7:
+    00000303 0A                     936 	.db 0x0a
+    00000304 42 65 6E 63 68 6D 61   937 	.ascii "Benchmark memcpy:"
+             72 6B 20 6D 65 6D 63
+             70 79 3A
+    00000315 0A                     938 	.db 0x0a
+    00000316 00                     939 	.db 0x00
+    00000317                        940 ___str_8:
+    00000317 38 30 30 2A 6D 65 6D   941 	.ascii "800*memcpy(d,s,150)"
+             63 70 79 28 64 2C 73
+             2C 31 35 30 29
+    0000032A 0A                     942 	.db 0x0a
+    0000032B 2D 3E 20 25 64 20 66   943 	.ascii "-> %d frames"
+             72 61 6D 65 73
+    00000337 0A                     944 	.db 0x0a
+    00000338 00                     945 	.db 0x00
+    00000339                        946 ___str_9:
+    00000339 34 30 30 2A 6D 65 6D   947 	.ascii "400*memcpy(d,s,300)"
+             63 70 79 28 64 2C 73
+             2C 33 30 30 29
+    0000034C 0A                     948 	.db 0x0a
+    0000034D 2D 3E 20 25 64 20 66   949 	.ascii "-> %d frames"
+             72 61 6D 65 73
+    00000359 0A                     950 	.db 0x0a
+    0000035A 00                     951 	.db 0x00
+                                    952 	.area _XINIT
+                                    953 	.area _CABS    (ABS)

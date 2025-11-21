@@ -1,0 +1,1812 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module joytest
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _reset_object_pos
+                                     23 	.globl _draw_disabled
+                                     24 	.globl _draw_buttons
+                                     25 	.globl _fill_bkg_rect
+                                     26 	.globl _scroll_sprite
+                                     27 	.globl _move_sprite
+                                     28 	.globl _set_sprite_tile
+                                     29 	.globl _set_sprite_data
+                                     30 	.globl _set_bkg_based_tiles
+                                     31 	.globl _set_bkg_data
+                                     32 	.globl _vsync
+                                     33 	.globl _joypad_ex
+                                     34 	.globl _joypad_init
+                                     35 	.globl _joypad
+                                     36 	.globl _joy
+                                     37 	.globl _old_joy
+                                     38 	.globl _isSGB
+                                     39 	.globl _toggle
+                                     40 	.globl _joypads
+                                     41 	.globl _old_joypads
+                                     42 	.globl _draw_buttons_PARM_3
+                                     43 	.globl _OAMDMA
+                                     44 	.globl _PPUDATA
+                                     45 	.globl _PPUADDR
+                                     46 	.globl _PPUSCROLL
+                                     47 	.globl _OAMDATA
+                                     48 	.globl _OAMADDR
+                                     49 	.globl _PPUSTATUS
+                                     50 	.globl _PPUMASK
+                                     51 	.globl _PPUCTRL
+                                     52 ;--------------------------------------------------------
+                                     53 ; ZP ram data
+                                     54 ;--------------------------------------------------------
+                                     55 	.area _ZP      (PAG)
+    00000000                         56 _draw_buttons_sloc0_1_0:
+    00000000                         57 	.ds 1
+    00000001                         58 _draw_disabled_sloc0_1_0:
+    00000001                         59 	.ds 1
+    00000002                         60 _main_sloc0_1_0:
+    00000002                         61 	.ds 1
+    00000003                         62 _main_sloc1_1_0:
+    00000003                         63 	.ds 2
+                                     64 ;--------------------------------------------------------
+                                     65 ; overlayable items in ram
+                                     66 ;--------------------------------------------------------
+                                     67 	.area	OSEG    (PAG, OVR)
+    00000000                         68 _reset_object_pos_sloc0_1_0:
+    00000000                         69 	.ds 1
+                                     70 ;--------------------------------------------------------
+                                     71 ; uninitialized external ram data
+                                     72 ;--------------------------------------------------------
+                                     73 	.area _BSS
+                         00002000    74 _PPUCTRL	=	0x2000
+                         00002001    75 _PPUMASK	=	0x2001
+                         00002002    76 _PPUSTATUS	=	0x2002
+                         00002003    77 _OAMADDR	=	0x2003
+                         00002004    78 _OAMDATA	=	0x2004
+                         00002005    79 _PPUSCROLL	=	0x2005
+                         00002006    80 _PPUADDR	=	0x2006
+                         00002007    81 _PPUDATA	=	0x2007
+                         00004014    82 _OAMDMA	=	0x4014
+    00000000                         83 _draw_buttons_PARM_3:
+    00000000                         84 	.ds 1
+    00000001                         85 _draw_buttons_x_10000_99:
+    00000001                         86 	.ds 1
+    00000002                         87 _draw_buttons_state_10000_99:
+    00000002                         88 	.ds 1
+    00000003                         89 _draw_disabled_y_10000_101:
+    00000003                         90 	.ds 1
+    00000004                         91 _old_joypads::
+    00000004                         92 	.ds 5
+    00000009                         93 _joypads::
+    00000009                         94 	.ds 5
+    0000000E                         95 _main_j_60000_125:
+    0000000E                         96 	.ds 1
+                                     97 ;--------------------------------------------------------
+                                     98 ; absolute external ram data
+                                     99 ;--------------------------------------------------------
+                                    100 	.area _DABS    (ABS)
+                                    101 ;--------------------------------------------------------
+                                    102 ; initialized external ram data
+                                    103 ;--------------------------------------------------------
+                                    104 	.area _DATA
+    00000000                        105 _toggle::
+    00000000                        106 	.ds 1
+    00000001                        107 _isSGB::
+    00000001                        108 	.ds 1
+    00000002                        109 _old_joy::
+    00000002                        110 	.ds 1
+    00000003                        111 _joy::
+    00000003                        112 	.ds 1
+                                    113 ;--------------------------------------------------------
+                                    114 ; global & static initialisations
+                                    115 ;--------------------------------------------------------
+                                    116 	.area _HOME
+                                    117 	.area _GSINIT
+                                    118 	.area _GSFINAL
+                                    119 	.area _GSINIT
+                                    120 ;--------------------------------------------------------
+                                    121 ; Home
+                                    122 ;--------------------------------------------------------
+                                    123 	.area _HOME
+                                    124 	.area _HOME
+                                    125 ;--------------------------------------------------------
+                                    126 ; code
+                                    127 ;--------------------------------------------------------
+                                    128 	.area _CODE
+                                    129 ;------------------------------------------------------------
+                                    130 ;Allocation info for local variables in function 'draw_buttons'
+                                    131 ;------------------------------------------------------------
+                                    132 ;sloc0         Allocated with name '_draw_buttons_sloc0_1_0'
+                                    133 ;y             Allocated with name '_draw_buttons_PARM_3'
+                                    134 ;x             Allocated with name '_draw_buttons_x_10000_99'
+                                    135 ;state         Allocated with name '_draw_buttons_state_10000_99'
+                                    136 ;------------------------------------------------------------
+                                    137 ;	src/joytest.c: 13: void draw_buttons(uint8_t state, uint8_t x, uint8_t y) {
+                                    138 ;	genLabel
+                                    139 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    140 ;	-----------------------------------------
+                                    141 ;	 function draw_buttons
+                                    142 ;	-----------------------------------------
+                                    143 ;	Register assignment is optimal.
+                                    144 ;	Stack space usage: 0 bytes.
+    00000000                        145 _draw_buttons:
+                                    146 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    147 ;	genReceive
+    00000000 8Dr02r00         [ 4]  148 	sta	_draw_buttons_state_10000_99
+                                    149 ;	Raw cost for generated ic 2 : (3, 4.000000) count=1.000000
+                                    150 ;	genReceive
+    00000003 8Er01r00         [ 4]  151 	stx	_draw_buttons_x_10000_99
+                                    152 ;	Raw cost for generated ic 3 : (3, 4.000000) count=1.000000
+                                    153 ;	src/joytest.c: 14: set_bkg_based_tiles(x,      y, 2, 2, (state & J_UP)     ? pressed_buttons[0] : normal_buttons[0], 1);
+                                    154 ;	genAnd
+    00000006 ADr02r00         [ 4]  155 	lda	_draw_buttons_state_10000_99
+    00000009 29 08            [ 2]  156 	and	#0x08
+                                    157 ;	genIfxJump : z
+    0000000B F0 07            [ 4]  158 	beq	00103$
+                                    159 ;	Raw cost for generated ic 5 : (10, 11.600000) count=1.000000
+                                    160 ;	skipping generated iCode
+                                    161 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    162 ;	genAddrOf
+    0000000D A9r00            [ 2]  163 	lda	#_pressed_buttons
+    0000000F A2s00            [ 2]  164 	ldx	#>_pressed_buttons
+                                    165 ;	Raw cost for generated ic 7 : (4, 4.000000) count=0.750000
+                                    166 ;	genGoto
+    00000011 4Cr18r00         [ 3]  167 	jmp	00104$
+                                    168 ;	Raw cost for generated ic 9 : (3, 3.000000) count=0.750000
+                                    169 ;	genLabel
+    00000014                        170 00103$:
+                                    171 ;	Raw cost for generated ic 10 : (0, 0.000000) count=0.250000
+                                    172 ;	genAddrOf
+    00000014 A9r00            [ 2]  173 	lda	#_normal_buttons
+    00000016 A2s00            [ 2]  174 	ldx	#>_normal_buttons
+                                    175 ;	Raw cost for generated ic 11 : (4, 4.000000) count=0.250000
+                                    176 ;	genLabel
+    00000018                        177 00104$:
+                                    178 ;	Raw cost for generated ic 13 : (0, 0.000000) count=1.000000
+                                    179 ;	genCast
+                                    180 ;	genCopy
+    00000018 8Dr00r00         [ 4]  181 	sta	_set_bkg_based_tiles_PARM_5
+    0000001B 8Er01r00         [ 4]  182 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    183 ;	Raw cost for generated ic 14 : (6, 8.000000) count=1.000000
+                                    184 ;	genAssign
+                                    185 ;	genAssignLit
+    0000001E A2 02            [ 2]  186 	ldx	#0x02
+    00000020 8Er00r00         [ 4]  187 	stx	_set_bkg_based_tiles_PARM_3
+                                    188 ;	Raw cost for generated ic 17 : (5, 6.000000) count=1.000000
+                                    189 ;	genAssign
+                                    190 ;	genAssignLit
+    00000023 8Er00r00         [ 4]  191 	stx	_set_bkg_based_tiles_PARM_4
+                                    192 ;	Raw cost for generated ic 18 : (3, 4.000000) count=1.000000
+                                    193 ;	genAssign
+                                    194 ;	genAssignLit
+    00000026 CA               [ 2]  195 	dex
+    00000027 8Er00r00         [ 4]  196 	stx	_set_bkg_based_tiles_PARM_6
+                                    197 ;	Raw cost for generated ic 20 : (4, 6.000000) count=1.000000
+                                    198 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    199 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    200 ;	genCall
+                                    201 ;	genSend
+    0000002A ADr01r00         [ 4]  202 	lda	_draw_buttons_x_10000_99
+    0000002D AEr00r00         [ 4]  203 	ldx	_draw_buttons_PARM_3
+    00000030 20r00r00         [ 6]  204 	jsr	_set_bkg_based_tiles
+                                    205 ;	Raw cost for generated ic 21 : (9, 14.000000) count=1.000000
+                                    206 ;	src/joytest.c: 15: set_bkg_based_tiles(x + 2,  y, 2, 2, (state & J_DOWN)   ? pressed_buttons[1] : normal_buttons[1], 1);
+                                    207 ;	genCast
+                                    208 ;	genCopy
+    00000033 ADr01r00         [ 4]  209 	lda	_draw_buttons_x_10000_99
+                                    210 ;	Raw cost for generated ic 22 : (5, 7.000000) count=1.000000
+                                    211 ;	genPlus
+                                    212 ;	genPlusIncr
+    00000036 85*00            [ 3]  213 	sta	*_draw_buttons_sloc0_1_0
+    00000038 18               [ 2]  214 	clc
+    00000039 69 02            [ 2]  215 	adc	#0x02
+    0000003B A8               [ 2]  216 	tay
+                                    217 ;	Raw cost for generated ic 23 : (6, 9.000000) count=1.000000
+                                    218 ;	genAnd
+    0000003C ADr02r00         [ 4]  219 	lda	_draw_buttons_state_10000_99
+    0000003F 29 04            [ 2]  220 	and	#0x04
+                                    221 ;	genIfxJump : z
+    00000041 F0 0D            [ 4]  222 	beq	00105$
+                                    223 ;	Raw cost for generated ic 25 : (10, 11.600000) count=1.000000
+                                    224 ;	skipping generated iCode
+                                    225 ;	Raw cost for generated ic 26 : (0, 0.000000) count=1.000000
+                                    226 ;	skipping iCode since result will be rematerialized
+                                    227 ;	Raw cost for generated ic 27 : (0, 0.000000) count=0.750000
+                                    228 ;	genPlus
+                                    229 ;	genPlusIncr
+    00000043 A2s00            [ 2]  230 	ldx	#>_pressed_buttons
+    00000045 A9r00            [ 2]  231 	lda	#_pressed_buttons
+    00000047 18               [ 2]  232 	clc
+    00000048 69 04            [ 2]  233 	adc	#0x04
+    0000004A 90 0E            [ 4]  234 	bcc	00106$
+    0000004C E8               [ 2]  235 	inx
+                                    236 ;	Raw cost for generated ic 28 : (10, 12.600000) count=0.750000
+                                    237 ;	genGoto
+    0000004D 4Cr5Ar00         [ 3]  238 	jmp	00106$
+                                    239 ;	Raw cost for generated ic 30 : (3, 3.000000) count=0.750000
+                                    240 ;	genLabel
+    00000050                        241 00105$:
+                                    242 ;	Raw cost for generated ic 31 : (0, 0.000000) count=0.250000
+                                    243 ;	skipping iCode since result will be rematerialized
+                                    244 ;	Raw cost for generated ic 32 : (0, 0.000000) count=0.250000
+                                    245 ;	genPlus
+                                    246 ;	genPlusIncr
+    00000050 A2s00            [ 2]  247 	ldx	#>_normal_buttons
+    00000052 A9r00            [ 2]  248 	lda	#_normal_buttons
+    00000054 18               [ 2]  249 	clc
+    00000055 69 04            [ 2]  250 	adc	#0x04
+    00000057 90 01            [ 4]  251 	bcc	00172$
+    00000059 E8               [ 2]  252 	inx
+    0000005A                        253 00172$:
+                                    254 ;	Raw cost for generated ic 33 : (10, 12.600000) count=0.250000
+                                    255 ;	genLabel
+    0000005A                        256 00106$:
+                                    257 ;	Raw cost for generated ic 35 : (0, 0.000000) count=1.000000
+                                    258 ;	genCast
+                                    259 ;	genCopy
+    0000005A 8Dr00r00         [ 4]  260 	sta	_set_bkg_based_tiles_PARM_5
+    0000005D 8Er01r00         [ 4]  261 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    262 ;	Raw cost for generated ic 36 : (6, 8.000000) count=1.000000
+                                    263 ;	genAssign
+                                    264 ;	genAssignLit
+    00000060 A2 02            [ 2]  265 	ldx	#0x02
+    00000062 8Er00r00         [ 4]  266 	stx	_set_bkg_based_tiles_PARM_3
+                                    267 ;	Raw cost for generated ic 39 : (5, 6.000000) count=1.000000
+                                    268 ;	genAssign
+                                    269 ;	genAssignLit
+    00000065 8Er00r00         [ 4]  270 	stx	_set_bkg_based_tiles_PARM_4
+                                    271 ;	Raw cost for generated ic 40 : (3, 4.000000) count=1.000000
+                                    272 ;	genAssign
+                                    273 ;	genAssignLit
+    00000068 CA               [ 2]  274 	dex
+    00000069 8Er00r00         [ 4]  275 	stx	_set_bkg_based_tiles_PARM_6
+                                    276 ;	Raw cost for generated ic 42 : (4, 6.000000) count=1.000000
+                                    277 ;	Raw cost for generated ic 37 : (0, 0.000000) count=1.000000
+                                    278 ;	Raw cost for generated ic 38 : (0, 0.000000) count=1.000000
+                                    279 ;	genCall
+                                    280 ;	genSend
+    0000006C 98               [ 2]  281 	tya
+    0000006D AEr00r00         [ 4]  282 	ldx	_draw_buttons_PARM_3
+    00000070 20r00r00         [ 6]  283 	jsr	_set_bkg_based_tiles
+                                    284 ;	Raw cost for generated ic 43 : (7, 12.000000) count=1.000000
+                                    285 ;	src/joytest.c: 16: set_bkg_based_tiles(x + 4,  y, 2, 2, (state & J_LEFT)   ? pressed_buttons[2] : normal_buttons[2], 1);
+                                    286 ;	genPlus
+                                    287 ;	genPlusIncr
+    00000073 A5*00            [ 3]  288 	lda	*_draw_buttons_sloc0_1_0
+    00000075 18               [ 2]  289 	clc
+    00000076 69 04            [ 2]  290 	adc	#0x04
+    00000078 A8               [ 2]  291 	tay
+                                    292 ;	Raw cost for generated ic 45 : (6, 9.000000) count=1.000000
+                                    293 ;	genAnd
+    00000079 ADr02r00         [ 4]  294 	lda	_draw_buttons_state_10000_99
+    0000007C 29 02            [ 2]  295 	and	#0x02
+                                    296 ;	genIfxJump : z
+    0000007E F0 0D            [ 4]  297 	beq	00107$
+                                    298 ;	Raw cost for generated ic 47 : (10, 11.600000) count=1.000000
+                                    299 ;	skipping generated iCode
+                                    300 ;	Raw cost for generated ic 48 : (0, 0.000000) count=1.000000
+                                    301 ;	skipping iCode since result will be rematerialized
+                                    302 ;	Raw cost for generated ic 49 : (0, 0.000000) count=0.750000
+                                    303 ;	genPlus
+                                    304 ;	genPlusIncr
+    00000080 A2s00            [ 2]  305 	ldx	#>_pressed_buttons
+    00000082 A9r00            [ 2]  306 	lda	#_pressed_buttons
+    00000084 18               [ 2]  307 	clc
+    00000085 69 08            [ 2]  308 	adc	#0x08
+    00000087 90 0E            [ 4]  309 	bcc	00108$
+    00000089 E8               [ 2]  310 	inx
+                                    311 ;	Raw cost for generated ic 50 : (10, 12.600000) count=0.750000
+                                    312 ;	genGoto
+    0000008A 4Cr97r00         [ 3]  313 	jmp	00108$
+                                    314 ;	Raw cost for generated ic 52 : (3, 3.000000) count=0.750000
+                                    315 ;	genLabel
+    0000008D                        316 00107$:
+                                    317 ;	Raw cost for generated ic 53 : (0, 0.000000) count=0.250000
+                                    318 ;	skipping iCode since result will be rematerialized
+                                    319 ;	Raw cost for generated ic 54 : (0, 0.000000) count=0.250000
+                                    320 ;	genPlus
+                                    321 ;	genPlusIncr
+    0000008D A2s00            [ 2]  322 	ldx	#>_normal_buttons
+    0000008F A9r00            [ 2]  323 	lda	#_normal_buttons
+    00000091 18               [ 2]  324 	clc
+    00000092 69 08            [ 2]  325 	adc	#0x08
+    00000094 90 01            [ 4]  326 	bcc	00176$
+    00000096 E8               [ 2]  327 	inx
+    00000097                        328 00176$:
+                                    329 ;	Raw cost for generated ic 55 : (10, 12.600000) count=0.250000
+                                    330 ;	genLabel
+    00000097                        331 00108$:
+                                    332 ;	Raw cost for generated ic 57 : (0, 0.000000) count=1.000000
+                                    333 ;	genCast
+                                    334 ;	genCopy
+    00000097 8Dr00r00         [ 4]  335 	sta	_set_bkg_based_tiles_PARM_5
+    0000009A 8Er01r00         [ 4]  336 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    337 ;	Raw cost for generated ic 58 : (6, 8.000000) count=1.000000
+                                    338 ;	genAssign
+                                    339 ;	genAssignLit
+    0000009D A2 02            [ 2]  340 	ldx	#0x02
+    0000009F 8Er00r00         [ 4]  341 	stx	_set_bkg_based_tiles_PARM_3
+                                    342 ;	Raw cost for generated ic 61 : (5, 6.000000) count=1.000000
+                                    343 ;	genAssign
+                                    344 ;	genAssignLit
+    000000A2 8Er00r00         [ 4]  345 	stx	_set_bkg_based_tiles_PARM_4
+                                    346 ;	Raw cost for generated ic 62 : (3, 4.000000) count=1.000000
+                                    347 ;	genAssign
+                                    348 ;	genAssignLit
+    000000A5 CA               [ 2]  349 	dex
+    000000A6 8Er00r00         [ 4]  350 	stx	_set_bkg_based_tiles_PARM_6
+                                    351 ;	Raw cost for generated ic 64 : (4, 6.000000) count=1.000000
+                                    352 ;	Raw cost for generated ic 59 : (0, 0.000000) count=1.000000
+                                    353 ;	Raw cost for generated ic 60 : (0, 0.000000) count=1.000000
+                                    354 ;	genCall
+                                    355 ;	genSend
+    000000A9 98               [ 2]  356 	tya
+    000000AA AEr00r00         [ 4]  357 	ldx	_draw_buttons_PARM_3
+    000000AD 20r00r00         [ 6]  358 	jsr	_set_bkg_based_tiles
+                                    359 ;	Raw cost for generated ic 65 : (7, 12.000000) count=1.000000
+                                    360 ;	src/joytest.c: 17: set_bkg_based_tiles(x + 6,  y, 2, 2, (state & J_RIGHT)  ? pressed_buttons[3] : normal_buttons[3], 1);
+                                    361 ;	genPlus
+                                    362 ;	genPlusIncr
+    000000B0 A5*00            [ 3]  363 	lda	*_draw_buttons_sloc0_1_0
+    000000B2 18               [ 2]  364 	clc
+    000000B3 69 06            [ 2]  365 	adc	#0x06
+    000000B5 A8               [ 2]  366 	tay
+                                    367 ;	Raw cost for generated ic 67 : (6, 9.000000) count=1.000000
+                                    368 ;	genAnd
+    000000B6 ADr02r00         [ 4]  369 	lda	_draw_buttons_state_10000_99
+    000000B9 29 01            [ 2]  370 	and	#0x01
+                                    371 ;	genIfxJump : z
+    000000BB F0 0D            [ 4]  372 	beq	00109$
+                                    373 ;	Raw cost for generated ic 69 : (10, 11.600000) count=1.000000
+                                    374 ;	skipping generated iCode
+                                    375 ;	Raw cost for generated ic 70 : (0, 0.000000) count=1.000000
+                                    376 ;	skipping iCode since result will be rematerialized
+                                    377 ;	Raw cost for generated ic 71 : (0, 0.000000) count=0.750000
+                                    378 ;	genPlus
+                                    379 ;	genPlusIncr
+    000000BD A2s00            [ 2]  380 	ldx	#>_pressed_buttons
+    000000BF A9r00            [ 2]  381 	lda	#_pressed_buttons
+    000000C1 18               [ 2]  382 	clc
+    000000C2 69 0C            [ 2]  383 	adc	#0x0c
+    000000C4 90 0E            [ 4]  384 	bcc	00110$
+    000000C6 E8               [ 2]  385 	inx
+                                    386 ;	Raw cost for generated ic 72 : (10, 12.600000) count=0.750000
+                                    387 ;	genGoto
+    000000C7 4CrD4r00         [ 3]  388 	jmp	00110$
+                                    389 ;	Raw cost for generated ic 74 : (3, 3.000000) count=0.750000
+                                    390 ;	genLabel
+    000000CA                        391 00109$:
+                                    392 ;	Raw cost for generated ic 75 : (0, 0.000000) count=0.250000
+                                    393 ;	skipping iCode since result will be rematerialized
+                                    394 ;	Raw cost for generated ic 76 : (0, 0.000000) count=0.250000
+                                    395 ;	genPlus
+                                    396 ;	genPlusIncr
+    000000CA A2s00            [ 2]  397 	ldx	#>_normal_buttons
+    000000CC A9r00            [ 2]  398 	lda	#_normal_buttons
+    000000CE 18               [ 2]  399 	clc
+    000000CF 69 0C            [ 2]  400 	adc	#0x0c
+    000000D1 90 01            [ 4]  401 	bcc	00180$
+    000000D3 E8               [ 2]  402 	inx
+    000000D4                        403 00180$:
+                                    404 ;	Raw cost for generated ic 77 : (10, 12.600000) count=0.250000
+                                    405 ;	genLabel
+    000000D4                        406 00110$:
+                                    407 ;	Raw cost for generated ic 79 : (0, 0.000000) count=1.000000
+                                    408 ;	genCast
+                                    409 ;	genCopy
+    000000D4 8Dr00r00         [ 4]  410 	sta	_set_bkg_based_tiles_PARM_5
+    000000D7 8Er01r00         [ 4]  411 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    412 ;	Raw cost for generated ic 80 : (6, 8.000000) count=1.000000
+                                    413 ;	genAssign
+                                    414 ;	genAssignLit
+    000000DA A2 02            [ 2]  415 	ldx	#0x02
+    000000DC 8Er00r00         [ 4]  416 	stx	_set_bkg_based_tiles_PARM_3
+                                    417 ;	Raw cost for generated ic 83 : (5, 6.000000) count=1.000000
+                                    418 ;	genAssign
+                                    419 ;	genAssignLit
+    000000DF 8Er00r00         [ 4]  420 	stx	_set_bkg_based_tiles_PARM_4
+                                    421 ;	Raw cost for generated ic 84 : (3, 4.000000) count=1.000000
+                                    422 ;	genAssign
+                                    423 ;	genAssignLit
+    000000E2 CA               [ 2]  424 	dex
+    000000E3 8Er00r00         [ 4]  425 	stx	_set_bkg_based_tiles_PARM_6
+                                    426 ;	Raw cost for generated ic 86 : (4, 6.000000) count=1.000000
+                                    427 ;	Raw cost for generated ic 81 : (0, 0.000000) count=1.000000
+                                    428 ;	Raw cost for generated ic 82 : (0, 0.000000) count=1.000000
+                                    429 ;	genCall
+                                    430 ;	genSend
+    000000E6 98               [ 2]  431 	tya
+    000000E7 AEr00r00         [ 4]  432 	ldx	_draw_buttons_PARM_3
+    000000EA 20r00r00         [ 6]  433 	jsr	_set_bkg_based_tiles
+                                    434 ;	Raw cost for generated ic 87 : (7, 12.000000) count=1.000000
+                                    435 ;	src/joytest.c: 18: set_bkg_based_tiles(x + 8,  y, 2, 2, (state & J_A)      ? pressed_buttons[4] : normal_buttons[4], 1);
+                                    436 ;	genPlus
+                                    437 ;	genPlusIncr
+    000000ED A5*00            [ 3]  438 	lda	*_draw_buttons_sloc0_1_0
+    000000EF 18               [ 2]  439 	clc
+    000000F0 69 08            [ 2]  440 	adc	#0x08
+    000000F2 A8               [ 2]  441 	tay
+                                    442 ;	Raw cost for generated ic 89 : (6, 9.000000) count=1.000000
+                                    443 ;	genAnd
+    000000F3 2Cr02r00         [ 4]  444 	bit	_draw_buttons_state_10000_99
+                                    445 ;	genIfxJump : n
+    000000F6 10 0D            [ 4]  446 	bpl	00111$
+                                    447 ;	Raw cost for generated ic 91 : (8, 9.600000) count=1.000000
+                                    448 ;	skipping generated iCode
+                                    449 ;	Raw cost for generated ic 92 : (0, 0.000000) count=1.000000
+                                    450 ;	skipping iCode since result will be rematerialized
+                                    451 ;	Raw cost for generated ic 93 : (0, 0.000000) count=0.750000
+                                    452 ;	genPlus
+                                    453 ;	genPlusIncr
+    000000F8 A2s00            [ 2]  454 	ldx	#>_pressed_buttons
+    000000FA A9r00            [ 2]  455 	lda	#_pressed_buttons
+    000000FC 18               [ 2]  456 	clc
+    000000FD 69 10            [ 2]  457 	adc	#0x10
+    000000FF 90 0E            [ 4]  458 	bcc	00112$
+    00000101 E8               [ 2]  459 	inx
+                                    460 ;	Raw cost for generated ic 94 : (10, 12.600000) count=0.750000
+                                    461 ;	genGoto
+    00000102 4Cr0Fr01         [ 3]  462 	jmp	00112$
+                                    463 ;	Raw cost for generated ic 96 : (3, 3.000000) count=0.750000
+                                    464 ;	genLabel
+    00000105                        465 00111$:
+                                    466 ;	Raw cost for generated ic 97 : (0, 0.000000) count=0.250000
+                                    467 ;	skipping iCode since result will be rematerialized
+                                    468 ;	Raw cost for generated ic 98 : (0, 0.000000) count=0.250000
+                                    469 ;	genPlus
+                                    470 ;	genPlusIncr
+    00000105 A2s00            [ 2]  471 	ldx	#>_normal_buttons
+    00000107 A9r00            [ 2]  472 	lda	#_normal_buttons
+    00000109 18               [ 2]  473 	clc
+    0000010A 69 10            [ 2]  474 	adc	#0x10
+    0000010C 90 01            [ 4]  475 	bcc	00183$
+    0000010E E8               [ 2]  476 	inx
+    0000010F                        477 00183$:
+                                    478 ;	Raw cost for generated ic 99 : (10, 12.600000) count=0.250000
+                                    479 ;	genLabel
+    0000010F                        480 00112$:
+                                    481 ;	Raw cost for generated ic 101 : (0, 0.000000) count=1.000000
+                                    482 ;	genCast
+                                    483 ;	genCopy
+    0000010F 8Dr00r00         [ 4]  484 	sta	_set_bkg_based_tiles_PARM_5
+    00000112 8Er01r00         [ 4]  485 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    486 ;	Raw cost for generated ic 102 : (6, 8.000000) count=1.000000
+                                    487 ;	genAssign
+                                    488 ;	genAssignLit
+    00000115 A2 02            [ 2]  489 	ldx	#0x02
+    00000117 8Er00r00         [ 4]  490 	stx	_set_bkg_based_tiles_PARM_3
+                                    491 ;	Raw cost for generated ic 105 : (5, 6.000000) count=1.000000
+                                    492 ;	genAssign
+                                    493 ;	genAssignLit
+    0000011A 8Er00r00         [ 4]  494 	stx	_set_bkg_based_tiles_PARM_4
+                                    495 ;	Raw cost for generated ic 106 : (3, 4.000000) count=1.000000
+                                    496 ;	genAssign
+                                    497 ;	genAssignLit
+    0000011D CA               [ 2]  498 	dex
+    0000011E 8Er00r00         [ 4]  499 	stx	_set_bkg_based_tiles_PARM_6
+                                    500 ;	Raw cost for generated ic 108 : (4, 6.000000) count=1.000000
+                                    501 ;	Raw cost for generated ic 103 : (0, 0.000000) count=1.000000
+                                    502 ;	Raw cost for generated ic 104 : (0, 0.000000) count=1.000000
+                                    503 ;	genCall
+                                    504 ;	genSend
+    00000121 98               [ 2]  505 	tya
+    00000122 AEr00r00         [ 4]  506 	ldx	_draw_buttons_PARM_3
+    00000125 20r00r00         [ 6]  507 	jsr	_set_bkg_based_tiles
+                                    508 ;	Raw cost for generated ic 109 : (7, 12.000000) count=1.000000
+                                    509 ;	src/joytest.c: 19: set_bkg_based_tiles(x + 10, y, 2, 2, (state & J_B)      ? pressed_buttons[5] : normal_buttons[5], 1);
+                                    510 ;	genPlus
+                                    511 ;	genPlusIncr
+    00000128 A5*00            [ 3]  512 	lda	*_draw_buttons_sloc0_1_0
+    0000012A 18               [ 2]  513 	clc
+    0000012B 69 0A            [ 2]  514 	adc	#0x0a
+    0000012D A8               [ 2]  515 	tay
+                                    516 ;	Raw cost for generated ic 111 : (6, 9.000000) count=1.000000
+                                    517 ;	genAnd
+    0000012E 2Cr02r00         [ 4]  518 	bit	_draw_buttons_state_10000_99
+                                    519 ;	genIfxJump : v
+    00000131 50 0D            [ 4]  520 	bvc	00113$
+                                    521 ;	Raw cost for generated ic 113 : (8, 9.600000) count=1.000000
+                                    522 ;	skipping generated iCode
+                                    523 ;	Raw cost for generated ic 114 : (0, 0.000000) count=1.000000
+                                    524 ;	skipping iCode since result will be rematerialized
+                                    525 ;	Raw cost for generated ic 115 : (0, 0.000000) count=0.750000
+                                    526 ;	genPlus
+                                    527 ;	genPlusIncr
+    00000133 A2s00            [ 2]  528 	ldx	#>_pressed_buttons
+    00000135 A9r00            [ 2]  529 	lda	#_pressed_buttons
+    00000137 18               [ 2]  530 	clc
+    00000138 69 14            [ 2]  531 	adc	#0x14
+    0000013A 90 0E            [ 4]  532 	bcc	00114$
+    0000013C E8               [ 2]  533 	inx
+                                    534 ;	Raw cost for generated ic 116 : (10, 12.600000) count=0.750000
+                                    535 ;	genGoto
+    0000013D 4Cr4Ar01         [ 3]  536 	jmp	00114$
+                                    537 ;	Raw cost for generated ic 118 : (3, 3.000000) count=0.750000
+                                    538 ;	genLabel
+    00000140                        539 00113$:
+                                    540 ;	Raw cost for generated ic 119 : (0, 0.000000) count=0.250000
+                                    541 ;	skipping iCode since result will be rematerialized
+                                    542 ;	Raw cost for generated ic 120 : (0, 0.000000) count=0.250000
+                                    543 ;	genPlus
+                                    544 ;	genPlusIncr
+    00000140 A2s00            [ 2]  545 	ldx	#>_normal_buttons
+    00000142 A9r00            [ 2]  546 	lda	#_normal_buttons
+    00000144 18               [ 2]  547 	clc
+    00000145 69 14            [ 2]  548 	adc	#0x14
+    00000147 90 01            [ 4]  549 	bcc	00186$
+    00000149 E8               [ 2]  550 	inx
+    0000014A                        551 00186$:
+                                    552 ;	Raw cost for generated ic 121 : (10, 12.600000) count=0.250000
+                                    553 ;	genLabel
+    0000014A                        554 00114$:
+                                    555 ;	Raw cost for generated ic 123 : (0, 0.000000) count=1.000000
+                                    556 ;	genCast
+                                    557 ;	genCopy
+    0000014A 8Dr00r00         [ 4]  558 	sta	_set_bkg_based_tiles_PARM_5
+    0000014D 8Er01r00         [ 4]  559 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    560 ;	Raw cost for generated ic 124 : (6, 8.000000) count=1.000000
+                                    561 ;	genAssign
+                                    562 ;	genAssignLit
+    00000150 A2 02            [ 2]  563 	ldx	#0x02
+    00000152 8Er00r00         [ 4]  564 	stx	_set_bkg_based_tiles_PARM_3
+                                    565 ;	Raw cost for generated ic 127 : (5, 6.000000) count=1.000000
+                                    566 ;	genAssign
+                                    567 ;	genAssignLit
+    00000155 8Er00r00         [ 4]  568 	stx	_set_bkg_based_tiles_PARM_4
+                                    569 ;	Raw cost for generated ic 128 : (3, 4.000000) count=1.000000
+                                    570 ;	genAssign
+                                    571 ;	genAssignLit
+    00000158 CA               [ 2]  572 	dex
+    00000159 8Er00r00         [ 4]  573 	stx	_set_bkg_based_tiles_PARM_6
+                                    574 ;	Raw cost for generated ic 130 : (4, 6.000000) count=1.000000
+                                    575 ;	Raw cost for generated ic 125 : (0, 0.000000) count=1.000000
+                                    576 ;	Raw cost for generated ic 126 : (0, 0.000000) count=1.000000
+                                    577 ;	genCall
+                                    578 ;	genSend
+    0000015C 98               [ 2]  579 	tya
+    0000015D AEr00r00         [ 4]  580 	ldx	_draw_buttons_PARM_3
+    00000160 20r00r00         [ 6]  581 	jsr	_set_bkg_based_tiles
+                                    582 ;	Raw cost for generated ic 131 : (7, 12.000000) count=1.000000
+                                    583 ;	src/joytest.c: 20: set_bkg_based_tiles(x + 12, y, 2, 2, (state & J_START)  ? pressed_buttons[6] : normal_buttons[6], 1);
+                                    584 ;	genPlus
+                                    585 ;	genPlusIncr
+    00000163 A5*00            [ 3]  586 	lda	*_draw_buttons_sloc0_1_0
+    00000165 18               [ 2]  587 	clc
+    00000166 69 0C            [ 2]  588 	adc	#0x0c
+    00000168 A8               [ 2]  589 	tay
+                                    590 ;	Raw cost for generated ic 133 : (6, 9.000000) count=1.000000
+                                    591 ;	genAnd
+    00000169 ADr02r00         [ 4]  592 	lda	_draw_buttons_state_10000_99
+    0000016C 29 10            [ 2]  593 	and	#0x10
+                                    594 ;	genIfxJump : z
+    0000016E F0 0D            [ 4]  595 	beq	00115$
+                                    596 ;	Raw cost for generated ic 135 : (10, 11.600000) count=1.000000
+                                    597 ;	skipping generated iCode
+                                    598 ;	Raw cost for generated ic 136 : (0, 0.000000) count=1.000000
+                                    599 ;	skipping iCode since result will be rematerialized
+                                    600 ;	Raw cost for generated ic 137 : (0, 0.000000) count=0.750000
+                                    601 ;	genPlus
+                                    602 ;	genPlusIncr
+    00000170 A2s00            [ 2]  603 	ldx	#>_pressed_buttons
+    00000172 A9r00            [ 2]  604 	lda	#_pressed_buttons
+    00000174 18               [ 2]  605 	clc
+    00000175 69 18            [ 2]  606 	adc	#0x18
+    00000177 90 0E            [ 4]  607 	bcc	00116$
+    00000179 E8               [ 2]  608 	inx
+                                    609 ;	Raw cost for generated ic 138 : (10, 12.600000) count=0.750000
+                                    610 ;	genGoto
+    0000017A 4Cr87r01         [ 3]  611 	jmp	00116$
+                                    612 ;	Raw cost for generated ic 140 : (3, 3.000000) count=0.750000
+                                    613 ;	genLabel
+    0000017D                        614 00115$:
+                                    615 ;	Raw cost for generated ic 141 : (0, 0.000000) count=0.250000
+                                    616 ;	skipping iCode since result will be rematerialized
+                                    617 ;	Raw cost for generated ic 142 : (0, 0.000000) count=0.250000
+                                    618 ;	genPlus
+                                    619 ;	genPlusIncr
+    0000017D A2s00            [ 2]  620 	ldx	#>_normal_buttons
+    0000017F A9r00            [ 2]  621 	lda	#_normal_buttons
+    00000181 18               [ 2]  622 	clc
+    00000182 69 18            [ 2]  623 	adc	#0x18
+    00000184 90 01            [ 4]  624 	bcc	00190$
+    00000186 E8               [ 2]  625 	inx
+    00000187                        626 00190$:
+                                    627 ;	Raw cost for generated ic 143 : (10, 12.600000) count=0.250000
+                                    628 ;	genLabel
+    00000187                        629 00116$:
+                                    630 ;	Raw cost for generated ic 145 : (0, 0.000000) count=1.000000
+                                    631 ;	genCast
+                                    632 ;	genCopy
+    00000187 8Dr00r00         [ 4]  633 	sta	_set_bkg_based_tiles_PARM_5
+    0000018A 8Er01r00         [ 4]  634 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    635 ;	Raw cost for generated ic 146 : (6, 8.000000) count=1.000000
+                                    636 ;	genAssign
+                                    637 ;	genAssignLit
+    0000018D A2 02            [ 2]  638 	ldx	#0x02
+    0000018F 8Er00r00         [ 4]  639 	stx	_set_bkg_based_tiles_PARM_3
+                                    640 ;	Raw cost for generated ic 149 : (5, 6.000000) count=1.000000
+                                    641 ;	genAssign
+                                    642 ;	genAssignLit
+    00000192 8Er00r00         [ 4]  643 	stx	_set_bkg_based_tiles_PARM_4
+                                    644 ;	Raw cost for generated ic 150 : (3, 4.000000) count=1.000000
+                                    645 ;	genAssign
+                                    646 ;	genAssignLit
+    00000195 CA               [ 2]  647 	dex
+    00000196 8Er00r00         [ 4]  648 	stx	_set_bkg_based_tiles_PARM_6
+                                    649 ;	Raw cost for generated ic 152 : (4, 6.000000) count=1.000000
+                                    650 ;	Raw cost for generated ic 147 : (0, 0.000000) count=1.000000
+                                    651 ;	Raw cost for generated ic 148 : (0, 0.000000) count=1.000000
+                                    652 ;	genCall
+                                    653 ;	genSend
+    00000199 98               [ 2]  654 	tya
+    0000019A AEr00r00         [ 4]  655 	ldx	_draw_buttons_PARM_3
+    0000019D 20r00r00         [ 6]  656 	jsr	_set_bkg_based_tiles
+                                    657 ;	Raw cost for generated ic 153 : (7, 12.000000) count=1.000000
+                                    658 ;	src/joytest.c: 21: set_bkg_based_tiles(x + 14, y, 2, 2, (state & J_SELECT) ? pressed_buttons[7] : normal_buttons[7], 1);
+                                    659 ;	genPlus
+                                    660 ;	genPlusIncr
+    000001A0 A5*00            [ 3]  661 	lda	*_draw_buttons_sloc0_1_0
+    000001A2 18               [ 2]  662 	clc
+    000001A3 69 0E            [ 2]  663 	adc	#0x0e
+    000001A5 A8               [ 2]  664 	tay
+                                    665 ;	Raw cost for generated ic 155 : (6, 9.000000) count=1.000000
+                                    666 ;	genAnd
+    000001A6 ADr02r00         [ 4]  667 	lda	_draw_buttons_state_10000_99
+    000001A9 29 20            [ 2]  668 	and	#0x20
+                                    669 ;	genIfxJump : z
+    000001AB F0 0D            [ 4]  670 	beq	00117$
+                                    671 ;	Raw cost for generated ic 157 : (10, 11.600000) count=1.000000
+                                    672 ;	skipping generated iCode
+                                    673 ;	Raw cost for generated ic 158 : (0, 0.000000) count=1.000000
+                                    674 ;	skipping iCode since result will be rematerialized
+                                    675 ;	Raw cost for generated ic 159 : (0, 0.000000) count=0.750000
+                                    676 ;	genPlus
+                                    677 ;	genPlusIncr
+    000001AD A2s00            [ 2]  678 	ldx	#>_pressed_buttons
+    000001AF A9r00            [ 2]  679 	lda	#_pressed_buttons
+    000001B1 18               [ 2]  680 	clc
+    000001B2 69 1C            [ 2]  681 	adc	#0x1c
+    000001B4 90 0E            [ 4]  682 	bcc	00118$
+    000001B6 E8               [ 2]  683 	inx
+                                    684 ;	Raw cost for generated ic 160 : (10, 12.600000) count=0.750000
+                                    685 ;	genGoto
+    000001B7 4CrC4r01         [ 3]  686 	jmp	00118$
+                                    687 ;	Raw cost for generated ic 162 : (3, 3.000000) count=0.750000
+                                    688 ;	genLabel
+    000001BA                        689 00117$:
+                                    690 ;	Raw cost for generated ic 163 : (0, 0.000000) count=0.250000
+                                    691 ;	skipping iCode since result will be rematerialized
+                                    692 ;	Raw cost for generated ic 164 : (0, 0.000000) count=0.250000
+                                    693 ;	genPlus
+                                    694 ;	genPlusIncr
+    000001BA A2s00            [ 2]  695 	ldx	#>_normal_buttons
+    000001BC A9r00            [ 2]  696 	lda	#_normal_buttons
+    000001BE 18               [ 2]  697 	clc
+    000001BF 69 1C            [ 2]  698 	adc	#0x1c
+    000001C1 90 01            [ 4]  699 	bcc	00194$
+    000001C3 E8               [ 2]  700 	inx
+    000001C4                        701 00194$:
+                                    702 ;	Raw cost for generated ic 165 : (10, 12.600000) count=0.250000
+                                    703 ;	genLabel
+    000001C4                        704 00118$:
+                                    705 ;	Raw cost for generated ic 167 : (0, 0.000000) count=1.000000
+                                    706 ;	genCast
+                                    707 ;	genCopy
+    000001C4 8Dr00r00         [ 4]  708 	sta	_set_bkg_based_tiles_PARM_5
+    000001C7 8Er01r00         [ 4]  709 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+                                    710 ;	Raw cost for generated ic 168 : (6, 8.000000) count=1.000000
+                                    711 ;	genAssign
+                                    712 ;	genAssignLit
+    000001CA A2 02            [ 2]  713 	ldx	#0x02
+    000001CC 8Er00r00         [ 4]  714 	stx	_set_bkg_based_tiles_PARM_3
+                                    715 ;	Raw cost for generated ic 171 : (5, 6.000000) count=1.000000
+                                    716 ;	genAssign
+                                    717 ;	genAssignLit
+    000001CF 8Er00r00         [ 4]  718 	stx	_set_bkg_based_tiles_PARM_4
+                                    719 ;	Raw cost for generated ic 172 : (3, 4.000000) count=1.000000
+                                    720 ;	genAssign
+                                    721 ;	genAssignLit
+    000001D2 CA               [ 2]  722 	dex
+    000001D3 8Er00r00         [ 4]  723 	stx	_set_bkg_based_tiles_PARM_6
+                                    724 ;	Raw cost for generated ic 174 : (4, 6.000000) count=1.000000
+                                    725 ;	Raw cost for generated ic 169 : (0, 0.000000) count=1.000000
+                                    726 ;	Raw cost for generated ic 170 : (0, 0.000000) count=1.000000
+                                    727 ;	genCall
+                                    728 ;	genSend
+    000001D6 98               [ 2]  729 	tya
+    000001D7 AEr00r00         [ 4]  730 	ldx	_draw_buttons_PARM_3
+                                    731 ;	Raw cost for generated ic 175 : (7, 12.000000) count=1.000000
+                                    732 ;	genLabel
+                                    733 ;	Raw cost for generated ic 176 : (0, 0.000000) count=1.000000
+                                    734 ;	src/joytest.c: 22: }
+                                    735 ;	genEndFunction
+    000001DA 4Cr00r00         [ 3]  736 	jmp	_set_bkg_based_tiles
+                                    737 ;	Raw cost for generated ic 177 : (1, 6.000000) count=1.000000
+                                    738 ;------------------------------------------------------------
+                                    739 ;Allocation info for local variables in function 'draw_disabled'
+                                    740 ;------------------------------------------------------------
+                                    741 ;sloc0         Allocated with name '_draw_disabled_sloc0_1_0'
+                                    742 ;y             Allocated with name '_draw_disabled_y_10000_101'
+                                    743 ;x             Allocated to registers a 
+                                    744 ;------------------------------------------------------------
+                                    745 ;	src/joytest.c: 24: void draw_disabled(uint8_t x, uint8_t y) {
+                                    746 ;	genLabel
+                                    747 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    748 ;	-----------------------------------------
+                                    749 ;	 function draw_disabled
+                                    750 ;	-----------------------------------------
+                                    751 ;	Register assignment is optimal.
+                                    752 ;	Stack space usage: 0 bytes.
+    000001DD                        753 _draw_disabled:
+                                    754 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    755 ;	genReceive
+                                    756 ;	Raw cost for generated ic 2 : (0, 0.000000) count=1.000000
+                                    757 ;	genReceive
+    000001DD 8Er03r00         [ 4]  758 	stx	_draw_disabled_y_10000_101
+                                    759 ;	Raw cost for generated ic 3 : (3, 4.000000) count=1.000000
+                                    760 ;	src/joytest.c: 25: set_bkg_based_tiles(x,      y, 2, 2, disabled_buttons[0], 1);
+                                    761 ;	skipping iCode since result will be rematerialized
+                                    762 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    763 ;	genCast
+                                    764 ;	genCopy
+    000001E0 A2s00            [ 2]  765 	ldx	#>_disabled_buttons
+    000001E2 8Er01r00         [ 4]  766 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    000001E5 A2r00            [ 2]  767 	ldx	#_disabled_buttons
+    000001E7 8Er00r00         [ 4]  768 	stx	_set_bkg_based_tiles_PARM_5
+                                    769 ;	Raw cost for generated ic 5 : (10, 12.000000) count=1.000000
+                                    770 ;	genAssign
+                                    771 ;	genAssignLit
+    000001EA A2 02            [ 2]  772 	ldx	#0x02
+    000001EC 8Er00r00         [ 4]  773 	stx	_set_bkg_based_tiles_PARM_3
+                                    774 ;	Raw cost for generated ic 8 : (5, 6.000000) count=1.000000
+                                    775 ;	genAssign
+                                    776 ;	genAssignLit
+    000001EF 8Er00r00         [ 4]  777 	stx	_set_bkg_based_tiles_PARM_4
+                                    778 ;	Raw cost for generated ic 9 : (3, 4.000000) count=1.000000
+                                    779 ;	genAssign
+                                    780 ;	genAssignLit
+    000001F2 CA               [ 2]  781 	dex
+    000001F3 8Er00r00         [ 4]  782 	stx	_set_bkg_based_tiles_PARM_6
+                                    783 ;	Raw cost for generated ic 11 : (4, 6.000000) count=1.000000
+                                    784 ;	Raw cost for generated ic 6 : (0, 0.000000) count=1.000000
+                                    785 ;	Raw cost for generated ic 7 : (0, 0.000000) count=1.000000
+                                    786 ;	genCall
+    000001F6 48               [ 3]  787 	pha
+                                    788 ;	genSend
+    000001F7 AEr03r00         [ 4]  789 	ldx	_draw_disabled_y_10000_101
+    000001FA 20r00r00         [ 6]  790 	jsr	_set_bkg_based_tiles
+    000001FD 68               [ 4]  791 	pla
+                                    792 ;	Raw cost for generated ic 12 : (8, 17.000000) count=1.000000
+                                    793 ;	src/joytest.c: 26: set_bkg_based_tiles(x + 2,  y, 2, 2, disabled_buttons[1], 1);
+                                    794 ;	genCast
+                                    795 ;	genCopy
+                                    796 ;	Raw cost for generated ic 13 : (2, 3.000000) count=1.000000
+                                    797 ;	genPlus
+                                    798 ;	genPlusIncr
+    000001FE 85*01            [ 3]  799 	sta	*_draw_disabled_sloc0_1_0
+    00000200 18               [ 2]  800 	clc
+    00000201 69 02            [ 2]  801 	adc	#0x02
+                                    802 ;	Raw cost for generated ic 14 : (5, 7.000000) count=1.000000
+                                    803 ;	skipping iCode since result will be rematerialized
+                                    804 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    805 ;	skipping iCode since result will be rematerialized
+                                    806 ;	Raw cost for generated ic 16 : (0, 0.000000) count=1.000000
+                                    807 ;	genCast
+                                    808 ;	genCopy
+    00000203 A2s00            [ 2]  809 	ldx	#>(_disabled_buttons + 0x0004)
+    00000205 8Er01r00         [ 4]  810 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    00000208 A2r04            [ 2]  811 	ldx	#(_disabled_buttons + 0x0004)
+    0000020A 8Er00r00         [ 4]  812 	stx	_set_bkg_based_tiles_PARM_5
+                                    813 ;	Raw cost for generated ic 17 : (10, 12.000000) count=1.000000
+                                    814 ;	genAssign
+                                    815 ;	genAssignLit
+    0000020D A2 02            [ 2]  816 	ldx	#0x02
+    0000020F 8Er00r00         [ 4]  817 	stx	_set_bkg_based_tiles_PARM_3
+                                    818 ;	Raw cost for generated ic 20 : (5, 6.000000) count=1.000000
+                                    819 ;	genAssign
+                                    820 ;	genAssignLit
+    00000212 8Er00r00         [ 4]  821 	stx	_set_bkg_based_tiles_PARM_4
+                                    822 ;	Raw cost for generated ic 21 : (3, 4.000000) count=1.000000
+                                    823 ;	genAssign
+                                    824 ;	genAssignLit
+    00000215 CA               [ 2]  825 	dex
+    00000216 8Er00r00         [ 4]  826 	stx	_set_bkg_based_tiles_PARM_6
+                                    827 ;	Raw cost for generated ic 23 : (4, 6.000000) count=1.000000
+                                    828 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    829 ;	Raw cost for generated ic 19 : (0, 0.000000) count=1.000000
+                                    830 ;	genCall
+                                    831 ;	genSend
+    00000219 AEr03r00         [ 4]  832 	ldx	_draw_disabled_y_10000_101
+    0000021C 20r00r00         [ 6]  833 	jsr	_set_bkg_based_tiles
+                                    834 ;	Raw cost for generated ic 24 : (6, 10.000000) count=1.000000
+                                    835 ;	src/joytest.c: 27: set_bkg_based_tiles(x + 4,  y, 2, 2, disabled_buttons[2], 1);
+                                    836 ;	genPlus
+                                    837 ;	genPlusIncr
+    0000021F A5*01            [ 3]  838 	lda	*_draw_disabled_sloc0_1_0
+    00000221 18               [ 2]  839 	clc
+    00000222 69 04            [ 2]  840 	adc	#0x04
+                                    841 ;	Raw cost for generated ic 26 : (5, 7.000000) count=1.000000
+                                    842 ;	skipping iCode since result will be rematerialized
+                                    843 ;	Raw cost for generated ic 28 : (0, 0.000000) count=1.000000
+                                    844 ;	genCast
+                                    845 ;	genCopy
+    00000224 A2s00            [ 2]  846 	ldx	#>(_disabled_buttons + 0x0008)
+    00000226 8Er01r00         [ 4]  847 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    00000229 A2r08            [ 2]  848 	ldx	#(_disabled_buttons + 0x0008)
+    0000022B 8Er00r00         [ 4]  849 	stx	_set_bkg_based_tiles_PARM_5
+                                    850 ;	Raw cost for generated ic 29 : (10, 12.000000) count=1.000000
+                                    851 ;	genAssign
+                                    852 ;	genAssignLit
+    0000022E A2 02            [ 2]  853 	ldx	#0x02
+    00000230 8Er00r00         [ 4]  854 	stx	_set_bkg_based_tiles_PARM_3
+                                    855 ;	Raw cost for generated ic 32 : (5, 6.000000) count=1.000000
+                                    856 ;	genAssign
+                                    857 ;	genAssignLit
+    00000233 8Er00r00         [ 4]  858 	stx	_set_bkg_based_tiles_PARM_4
+                                    859 ;	Raw cost for generated ic 33 : (3, 4.000000) count=1.000000
+                                    860 ;	genAssign
+                                    861 ;	genAssignLit
+    00000236 CA               [ 2]  862 	dex
+    00000237 8Er00r00         [ 4]  863 	stx	_set_bkg_based_tiles_PARM_6
+                                    864 ;	Raw cost for generated ic 35 : (4, 6.000000) count=1.000000
+                                    865 ;	Raw cost for generated ic 30 : (0, 0.000000) count=1.000000
+                                    866 ;	Raw cost for generated ic 31 : (0, 0.000000) count=1.000000
+                                    867 ;	genCall
+                                    868 ;	genSend
+    0000023A AEr03r00         [ 4]  869 	ldx	_draw_disabled_y_10000_101
+    0000023D 20r00r00         [ 6]  870 	jsr	_set_bkg_based_tiles
+                                    871 ;	Raw cost for generated ic 36 : (6, 10.000000) count=1.000000
+                                    872 ;	src/joytest.c: 28: set_bkg_based_tiles(x + 6,  y, 2, 2, disabled_buttons[3], 1);
+                                    873 ;	genPlus
+                                    874 ;	genPlusIncr
+    00000240 A5*01            [ 3]  875 	lda	*_draw_disabled_sloc0_1_0
+    00000242 18               [ 2]  876 	clc
+    00000243 69 06            [ 2]  877 	adc	#0x06
+                                    878 ;	Raw cost for generated ic 38 : (5, 7.000000) count=1.000000
+                                    879 ;	skipping iCode since result will be rematerialized
+                                    880 ;	Raw cost for generated ic 40 : (0, 0.000000) count=1.000000
+                                    881 ;	genCast
+                                    882 ;	genCopy
+    00000245 A2s00            [ 2]  883 	ldx	#>(_disabled_buttons + 0x000c)
+    00000247 8Er01r00         [ 4]  884 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    0000024A A2r0C            [ 2]  885 	ldx	#(_disabled_buttons + 0x000c)
+    0000024C 8Er00r00         [ 4]  886 	stx	_set_bkg_based_tiles_PARM_5
+                                    887 ;	Raw cost for generated ic 41 : (10, 12.000000) count=1.000000
+                                    888 ;	genAssign
+                                    889 ;	genAssignLit
+    0000024F A2 02            [ 2]  890 	ldx	#0x02
+    00000251 8Er00r00         [ 4]  891 	stx	_set_bkg_based_tiles_PARM_3
+                                    892 ;	Raw cost for generated ic 44 : (5, 6.000000) count=1.000000
+                                    893 ;	genAssign
+                                    894 ;	genAssignLit
+    00000254 8Er00r00         [ 4]  895 	stx	_set_bkg_based_tiles_PARM_4
+                                    896 ;	Raw cost for generated ic 45 : (3, 4.000000) count=1.000000
+                                    897 ;	genAssign
+                                    898 ;	genAssignLit
+    00000257 CA               [ 2]  899 	dex
+    00000258 8Er00r00         [ 4]  900 	stx	_set_bkg_based_tiles_PARM_6
+                                    901 ;	Raw cost for generated ic 47 : (4, 6.000000) count=1.000000
+                                    902 ;	Raw cost for generated ic 42 : (0, 0.000000) count=1.000000
+                                    903 ;	Raw cost for generated ic 43 : (0, 0.000000) count=1.000000
+                                    904 ;	genCall
+                                    905 ;	genSend
+    0000025B AEr03r00         [ 4]  906 	ldx	_draw_disabled_y_10000_101
+    0000025E 20r00r00         [ 6]  907 	jsr	_set_bkg_based_tiles
+                                    908 ;	Raw cost for generated ic 48 : (6, 10.000000) count=1.000000
+                                    909 ;	src/joytest.c: 29: set_bkg_based_tiles(x + 8,  y, 2, 2, disabled_buttons[4], 1);
+                                    910 ;	genPlus
+                                    911 ;	genPlusIncr
+    00000261 A5*01            [ 3]  912 	lda	*_draw_disabled_sloc0_1_0
+    00000263 18               [ 2]  913 	clc
+    00000264 69 08            [ 2]  914 	adc	#0x08
+                                    915 ;	Raw cost for generated ic 50 : (5, 7.000000) count=1.000000
+                                    916 ;	skipping iCode since result will be rematerialized
+                                    917 ;	Raw cost for generated ic 52 : (0, 0.000000) count=1.000000
+                                    918 ;	genCast
+                                    919 ;	genCopy
+    00000266 A2s00            [ 2]  920 	ldx	#>(_disabled_buttons + 0x0010)
+    00000268 8Er01r00         [ 4]  921 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    0000026B A2r10            [ 2]  922 	ldx	#(_disabled_buttons + 0x0010)
+    0000026D 8Er00r00         [ 4]  923 	stx	_set_bkg_based_tiles_PARM_5
+                                    924 ;	Raw cost for generated ic 53 : (10, 12.000000) count=1.000000
+                                    925 ;	genAssign
+                                    926 ;	genAssignLit
+    00000270 A2 02            [ 2]  927 	ldx	#0x02
+    00000272 8Er00r00         [ 4]  928 	stx	_set_bkg_based_tiles_PARM_3
+                                    929 ;	Raw cost for generated ic 56 : (5, 6.000000) count=1.000000
+                                    930 ;	genAssign
+                                    931 ;	genAssignLit
+    00000275 8Er00r00         [ 4]  932 	stx	_set_bkg_based_tiles_PARM_4
+                                    933 ;	Raw cost for generated ic 57 : (3, 4.000000) count=1.000000
+                                    934 ;	genAssign
+                                    935 ;	genAssignLit
+    00000278 CA               [ 2]  936 	dex
+    00000279 8Er00r00         [ 4]  937 	stx	_set_bkg_based_tiles_PARM_6
+                                    938 ;	Raw cost for generated ic 59 : (4, 6.000000) count=1.000000
+                                    939 ;	Raw cost for generated ic 54 : (0, 0.000000) count=1.000000
+                                    940 ;	Raw cost for generated ic 55 : (0, 0.000000) count=1.000000
+                                    941 ;	genCall
+                                    942 ;	genSend
+    0000027C AEr03r00         [ 4]  943 	ldx	_draw_disabled_y_10000_101
+    0000027F 20r00r00         [ 6]  944 	jsr	_set_bkg_based_tiles
+                                    945 ;	Raw cost for generated ic 60 : (6, 10.000000) count=1.000000
+                                    946 ;	src/joytest.c: 30: set_bkg_based_tiles(x + 10, y, 2, 2, disabled_buttons[5], 1);
+                                    947 ;	genPlus
+                                    948 ;	genPlusIncr
+    00000282 A5*01            [ 3]  949 	lda	*_draw_disabled_sloc0_1_0
+    00000284 18               [ 2]  950 	clc
+    00000285 69 0A            [ 2]  951 	adc	#0x0a
+                                    952 ;	Raw cost for generated ic 62 : (5, 7.000000) count=1.000000
+                                    953 ;	skipping iCode since result will be rematerialized
+                                    954 ;	Raw cost for generated ic 64 : (0, 0.000000) count=1.000000
+                                    955 ;	genCast
+                                    956 ;	genCopy
+    00000287 A2s00            [ 2]  957 	ldx	#>(_disabled_buttons + 0x0014)
+    00000289 8Er01r00         [ 4]  958 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    0000028C A2r14            [ 2]  959 	ldx	#(_disabled_buttons + 0x0014)
+    0000028E 8Er00r00         [ 4]  960 	stx	_set_bkg_based_tiles_PARM_5
+                                    961 ;	Raw cost for generated ic 65 : (10, 12.000000) count=1.000000
+                                    962 ;	genAssign
+                                    963 ;	genAssignLit
+    00000291 A2 02            [ 2]  964 	ldx	#0x02
+    00000293 8Er00r00         [ 4]  965 	stx	_set_bkg_based_tiles_PARM_3
+                                    966 ;	Raw cost for generated ic 68 : (5, 6.000000) count=1.000000
+                                    967 ;	genAssign
+                                    968 ;	genAssignLit
+    00000296 8Er00r00         [ 4]  969 	stx	_set_bkg_based_tiles_PARM_4
+                                    970 ;	Raw cost for generated ic 69 : (3, 4.000000) count=1.000000
+                                    971 ;	genAssign
+                                    972 ;	genAssignLit
+    00000299 CA               [ 2]  973 	dex
+    0000029A 8Er00r00         [ 4]  974 	stx	_set_bkg_based_tiles_PARM_6
+                                    975 ;	Raw cost for generated ic 71 : (4, 6.000000) count=1.000000
+                                    976 ;	Raw cost for generated ic 66 : (0, 0.000000) count=1.000000
+                                    977 ;	Raw cost for generated ic 67 : (0, 0.000000) count=1.000000
+                                    978 ;	genCall
+                                    979 ;	genSend
+    0000029D AEr03r00         [ 4]  980 	ldx	_draw_disabled_y_10000_101
+    000002A0 20r00r00         [ 6]  981 	jsr	_set_bkg_based_tiles
+                                    982 ;	Raw cost for generated ic 72 : (6, 10.000000) count=1.000000
+                                    983 ;	src/joytest.c: 31: set_bkg_based_tiles(x + 12, y, 2, 2, disabled_buttons[6], 1);
+                                    984 ;	genPlus
+                                    985 ;	genPlusIncr
+    000002A3 A5*01            [ 3]  986 	lda	*_draw_disabled_sloc0_1_0
+    000002A5 18               [ 2]  987 	clc
+    000002A6 69 0C            [ 2]  988 	adc	#0x0c
+                                    989 ;	Raw cost for generated ic 74 : (5, 7.000000) count=1.000000
+                                    990 ;	skipping iCode since result will be rematerialized
+                                    991 ;	Raw cost for generated ic 76 : (0, 0.000000) count=1.000000
+                                    992 ;	genCast
+                                    993 ;	genCopy
+    000002A8 A2s00            [ 2]  994 	ldx	#>(_disabled_buttons + 0x0018)
+    000002AA 8Er01r00         [ 4]  995 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    000002AD A2r18            [ 2]  996 	ldx	#(_disabled_buttons + 0x0018)
+    000002AF 8Er00r00         [ 4]  997 	stx	_set_bkg_based_tiles_PARM_5
+                                    998 ;	Raw cost for generated ic 77 : (10, 12.000000) count=1.000000
+                                    999 ;	genAssign
+                                   1000 ;	genAssignLit
+    000002B2 A2 02            [ 2] 1001 	ldx	#0x02
+    000002B4 8Er00r00         [ 4] 1002 	stx	_set_bkg_based_tiles_PARM_3
+                                   1003 ;	Raw cost for generated ic 80 : (5, 6.000000) count=1.000000
+                                   1004 ;	genAssign
+                                   1005 ;	genAssignLit
+    000002B7 8Er00r00         [ 4] 1006 	stx	_set_bkg_based_tiles_PARM_4
+                                   1007 ;	Raw cost for generated ic 81 : (3, 4.000000) count=1.000000
+                                   1008 ;	genAssign
+                                   1009 ;	genAssignLit
+    000002BA CA               [ 2] 1010 	dex
+    000002BB 8Er00r00         [ 4] 1011 	stx	_set_bkg_based_tiles_PARM_6
+                                   1012 ;	Raw cost for generated ic 83 : (4, 6.000000) count=1.000000
+                                   1013 ;	Raw cost for generated ic 78 : (0, 0.000000) count=1.000000
+                                   1014 ;	Raw cost for generated ic 79 : (0, 0.000000) count=1.000000
+                                   1015 ;	genCall
+                                   1016 ;	genSend
+    000002BE AEr03r00         [ 4] 1017 	ldx	_draw_disabled_y_10000_101
+    000002C1 20r00r00         [ 6] 1018 	jsr	_set_bkg_based_tiles
+                                   1019 ;	Raw cost for generated ic 84 : (6, 10.000000) count=1.000000
+                                   1020 ;	src/joytest.c: 32: set_bkg_based_tiles(x + 14, y, 2, 2, disabled_buttons[7], 1);
+                                   1021 ;	genPlus
+                                   1022 ;	genPlusIncr
+    000002C4 A5*01            [ 3] 1023 	lda	*_draw_disabled_sloc0_1_0
+    000002C6 18               [ 2] 1024 	clc
+    000002C7 69 0E            [ 2] 1025 	adc	#0x0e
+                                   1026 ;	Raw cost for generated ic 86 : (5, 7.000000) count=1.000000
+                                   1027 ;	skipping iCode since result will be rematerialized
+                                   1028 ;	Raw cost for generated ic 88 : (0, 0.000000) count=1.000000
+                                   1029 ;	genCast
+                                   1030 ;	genCopy
+    000002C9 A2s00            [ 2] 1031 	ldx	#>(_disabled_buttons + 0x001c)
+    000002CB 8Er01r00         [ 4] 1032 	stx	(_set_bkg_based_tiles_PARM_5 + 1)
+    000002CE A2r1C            [ 2] 1033 	ldx	#(_disabled_buttons + 0x001c)
+    000002D0 8Er00r00         [ 4] 1034 	stx	_set_bkg_based_tiles_PARM_5
+                                   1035 ;	Raw cost for generated ic 89 : (10, 12.000000) count=1.000000
+                                   1036 ;	genAssign
+                                   1037 ;	genAssignLit
+    000002D3 A2 02            [ 2] 1038 	ldx	#0x02
+    000002D5 8Er00r00         [ 4] 1039 	stx	_set_bkg_based_tiles_PARM_3
+                                   1040 ;	Raw cost for generated ic 92 : (5, 6.000000) count=1.000000
+                                   1041 ;	genAssign
+                                   1042 ;	genAssignLit
+    000002D8 8Er00r00         [ 4] 1043 	stx	_set_bkg_based_tiles_PARM_4
+                                   1044 ;	Raw cost for generated ic 93 : (3, 4.000000) count=1.000000
+                                   1045 ;	genAssign
+                                   1046 ;	genAssignLit
+    000002DB CA               [ 2] 1047 	dex
+    000002DC 8Er00r00         [ 4] 1048 	stx	_set_bkg_based_tiles_PARM_6
+                                   1049 ;	Raw cost for generated ic 95 : (4, 6.000000) count=1.000000
+                                   1050 ;	Raw cost for generated ic 90 : (0, 0.000000) count=1.000000
+                                   1051 ;	Raw cost for generated ic 91 : (0, 0.000000) count=1.000000
+                                   1052 ;	genCall
+                                   1053 ;	genSend
+    000002DF AEr03r00         [ 4] 1054 	ldx	_draw_disabled_y_10000_101
+                                   1055 ;	Raw cost for generated ic 96 : (6, 10.000000) count=1.000000
+                                   1056 ;	genLabel
+                                   1057 ;	Raw cost for generated ic 97 : (0, 0.000000) count=1.000000
+                                   1058 ;	src/joytest.c: 33: }
+                                   1059 ;	genEndFunction
+    000002E2 4Cr00r00         [ 3] 1060 	jmp	_set_bkg_based_tiles
+                                   1061 ;	Raw cost for generated ic 98 : (1, 6.000000) count=1.000000
+                                   1062 ;------------------------------------------------------------
+                                   1063 ;Allocation info for local variables in function 'reset_object_pos'
+                                   1064 ;------------------------------------------------------------
+                                   1065 ;i             Allocated to registers 
+                                   1066 ;sloc0         Allocated with name '_reset_object_pos_sloc0_1_0'
+                                   1067 ;------------------------------------------------------------
+                                   1068 ;	src/joytest.c: 35: void reset_object_pos(void) {
+                                   1069 ;	genLabel
+                                   1070 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1071 ;	-----------------------------------------
+                                   1072 ;	 function reset_object_pos
+                                   1073 ;	-----------------------------------------
+                                   1074 ;	Register assignment is optimal.
+                                   1075 ;	Stack space usage: 0 bytes.
+    000002E5                       1076 _reset_object_pos:
+                                   1077 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1078 ;	src/joytest.c: 36: for (uint8_t i = 0; i < 4; i++) {
+                                   1079 ;	genAssign
+                                   1080 ;	genAssignLit
+    000002E5 A2 00            [ 2] 1081 	ldx	#0x00
+    000002E7 86*00            [ 3] 1082 	stx	*_reset_object_pos_sloc0_1_0
+                                   1083 ;	Raw cost for generated ic 27 : (4, 5.000000) count=1.000000
+                                   1084 ;	genLabel
+    000002E9                       1085 00103$:
+                                   1086 ;	Raw cost for generated ic 3 : (0, 0.000000) count=3.999997
+                                   1087 ;	genCmp
+    000002E9 A5*00            [ 3] 1088 	lda	*_reset_object_pos_sloc0_1_0
+    000002EB C9 04            [ 2] 1089 	cmp	#0x04
+    000002ED B0 1F            [ 4] 1090 	bcs	00105$
+                                   1091 ;	Raw cost for generated ic 4 : (9, 10.600000) count=3.999997
+                                   1092 ;	skipping generated iCode
+                                   1093 ;	Raw cost for generated ic 5 : (0, 0.000000) count=3.999997
+                                   1094 ;	src/joytest.c: 37: set_sprite_tile(i, i);
+                                   1095 ;	Raw cost for generated ic 8 : (0, 0.000000) count=2.999997
+                                   1096 ;	Raw cost for generated ic 9 : (0, 0.000000) count=2.999997
+                                   1097 ;	genCall
+                                   1098 ;	genSend
+    000002EF A5*00            [ 3] 1099 	lda	*_reset_object_pos_sloc0_1_0
+    000002F1 A6*00            [ 3] 1100 	ldx	*_reset_object_pos_sloc0_1_0
+    000002F3 20r00r00         [ 6] 1101 	jsr	_set_sprite_tile
+                                   1102 ;	Raw cost for generated ic 10 : (7, 12.000000) count=2.999997
+                                   1103 ;	src/joytest.c: 39: DEVICE_SPRITE_PX_OFFSET_X + (i << 3) + ((DEVICE_SCREEN_PX_WIDTH - (4 * 8)) >> 1), 
+                                   1104 ;	genLeftShift
+                                   1105 ;	genLeftShiftLiteral
+                                   1106 ;	genlshOne
+    000002F6 A5*00            [ 3] 1107 	lda	*_reset_object_pos_sloc0_1_0
+    000002F8 0A               [ 2] 1108 	asl	a
+    000002F9 0A               [ 2] 1109 	asl	a
+    000002FA 0A               [ 2] 1110 	asl	a
+                                   1111 ;	Raw cost for generated ic 11 : (5, 9.000000) count=2.999997
+                                   1112 ;	genCast
+                                   1113 ;	genCopy
+                                   1114 ;	Raw cost for generated ic 12 : (0, 0.000000) count=2.999997
+                                   1115 ;	genPlus
+                                   1116 ;	genPlusIncr
+    000002FB 18               [ 2] 1117 	clc
+    000002FC 69 70            [ 2] 1118 	adc	#0x70
+                                   1119 ;	Raw cost for generated ic 13 : (3, 4.000000) count=2.999997
+                                   1120 ;	src/joytest.c: 41: );
+                                   1121 ;	genAssign
+                                   1122 ;	genAssignLit
+    000002FE A2 A3            [ 2] 1123 	ldx	#0xa3
+    00000300 8Er00r00         [ 4] 1124 	stx	_move_sprite_PARM_3
+                                   1125 ;	Raw cost for generated ic 16 : (5, 6.000000) count=2.999997
+                                   1126 ;	Raw cost for generated ic 14 : (0, 0.000000) count=2.999997
+                                   1127 ;	Raw cost for generated ic 15 : (0, 0.000000) count=2.999997
+                                   1128 ;	genCall
+                                   1129 ;	genSend
+    00000303 AA               [ 2] 1130 	tax
+    00000304 A5*00            [ 3] 1131 	lda	*_reset_object_pos_sloc0_1_0
+    00000306 20r00r00         [ 6] 1132 	jsr	_move_sprite
+                                   1133 ;	Raw cost for generated ic 17 : (6, 11.000000) count=2.999997
+                                   1134 ;	src/joytest.c: 36: for (uint8_t i = 0; i < 4; i++) {
+                                   1135 ;	genPlus
+                                   1136 ;	genPlusIncr
+    00000309 E6*00            [ 5] 1137 	inc	*_reset_object_pos_sloc0_1_0
+                                   1138 ;	Raw cost for generated ic 20 : (2, 5.000000) count=2.999997
+                                   1139 ;	genGoto
+    0000030B 4CrE9r02         [ 3] 1140 	jmp	00103$
+                                   1141 ;	Raw cost for generated ic 22 : (3, 3.000000) count=2.999997
+                                   1142 ;	genLabel
+    0000030E                       1143 00105$:
+                                   1144 ;	Raw cost for generated ic 24 : (0, 0.000000) count=0.999999
+                                   1145 ;	src/joytest.c: 43: }
+                                   1146 ;	genEndFunction
+    0000030E 60               [ 6] 1147 	rts
+                                   1148 ;	Raw cost for generated ic 25 : (1, 6.000000) count=0.999999
+                                   1149 ;------------------------------------------------------------
+                                   1150 ;Allocation info for local variables in function 'main'
+                                   1151 ;------------------------------------------------------------
+                                   1152 ;sloc0         Allocated with name '_main_sloc0_1_0'
+                                   1153 ;sloc1         Allocated with name '_main_sloc1_1_0'
+                                   1154 ;i             Allocated to registers 
+                                   1155 ;i             Allocated to registers 
+                                   1156 ;i             Allocated to registers 
+                                   1157 ;j             Allocated with name '_main_j_60000_125'
+                                   1158 ;------------------------------------------------------------
+                                   1159 ;	src/joytest.c: 51: void main(void) {
+                                   1160 ;	genLabel
+                                   1161 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                   1162 ;	-----------------------------------------
+                                   1163 ;	 function main
+                                   1164 ;	-----------------------------------------
+                                   1165 ;	Register assignment is optimal.
+                                   1166 ;	Stack space usage: 0 bytes.
+    0000030F                       1167 _main:
+                                   1168 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                   1169 ;	src/joytest.c: 54: for (uint8_t i = 4; i != 0; i--) vsync();
+                                   1170 ;	genAssign
+                                   1171 ;	genAssignLit
+                                   1172 ;	genCopy
+    0000030F A9 04            [ 2] 1173 	lda	#0x04
+                                   1174 ;	Raw cost for generated ic 244 : (2, 2.000000) count=1.000000
+                                   1175 ;	genLabel
+    00000311                       1176 00135$:
+                                   1177 ;	Raw cost for generated ic 3 : (0, 0.000000) count=3.999997
+                                   1178 ;	genIfx
+    00000311 C9 00            [ 2] 1179 	cmp	#0x00
+                                   1180 ;	genIfxJump : z
+    00000313 F0 0B            [ 4] 1181 	beq	00101$
+                                   1182 ;	Raw cost for generated ic 4 : (7, 7.600000) count=3.999997
+                                   1183 ;	genCall
+    00000315 48               [ 3] 1184 	pha
+    00000316 20r00r00         [ 6] 1185 	jsr	_vsync
+    00000319 68               [ 4] 1186 	pla
+                                   1187 ;	Raw cost for generated ic 7 : (5, 13.000000) count=2.999997
+                                   1188 ;	genMinus
+                                   1189 ;	genMinusDec
+    0000031A 38               [ 2] 1190 	sec
+    0000031B E9 01            [ 2] 1191 	sbc	#0x01
+                                   1192 ;	Raw cost for generated ic 10 : (3, 4.000000) count=2.999997
+                                   1193 ;	genGoto
+    0000031D 4Cr11r03         [ 3] 1194 	jmp	00135$
+                                   1195 ;	Raw cost for generated ic 12 : (3, 3.000000) count=2.999997
+                                   1196 ;	genLabel
+    00000320                       1197 00101$:
+                                   1198 ;	Raw cost for generated ic 13 : (0, 0.000000) count=0.999999
+                                   1199 ;	src/joytest.c: 60: joypad_init(4, &joypads);
+                                   1200 ;	skipping iCode since result will be rematerialized
+                                   1201 ;	Raw cost for generated ic 14 : (0, 0.000000) count=0.999999
+                                   1202 ;	genCast
+                                   1203 ;	genCopy
+    00000320 A9s00            [ 2] 1204 	lda	#>_joypads
+    00000322 8Dr01r00         [ 4] 1205 	sta	(_joypad_init_PARM_2 + 1)
+    00000325 A9r09            [ 2] 1206 	lda	#_joypads
+    00000327 8Dr00r00         [ 4] 1207 	sta	_joypad_init_PARM_2
+                                   1208 ;	Raw cost for generated ic 15 : (10, 12.000000) count=0.999999
+                                   1209 ;	Raw cost for generated ic 16 : (0, 0.000000) count=0.999999
+                                   1210 ;	genCall
+                                   1211 ;	genSend
+    0000032A A9 04            [ 2] 1212 	lda	#0x04
+    0000032C 20r00r00         [ 6] 1213 	jsr	_joypad_init
+                                   1214 ;	Raw cost for generated ic 18 : (5, 8.000000) count=0.999999
+                                   1215 ;	src/joytest.c: 62: set_sprite_data(0, sizeof(sprite_data) >> 4, sprite_data);
+                                   1216 ;	skipping iCode since result will be rematerialized
+                                   1217 ;	Raw cost for generated ic 19 : (0, 0.000000) count=0.999999
+                                   1218 ;	genCast
+                                   1219 ;	genCopy
+    0000032F A9s00            [ 2] 1220 	lda	#>_sprite_data
+    00000331 8Dr01r00         [ 4] 1221 	sta	(_set_sprite_data_PARM_3 + 1)
+    00000334 A9r00            [ 2] 1222 	lda	#_sprite_data
+    00000336 8Dr00r00         [ 4] 1223 	sta	_set_sprite_data_PARM_3
+                                   1224 ;	Raw cost for generated ic 20 : (10, 12.000000) count=0.999999
+                                   1225 ;	Raw cost for generated ic 21 : (0, 0.000000) count=0.999999
+                                   1226 ;	Raw cost for generated ic 22 : (0, 0.000000) count=0.999999
+                                   1227 ;	genCall
+                                   1228 ;	genSend
+    00000339 A9 00            [ 2] 1229 	lda	#0x00
+    0000033B A2 04            [ 2] 1230 	ldx	#0x04
+    0000033D 20r00r00         [ 6] 1231 	jsr	_set_sprite_data
+                                   1232 ;	Raw cost for generated ic 24 : (7, 10.000000) count=0.999999
+                                   1233 ;	src/joytest.c: 63: set_bkg_data(1, sizeof(tiles_data) >> 4, tiles_data);
+                                   1234 ;	skipping iCode since result will be rematerialized
+                                   1235 ;	Raw cost for generated ic 25 : (0, 0.000000) count=0.999999
+                                   1236 ;	genCast
+                                   1237 ;	genCopy
+    00000340 A9s00            [ 2] 1238 	lda	#>_tiles_data
+    00000342 8Dr01r00         [ 4] 1239 	sta	(_set_bkg_data_PARM_3 + 1)
+    00000345 A9r00            [ 2] 1240 	lda	#_tiles_data
+    00000347 8Dr00r00         [ 4] 1241 	sta	_set_bkg_data_PARM_3
+                                   1242 ;	Raw cost for generated ic 26 : (10, 12.000000) count=0.999999
+                                   1243 ;	Raw cost for generated ic 27 : (0, 0.000000) count=0.999999
+                                   1244 ;	Raw cost for generated ic 28 : (0, 0.000000) count=0.999999
+                                   1245 ;	genCall
+                                   1246 ;	genSend
+    0000034A A9 01            [ 2] 1247 	lda	#0x01
+    0000034C A2 5D            [ 2] 1248 	ldx	#0x5d
+    0000034E 20r00r00         [ 6] 1249 	jsr	_set_bkg_data
+                                   1250 ;	Raw cost for generated ic 30 : (7, 10.000000) count=0.999999
+                                   1251 ;	src/joytest.c: 64: fill_bkg_rect(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, 0);
+                                   1252 ;	genAssign
+                                   1253 ;	genAssignLit
+    00000351 A2 20            [ 2] 1254 	ldx	#0x20
+    00000353 8Er00r00         [ 4] 1255 	stx	_fill_bkg_rect_PARM_3
+                                   1256 ;	Raw cost for generated ic 33 : (5, 6.000000) count=0.999999
+                                   1257 ;	genAssign
+                                   1258 ;	genAssignLit
+    00000356 A2 1E            [ 2] 1259 	ldx	#0x1e
+    00000358 8Er00r00         [ 4] 1260 	stx	_fill_bkg_rect_PARM_4
+                                   1261 ;	Raw cost for generated ic 34 : (5, 6.000000) count=0.999999
+                                   1262 ;	genAssign
+                                   1263 ;	genAssignLit
+    0000035B A2 00            [ 2] 1264 	ldx	#0x00
+    0000035D 8Er00r00         [ 4] 1265 	stx	_fill_bkg_rect_PARM_5
+                                   1266 ;	Raw cost for generated ic 35 : (5, 6.000000) count=0.999999
+                                   1267 ;	Raw cost for generated ic 31 : (0, 0.000000) count=0.999999
+                                   1268 ;	Raw cost for generated ic 32 : (0, 0.000000) count=0.999999
+                                   1269 ;	genCall
+                                   1270 ;	genSend
+    00000360 8A               [ 2] 1271 	txa
+    00000361 20r00r00         [ 6] 1272 	jsr	_fill_bkg_rect
+                                   1273 ;	Raw cost for generated ic 36 : (4, 8.000000) count=0.999999
+                                   1274 ;	src/joytest.c: 66: if (isSGB) draw_disabled(0, 0); else draw_buttons(joy, 0, 0);
+                                   1275 ;	genIfx
+    00000364 ADr01r00         [ 4] 1276 	lda	_isSGB
+                                   1277 ;	genIfxJump : z
+    00000367 F0 09            [ 4] 1278 	beq	00103$
+                                   1279 ;	Raw cost for generated ic 37 : (8, 9.600000) count=0.999999
+                                   1280 ;	Raw cost for generated ic 40 : (0, 0.000000) count=0.749999
+                                   1281 ;	Raw cost for generated ic 41 : (0, 0.000000) count=0.749999
+                                   1282 ;	genCall
+                                   1283 ;	genSend
+    00000369 A9 00            [ 2] 1284 	lda	#0x00
+    0000036B AA               [ 2] 1285 	tax
+    0000036C 20rDDr01         [ 6] 1286 	jsr	_draw_disabled
+                                   1287 ;	Raw cost for generated ic 42 : (6, 10.000000) count=0.749999
+                                   1288 ;	genGoto
+    0000036F 4Cr7Dr03         [ 3] 1289 	jmp	00150$
+                                   1290 ;	Raw cost for generated ic 43 : (3, 3.000000) count=0.749999
+                                   1291 ;	genLabel
+    00000372                       1292 00103$:
+                                   1293 ;	Raw cost for generated ic 44 : (0, 0.000000) count=0.249999
+                                   1294 ;	genAssign
+                                   1295 ;	genAssignLit
+    00000372 A2 00            [ 2] 1296 	ldx	#0x00
+    00000374 8Er00r00         [ 4] 1297 	stx	_draw_buttons_PARM_3
+                                   1298 ;	Raw cost for generated ic 47 : (5, 6.000000) count=0.249999
+                                   1299 ;	Raw cost for generated ic 45 : (0, 0.000000) count=0.249999
+                                   1300 ;	Raw cost for generated ic 46 : (0, 0.000000) count=0.249999
+                                   1301 ;	genCall
+                                   1302 ;	genSend
+    00000377 ADr03r00         [ 4] 1303 	lda	_joy
+    0000037A 20r00r00         [ 6] 1304 	jsr	_draw_buttons
+                                   1305 ;	Raw cost for generated ic 48 : (6, 10.000000) count=0.249999
+                                   1306 ;	src/joytest.c: 68: for (uint8_t i = 0; i != 4; i++) {
+                                   1307 ;	genLabel
+    0000037D                       1308 00150$:
+                                   1309 ;	Raw cost for generated ic 241 : (0, 0.000000) count=0.999998
+                                   1310 ;	skipping iCode since result will be rematerialized
+                                   1311 ;	Raw cost for generated ic 67 : (0, 0.000000) count=0.999998
+                                   1312 ;	genAssign
+                                   1313 ;	genAssignLit
+    0000037D A2 00            [ 2] 1314 	ldx	#0x00
+    0000037F 86*02            [ 3] 1315 	stx	*_main_sloc0_1_0
+                                   1316 ;	Raw cost for generated ic 247 : (4, 5.000000) count=0.999998
+                                   1317 ;	genLabel
+    00000381                       1318 00138$:
+                                   1319 ;	Raw cost for generated ic 51 : (0, 0.000000) count=3.999972
+                                   1320 ;	genCmpEQorNE
+    00000381 A5*02            [ 3] 1321 	lda	*_main_sloc0_1_0
+    00000383 C9 04            [ 2] 1322 	cmp	#0x04
+    00000385 F0 4C            [ 4] 1323 	beq	00108$
+                                   1324 ;	Raw cost for generated ic 52 : (9, 10.600000) count=3.999972
+                                   1325 ;	skipping generated iCode
+                                   1326 ;	Raw cost for generated ic 53 : (0, 0.000000) count=3.999972
+                                   1327 ;	src/joytest.c: 69: if (i <= (joypads.npads - 1)) {
+                                   1328 ;	genPointerGet
+                                   1329 ;	genDataPointerGet
+    00000387 ADr09r00         [ 4] 1330 	lda	_joypads
+                                   1331 ;	Raw cost for generated ic 58 : (3, 4.000000) count=2.999980
+                                   1332 ;	genCast
+                                   1333 ;	genCopy
+    0000038A A2 00            [ 2] 1334 	ldx	#0x00
+                                   1335 ;	Raw cost for generated ic 59 : (2, 2.000000) count=2.999980
+                                   1336 ;	genMinus
+                                   1337 ;	genMinusDec
+    0000038C 38               [ 2] 1338 	sec
+    0000038D E9 01            [ 2] 1339 	sbc	#0x01
+    0000038F B0 01            [ 4] 1340 	bcs	00267$
+    00000391 CA               [ 2] 1341 	dex
+    00000392                       1342 00267$:
+                                   1343 ;	Raw cost for generated ic 60 : (6, 8.600000) count=2.999980
+                                   1344 ;	genCast
+    00000392 A4*02            [ 3] 1345 	ldy	*_main_sloc0_1_0
+    00000394 84*03            [ 3] 1346 	sty	*_main_sloc1_1_0
+    00000396 A0 00            [ 2] 1347 	ldy	#0x00
+    00000398 84*04            [ 3] 1348 	sty	*(_main_sloc1_1_0 + 1)
+                                   1349 ;	Raw cost for generated ic 61 : (8, 11.000000) count=2.999980
+                                   1350 ;	genCmp
+    0000039A 38               [ 2] 1351 	sec
+    0000039B E5*03            [ 3] 1352 	sbc	*_main_sloc1_1_0
+    0000039D 8A               [ 2] 1353 	txa
+    0000039E E5*04            [ 3] 1354 	sbc	*(_main_sloc1_1_0 + 1)
+    000003A0 70 04            [ 4] 1355 	bvs	00269$
+    000003A2 10 04            [ 4] 1356 	bpl	00268$
+    000003A4 30 1C            [ 4] 1357 	bmi	00106$
+    000003A6                       1358 00269$:
+    000003A6 10 1A            [ 4] 1359 	bpl	00106$
+    000003A8                       1360 00268$:
+                                   1361 ;	Raw cost for generated ic 62 : (17, 23.400002) count=2.999980
+                                   1362 ;	skipping generated iCode
+                                   1363 ;	Raw cost for generated ic 63 : (0, 0.000000) count=2.999980
+                                   1364 ;	src/joytest.c: 70: draw_buttons(joypads.joypads[i], 0, 4 + (i << 1)); 
+                                   1365 ;	genAssign
+                                   1366 ;	genAssignLit
+                                   1367 ;	genCopy
+    000003A8 A2 00            [ 2] 1368 	ldx	#0x00
+    000003AA A5*02            [ 3] 1369 	lda	*_main_sloc0_1_0
+                                   1370 ;	Raw cost for generated ic 69 : (4, 5.000000) count=2.249982
+                                   1371 ;	genPointerGet
+    000003AC AA               [ 2] 1372 	tax
+    000003AD BCr0Ar00         [ 5] 1373 	ldy	((_joypads + 0x0001)+0+0x0000),x
+                                   1374 ;	Raw cost for generated ic 70 : (4, 6.000000) count=2.249982
+                                   1375 ;	genLeftShift
+                                   1376 ;	genLeftShiftLiteral
+                                   1377 ;	genlshOne
+    000003B0 A5*02            [ 3] 1378 	lda	*_main_sloc0_1_0
+    000003B2 0A               [ 2] 1379 	asl	a
+                                   1380 ;	Raw cost for generated ic 71 : (3, 5.000000) count=2.249982
+                                   1381 ;	genCast
+                                   1382 ;	genCopy
+                                   1383 ;	Raw cost for generated ic 72 : (0, 0.000000) count=2.249982
+                                   1384 ;	genPlus
+                                   1385 ;	genPlusIncr
+    000003B3 18               [ 2] 1386 	clc
+    000003B4 69 04            [ 2] 1387 	adc	#0x04
+    000003B6 8Dr00r00         [ 4] 1388 	sta	_draw_buttons_PARM_3
+                                   1389 ;	Raw cost for generated ic 73 : (6, 8.000000) count=2.249982
+                                   1390 ;	Raw cost for generated ic 74 : (0, 0.000000) count=2.249982
+                                   1391 ;	Raw cost for generated ic 75 : (0, 0.000000) count=2.249982
+                                   1392 ;	genCall
+                                   1393 ;	genSend
+    000003B9 98               [ 2] 1394 	tya
+    000003BA A2 00            [ 2] 1395 	ldx	#0x00
+    000003BC 20r00r00         [ 6] 1396 	jsr	_draw_buttons
+                                   1397 ;	Raw cost for generated ic 77 : (6, 10.000000) count=2.249982
+                                   1398 ;	genGoto
+    000003BF 4CrCEr03         [ 3] 1399 	jmp	00139$
+                                   1400 ;	Raw cost for generated ic 78 : (3, 3.000000) count=2.249982
+                                   1401 ;	genLabel
+    000003C2                       1402 00106$:
+                                   1403 ;	Raw cost for generated ic 79 : (0, 0.000000) count=0.749993
+                                   1404 ;	src/joytest.c: 72: draw_disabled(0, 4 + (i << 1));
+                                   1405 ;	genLeftShift
+                                   1406 ;	genLeftShiftLiteral
+                                   1407 ;	genlshOne
+    000003C2 A5*02            [ 3] 1408 	lda	*_main_sloc0_1_0
+    000003C4 0A               [ 2] 1409 	asl	a
+                                   1410 ;	Raw cost for generated ic 80 : (3, 5.000000) count=0.749993
+                                   1411 ;	genCast
+                                   1412 ;	genCopy
+                                   1413 ;	Raw cost for generated ic 81 : (0, 0.000000) count=0.749993
+                                   1414 ;	genPlus
+                                   1415 ;	genPlusIncr
+    000003C5 18               [ 2] 1416 	clc
+    000003C6 69 04            [ 2] 1417 	adc	#0x04
+                                   1418 ;	Raw cost for generated ic 82 : (3, 4.000000) count=0.749993
+                                   1419 ;	Raw cost for generated ic 83 : (0, 0.000000) count=0.749993
+                                   1420 ;	Raw cost for generated ic 84 : (0, 0.000000) count=0.749993
+                                   1421 ;	genCall
+                                   1422 ;	genSend
+    000003C8 AA               [ 2] 1423 	tax
+    000003C9 A9 00            [ 2] 1424 	lda	#0x00
+    000003CB 20rDDr01         [ 6] 1425 	jsr	_draw_disabled
+                                   1426 ;	Raw cost for generated ic 85 : (6, 10.000000) count=0.749993
+                                   1427 ;	genLabel
+    000003CE                       1428 00139$:
+                                   1429 ;	Raw cost for generated ic 87 : (0, 0.000000) count=2.999975
+                                   1430 ;	src/joytest.c: 68: for (uint8_t i = 0; i != 4; i++) {
+                                   1431 ;	genPlus
+                                   1432 ;	genPlusIncr
+    000003CE E6*02            [ 5] 1433 	inc	*_main_sloc0_1_0
+                                   1434 ;	Raw cost for generated ic 89 : (2, 5.000000) count=2.999975
+                                   1435 ;	genGoto
+    000003D0 4Cr81r03         [ 3] 1436 	jmp	00138$
+                                   1437 ;	Raw cost for generated ic 91 : (3, 3.000000) count=2.999975
+                                   1438 ;	genLabel
+    000003D3                       1439 00108$:
+                                   1440 ;	Raw cost for generated ic 92 : (0, 0.000000) count=0.999992
+                                   1441 ;	src/joytest.c: 76: reset_object_pos();
+                                   1442 ;	genCall
+    000003D3 20rE5r02         [ 6] 1443 	jsr	_reset_object_pos
+                                   1444 ;	Raw cost for generated ic 93 : (3, 6.000000) count=0.999992
+                                   1445 ;	src/joytest.c: 77: SHOW_SPRITES; SHOW_BKG;
+                                   1446 ;	genOr
+    000003D6 ADr00r00         [ 4] 1447 	lda	_shadow_PPUMASK
+    000003D9 09 10            [ 2] 1448 	ora	#0x10
+    000003DB 8Dr00r00         [ 4] 1449 	sta	_shadow_PPUMASK
+                                   1450 ;	Raw cost for generated ic 94 : (8, 10.000000) count=0.999992
+                                   1451 ;	genOr
+    000003DE ADr00r00         [ 4] 1452 	lda	_shadow_PPUMASK
+    000003E1 09 08            [ 2] 1453 	ora	#0x08
+    000003E3 8Dr00r00         [ 4] 1454 	sta	_shadow_PPUMASK
+                                   1455 ;	Raw cost for generated ic 96 : (8, 10.000000) count=0.999992
+                                   1456 ;	src/joytest.c: 79: while(TRUE) {
+                                   1457 ;	genLabel
+    000003E6                       1458 00132$:
+                                   1459 ;	Raw cost for generated ic 100 : (0, 0.000000) count=38.465435
+                                   1460 ;	src/joytest.c: 81: if (toggle = !toggle) {
+                                   1461 ;	genNot
+    000003E6 ADr00r00         [ 4] 1462 	lda	_toggle
+    000003E9 49 01            [ 2] 1463 	eor	#0x01
+                                   1464 ;	Raw cost for generated ic 101 : (5, 6.000000) count=38.465435
+                                   1465 ;	genAssign
+                                   1466 ;	genAssignLit
+                                   1467 ;	genCopy
+    000003EB AA               [ 2] 1468 	tax
+                                   1469 ;	Raw cost for generated ic 102 : (1, 2.000000) count=38.465435
+                                   1470 ;	genAssign
+                                   1471 ;	genAssignLit
+                                   1472 ;	genCopy
+    000003EC 8Dr00r00         [ 4] 1473 	sta	_toggle
+                                   1474 ;	Raw cost for generated ic 103 : (3, 4.000000) count=38.465435
+                                   1475 ;	genIfx
+                                   1476 ;	genIfxJump : z
+    000003EF F0 31            [ 4] 1477 	beq	00129$
+                                   1478 ;	Raw cost for generated ic 104 : (5, 5.600000) count=38.465435
+                                   1479 ;	src/joytest.c: 83: if (!isSGB) {
+                                   1480 ;	genIfx
+    000003F1 ADr01r00         [ 4] 1481 	lda	_isSGB
+                                   1482 ;	genIfxJump : z
+    000003F4 F0 03            [ 4] 1483 	beq	00275$
+    000003F6 4CrD0r04         [ 3] 1484 	jmp	00130$
+    000003F9                       1485 00275$:
+                                   1486 ;	Raw cost for generated ic 107 : (8, 9.600000) count=28.849075
+                                   1487 ;	src/joytest.c: 84: old_joy = joy, joy = joypad();
+                                   1488 ;	genAssign
+                                   1489 ;	genAssignLit
+                                   1490 ;	genCopy
+    000003F9 ADr03r00         [ 4] 1491 	lda	_joy
+    000003FC 8Dr02r00         [ 4] 1492 	sta	_old_joy
+                                   1493 ;	Raw cost for generated ic 110 : (6, 9.000000) count=21.636808
+                                   1494 ;	genCall
+    000003FF 20r00r00         [ 6] 1495 	jsr	_joypad
+                                   1496 ;	assignResultValue
+                                   1497 ;	Raw cost for generated ic 112 : (3, 6.000000) count=21.636808
+                                   1498 ;	genAssign
+                                   1499 ;	genAssignLit
+                                   1500 ;	genCopy
+    00000402 8Dr03r00         [ 4] 1501 	sta	_joy
+                                   1502 ;	Raw cost for generated ic 114 : (3, 5.000000) count=21.636808
+                                   1503 ;	src/joytest.c: 87: if (joy != old_joy) draw_buttons(joy, 0, 0);
+                                   1504 ;	genCmpEQorNE
+    00000405 CDr02r00         [ 4] 1505 	cmp	_old_joy
+    00000408 F0 08            [ 4] 1506 	beq	00110$
+                                   1507 ;	Raw cost for generated ic 115 : (8, 9.600000) count=21.636808
+                                   1508 ;	skipping generated iCode
+                                   1509 ;	Raw cost for generated ic 116 : (0, 0.000000) count=21.636808
+                                   1510 ;	genAssign
+                                   1511 ;	genAssignLit
+    0000040A A2 00            [ 2] 1512 	ldx	#0x00
+    0000040C 8Er00r00         [ 4] 1513 	stx	_draw_buttons_PARM_3
+                                   1514 ;	Raw cost for generated ic 121 : (5, 6.000000) count=16.227602
+                                   1515 ;	Raw cost for generated ic 119 : (0, 0.000000) count=16.227602
+                                   1516 ;	Raw cost for generated ic 120 : (0, 0.000000) count=16.227602
+                                   1517 ;	genCall
+                                   1518 ;	genSend
+    0000040F 20r00r00         [ 6] 1519 	jsr	_draw_buttons
+                                   1520 ;	Raw cost for generated ic 122 : (3, 6.000000) count=16.227602
+                                   1521 ;	genLabel
+    00000412                       1522 00110$:
+                                   1523 ;	Raw cost for generated ic 123 : (0, 0.000000) count=21.636808
+                                   1524 ;	src/joytest.c: 90: if (joy & J_START) reset_object_pos();
+                                   1525 ;	genCast
+                                   1526 ;	genCopy
+    00000412 ADr03r00         [ 4] 1527 	lda	_joy
+                                   1528 ;	Raw cost for generated ic 124 : (3, 4.000000) count=21.636808
+                                   1529 ;	genAnd
+    00000415 29 10            [ 2] 1530 	and	#0x10
+                                   1531 ;	genIfxJump : z
+    00000417 D0 03            [ 4] 1532 	bne	00277$
+    00000419 4CrD0r04         [ 3] 1533 	jmp	00130$
+    0000041C                       1534 00277$:
+                                   1535 ;	Raw cost for generated ic 125 : (7, 7.600000) count=21.636808
+                                   1536 ;	skipping generated iCode
+                                   1537 ;	Raw cost for generated ic 126 : (0, 0.000000) count=21.636808
+                                   1538 ;	genCall
+    0000041C 20rE5r02         [ 6] 1539 	jsr	_reset_object_pos
+                                   1540 ;	Raw cost for generated ic 129 : (3, 6.000000) count=16.227602
+                                   1541 ;	genGoto
+    0000041F 4CrD0r04         [ 3] 1542 	jmp	00130$
+                                   1543 ;	Raw cost for generated ic 132 : (3, 3.000000) count=16.227602
+                                   1544 ;	genLabel
+    00000422                       1545 00129$:
+                                   1546 ;	Raw cost for generated ic 133 : (0, 0.000000) count=9.616359
+                                   1547 ;	src/joytest.c: 93: old_joypads = joypads;
+                                   1548 ;	skipping iCode since result will be rematerialized
+                                   1549 ;	Raw cost for generated ic 134 : (0, 0.000000) count=9.616359
+                                   1550 ;	skipping iCode since result will be rematerialized
+                                   1551 ;	Raw cost for generated ic 135 : (0, 0.000000) count=9.616359
+                                   1552 ;	genCast
+                                   1553 ;	genCopy
+    00000422 A9s00            [ 2] 1554 	lda	#>_joypads
+    00000424 8Dr01r00         [ 4] 1555 	sta	(___memcpy_PARM_2 + 1)
+    00000427 A9r09            [ 2] 1556 	lda	#_joypads
+    00000429 8Dr00r00         [ 4] 1557 	sta	___memcpy_PARM_2
+                                   1558 ;	Raw cost for generated ic 137 : (10, 12.000000) count=9.616359
+                                   1559 ;	genAssign
+                                   1560 ;	genAssignLit
+    0000042C A2 05            [ 2] 1561 	ldx	#0x05
+    0000042E 8Er00r00         [ 4] 1562 	stx	___memcpy_PARM_3
+    00000431 A2 00            [ 2] 1563 	ldx	#0x00
+    00000433 8Er01r00         [ 4] 1564 	stx	(___memcpy_PARM_3 + 1)
+                                   1565 ;	Raw cost for generated ic 142 : (10, 12.000000) count=9.616359
+                                   1566 ;	Raw cost for generated ic 138 : (0, 0.000000) count=9.616359
+                                   1567 ;	genCall
+                                   1568 ;	genSend
+    00000436 A2s00            [ 2] 1569 	ldx	#>_old_joypads
+    00000438 A9r04            [ 2] 1570 	lda	#_old_joypads
+    0000043A 20r00r00         [ 6] 1571 	jsr	___memcpy
+                                   1572 ;	Raw cost for generated ic 143 : (7, 10.000000) count=9.616359
+                                   1573 ;	src/joytest.c: 94: joypad_ex(&joypads);
+                                   1574 ;	skipping iCode since result will be rematerialized
+                                   1575 ;	Raw cost for generated ic 146 : (0, 0.000000) count=9.616359
+                                   1576 ;	Raw cost for generated ic 147 : (0, 0.000000) count=9.616359
+                                   1577 ;	genCall
+                                   1578 ;	genSend
+    0000043D A2s00            [ 2] 1579 	ldx	#>_joypads
+    0000043F A9r09            [ 2] 1580 	lda	#_joypads
+    00000441 20r00r00         [ 6] 1581 	jsr	_joypad_ex
+                                   1582 ;	Raw cost for generated ic 148 : (7, 10.000000) count=9.616359
+                                   1583 ;	src/joytest.c: 96: for (uint8_t i = 0; i < joypads.npads; i++) {
+                                   1584 ;	skipping iCode since result will be rematerialized
+                                   1585 ;	Raw cost for generated ic 159 : (0, 0.000000) count=9.616359
+                                   1586 ;	skipping iCode since result will be rematerialized
+                                   1587 ;	Raw cost for generated ic 165 : (0, 0.000000) count=9.616359
+                                   1588 ;	genAssign
+                                   1589 ;	genAssignLit
+    00000444 A2 00            [ 2] 1590 	ldx	#0x00
+    00000446 86*03            [ 3] 1591 	stx	*_main_sloc1_1_0
+                                   1592 ;	Raw cost for generated ic 250 : (4, 5.000000) count=9.616359
+                                   1593 ;	genLabel
+    00000448                       1594 00141$:
+                                   1595 ;	Raw cost for generated ic 150 : (0, 0.000000) count=36.751163
+                                   1596 ;	genPointerGet
+                                   1597 ;	genDataPointerGet
+    00000448 ADr09r00         [ 4] 1598 	lda	_joypads
+                                   1599 ;	Raw cost for generated ic 153 : (3, 4.000000) count=36.751163
+                                   1600 ;	genCmp
+    0000044B C5*03            [ 3] 1601 	cmp	*_main_sloc1_1_0
+    0000044D F0 02            [ 4] 1602 	beq	00279$
+    0000044F B0 03            [ 4] 1603 	bcs	00278$
+    00000451                       1604 00279$:
+    00000451 4CrD0r04         [ 3] 1605 	jmp	00130$
+    00000454                       1606 00278$:
+                                   1607 ;	Raw cost for generated ic 154 : (9, 11.200000) count=36.751163
+                                   1608 ;	skipping generated iCode
+                                   1609 ;	Raw cost for generated ic 155 : (0, 0.000000) count=36.751163
+                                   1610 ;	src/joytest.c: 97: uint8_t j = joypads.joypads[i];
+                                   1611 ;	genAssign
+                                   1612 ;	genAssignLit
+                                   1613 ;	genCopy
+    00000454 A2 00            [ 2] 1614 	ldx	#0x00
+    00000456 A5*03            [ 3] 1615 	lda	*_main_sloc1_1_0
+                                   1616 ;	Raw cost for generated ic 161 : (4, 5.000000) count=27.563372
+                                   1617 ;	genPointerGet
+    00000458 A8               [ 2] 1618 	tay
+    00000459 B9r0Ar00         [ 5] 1619 	lda	((_joypads + 0x0001)+0+0x0000),y
+    0000045C 8Dr0Er00         [ 4] 1620 	sta	_main_j_60000_125
+                                   1621 ;	Raw cost for generated ic 162 : (7, 10.000000) count=27.563372
+                                   1622 ;	src/joytest.c: 100: if (old_joypads.joypads[i] != j) draw_buttons(j, 0, 4 + (i << 1));
+                                   1623 ;	genAssign
+                                   1624 ;	genAssignLit
+                                   1625 ;	genCopy
+    0000045F A5*03            [ 3] 1626 	lda	*_main_sloc1_1_0
+                                   1627 ;	Raw cost for generated ic 167 : (2, 3.000000) count=27.563372
+                                   1628 ;	genPointerGet
+    00000461 A8               [ 2] 1629 	tay
+    00000462 B9r05r00         [ 5] 1630 	lda	((_old_joypads + 0x0001)+0+0x0000),y
+                                   1631 ;	Raw cost for generated ic 168 : (4, 6.000000) count=27.563372
+                                   1632 ;	genCmpEQorNE
+    00000465 CDr0Er00         [ 4] 1633 	cmp	_main_j_60000_125
+    00000468 F0 0F            [ 4] 1634 	beq	00116$
+                                   1635 ;	Raw cost for generated ic 169 : (8, 9.600000) count=27.563372
+                                   1636 ;	skipping generated iCode
+                                   1637 ;	Raw cost for generated ic 170 : (0, 0.000000) count=27.563372
+                                   1638 ;	genLeftShift
+                                   1639 ;	genLeftShiftLiteral
+                                   1640 ;	genlshOne
+    0000046A A5*03            [ 3] 1641 	lda	*_main_sloc1_1_0
+    0000046C 0A               [ 2] 1642 	asl	a
+                                   1643 ;	Raw cost for generated ic 173 : (3, 5.000000) count=20.672527
+                                   1644 ;	genCast
+                                   1645 ;	genCopy
+                                   1646 ;	Raw cost for generated ic 174 : (0, 0.000000) count=20.672527
+                                   1647 ;	genPlus
+                                   1648 ;	genPlusIncr
+    0000046D 18               [ 2] 1649 	clc
+    0000046E 69 04            [ 2] 1650 	adc	#0x04
+    00000470 8Dr00r00         [ 4] 1651 	sta	_draw_buttons_PARM_3
+                                   1652 ;	Raw cost for generated ic 175 : (6, 8.000000) count=20.672527
+                                   1653 ;	Raw cost for generated ic 176 : (0, 0.000000) count=20.672527
+                                   1654 ;	Raw cost for generated ic 177 : (0, 0.000000) count=20.672527
+                                   1655 ;	genCall
+                                   1656 ;	genSend
+    00000473 ADr0Er00         [ 4] 1657 	lda	_main_j_60000_125
+    00000476 20r00r00         [ 6] 1658 	jsr	_draw_buttons
+                                   1659 ;	Raw cost for generated ic 179 : (6, 10.000000) count=20.672527
+                                   1660 ;	genLabel
+    00000479                       1661 00116$:
+                                   1662 ;	Raw cost for generated ic 180 : (0, 0.000000) count=27.563372
+                                   1663 ;	src/joytest.c: 103: if (j & J_LEFT)  scroll_sprite(i, -1, 0);
+                                   1664 ;	genAnd
+    00000479 ADr0Er00         [ 4] 1665 	lda	_main_j_60000_125
+    0000047C 29 02            [ 2] 1666 	and	#0x02
+                                   1667 ;	genIfxJump : z
+    0000047E F0 0B            [ 4] 1668 	beq	00118$
+                                   1669 ;	Raw cost for generated ic 182 : (10, 11.600000) count=27.563372
+                                   1670 ;	skipping generated iCode
+                                   1671 ;	Raw cost for generated ic 183 : (0, 0.000000) count=27.563372
+                                   1672 ;	genAssign
+                                   1673 ;	genAssignLit
+    00000480 A2 00            [ 2] 1674 	ldx	#0x00
+    00000482 8Er00r00         [ 4] 1675 	stx	_scroll_sprite_PARM_3
+                                   1676 ;	Raw cost for generated ic 188 : (5, 6.000000) count=20.672527
+                                   1677 ;	Raw cost for generated ic 186 : (0, 0.000000) count=20.672527
+                                   1678 ;	Raw cost for generated ic 187 : (0, 0.000000) count=20.672527
+                                   1679 ;	genCall
+                                   1680 ;	genSend
+    00000485 A5*03            [ 3] 1681 	lda	*_main_sloc1_1_0
+    00000487 CA               [ 2] 1682 	dex
+    00000488 20r00r00         [ 6] 1683 	jsr	_scroll_sprite
+                                   1684 ;	Raw cost for generated ic 189 : (6, 11.000000) count=20.672527
+                                   1685 ;	genLabel
+    0000048B                       1686 00118$:
+                                   1687 ;	Raw cost for generated ic 190 : (0, 0.000000) count=27.563372
+                                   1688 ;	src/joytest.c: 104: if (j & J_RIGHT) scroll_sprite(i, 1, 0);
+                                   1689 ;	genAnd
+    0000048B ADr0Er00         [ 4] 1690 	lda	_main_j_60000_125
+    0000048E 29 01            [ 2] 1691 	and	#0x01
+                                   1692 ;	genIfxJump : z
+    00000490 F0 0B            [ 4] 1693 	beq	00120$
+                                   1694 ;	Raw cost for generated ic 192 : (10, 11.600000) count=27.563372
+                                   1695 ;	skipping generated iCode
+                                   1696 ;	Raw cost for generated ic 193 : (0, 0.000000) count=27.563372
+                                   1697 ;	genAssign
+                                   1698 ;	genAssignLit
+    00000492 A2 00            [ 2] 1699 	ldx	#0x00
+    00000494 8Er00r00         [ 4] 1700 	stx	_scroll_sprite_PARM_3
+                                   1701 ;	Raw cost for generated ic 198 : (5, 6.000000) count=20.672527
+                                   1702 ;	Raw cost for generated ic 196 : (0, 0.000000) count=20.672527
+                                   1703 ;	Raw cost for generated ic 197 : (0, 0.000000) count=20.672527
+                                   1704 ;	genCall
+                                   1705 ;	genSend
+    00000497 A5*03            [ 3] 1706 	lda	*_main_sloc1_1_0
+    00000499 E8               [ 2] 1707 	inx
+    0000049A 20r00r00         [ 6] 1708 	jsr	_scroll_sprite
+                                   1709 ;	Raw cost for generated ic 199 : (6, 11.000000) count=20.672527
+                                   1710 ;	genLabel
+    0000049D                       1711 00120$:
+                                   1712 ;	Raw cost for generated ic 200 : (0, 0.000000) count=27.563372
+                                   1713 ;	src/joytest.c: 105: if (j & J_UP)    scroll_sprite(i, 0, -1);
+                                   1714 ;	genAnd
+    0000049D ADr0Er00         [ 4] 1715 	lda	_main_j_60000_125
+    000004A0 29 08            [ 2] 1716 	and	#0x08
+                                   1717 ;	genIfxJump : z
+    000004A2 F0 0B            [ 4] 1718 	beq	00122$
+                                   1719 ;	Raw cost for generated ic 202 : (10, 11.600000) count=27.563372
+                                   1720 ;	skipping generated iCode
+                                   1721 ;	Raw cost for generated ic 203 : (0, 0.000000) count=27.563372
+                                   1722 ;	genAssign
+                                   1723 ;	genAssignLit
+    000004A4 A2 FF            [ 2] 1724 	ldx	#0xff
+    000004A6 8Er00r00         [ 4] 1725 	stx	_scroll_sprite_PARM_3
+                                   1726 ;	Raw cost for generated ic 208 : (5, 6.000000) count=20.672527
+                                   1727 ;	Raw cost for generated ic 206 : (0, 0.000000) count=20.672527
+                                   1728 ;	Raw cost for generated ic 207 : (0, 0.000000) count=20.672527
+                                   1729 ;	genCall
+                                   1730 ;	genSend
+    000004A9 A5*03            [ 3] 1731 	lda	*_main_sloc1_1_0
+    000004AB E8               [ 2] 1732 	inx
+    000004AC 20r00r00         [ 6] 1733 	jsr	_scroll_sprite
+                                   1734 ;	Raw cost for generated ic 209 : (6, 11.000000) count=20.672527
+                                   1735 ;	genLabel
+    000004AF                       1736 00122$:
+                                   1737 ;	Raw cost for generated ic 210 : (0, 0.000000) count=27.563372
+                                   1738 ;	src/joytest.c: 106: if (j & J_DOWN)  scroll_sprite(i, 0, 1);
+                                   1739 ;	genAnd
+    000004AF ADr0Er00         [ 4] 1740 	lda	_main_j_60000_125
+    000004B2 29 04            [ 2] 1741 	and	#0x04
+                                   1742 ;	genIfxJump : z
+    000004B4 F0 0B            [ 4] 1743 	beq	00124$
+                                   1744 ;	Raw cost for generated ic 212 : (10, 11.600000) count=27.563372
+                                   1745 ;	skipping generated iCode
+                                   1746 ;	Raw cost for generated ic 213 : (0, 0.000000) count=27.563372
+                                   1747 ;	genAssign
+                                   1748 ;	genAssignLit
+    000004B6 A2 01            [ 2] 1749 	ldx	#0x01
+    000004B8 8Er00r00         [ 4] 1750 	stx	_scroll_sprite_PARM_3
+                                   1751 ;	Raw cost for generated ic 218 : (5, 6.000000) count=20.672527
+                                   1752 ;	Raw cost for generated ic 216 : (0, 0.000000) count=20.672527
+                                   1753 ;	Raw cost for generated ic 217 : (0, 0.000000) count=20.672527
+                                   1754 ;	genCall
+                                   1755 ;	genSend
+    000004BB A5*03            [ 3] 1756 	lda	*_main_sloc1_1_0
+    000004BD CA               [ 2] 1757 	dex
+    000004BE 20r00r00         [ 6] 1758 	jsr	_scroll_sprite
+                                   1759 ;	Raw cost for generated ic 219 : (6, 11.000000) count=20.672527
+                                   1760 ;	genLabel
+    000004C1                       1761 00124$:
+                                   1762 ;	Raw cost for generated ic 220 : (0, 0.000000) count=27.563372
+                                   1763 ;	src/joytest.c: 109: if (j & J_START) reset_object_pos();
+                                   1764 ;	genAnd
+    000004C1 ADr0Er00         [ 4] 1765 	lda	_main_j_60000_125
+    000004C4 29 10            [ 2] 1766 	and	#0x10
+                                   1767 ;	genIfxJump : z
+    000004C6 F0 03            [ 4] 1768 	beq	00142$
+                                   1769 ;	Raw cost for generated ic 222 : (10, 11.600000) count=27.563372
+                                   1770 ;	skipping generated iCode
+                                   1771 ;	Raw cost for generated ic 223 : (0, 0.000000) count=27.563372
+                                   1772 ;	genCall
+    000004C8 20rE5r02         [ 6] 1773 	jsr	_reset_object_pos
+                                   1774 ;	Raw cost for generated ic 226 : (3, 6.000000) count=20.672527
+                                   1775 ;	genLabel
+    000004CB                       1776 00142$:
+                                   1777 ;	Raw cost for generated ic 228 : (0, 0.000000) count=27.563372
+                                   1778 ;	src/joytest.c: 96: for (uint8_t i = 0; i < joypads.npads; i++) {
+                                   1779 ;	genPlus
+                                   1780 ;	genPlusIncr
+    000004CB E6*03            [ 5] 1781 	inc	*_main_sloc1_1_0
+                                   1782 ;	Raw cost for generated ic 230 : (2, 5.000000) count=27.563372
+                                   1783 ;	genGoto
+    000004CD 4Cr48r04         [ 3] 1784 	jmp	00141$
+                                   1785 ;	Raw cost for generated ic 232 : (3, 3.000000) count=27.563372
+                                   1786 ;	genLabel
+    000004D0                       1787 00130$:
+                                   1788 ;	Raw cost for generated ic 234 : (0, 0.000000) count=38.036869
+                                   1789 ;	src/joytest.c: 113: vsync();
+                                   1790 ;	genCall
+    000004D0 20r00r00         [ 6] 1791 	jsr	_vsync
+                                   1792 ;	Raw cost for generated ic 235 : (3, 6.000000) count=38.036869
+                                   1793 ;	genGoto
+    000004D3 4CrE6r03         [ 3] 1794 	jmp	00132$
+                                   1795 ;	Raw cost for generated ic 236 : (3, 3.000000) count=38.036869
+                                   1796 ;	genLabel
+                                   1797 ;	Raw cost for generated ic 238 : (0, 0.000000) count=0.000000
+                                   1798 ;	src/joytest.c: 115: }
+                                   1799 ;	genEndFunction
+    000004D6 60               [ 6] 1800 	rts
+                                   1801 ;	Raw cost for generated ic 239 : (1, 6.000000) count=0.000000
+                                   1802 	.area _CODE
+                                   1803 	.area _XINIT
+    00000000                       1804 __xinit__toggle:
+    00000000 00                    1805 	.db #0x00	;  0
+    00000001                       1806 __xinit__isSGB:
+    00000001 00                    1807 	.db #0x00	;  0
+    00000002                       1808 __xinit__old_joy:
+    00000002 FF                    1809 	.db #0xff	; 255
+    00000003                       1810 __xinit__joy:
+    00000003 00                    1811 	.db #0x00	; 0
+                                   1812 	.area _CABS    (ABS)

@@ -1,0 +1,248 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler
+                                      3 ; Version 4.5.1 #15267 (Mac OS X ppc)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	
+                                      7 ;; Ordering of segments for the linker.
+                                      8 	.area _ZP      (PAG)
+                                      9 	.area _OSEG    (PAG, OVR)
+                                     10 	.area _HOME
+                                     11 	.area _GSINIT
+                                     12 	.area _GSFINAL
+                                     13 	.area _CODE
+                                     14 	.area _XINIT
+                                     15 	.area _DATA
+                                     16 	.area _DATA
+                                     17 	.area _BSS
+                                     18 ;--------------------------------------------------------
+                                     19 ; Public variables in this module
+                                     20 ;--------------------------------------------------------
+                                     21 	.globl _main
+                                     22 	.globl _fill_bkg_rect
+                                     23 	.globl _set_bkg_native_data
+                                     24 	.globl _set_bkg_attributes_nes16x16
+                                     25 	.globl _set_bkg_tiles
+                                     26 	.globl _display_off
+                                     27 	.globl _display_on
+                                     28 	.globl _vsync
+                                     29 	.globl _set_bkg_palette
+                                     30 	.globl _OAMDMA
+                                     31 	.globl _PPUDATA
+                                     32 	.globl _PPUADDR
+                                     33 	.globl _PPUSCROLL
+                                     34 	.globl _OAMDATA
+                                     35 	.globl _OAMADDR
+                                     36 	.globl _PPUSTATUS
+                                     37 	.globl _PPUMASK
+                                     38 	.globl _PPUCTRL
+                                     39 ;--------------------------------------------------------
+                                     40 ; ZP ram data
+                                     41 ;--------------------------------------------------------
+                                     42 	.area _ZP      (PAG)
+                                     43 ;--------------------------------------------------------
+                                     44 ; overlayable items in ram
+                                     45 ;--------------------------------------------------------
+                                     46 ;--------------------------------------------------------
+                                     47 ; uninitialized external ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _BSS
+                         00002000    50 _PPUCTRL	=	0x2000
+                         00002001    51 _PPUMASK	=	0x2001
+                         00002002    52 _PPUSTATUS	=	0x2002
+                         00002003    53 _OAMADDR	=	0x2003
+                         00002004    54 _OAMDATA	=	0x2004
+                         00002005    55 _PPUSCROLL	=	0x2005
+                         00002006    56 _PPUADDR	=	0x2006
+                         00002007    57 _PPUDATA	=	0x2007
+                         00004014    58 _OAMDMA	=	0x4014
+                                     59 ;--------------------------------------------------------
+                                     60 ; absolute external ram data
+                                     61 ;--------------------------------------------------------
+                                     62 	.area _DABS    (ABS)
+                                     63 ;--------------------------------------------------------
+                                     64 ; initialized external ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area _DATA
+                                     67 ;--------------------------------------------------------
+                                     68 ; global & static initialisations
+                                     69 ;--------------------------------------------------------
+                                     70 	.area _HOME
+                                     71 	.area _GSINIT
+                                     72 	.area _GSFINAL
+                                     73 	.area _GSINIT
+                                     74 ;--------------------------------------------------------
+                                     75 ; Home
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _HOME
+                                     78 	.area _HOME
+                                     79 ;--------------------------------------------------------
+                                     80 ; code
+                                     81 ;--------------------------------------------------------
+                                     82 	.area _CODE
+                                     83 ;------------------------------------------------------------
+                                     84 ;Allocation info for local variables in function 'main'
+                                     85 ;------------------------------------------------------------
+                                     86 ;__200000009   Allocated to registers 
+                                     87 ;__200000010   Allocated to registers 
+                                     88 ;__200000011   Allocated to registers 
+                                     89 ;__200000012   Allocated to registers 
+                                     90 ;__200000013   Allocated to registers 
+                                     91 ;x             Allocated to registers 
+                                     92 ;y             Allocated to registers 
+                                     93 ;w             Allocated to registers 
+                                     94 ;h             Allocated to registers 
+                                     95 ;attributes    Allocated to registers 
+                                     96 ;------------------------------------------------------------
+                                     97 ;	src/main.c: 5: void main(void) {
+                                     98 ;	genLabel
+                                     99 ;	Raw cost for generated ic 0 : (0, 0.000000) count=1.000000
+                                    100 ;	-----------------------------------------
+                                    101 ;	 function main
+                                    102 ;	-----------------------------------------
+                                    103 ;	Register assignment is optimal.
+                                    104 ;	Stack space usage: 0 bytes.
+    00000000                        105 _main:
+                                    106 ;	Raw cost for generated ic 1 : (0, 0.000000) count=1.000000
+                                    107 ;	src/main.c: 6: DISPLAY_OFF;
+                                    108 ;	genCall
+    00000000 20r00r00         [ 6]  109 	jsr	_display_off
+                                    110 ;	Raw cost for generated ic 2 : (3, 6.000000) count=1.000000
+                                    111 ;	src/main.c: 7: fill_bkg_rect(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, 0);
+                                    112 ;	genAssign
+                                    113 ;	genAssignLit
+    00000003 A2 20            [ 2]  114 	ldx	#0x20
+    00000005 8Er00r00         [ 4]  115 	stx	_fill_bkg_rect_PARM_3
+                                    116 ;	Raw cost for generated ic 5 : (5, 6.000000) count=1.000000
+                                    117 ;	genAssign
+                                    118 ;	genAssignLit
+    00000008 A2 1E            [ 2]  119 	ldx	#0x1e
+    0000000A 8Er00r00         [ 4]  120 	stx	_fill_bkg_rect_PARM_4
+                                    121 ;	Raw cost for generated ic 6 : (5, 6.000000) count=1.000000
+                                    122 ;	genAssign
+                                    123 ;	genAssignLit
+    0000000D A2 00            [ 2]  124 	ldx	#0x00
+    0000000F 8Er00r00         [ 4]  125 	stx	_fill_bkg_rect_PARM_5
+                                    126 ;	Raw cost for generated ic 7 : (5, 6.000000) count=1.000000
+                                    127 ;	Raw cost for generated ic 3 : (0, 0.000000) count=1.000000
+                                    128 ;	Raw cost for generated ic 4 : (0, 0.000000) count=1.000000
+                                    129 ;	genCall
+                                    130 ;	genSend
+    00000012 8A               [ 2]  131 	txa
+    00000013 20r00r00         [ 6]  132 	jsr	_fill_bkg_rect
+                                    133 ;	Raw cost for generated ic 8 : (4, 8.000000) count=1.000000
+                                    134 ;	src/main.c: 16: set_bkg_palette(0, GBDK_2020_logo_PALETTE_COUNT, GBDK_2020_logo_palettes);
+                                    135 ;	skipping iCode since result will be rematerialized
+                                    136 ;	Raw cost for generated ic 9 : (0, 0.000000) count=1.000000
+                                    137 ;	genCast
+                                    138 ;	genCopy
+    00000016 A9s00            [ 2]  139 	lda	#>_GBDK_2020_logo_palettes
+    00000018 8Dr01r00         [ 4]  140 	sta	(_set_bkg_palette_PARM_3 + 1)
+    0000001B A9r00            [ 2]  141 	lda	#_GBDK_2020_logo_palettes
+    0000001D 8Dr00r00         [ 4]  142 	sta	_set_bkg_palette_PARM_3
+                                    143 ;	Raw cost for generated ic 10 : (10, 12.000000) count=1.000000
+                                    144 ;	Raw cost for generated ic 11 : (0, 0.000000) count=1.000000
+                                    145 ;	Raw cost for generated ic 12 : (0, 0.000000) count=1.000000
+                                    146 ;	genCall
+                                    147 ;	genSend
+    00000020 A9 00            [ 2]  148 	lda	#0x00
+    00000022 A2 03            [ 2]  149 	ldx	#0x03
+    00000024 20r00r00         [ 6]  150 	jsr	_set_bkg_palette
+                                    151 ;	Raw cost for generated ic 14 : (7, 10.000000) count=1.000000
+                                    152 ;	src/main.c: 19: set_bkg_native_data(0, GBDK_2020_logo_TILE_COUNT, GBDK_2020_logo_tiles);
+                                    153 ;	skipping iCode since result will be rematerialized
+                                    154 ;	Raw cost for generated ic 15 : (0, 0.000000) count=1.000000
+                                    155 ;	genCast
+                                    156 ;	genCopy
+    00000027 A9s00            [ 2]  157 	lda	#>_GBDK_2020_logo_tiles
+    00000029 8Dr01r00         [ 4]  158 	sta	(_set_bkg_native_data_PARM_3 + 1)
+    0000002C A9r00            [ 2]  159 	lda	#_GBDK_2020_logo_tiles
+    0000002E 8Dr00r00         [ 4]  160 	sta	_set_bkg_native_data_PARM_3
+                                    161 ;	Raw cost for generated ic 16 : (10, 12.000000) count=1.000000
+                                    162 ;	Raw cost for generated ic 17 : (0, 0.000000) count=1.000000
+                                    163 ;	Raw cost for generated ic 18 : (0, 0.000000) count=1.000000
+                                    164 ;	genCall
+                                    165 ;	genSend
+    00000031 A9 00            [ 2]  166 	lda	#0x00
+    00000033 A2 28            [ 2]  167 	ldx	#0x28
+    00000035 20r00r00         [ 6]  168 	jsr	_set_bkg_native_data
+                                    169 ;	Raw cost for generated ic 20 : (7, 10.000000) count=1.000000
+                                    170 ;	src/main.c: 25: GBDK_2020_logo_map_attributes);
+                                    171 ;	skipping iCode since result will be rematerialized
+                                    172 ;	Raw cost for generated ic 21 : (0, 0.000000) count=1.000000
+                                    173 ;	genCast
+                                    174 ;	genCopy
+    00000038 A9s00            [ 2]  175 	lda	#>_GBDK_2020_logo_map_attributes
+    0000003A 8Dr01r00         [ 4]  176 	sta	(_set_bkg_attributes_nes16x16_PARM_5 + 1)
+    0000003D A9r00            [ 2]  177 	lda	#_GBDK_2020_logo_map_attributes
+    0000003F 8Dr00r00         [ 4]  178 	sta	_set_bkg_attributes_nes16x16_PARM_5
+                                    179 ;	Raw cost for generated ic 22 : (10, 12.000000) count=1.000000
+                                    180 ;	../../../include/nes/nes.h: 758: set_bkg_attributes_nes16x16(x >> 1, y >> 1, (w + 1) >> 1, (h + 1) >> 1, attributes);
+                                    181 ;	genAssign
+                                    182 ;	genAssignLit
+    00000042 A2 0A            [ 2]  183 	ldx	#0x0a
+    00000044 8Er00r00         [ 4]  184 	stx	_set_bkg_attributes_nes16x16_PARM_3
+                                    185 ;	Raw cost for generated ic 45 : (5, 6.000000) count=1.000000
+                                    186 ;	genAssign
+                                    187 ;	genAssignLit
+    00000047 CA               [ 2]  188 	dex
+    00000048 8Er00r00         [ 4]  189 	stx	_set_bkg_attributes_nes16x16_PARM_4
+                                    190 ;	Raw cost for generated ic 46 : (4, 6.000000) count=1.000000
+                                    191 ;	Raw cost for generated ic 43 : (0, 0.000000) count=1.000000
+                                    192 ;	Raw cost for generated ic 44 : (0, 0.000000) count=1.000000
+                                    193 ;	genCall
+                                    194 ;	genSend
+    0000004B A9 03            [ 2]  195 	lda	#0x03
+    0000004D AA               [ 2]  196 	tax
+    0000004E 20r00r00         [ 6]  197 	jsr	_set_bkg_attributes_nes16x16
+                                    198 ;	Raw cost for generated ic 48 : (6, 10.000000) count=1.000000
+                                    199 ;	src/main.c: 31: GBDK_2020_logo_map);
+                                    200 ;	skipping iCode since result will be rematerialized
+                                    201 ;	Raw cost for generated ic 50 : (0, 0.000000) count=1.000000
+                                    202 ;	genCast
+                                    203 ;	genCopy
+    00000051 A9s00            [ 2]  204 	lda	#>_GBDK_2020_logo_map
+    00000053 8Dr01r00         [ 4]  205 	sta	(_set_bkg_tiles_PARM_5 + 1)
+    00000056 A9r00            [ 2]  206 	lda	#_GBDK_2020_logo_map
+    00000058 8Dr00r00         [ 4]  207 	sta	_set_bkg_tiles_PARM_5
+                                    208 ;	Raw cost for generated ic 51 : (10, 12.000000) count=1.000000
+                                    209 ;	genAssign
+                                    210 ;	genAssignLit
+    0000005B A2 14            [ 2]  211 	ldx	#0x14
+    0000005D 8Er00r00         [ 4]  212 	stx	_set_bkg_tiles_PARM_3
+                                    213 ;	Raw cost for generated ic 54 : (5, 6.000000) count=1.000000
+                                    214 ;	genAssign
+                                    215 ;	genAssignLit
+    00000060 A2 12            [ 2]  216 	ldx	#0x12
+    00000062 8Er00r00         [ 4]  217 	stx	_set_bkg_tiles_PARM_4
+                                    218 ;	Raw cost for generated ic 55 : (5, 6.000000) count=1.000000
+                                    219 ;	Raw cost for generated ic 52 : (0, 0.000000) count=1.000000
+                                    220 ;	Raw cost for generated ic 53 : (0, 0.000000) count=1.000000
+                                    221 ;	genCall
+                                    222 ;	genSend
+    00000065 A9 06            [ 2]  223 	lda	#0x06
+    00000067 AA               [ 2]  224 	tax
+    00000068 20r00r00         [ 6]  225 	jsr	_set_bkg_tiles
+                                    226 ;	Raw cost for generated ic 57 : (6, 10.000000) count=1.000000
+                                    227 ;	src/main.c: 33: vsync();
+                                    228 ;	genCall
+    0000006B 20r00r00         [ 6]  229 	jsr	_vsync
+                                    230 ;	Raw cost for generated ic 58 : (3, 6.000000) count=1.000000
+                                    231 ;	src/main.c: 34: SHOW_BKG;
+                                    232 ;	genOr
+    0000006E ADr00r00         [ 4]  233 	lda	_shadow_PPUMASK
+    00000071 09 08            [ 2]  234 	ora	#0x08
+    00000073 8Dr00r00         [ 4]  235 	sta	_shadow_PPUMASK
+                                    236 ;	Raw cost for generated ic 59 : (8, 10.000000) count=1.000000
+                                    237 ;	src/main.c: 35: DISPLAY_ON;
+                                    238 ;	genCall
+                                    239 ;	Raw cost for generated ic 61 : (3, 6.000000) count=1.000000
+                                    240 ;	genLabel
+                                    241 ;	Raw cost for generated ic 62 : (0, 0.000000) count=1.000000
+                                    242 ;	src/main.c: 36: }
+                                    243 ;	genEndFunction
+    00000076 4Cr00r00         [ 3]  244 	jmp	_display_on
+                                    245 ;	Raw cost for generated ic 63 : (1, 6.000000) count=1.000000
+                                    246 	.area _CODE
+                                    247 	.area _XINIT
+                                    248 	.area _CABS    (ABS)
