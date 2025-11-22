@@ -1,0 +1,6 @@
+
+In the directory containing your Makefile, run:
+$make clean
+$make
+
+Ctrl+Shift+P is the shortcut to search for "Edit Configurations" for C/C++ Compiling
