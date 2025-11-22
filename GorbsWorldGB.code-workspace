@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.embeddedhtml": "html",
+			"laroldsjubilantjunkyard.h": "c",
+			"bar_c.h": "c"
+		}
+	}
+}
