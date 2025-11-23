@@ -4,3 +4,8 @@ $make clean
 $make
 
 Ctrl+Shift+P is the shortcut to search for "Edit Configurations" for C/C++ Compiling
+
+160 pixels wide by 144 pixels high.
+
+TODO:
+

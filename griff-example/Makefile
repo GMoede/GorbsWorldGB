@@ -5,7 +5,8 @@ ifndef GBDK_HOME
 endif
 
 #LCC is the compiler used to compile and link the project
-LCC = $(GBDK_HOME)bin/lcc -Wa-l -Wl-m -Wl-j
+#-Wm-yC is used to generate a gameboy color file 
+LCC = $(GBDK_HOME)bin/lcc -Wa-l -Wl-m -Wl-j -Wm-yC 
 
 # BINS is the list of output files to be generated
 BINS	= griff-example.gb
@@ -23,7 +24,7 @@ compile.bat: Makefile
 	@make -sn | sed y/\\//\\\\/ | sed s/mkdir\ -p\/mkdir\/ | grep -v make >> compile.bat
 
 # Build `griff-example.gb` from the main C file and the data source
-griff-example.gb:	griff-example.c LaroldsJubilantJunkyard.c
+griff-example.gb:	griff-example.c LaroldsJubilantJunkyard.c MeowSprite.c
 	$(LCC) $(LCCFLAGS) -o $@ $^
 
 clean:
