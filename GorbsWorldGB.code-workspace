@@ -8,7 +8,8 @@
 		"files.associations": {
 			"*.embeddedhtml": "html",
 			"laroldsjubilantjunkyard.h": "c",
-			"bar_c.h": "c"
+			"bar_c.h": "c",
+			"gb.h": "c"
 		}
 	}
 }

@@ -1,3 +1,25 @@
+Generating Background Tiles:
+https://www.youtube.com/watch?v=tnMAEwTjCX8
+Creating Splashscreen:
+https://www.youtube.com/watch?v=nziu1O_cj1w
+
+Create pixil art in Aseprite
+-160px144px
+-Indexed
+-Transparent
+-OK
+Edit->Preferenes
+Grid 8 Height 8 Width
+Background 8x8
+Sprite->ColorMode->Indexed
+Layer->Properties->ConvertToTileMap
+
+https://laroldsretrogameyard.com/tutorials/gb/png2asset-graphics-creation-for-gbdk-2020/
+https://stellod.itch.io/gbc-palette-guard
+
+
+
+
 
 In the directory containing your Makefile, run:
 $make clean
@@ -9,3 +31,6 @@ Ctrl+Shift+P is the shortcut to search for "Edit Configurations" for C/C++ Compi
 
 TODO:
 
+-Create background for game/splash screen
+-Create sprites for:
+    -Gorby

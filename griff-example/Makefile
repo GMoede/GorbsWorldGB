@@ -9,7 +9,7 @@ endif
 LCC = $(GBDK_HOME)bin/lcc -Wa-l -Wl-m -Wl-j -Wm-yC 
 
 # BINS is the list of output files to be generated
-BINS	= griff-example.gb
+BINS	= griff-example.gbc
 
 # GBDK_DEBUG = ON
 ifdef GBDK_DEBUG
@@ -24,7 +24,7 @@ compile.bat: Makefile
 	@make -sn | sed y/\\//\\\\/ | sed s/mkdir\ -p\/mkdir\/ | grep -v make >> compile.bat
 
 # Build `griff-example.gb` from the main C file and the data source
-griff-example.gb:	griff-example.c LaroldsJubilantJunkyard.c MeowSprite.c
+griff-example.gbc:	griff-example.c TheAgeOfGorby.c MeowSprite.c
 	$(LCC) $(LCCFLAGS) -o $@ $^
 
 clean:
