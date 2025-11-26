@@ -9,7 +9,11 @@
 			"*.embeddedhtml": "html",
 			"laroldsjubilantjunkyard.h": "c",
 			"bar_c.h": "c",
-			"gb.h": "c"
+			"gb.h": "c",
+			"common.h": "c",
+			"palettes.h": "c",
+			"walkinggorbdown.h": "c",
+			"walkinggorbup.h": "c"
 		}
 	}
 }

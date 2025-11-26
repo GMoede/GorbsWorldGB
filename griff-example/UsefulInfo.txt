@@ -3,20 +3,21 @@ https://www.youtube.com/watch?v=tnMAEwTjCX8
 Creating Splashscreen:
 https://www.youtube.com/watch?v=nziu1O_cj1w
 
-Create pixil art in Aseprite
--160px144px
--Indexed
--Transparent
--OK
-Edit->Preferenes
-Grid 8 Height 8 Width
-Background 8x8
-Sprite->ColorMode->Indexed
-Layer->Properties->ConvertToTileMap
+Create background pixil art in Aseprite:
+    -New file:160px144px,Indexed,Transparent
+    -Edit Preferences: Grid 8Height 8Width, Background 8x8
+    -Export As... png file 
 
-https://laroldsretrogameyard.com/tutorials/gb/png2asset-graphics-creation-for-gbdk-2020/
-https://stellod.itch.io/gbc-palette-guard
+GENERATE BACKGROUND FILES:
+cd gdbk/bin/
+./png2asset /path/to/background.png -map -use_map_attributes
 
+GENERATE SPRITE FILES:
+cd gdbk/bin/
+./png2asset ../../Sprites/WalkingGorbDown.png -sw 16  
+(-sw 16 is defining that the metasprite width is 16 pixels)
+See manual here:
+https://gbdk.org/docs/api/docs_toolchain_settings.html#png2asset-settings
 
 
 

@@ -1,18 +1,25 @@
 #include <gb/gb.h>
 #include <gb/cgb.h>
-#include "MeowSprite.h"
-#include "TheAgeOfGorby.h"
-
-uint8_t spriteX, spriteY;
-int8_t velocityX, velocityY, velocityIncrease;
+#include <gb/metasprites.h>
+#include <stdint.h>
+#include "graphics/TheAgeOfGorby.h"
+#include "graphics/WalkingGorb.h"
+#include "graphics/WalkingGorbDown.h"
+#include "graphics/WalkingGorbUp.h"
+#include "gorb.h"
+#include "common.h"
 
 void main(void)
 {
     DISPLAY_ON;
     SHOW_BKG;
     SHOW_SPRITES;
+    SPRITES_8x16;
     // Use HIDE_BKG; to turn the background OFF
 
+    set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
+
+    setupGorb();
     // Which tile to start at, how many tiles to load, and the tile data
     // set_sprite_data(0, 1, MeowSpriteTLE0);
     // // Which sprite to set, which tile to use
@@ -20,17 +27,26 @@ void main(void)
     // // Where to move the sprite on the screen
     // move_sprite(0, 84, 88);
     // set_sprite_palette(0, 1, blob_pallette);
-
-    spriteX = 80;
-    spriteY = 72;
-    velocityX = 0;
-    velocityY = 0;
     // 160 pixels wide by 144 pixels high.
     //  // Loop forever
     while (1)
     {
-        spriteX += velocityX;
-        spriteY += velocityY;
+        // Save the current state of the joypad
+        // it's important NOT to call the joypad function more than once
+        joypadCurrent = joypad();
+
+        updateTwoFrameCounter();
+
+        uint8_t lastSprite = 0;
+
+        lastSprite += updateGorb();
+        // lastSprite += UpdateMoblin(lastSprite);
+
+        // Hide any extra sprites
+        // This might not be as useful in this demo
+        // But this will be helpful for actual games
+        // Without this, extra "leftover" sprites may weidly linger around.
+        hide_sprites_range(lastSprite, 40);
 
         // Position the first sprite at our spriteX and spriteY
         // All sprites are render 8 pixels to the left of their x position and 16 pixels ABOVE their actual y position
@@ -44,7 +60,7 @@ void main(void)
     }
 }
 
-void backgroundSetup()
+void setupBackground(void)
 {
     // Load & set our background data
     set_bkg_data(0, TheAgeOfGorby_TILE_COUNT, TheAgeOfGorby_tiles);
