@@ -3,9 +3,9 @@
 #include <gb/metasprites.h>
 #include <stdint.h>
 #include "common.h"
-#include "tileset.h"
-#include "tilemap.h"
-#include "ball.h"
+// #include "tileset.h"
+// #include "tilemap.h"
+// #include "ball.h"
 
 #define SOLID 1
 #define PLAYER_HALF_WIDTH 8
@@ -18,34 +18,34 @@
 
 uint16_t playerX,playerY;
 
-uint8_t WorldPositionIsSolid(uint16_t x, uint16_t y){
+// uint8_t WorldPositionIsSolid(uint16_t x, uint16_t y){
     
-    // Bit-shifting would be faster here
-    uint16_t column = x/GRID_NODE_SIZE; 
+//     // Bit-shifting would be faster here
+//     uint16_t column = x/GRID_NODE_SIZE; 
 
-    // Make sure the tile is in proper bounds
-    if(column>=TILEMAP_WIDTH_IN_TILES)return TRUE;
+//     // Make sure the tile is in proper bounds
+//     if(column>=TILEMAP_WIDTH_IN_TILES)return TRUE;
 
-    uint16_t row = y/GRID_NODE_SIZE;
+//     uint16_t row = y/GRID_NODE_SIZE;
 
-    // Make sure the tile is in proper bounds
-    if(row>=TILEMAP_HEIGHT_IN_TILES)return TRUE;
+//     // Make sure the tile is in proper bounds
+//     if(row>=TILEMAP_HEIGHT_IN_TILES)return TRUE;
     
-    uint16_t tilemapIndex  = column+row*TILEMAP_WIDTH_IN_TILES;
+//     uint16_t tilemapIndex  = column+row*TILEMAP_WIDTH_IN_TILES;
 
-    uint8_t tileIsSolid = FALSE;
+//     uint8_t tileIsSolid = FALSE;
 
-    // Get the tilset tile in our tilemap
-    uint8_t tilesetTile = tilemap_map[tilemapIndex];
+//     // Get the tilset tile in our tilemap
+//     uint8_t tilesetTile = tilemap_map[tilemapIndex];
 
-    // In our tileset, the solid tiles always come first.
-    // There are 10 tiles. The first 9 are solid
-    // this makes it fast & easy to determine if a tile is solid or not
-    tileIsSolid = tilesetTile<NUMBER_OF_SOLID_TILES;
+//     // In our tileset, the solid tiles always come first.
+//     // There are 10 tiles. The first 9 are solid
+//     // this makes it fast & easy to determine if a tile is solid or not
+//     tileIsSolid = tilesetTile<NUMBER_OF_SOLID_TILES;
 
-    return  tileIsSolid;
+//     return  tileIsSolid;
 
-}
+// }
 
 void GetPlayerInput(uint16_t* nextPlayerX,uint16_t* nextPlayerY,int8_t* directionX, int8_t* directionY){
     
@@ -75,32 +75,32 @@ void GetPlayerInput(uint16_t* nextPlayerX,uint16_t* nextPlayerY,int8_t* directio
     }
 }
 
-void SetupDemo(){
+// void SetupDemo(){
 
-    SHOW_SPRITES;
-    SHOW_BKG;
-    SPRITES_8x16;
+//     SHOW_SPRITES;
+//     SHOW_BKG;
+//     SPRITES_8x16;
 
-    set_sprite_data(0,ball_TILE_COUNT,ball_tiles);
-    set_bkg_data(0,tileset_TILE_COUNT,tileset_tiles);
+//     set_sprite_data(0,ball_TILE_COUNT,ball_tiles);
+//     set_bkg_data(0,tileset_TILE_COUNT,tileset_tiles);
 
-    set_bkg_tiles(0,0,TILEMAP_WIDTH_IN_TILES,TILEMAP_HEIGHT_IN_TILES,tilemap_map);
+//     set_bkg_tiles(0,0,TILEMAP_WIDTH_IN_TILES,TILEMAP_HEIGHT_IN_TILES,tilemap_map);
 
-    playerX=80;
-    playerY=90;
+//     playerX=80;
+//     playerY=90;
 
-}
+// }
 
 // This is an easy way to determine a direction for a object with two frames per direction
-const Vector8 directionsForTwoFrameObjects[7]={
-    {0,1}, // Down
-    {0,0}, 
-    {0,-1}, // Up,
-    {0,0},
-    {1,0},// Right
-    {0,0},
-    {-1,0},// Left
-};
+// const Vector8 directionsForTwoFrameObjects[7]={
+//     {0,1}, // Down
+//     {0,0}, 
+//     {0,-1}, // Up,
+//     {0,0},
+//     {1,0},// Right
+//     {0,0},
+//     {-1,0},// Left
+// };
 
 uint8_t joypadCurrent=0;
 uint8_t twoFrameCounter= 0;

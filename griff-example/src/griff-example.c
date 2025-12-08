@@ -6,6 +6,7 @@
 #include "graphics/WalkingGorb.h"
 #include "graphics/WalkingGorbDown.h"
 #include "graphics/WalkingGorbUp.h"
+#include "graphics/splashscreen3.h"
 #include "gorb.h"
 #include "common.h"
 
@@ -15,7 +16,15 @@ void main(void)
     SHOW_BKG;
     SHOW_SPRITES;
     SPRITES_8x16;
-    // Use HIDE_BKG; to turn the background OFF
+    // // Use HIDE_BKG; to turn the background OFF
+    // set_bkg_data(0,178,splashscreen3_tiles);
+    // // The gameboy screen is 160px wide by 144px tall
+    // // We deal with tiles that are 8px wide and 8px tall
+    // // 160/8 = 20, and 144/8 = 18
+    // set_bkg_tiles(0,0,20,18,splashscreen3_map);
+    // // The "LaroldsJubilantJunkyard_pallette" color palette is defined in LaroldsJubilantJunkyard.c
+    // set_bkg_palette(0,1,splashscreen3_palettes);
+    setupBackground();
 
     set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
 
@@ -63,19 +72,19 @@ void main(void)
 void setupBackground(void)
 {
     // Load & set our background data
-    set_bkg_data(0, TheAgeOfGorby_TILE_COUNT, TheAgeOfGorby_tiles);
+    set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
     // The gameboy screen is 160px wide by 144px tall
     // We deal with tiles that are 8px wide and 8px tall
     // 160/8 = 20, and 144/8 = 18
-    set_bkg_tiles(0, 0, 20, 18, TheAgeOfGorby_map);
+    set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
 
     // The "LaroldsJubilantJunkyard_pallette" color palette is defined in LaroldsJubilantJunkyard.c
-    set_bkg_palette(0, 8, TheAgeOfGorby_palettes);
+    set_bkg_palette(0, 8, splashscreen3_palettes);
 
     // Set the attributes using VRAM bank 1
     // Specifically, which color palette to use
     VBK_REG = 1;
-    set_bkg_tiles(0, 0, 20, 18, TheAgeOfGorby_map_attributes);
+    set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
 
     // Switch back to bank 0 to prevent accidentally writing to bank 1
     VBK_REG = 0;

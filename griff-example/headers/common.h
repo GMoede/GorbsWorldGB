@@ -2,6 +2,8 @@
 
 #define COMMON_HEADER
 
+#include <stdint.h>
+
 void updateTwoFrameCounter(void);
 
 typedef struct Vector8{
