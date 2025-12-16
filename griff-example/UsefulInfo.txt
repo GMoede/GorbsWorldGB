@@ -1,3 +1,13 @@
+Retro-Pie info:
+hostname:retropie
+password:chunguspoopyhead
+ip:	
+192.168.0.132
+
+sudo ssh -l pi 192.168.0.132
+
+
+
 Generating Background Tiles:
 https://www.youtube.com/watch?v=tnMAEwTjCX8
 Creating Splashscreen:
@@ -14,13 +24,10 @@ cd gdbk/bin/
 
 GENERATE SPRITE FILES:
 cd gdbk/bin/
-./png2asset ../../Sprites/WalkingGorbDown.png -sw 16  
+./png2asset ../../Sprites/WalkingGorbDown.png -sw 16 -keep_palette_order
 (-sw 16 is defining that the metasprite width is 16 pixels)
 See manual here:
 https://gbdk.org/docs/api/docs_toolchain_settings.html#png2asset-settings
-
-
-
 
 In the directory containing your Makefile, run:
 $make clean
@@ -31,7 +38,20 @@ Ctrl+Shift+P is the shortcut to search for "Edit Configurations" for C/C++ Compi
 160 pixels wide by 144 pixels high.
 
 TODO:
+-Button A is jump
+-Button B is Drop a nuke 
+-Adjust palette colors programatically to fade background? 
+-Make him blink
+-Make him jump
+-Starting animation with gorby sleeping on couch.
+-Falling animation with him flailing his legs.
+-Jumping sprite 
 
+DONE:
 -Create background for game/splash screen
 -Create sprites for:
     -Gorby
+        -Sideways
+        -Up
+        -Down
+        

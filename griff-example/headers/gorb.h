@@ -6,5 +6,6 @@
 
 uint8_t updateGorb(void);
 void setupGorb(void);
+void initialAnimation(void);
 
 #endif

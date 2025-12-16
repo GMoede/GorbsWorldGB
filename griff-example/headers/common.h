@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 
-void updateTwoFrameCounter(void);
+void updateFrameCounter(void);
 
 typedef struct Vector8{
     int8_t x;
@@ -13,5 +13,5 @@ typedef struct Vector8{
 
 extern const Vector8 directionsForTwoFrameObjects[7];
 
-extern uint8_t joypadCurrent, joypadPrevious, twoFrameRealValue;
+extern uint8_t joypadCurrent, joypadPrevious, twoFrameRealValue, isIntroSequence;
 #endif

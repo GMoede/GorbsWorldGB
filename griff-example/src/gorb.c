@@ -3,10 +3,11 @@
 #include "graphics/WalkingGorb.h"
 #include "graphics/WalkingGorbDown.h"
 #include "graphics/WalkingGorbUp.h"
+#include "graphics/gorbySleeping.h"
 
 #define GORB_SPEED 8
 
-extern uint8_t joypadCurrent, joypadPrevious, twoFrameRealValue;
+extern uint8_t joypadCurrent, joypadPrevious, frameRealValue, isIntroSequence;
 
 extern const int16_t directions[9][2];
 
@@ -14,31 +15,59 @@ uint8_t gorbDirection = 0;
 uint16_t gorbX, gorbY;
 
 uint8_t flipGorb = FALSE;
+uint8_t isIntroSpriteSelected = FALSE;
 
 // Keep track of which metasprite to use for link
 metasprite_t const *gorbMetasprite;
 
-void setupGorb(void)
+void initialAnimation(void)
 {
-    // set the down tiles in
-    set_sprite_data(0, WalkingGorbDown_TILE_COUNT, WalkingGorbDown_tiles);
-
-    // Position near the top middle
-    // Scale the position, since we are using scaled integers
+    set_sprite_data(0, gorbySleeping_TILE_COUNT, gorbySleeping_tiles);
     gorbX = 80 << 4;
     gorbY = 40 << 4;
+    gorbMetasprite = gorbySleeping_metasprites[0];
+    // Position gorb on the couch
+    // Go through the sleeping animation
+    // Once 'start' is pressed, gorby blinks twice, and jumps down, and walks away.
+}
 
-    // Start by facing down
-    gorbDirection = J_DOWN;
+void setupGorb(void)
+{
+    //Put him on the couch
+    if (isIntroSequence)
+    {
+        set_sprite_data(0, gorbySleeping_TILE_COUNT, gorbySleeping_tiles);
+        gorbX = 67 << 4;
+        gorbY = 100 << 4;
+        gorbMetasprite = gorbySleeping_metasprites[0];
+        isIntroSpriteSelected = TRUE;
+    }
+    else
+    {
+        // set the down tiles in
+        set_sprite_data(0, WalkingGorbDown_TILE_COUNT, WalkingGorbDown_tiles);
 
-    // Start with the down metasprite
-    gorbMetasprite = WalkingGorbDown_metasprites[0];
+        // Position near the top middle
+        // Scale the position, since we are using scaled integers
+        gorbX = 80 << 4;
+        gorbY = 40 << 4;
+
+        // Start by facing down
+        gorbDirection = J_DOWN;
+
+        // Start with the down metasprite
+        gorbMetasprite = WalkingGorbDown_metasprites[0];
+    }
 }
 
 uint8_t updateGorb(void)
 {
+    if(isIntroSequence){
+        gorbMetasprite = gorbySleeping_metasprites[frameRealValue];
+        move_metasprite_ex(gorbMetasprite, 0, 0, 0, gorbX >> 4, gorbY >> 4);
+    }
 
-    // Save our last direction
+     // Save our last direction
     // So we can keep track of directional changes
     uint8_t gorbLastDirection = gorbDirection;
     uint8_t gorbMoving = FALSE;
@@ -78,11 +107,10 @@ uint8_t updateGorb(void)
     // If link is moving
     if (gorbMoving)
     {
-
+        isIntroSequence = FALSE;
         // If we changed direction
         if (gorbDirection != gorbLastDirection)
         {
-
             // Set the sprite data for the new side we are facing
             // We do not have 'left' tiles, we'll use the 'right' tiles and flip them
             switch (gorbDirection)
@@ -107,19 +135,19 @@ uint8_t updateGorb(void)
         switch (gorbDirection)
         {
         case J_DOWN:
-            gorbMetasprite = WalkingGorbDown_metasprites[twoFrameRealValue];
+            gorbMetasprite = WalkingGorbDown_metasprites[frameRealValue];
             flipGorb = FALSE;
             break;
         case J_RIGHT:
-            gorbMetasprite = WalkingGorb_metasprites[twoFrameRealValue];
+            gorbMetasprite = WalkingGorb_metasprites[frameRealValue];
             flipGorb = FALSE;
             break;
         case J_LEFT:
-            gorbMetasprite = WalkingGorb_metasprites[twoFrameRealValue];
+            gorbMetasprite = WalkingGorb_metasprites[frameRealValue];
             flipGorb = TRUE;
             break;
         case J_UP:
-            gorbMetasprite = WalkingGorbUp_metasprites[twoFrameRealValue];
+            gorbMetasprite = WalkingGorbUp_metasprites[frameRealValue];
             flipGorb = FALSE;
             break;
         }
@@ -131,5 +159,5 @@ uint8_t updateGorb(void)
     if (flipGorb)
         return move_metasprite_vflip(gorbMetasprite, 0, 0, gorbX >> 4, gorbY >> 4);
     else
-        return move_metasprite(gorbMetasprite, 0, 0, gorbX >> 4, gorbY >> 4);
+        return move_metasprite_ex(gorbMetasprite, 0, 0, 0, gorbX >> 4, gorbY >> 4);
 }

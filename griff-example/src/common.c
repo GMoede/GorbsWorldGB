@@ -13,65 +13,41 @@
 #define GRID_NODE_SIZE 8
 #define NUMBER_OF_SOLID_TILES 9
 
-#define TILEMAP_WIDTH_IN_TILES (tilemap_WIDTH>>3)
-#define TILEMAP_HEIGHT_IN_TILES (tilemap_HEIGHT>>3)
+#define TILEMAP_WIDTH_IN_TILES (tilemap_WIDTH >> 3)
+#define TILEMAP_HEIGHT_IN_TILES (tilemap_HEIGHT >> 3)
 
-uint16_t playerX,playerY;
+uint16_t playerX, playerY;
 
-// uint8_t WorldPositionIsSolid(uint16_t x, uint16_t y){
-    
-//     // Bit-shifting would be faster here
-//     uint16_t column = x/GRID_NODE_SIZE; 
+void GetPlayerInput(uint16_t *nextPlayerX, uint16_t *nextPlayerY, int8_t *directionX, int8_t *directionY)
+{
 
-//     // Make sure the tile is in proper bounds
-//     if(column>=TILEMAP_WIDTH_IN_TILES)return TRUE;
-
-//     uint16_t row = y/GRID_NODE_SIZE;
-
-//     // Make sure the tile is in proper bounds
-//     if(row>=TILEMAP_HEIGHT_IN_TILES)return TRUE;
-    
-//     uint16_t tilemapIndex  = column+row*TILEMAP_WIDTH_IN_TILES;
-
-//     uint8_t tileIsSolid = FALSE;
-
-//     // Get the tilset tile in our tilemap
-//     uint8_t tilesetTile = tilemap_map[tilemapIndex];
-
-//     // In our tileset, the solid tiles always come first.
-//     // There are 10 tiles. The first 9 are solid
-//     // this makes it fast & easy to determine if a tile is solid or not
-//     tileIsSolid = tilesetTile<NUMBER_OF_SOLID_TILES;
-
-//     return  tileIsSolid;
-
-// }
-
-void GetPlayerInput(uint16_t* nextPlayerX,uint16_t* nextPlayerY,int8_t* directionX, int8_t* directionY){
-    
     // handle joypadInput
     uint8_t joypadCurrent = joypad();
 
     *nextPlayerX = playerX;
     *nextPlayerY = playerY;
-    *directionY=0;
-    *directionX=0;
+    *directionY = 0;
+    *directionX = 0;
 
-    if(joypadCurrent & J_RIGHT){
-        *nextPlayerX+=1;
-        *directionX=1;
+    if (joypadCurrent & J_RIGHT)
+    {
+        *nextPlayerX += 1;
+        *directionX = 1;
     }
-    if(joypadCurrent & J_LEFT){
-        *nextPlayerX-=1;
-        *directionX=-1;
+    if (joypadCurrent & J_LEFT)
+    {
+        *nextPlayerX -= 1;
+        *directionX = -1;
     }
-    if(joypadCurrent & J_DOWN){
-        *nextPlayerY+=1;
-        *directionY=1;
+    if (joypadCurrent & J_DOWN)
+    {
+        *nextPlayerY += 1;
+        *directionY = 1;
     }
-    if(joypadCurrent & J_UP){
-        *nextPlayerY-=1;
-        *directionY=-1;
+    if (joypadCurrent & J_UP)
+    {
+        *nextPlayerY -= 1;
+        *directionY = -1;
     }
 }
 
@@ -94,7 +70,7 @@ void GetPlayerInput(uint16_t* nextPlayerX,uint16_t* nextPlayerY,int8_t* directio
 // This is an easy way to determine a direction for a object with two frames per direction
 // const Vector8 directionsForTwoFrameObjects[7]={
 //     {0,1}, // Down
-//     {0,0}, 
+//     {0,0},
 //     {0,-1}, // Up,
 //     {0,0},
 //     {1,0},// Right
@@ -102,22 +78,55 @@ void GetPlayerInput(uint16_t* nextPlayerX,uint16_t* nextPlayerY,int8_t* directio
 //     {-1,0},// Left
 // };
 
-uint8_t joypadCurrent=0;
-uint8_t twoFrameCounter= 0;
-uint8_t twoFrameRealValue=0;
+uint8_t joypadCurrent = 0;
+uint8_t frameCounter = 0;
+uint8_t frameRealValue = 0;
+uint8_t isIntroSequence = TRUE;
+uint8_t increment = 1;
 
+void fourFrameLaggingAnimation(void){
+    increment = 2;
+        frameCounter += increment;
+        frameRealValue = frameCounter >> 4;
+
+        if (frameRealValue >= 4 && frameRealValue <= 5)
+        {
+            frameRealValue = 3;
+        }
+        else if (frameRealValue >= 10)
+        {
+            frameRealValue = 0;
+            frameCounter = 0;
+        }
+        else if (frameRealValue >= 9){
+            frameRealValue = 0;
+        }
+        else if (frameRealValue >= 6)
+        {
+            frameRealValue = 8 - frameRealValue;
+        }
+}
 
 /**
  * @brief Our moblin and link has two frame walk animation. They'll share a common variable that determines which frame to show
- * when they are walking. 
+ * when they are walking.
  */
-void updateTwoFrameCounter(void){
-    twoFrameCounter+=3;
-    twoFrameRealValue = twoFrameCounter>>4;
-
-    // Stop & reset if the vlaue is over 2
-    if(twoFrameRealValue>=10){
-        twoFrameRealValue=0;
-        twoFrameCounter=0;
+void updateFrameCounter(void)
+{
+    //
+    if (isIntroSequence)
+    {
+        fourFrameLaggingAnimation();
+    }
+    else
+    {
+        increment = 3;
+        frameCounter += increment;
+        frameRealValue = frameCounter >> 4;
+        if (frameRealValue >= 10)
+        {
+            frameRealValue = 0;
+            frameCounter = 0;
+        }
     }
 }

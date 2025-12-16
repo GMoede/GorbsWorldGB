@@ -10,41 +10,27 @@
 #include "gorb.h"
 #include "common.h"
 
+void setupBackground(void);
+
 void main(void)
 {
     DISPLAY_ON;
-    SHOW_BKG;
+    SHOW_BKG; //HIDE_BKG;
     SHOW_SPRITES;
     SPRITES_8x16;
-    // // Use HIDE_BKG; to turn the background OFF
-    // set_bkg_data(0,178,splashscreen3_tiles);
-    // // The gameboy screen is 160px wide by 144px tall
-    // // We deal with tiles that are 8px wide and 8px tall
-    // // 160/8 = 20, and 144/8 = 18
-    // set_bkg_tiles(0,0,20,18,splashscreen3_map);
-    // // The "LaroldsJubilantJunkyard_pallette" color palette is defined in LaroldsJubilantJunkyard.c
-    // set_bkg_palette(0,1,splashscreen3_palettes);
+
     setupBackground();
 
     set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
 
     setupGorb();
-    // Which tile to start at, how many tiles to load, and the tile data
-    // set_sprite_data(0, 1, MeowSpriteTLE0);
-    // // Which sprite to set, which tile to use
-    // set_sprite_tile(0, 0);
-    // // Where to move the sprite on the screen
-    // move_sprite(0, 84, 88);
-    // set_sprite_palette(0, 1, blob_pallette);
-    // 160 pixels wide by 144 pixels high.
-    //  // Loop forever
     while (1)
     {
         // Save the current state of the joypad
         // it's important NOT to call the joypad function more than once
         joypadCurrent = joypad();
 
-        updateTwoFrameCounter();
+        updateFrameCounter();
 
         uint8_t lastSprite = 0;
 
