@@ -1,9 +1,9 @@
 #include <gb/gb.h>
 #include <gb/cgb.h>
-#include "graphics/WalkingGorb.h"
-#include "graphics/WalkingGorbDown.h"
-#include "graphics/WalkingGorbUp.h"
-#include "graphics/gorbySleeping.h"
+#include "../gen/WalkingGorb.h"
+#include "../gen/WalkingGorbDown.h"
+#include "../gen/WalkingGorbUp.h"
+#include "../gen/gorbySleeping.h"
 
 #define GORB_SPEED 8
 

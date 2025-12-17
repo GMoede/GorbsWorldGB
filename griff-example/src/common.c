@@ -3,6 +3,7 @@
 #include <gb/metasprites.h>
 #include <stdint.h>
 #include "common.h"
+#include "../gen/splashscreen3.h"
 // #include "tileset.h"
 // #include "tilemap.h"
 // #include "ball.h"
@@ -18,7 +19,7 @@
 
 uint16_t playerX, playerY;
 
-void GetPlayerInput(uint16_t *nextPlayerX, uint16_t *nextPlayerY, int8_t *directionX, int8_t *directionY)
+void getPlayerInput(uint16_t *nextPlayerX, uint16_t *nextPlayerY, int8_t *directionX, int8_t *directionY)
 {
 
     // handle joypadInput
@@ -128,5 +129,79 @@ void updateFrameCounter(void)
             frameRealValue = 0;
             frameCounter = 0;
         }
+    }
+}
+
+uint8_t getCharacterVRamTile(char character)
+{
+
+    uint8_t vramTile = 0;
+
+    // Char's can be interpreted as integers
+    // We don't need to map every alpha-numeric character
+    // We can use basic math to simplify A-Z and 0-9
+    if (character >= 'a' && character <= 'z')
+        vramTile = (character - 'a') + 1;
+    else if (character >= 'A' && character <= 'Z')
+        vramTile = (character - 'A') + 1;
+    else if (character >= '0' && character <= '9')
+        vramTile = (character - '0') + 27;
+    else
+    {
+        switch (character)
+        {
+        case '!':
+            vramTile = 37;
+            break;
+        case ':':
+            vramTile = 38;
+            break;
+        case '?':
+            vramTile = 39;
+            break;
+        case '/':
+            vramTile = 40;
+            break;
+        case '=':
+            vramTile = 41;
+            break;
+        case ',':
+            vramTile = 42;
+            break;
+        case '.':
+            vramTile = 43;
+            break;
+        case '<':
+            vramTile = 44;
+            break;
+        case '>':
+            vramTile = 45;
+            break;
+        }
+    }
+
+    return vramTile + splashscreen3_TILE_COUNT;
+}
+
+void drawText(uint8_t column, uint8_t row, char *text)
+{
+
+    // Get the address of the first tile in the row
+    uint8_t *vramAddress = get_bkg_xy_addr(column, row);
+
+    uint16_t index = 0;
+
+    while (text[index] != '\0')
+    {
+
+        char character = text[index];
+
+        // Draw our character at the address
+        // THEN, increment the address
+        uint8_t vramTile = getCharacterVRamTile(character);
+
+        set_vram_byte(vramAddress++, vramTile);
+
+        index++;
     }
 }

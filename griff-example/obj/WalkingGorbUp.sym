@@ -1,0 +1,42 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =   00002710 L
+    .__.ABS.                                                    =   00000000 G
+    .__.CPU.                                                    =   00000000 L
+    .__.H$L.                                                    =   00000000 L
+  0 _WalkingGorbUp_metasprite0                                      00000268 GR
+  0 _WalkingGorbUp_metasprite1                                      00000274 GR
+  0 _WalkingGorbUp_metasprite2                                      00000280 GR
+  0 _WalkingGorbUp_metasprite3                                      0000028C GR
+  0 _WalkingGorbUp_metasprite4                                      00000298 GR
+  0 _WalkingGorbUp_metasprite5                                      000002A4 GR
+  0 _WalkingGorbUp_metasprite6                                      000002B0 GR
+  0 _WalkingGorbUp_metasprite7                                      000002BC GR
+  0 _WalkingGorbUp_metasprite8                                      000002C8 GR
+  0 _WalkingGorbUp_metasprite9                                      000002D4 GR
+  0 _WalkingGorbUp_metasprites                                      000002E0 GR
+  0 _WalkingGorbUp_palettes                                         00000000 GR
+  0 _WalkingGorbUp_tiles                                            00000008 GR
+    ___bank_WalkingGorbUp                                       =   00000000 G
+  0 ___func_WalkingGorbUp                                           00000000 GR
+    b___func_WalkingGorbUp                                      =   00000000 L
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Area Table
+
+   0 _CODE                                      size      2F4   flags    0
+   1 _DATA                                      size        0   flags    0
+   2 _INITIALIZED                               size        0   flags    0
+   3 _DABS                                      size        0   flags    8
+   4 _HOME                                      size        0   flags    0
+   5 _GSINIT                                    size        0   flags    0
+   6 _GSFINAL                                   size        0   flags    0
+   7 _INITIALIZER                               size        0   flags    0
+   8 _CABS                                      size        0   flags    8
+

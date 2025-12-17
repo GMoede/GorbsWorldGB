@@ -1,0 +1,54 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [32-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =   00002710 L
+    .__.ABS.                                                    =   00000000 G
+    .__.CPU.                                                    =   00000000 L
+    .__.H$L.                                                    =   00000000 L
+    _WalkingGorbDown_metasprites                                    ******** GX
+    _WalkingGorbDown_tiles                                          ******** GX
+    _WalkingGorbUp_metasprites                                      ******** GX
+    _WalkingGorbUp_tiles                                            ******** GX
+    _WalkingGorb_metasprites                                        ******** GX
+    _WalkingGorb_tiles                                              ******** GX
+    ___current_base_prop                                            ******** GX
+    ___current_base_tile                                            ******** GX
+    ___current_metasprite                                           ******** GX
+    ___move_metasprite                                              ******** GX
+    ___move_metasprite_vflip                                        ******** GX
+  7 __xinit__flipGorb                                               00000001 R
+  7 __xinit__gorbDirection                                          00000000 R
+  7 __xinit__isIntroSpriteSelected                                  00000002 R
+  2 _flipGorb                                                       00000001 GR
+    _frameRealValue                                                 ******** GX
+  2 _gorbDirection                                                  00000000 GR
+  1 _gorbMetasprite                                                 00000004 GR
+  1 _gorbX                                                          00000000 GR
+  1 _gorbY                                                          00000002 GR
+    _gorbySleeping_metasprites                                      ******** GX
+    _gorbySleeping_tiles                                            ******** GX
+  0 _initialAnimation                                               00000000 GR
+    _isIntroSequence                                                ******** GX
+  2 _isIntroSpriteSelected                                          00000002 GR
+    _joypadCurrent                                                  ******** GX
+    _set_sprite_data                                                ******** GX
+  0 _setupGorb                                                      00000028 GR
+  0 _updateGorb                                                     00000089 GR
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Area Table
+
+   0 _CODE                                      size      2BD   flags    0
+   1 _DATA                                      size        6   flags    0
+   2 _INITIALIZED                               size        3   flags    0
+   3 _DABS                                      size        0   flags    8
+   4 _HOME                                      size        0   flags    0
+   5 _GSINIT                                    size        0   flags    0
+   6 _GSFINAL                                   size        0   flags    0
+   7 _INITIALIZER                               size        3   flags    0
+   8 _CABS                                      size        0   flags    8
+

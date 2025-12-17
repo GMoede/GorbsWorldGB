@@ -6,7 +6,9 @@ ip:
 
 sudo ssh -l pi 192.168.0.132
 
+source ~/.zshrc
 
+export PATH="/Applications/Whisky.app/Contents/Resources:$PATH"
 
 Generating Background Tiles:
 https://www.youtube.com/watch?v=tnMAEwTjCX8
@@ -54,4 +56,4 @@ DONE:
         -Sideways
         -Up
         -Down
-        
+
