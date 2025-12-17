@@ -7,7 +7,6 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _drawTextCentered
 	.globl _getPlayerInput
 	.globl _strlen
 	.globl _get_bkg_xy_addr
@@ -23,6 +22,7 @@
 	.globl _fourFrameLaggingAnimation
 	.globl _updateFrameCounter
 	.globl _getCharacterVRamTile
+	.globl _drawTextCentered
 	.globl _drawText
 ;--------------------------------------------------------
 ; special function registers
@@ -522,42 +522,29 @@ _getCharacterVRamTile::
 ; Function drawTextCentered
 ; ---------------------------------
 _drawTextCentered::
-	add	sp, #-3
-	ldhl	sp,	#2
-	ld	(hl), a
-	inc	sp
-	inc	sp
-;src/common.c:189: uint16_t column = (20 - strlen(text)) / 2;
+	ld	c, a
+;src/common.c:189: uint8_t column = (20 - (uint8_t)strlen(text)) >> 1;
 	push	de
 	push	de
 	call	_strlen
 	pop	hl
+	ld	l, e
+	pop	de
+	ld	h, #0x00
 	ld	a, #0x14
-	sub	a, e
+	sub	a, l
 	ld	l, a
 	sbc	a, a
-	sub	a, d
-	ld	h, a
-	ld	c, l
-	ld	b, h
-	bit	7, h
-	jr	Z, 00103$
-	inc	hl
-	ld	c, l
-	ld	b, h
-00103$:
+	sub	a, h
+	ld	b, a
 	sra	b
-	rr	c
-;src/common.c:190: drawText(row, column, text);
-	pop	de
-	push	de
+	rr	l
+	ld	a, l
+;src/common.c:190: drawText(column, row, text);
 	push	de
 	ld	e, c
-	ldhl	sp,	#4
-	ld	a, (hl)
 	call	_drawText
 ;src/common.c:191: }
-	add	sp, #3
 	ret
 ;src/common.c:193: void drawText(uint8_t column, uint8_t row, char *text)
 ;	---------------------------------

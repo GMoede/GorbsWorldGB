@@ -27,20 +27,20 @@ Area                       Addr        Size        Decimal Bytes (Attributes)
      00000002  l__HEADER |    00000002  l__HEADER |    00000003  l__HEADER
      00000003  l__HRAM12 |    00000005  l__HEADER |    00000006  l__HEADER
      00000007  l__HEADER |    00000008  l__HEADER |    0000000A  l__INITIA
-     0000000A  l__INITIA |    0000000C  l__GSINIT |    0000001F  l__DATA  
-     00000030  l__HEADER |    00000060  l__HEADER |    000000AB  l__HEADER
+     0000000A  l__INITIA |    0000000C  l__GSINIT |    00000030  l__HEADER
+     00000060  l__HEADER |    00000083  l__DATA   |    000000AB  l__HEADER
      00000139  l__HOME   |    00000200  s__CODE   |    00002000  _rROMB0  
-     000022DB  l__CODE   |    000024DB  s__HOME   |    00002614  s__BASE  
-     00002614  s__CODE_0 |    00002614  s__INITIA |    00002614  s__LIT   
-     0000261E  s__GSINIT |    0000262A  s__GSFINA |    00003000  _rROMB1  
+     00003000  _rROMB1   |    00003B04  l__CODE   |    00003D04  s__HOME  
+     00003E3D  s__BASE   |    00003E3D  s__CODE_0 |    00003E3D  s__INITIA
+     00003E3D  s__LIT    |    00003E47  s__GSINIT |    00003E53  s__GSFINA
      00004000  _rMBC7_SR |    00004000  _rRAMB    |    00008000  __VRAM   
      00008000  __VRAM800 |    00008800  __VRAM880 |    00009000  __VRAM900
      00009800  __SCRN0   |    00009C00  __SCRN1   |    0000A000  __SRAM   
      0000A000  _rMBC7_LA |    0000A010  _rMBC7_LA |    0000A020  _rMBC7_AC
      0000A030  _rMBC7_AC |    0000A040  _rMBC7_AC |    0000A050  _rMBC7_AC
      0000C000  __RAM     |    0000C000  _shadow_O |    0000C0A0  s__DATA  
-     0000C0BF  s__BSS    |    0000C0BF  s__INITIA |    0000C0C9  s__HEAP  
-     0000C0C9  s__HEAP_E |    0000D000  __RAMBANK |    0000E000  .STACK   
+     0000C123  s__BSS    |    0000C123  s__INITIA |    0000C12D  s__HEAP  
+     0000C12D  s__HEAP_E |    0000D000  __RAMBANK |    0000E000  .STACK   
      0000FE00  __OAMRAM  |    0000FF00  _P1_REG   |    0000FF00  __IO     
      0000FF01  _SB_REG   |    0000FF02  _SC_REG   |    0000FF04  _DIV_REG 
      0000FF05  _TIMA_REG |    0000FF06  _TMA_REG  |    0000FF07  _TAC_REG 
@@ -77,40 +77,43 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_CODE                  00000200    000022DB =        8923. bytes (REL,CON)
+_CODE                  00000200    00003B04 =       15108. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
      00000200  _getPlaye |    000002CF  _fourFram |    00000314  _updateFr
-     00000339  _getChara |    000003F6  _drawText |    00000424  _drawText
-     00000459  _initialA |    00000481  _setupGor |    000004E2  _updateGo
-     00000716  _main     |    00000777  _setupBac |    000007B9  _Font_pal
-     000007B9  ___func_F |    000007D9  _Font_til |    00000AB9  _Font_map
-     00000AED  _WalkingG |    00000AED  ___func_W |    00000AF5  _WalkingG
-     00000CD5  _WalkingG |    00000CE1  _WalkingG |    00000CED  _WalkingG
-     00000CF9  _WalkingG |    00000D05  _WalkingG |    00000D11  _WalkingG
-     00000D1D  _WalkingG |    00000D29  _WalkingG |    00000D35  _WalkingG
-     00000D41  _WalkingG |    00000D4D  _WalkingG |    00000D61  _WalkingG
-     00000D61  ___func_W |    00000D69  _WalkingG |    00000FE9  _WalkingG
-     00000FF5  _WalkingG |    00001001  _WalkingG |    0000100D  _WalkingG
-     00001019  _WalkingG |    00001025  _WalkingG |    00001031  _WalkingG
-     0000103D  _WalkingG |    00001049  _WalkingG |    00001055  _WalkingG
-     00001061  _WalkingG |    00001075  _WalkingG |    00001075  ___func_W
-     0000107D  _WalkingG |    000012DD  _WalkingG |    000012E9  _WalkingG
-     000012F5  _WalkingG |    00001301  _WalkingG |    0000130D  _WalkingG
-     00001319  _WalkingG |    00001325  _WalkingG |    00001331  _WalkingG
-     0000133D  _WalkingG |    00001349  _WalkingG |    00001355  _WalkingG
-     00001369  ___func_g |    00001369  _gorbySle |    00001371  _gorbySle
-     00001471  _gorbySle |    0000147D  _gorbySle |    00001489  _gorbySle
-     00001495  _gorbySle |    000014A1  _gorbySle |    000014AD  _gorbySle
-     000014B7  ___func_s |    000014B7  _splashsc |    000014F7  _splashsc
-     00002027  _splashsc |    0000218F  _splashsc |    000022F7  _set_spri
-     000022FC  _set_bkg_ |    000022FF  .set_pale |    0000231E  _set_spri
-     00002323  _set_bkg_ |    00002326  .set_pale |    00002342  _hide_spr
-     00002371  _set_vram |    0000237A  _set_win_ |    00002383  _set_bkg_
-     000023B2  ___move_m |    000023EF  ___move_m |    000023EF  ___move_m
-     00002430  ___move_m |    00002430  ___move_m |    00002471  ___move_m
-     00002471  ___move_m |    000024B4  _get_win_ |    000024BC  _get_bkg_
+     00000339  _getChara |    000003F6  _drawText |    00000413  _drawText
+     00000448  _initialA |    00000470  _setupGor |    000004D1  _updateGo
+     00000705  _main     |    000017E3  _gorbythe |    00001805  _setupBac
+     00001847  _Font_pal |    00001847  ___func_F |    00001867  _Font_til
+     00001B47  _Font_map |    00001B7B  _WalkingG |    00001B7B  ___func_W
+     00001B83  _WalkingG |    00001D63  _WalkingG |    00001D6F  _WalkingG
+     00001D7B  _WalkingG |    00001D87  _WalkingG |    00001D93  _WalkingG
+     00001D9F  _WalkingG |    00001DAB  _WalkingG |    00001DB7  _WalkingG
+     00001DC3  _WalkingG |    00001DCF  _WalkingG |    00001DDB  _WalkingG
+     00001DEF  _WalkingG |    00001DEF  ___func_W |    00001DF7  _WalkingG
+     00002077  _WalkingG |    00002083  _WalkingG |    0000208F  _WalkingG
+     0000209B  _WalkingG |    000020A7  _WalkingG |    000020B3  _WalkingG
+     000020BF  _WalkingG |    000020CB  _WalkingG |    000020D7  _WalkingG
+     000020E3  _WalkingG |    000020EF  _WalkingG |    00002103  _WalkingG
+     00002103  ___func_W |    0000210B  _WalkingG |    0000236B  _WalkingG
+     00002377  _WalkingG |    00002383  _WalkingG |    0000238F  _WalkingG
+     0000239B  _WalkingG |    000023A7  _WalkingG |    000023B3  _WalkingG
+     000023BF  _WalkingG |    000023CB  _WalkingG |    000023D7  _WalkingG
+     000023E3  _WalkingG |    000023F7  ___func_g |    000023F7  _gorbySle
+     000023FF  _gorbySle |    000024FF  _gorbySle |    0000250B  _gorbySle
+     00002517  _gorbySle |    00002523  _gorbySle |    0000252F  _gorbySle
+     0000253B  _gorbySle |    00002545  ___func_s |    00002545  _splashsc
+     00002585  _splashsc |    000030B5  _splashsc |    0000321D  _splashsc
+     00003385  _hUGE_ini |    00003387  hUGE_init |    000033DD  _hUGE_mut
+     000033DF  hUGE_mute |    0000362D  _hUGE_set |    0000362F  hUGE_set_
+     000037F4  _hUGE_dos |    000037F4  hUGE_doso |    00003B20  _set_spri
+     00003B25  _set_bkg_ |    00003B28  .set_pale |    00003B47  _set_spri
+     00003B4C  _set_bkg_ |    00003B4F  .set_pale |    00003B6B  _hide_spr
+     00003B9A  _set_vram |    00003BA3  _set_win_ |    00003BAC  _set_bkg_
+     00003BDB  ___move_m |    00003C18  ___move_m |    00003C18  ___move_m
+     00003C59  ___move_m |    00003C59  ___move_m |    00003C9A  ___move_m
+     00003C9A  ___move_m |    00003CDD  _get_win_ |    00003CE5  _get_bkg_
 ASxxxx Linker V03.00/V05.40 + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -288,23 +291,23 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_HOME                  000024DB    00000139 =         313. bytes (REL,CON)
+_HOME                  00003D04    00000139 =         313. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     000024DB  .memset_s |    000024E4  .memcpy_s |    00002501  .display_
-     00002501  _display_ |    00002519  _set_tile |    0000251E  _set_bkg_
-     0000251E  _set_win_ |    00002526  _set_spri |    00002556  .padup   
-     00002556  _waitpadu |    00002566  .jpad     |    00002566  _joypad  
-     0000258E  _waitpad  |    0000258F  .wait_pad |    00002596  _strlen  
-     0000259B  .strlen   |    000025A4  _set_bkg_ |    000025B8  .set_xy_w
-     000025C1  .set_xy_b |    000025D0  .set_xy_t
+     00003D04  .memset_s |    00003D0D  .memcpy_s |    00003D2A  .display_
+     00003D2A  _display_ |    00003D42  _set_tile |    00003D47  _set_bkg_
+     00003D47  _set_win_ |    00003D4F  _set_spri |    00003D7F  .padup   
+     00003D7F  _waitpadu |    00003D8F  .jpad     |    00003D8F  _joypad  
+     00003DB7  _waitpad  |    00003DB8  .wait_pad |    00003DBF  _strlen  
+     00003DC4  .strlen   |    00003DCD  _set_bkg_ |    00003DE1  .set_xy_w
+     00003DEA  .set_xy_b |    00003DF9  .set_xy_t
 ASxxxx Linker V03.00/V05.40 + sdld,  page 23.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_INITIALIZER           00002614    0000000A =          10. bytes (REL,CON)
+_INITIALIZER           00003E3D    0000000A =          10. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -313,17 +316,17 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSINIT                0000261E    0000000C =          12. bytes (REL,CON)
+_GSINIT                00003E47    0000000C =          12. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     0000261E  gsinit   
+     00003E47  gsinit   
 ASxxxx Linker V03.00/V05.40 + sdld,  page 25.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSFINAL               0000262A    00000001 =           1. bytes (REL,CON)
+_GSFINAL               00003E53    00000001 =           1. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -332,28 +335,29 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_DATA                  0000C0A0    0000001F =          31. bytes (REL,CON)
+_DATA                  0000C0A0    00000083 =         131. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
      0000C0A0  __cpu     |    0000C0A1  __is_GBA  |    0000C0A2  .mode    
      0000C0A3  .sys_time |    0000C0A3  _sys_time |    0000C0A5  .int_0x40
      0000C0B1  _playerX  |    0000C0B3  _playerY  |    0000C0B5  _gorbX   
-     0000C0B7  _gorbY    |    0000C0B9  _gorbMeta |    0000C0BB  ___curren
-     0000C0BD  ___curren |    0000C0BE  ___curren
+     0000C0B7  _gorbY    |    0000C0B9  _gorbMeta |    0000C0D7  _hUGE_cur
+     0000C0D7  hUGE_curr |    0000C0D8  _hUGE_mut |    0000C11F  ___curren
+     0000C121  ___curren |    0000C122  ___curren
 ASxxxx Linker V03.00/V05.40 + sdld,  page 27.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_INITIALIZED           0000C0BF    0000000A =          10. bytes (REL,CON)
+_INITIALIZED           0000C123    0000000A =          10. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     0000C0BF  _joypadCu |    0000C0C0  _frameCou |    0000C0C1  _frameRea
-     0000C0C2  _isIntroS |    0000C0C3  _incremen |    0000C0C4  _gorbDire
-     0000C0C5  _flipGorb |    0000C0C6  _isIntroS |    0000C0C7  ___render
-     0000C0C8  __map_til
+     0000C123  _joypadCu |    0000C124  _frameCou |    0000C125  _frameRea
+     0000C126  _isIntroS |    0000C127  _incremen |    0000C128  _gorbDire
+     0000C129  _flipGorb |    0000C12A  _isIntroS |    0000C12B  ___render
+     0000C12C  __map_til
 ASxxxx Linker V03.00/V05.40 + sdld,  page 28.
 Hexadecimal  [32-Bits]
 
@@ -382,14 +386,15 @@ obj/splashscreen3.o                       [ splashscreen3 ]
 
 Libraries Linked                          [ object file ]
 
+hugedriver/gbdk/hUGEDriver.lib            [ hUGEDriver.o ]
 ../gbdk/lib/gb/gb.lib                     [ cgb_palettes.o ]
 ../gbdk/lib/gb/gb.lib                     [ metasprites_hide_spr.o ]
 ../gbdk/lib/gb/gb.lib                     [ set_tile.o ]
 ../gbdk/lib/gb/gb.lib                     [ set_data.o ]
+../gbdk/lib/gb/gb.lib                     [ sfr.o ]
 ../gbdk/lib/gb/gb.lib                     [ pad.o ]
 ../gbdk/lib/gb/gb.lib                     [ metasprites.o ]
 ../gbdk/lib/gb/gb.lib                     [ metasprites_flip.o ]
-../gbdk/lib/gb/gb.lib                     [ sfr.o ]
 ../gbdk/lib/sm83/sm83.lib                 [ strlen.o ]
 ../gbdk/lib/gb/gb.lib                     [ get_addr.o ]
 ../gbdk/lib/gb/gb.lib                     [ set_bk_t.o ]

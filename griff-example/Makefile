@@ -7,7 +7,7 @@ endif
 #LCC is the compiler used to compile and link the project
 #-Wm-yC is used to generate a gameboy color file 
 PROJECTNAME = gorbsworld
-LCC = $(GBDK_HOME)bin/lcc -Wa-l -Wl-m -Wl-j -Wm-yC 
+LCC = $(GBDK_HOME)bin/lcc -Ihugedriver/include -Wl-lhugedriver/gbdk/hUGEDriver.lib -Wa-l -Wl-m -Wl-j -Wm-yC 
 PNG2ASSET = $(GBDK_HOME)bin/png2asset 
 ROM_PATH_MAC = /Users/griffinmoede/git/GorbsWorldGB/griff-example/$(OBJDIR)/$(PROJECTNAME).gbc  # Path to the ROM on your Mac filesystem
 
@@ -66,6 +66,8 @@ $(BINS):	$(OBJS)
 
 # Run the game in mGBA 
 run:
+	-osascript -e 'tell application "mGBA" to quit'
+	sleep 1
 	open -a mGBA --args $(ROM_PATH_MAC)
 
 prepare:

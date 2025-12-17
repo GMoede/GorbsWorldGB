@@ -9,20 +9,60 @@ Symbol Table
     .__.H$L.                                                    =   00000000 L
     _Font_tiles                                                     ******** GX
     _LCDC_REG                                                       ******** GX
+    _NR50_REG                                                       ******** GX
+    _NR51_REG                                                       ******** GX
+    _NR52_REG                                                       ******** GX
+  0 _P0                                                             00000070 R
+  0 _P1                                                             00000130 R
+  0 _P10                                                            000007F0 R
+  0 _P11                                                            000008B0 R
+  0 _P13                                                            00000970 R
+  0 _P14                                                            00000A30 R
+  0 _P19                                                            00000AF0 R
+  0 _P2                                                             000001F0 R
+  0 _P20                                                            00000BB0 R
+  0 _P21                                                            00000C70 R
+  0 _P25                                                            00000D30 R
+  0 _P26                                                            00000DF0 R
+  0 _P27                                                            00000EB0 R
+  0 _P28                                                            00000F70 R
+  0 _P3                                                             000002B0 R
+  0 _P4                                                             00000370 R
+  0 _P5                                                             00000430 R
+  0 _P6                                                             000004F0 R
+  0 _P7                                                             000005B0 R
+  0 _P8                                                             00000670 R
+  0 _P9                                                             00000730 R
     _VBK_REG                                                        ******** GX
     _WalkingGorb_palettes                                           ******** GX
-  0 ___str_0                                                        00000055 R
+  0 ___str_0                                                        000010F3 R
+    _add_VBL                                                        ******** GX
     _drawTextCentered                                               ******** GX
+  0 _duty_instruments                                               00001068 R
+  0 _gorbytheme                                                     000010DE GR
+    _hUGE_dosound                                                   ******** GX
+    _hUGE_init                                                      ******** GX
     _hide_sprites_range                                             ******** GX
     _joypad                                                         ******** GX
     _joypadCurrent                                                  ******** GX
   0 _main                                                           00000000 GR
+  0 _noise_instruments                                              000010B6 R
+  0 _order1                                                         00001030 R
+  0 _order2                                                         0000103E R
+  0 _order3                                                         0000104C R
+  0 _order4                                                         0000105A R
+  0 _order_cnt                                                      0000006F R
     _set_bkg_data                                                   ******** GX
     _set_bkg_palette                                                ******** GX
     _set_bkg_tiles                                                  ******** GX
     _set_sprite_palette                                             ******** GX
-  0 _setupBackground                                                00000061 GR
+  0 _setupBackground                                                00001100 GR
     _setupGorb                                                      ******** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [32-Bits]
+
+Symbol Table
+
     _splashscreen3_map                                              ******** GX
     _splashscreen3_map_attributes                                   ******** GX
     _splashscreen3_palettes                                         ******** GX
@@ -30,13 +70,16 @@ Symbol Table
     _updateFrameCounter                                             ******** GX
     _updateGorb                                                     ******** GX
     _wait_vbl_done                                                  ******** GX
+  0 _wave_instruments                                               000010B0 R
+  0 _waves                                                          000010CE R
 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       A3   flags    0
+   0 _CODE                                      size     1142   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

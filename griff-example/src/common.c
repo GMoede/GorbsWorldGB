@@ -186,8 +186,8 @@ uint8_t getCharacterVRamTile(char character)
 
 void drawTextCentered(uint8_t row, char *text)
 {
-    uint16_t column = (20 - strlen(text)) / 2;
-    drawText(row, column, text);
+    uint8_t column = (20 - (uint8_t)strlen(text)) >> 1;
+    drawText(column, row, text);
 }
 
 void drawText(uint8_t column, uint8_t row, char *text)

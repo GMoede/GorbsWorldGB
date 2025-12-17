@@ -7,22 +7,22 @@
                                       7 ;--------------------------------------------------------
                                       8 ; Public variables in this module
                                       9 ;--------------------------------------------------------
-                                     10 	.globl _drawTextCentered
-                                     11 	.globl _getPlayerInput
-                                     12 	.globl _strlen
-                                     13 	.globl _get_bkg_xy_addr
-                                     14 	.globl _set_vram_byte
-                                     15 	.globl _joypad
-                                     16 	.globl _increment
-                                     17 	.globl _isIntroSequence
-                                     18 	.globl _frameRealValue
-                                     19 	.globl _frameCounter
-                                     20 	.globl _joypadCurrent
-                                     21 	.globl _playerY
-                                     22 	.globl _playerX
-                                     23 	.globl _fourFrameLaggingAnimation
-                                     24 	.globl _updateFrameCounter
-                                     25 	.globl _getCharacterVRamTile
+                                     10 	.globl _getPlayerInput
+                                     11 	.globl _strlen
+                                     12 	.globl _get_bkg_xy_addr
+                                     13 	.globl _set_vram_byte
+                                     14 	.globl _joypad
+                                     15 	.globl _increment
+                                     16 	.globl _isIntroSequence
+                                     17 	.globl _frameRealValue
+                                     18 	.globl _frameCounter
+                                     19 	.globl _joypadCurrent
+                                     20 	.globl _playerY
+                                     21 	.globl _playerX
+                                     22 	.globl _fourFrameLaggingAnimation
+                                     23 	.globl _updateFrameCounter
+                                     24 	.globl _getCharacterVRamTile
+                                     25 	.globl _drawTextCentered
                                      26 	.globl _drawText
                                      27 ;--------------------------------------------------------
                                      28 ; special function registers
@@ -522,107 +522,94 @@
                                     522 ; Function drawTextCentered
                                     523 ; ---------------------------------
     000001F6                        524 _drawTextCentered::
-    000001F6 E8 FD            [16]  525 	add	sp, #-3
-    000001F8 F8 02            [12]  526 	ldhl	sp,	#2
-    000001FA 77               [ 8]  527 	ld	(hl), a
-    000001FB 33               [ 8]  528 	inc	sp
-    000001FC 33               [ 8]  529 	inc	sp
-                                    530 ;src/common.c:189: uint16_t column = (20 - strlen(text)) / 2;
-    000001FD D5               [16]  531 	push	de
-    000001FE D5               [16]  532 	push	de
-    000001FF CDr00r00         [24]  533 	call	_strlen
-    00000202 E1               [12]  534 	pop	hl
-    00000203 3E 14            [ 8]  535 	ld	a, #0x14
-    00000205 93               [ 4]  536 	sub	a, e
-    00000206 6F               [ 4]  537 	ld	l, a
-    00000207 9F               [ 4]  538 	sbc	a, a
-    00000208 92               [ 4]  539 	sub	a, d
-    00000209 67               [ 4]  540 	ld	h, a
-    0000020A 4D               [ 4]  541 	ld	c, l
-    0000020B 44               [ 4]  542 	ld	b, h
-    0000020C CB 7C            [ 8]  543 	bit	7, h
-    0000020E 28 03            [12]  544 	jr	Z, 00103$
-    00000210 23               [ 8]  545 	inc	hl
-    00000211 4D               [ 4]  546 	ld	c, l
-    00000212 44               [ 4]  547 	ld	b, h
-    00000213                        548 00103$:
-    00000213 CB 28            [ 8]  549 	sra	b
-    00000215 CB 19            [ 8]  550 	rr	c
-                                    551 ;src/common.c:190: drawText(row, column, text);
-    00000217 D1               [12]  552 	pop	de
-    00000218 D5               [16]  553 	push	de
-    00000219 D5               [16]  554 	push	de
-    0000021A 59               [ 4]  555 	ld	e, c
-    0000021B F8 04            [12]  556 	ldhl	sp,	#4
-    0000021D 7E               [ 8]  557 	ld	a, (hl)
-    0000021E CDr24r02         [24]  558 	call	_drawText
-                                    559 ;src/common.c:191: }
-    00000221 E8 03            [16]  560 	add	sp, #3
-    00000223 C9               [16]  561 	ret
-                                    562 ;src/common.c:193: void drawText(uint8_t column, uint8_t row, char *text)
-                                    563 ;	---------------------------------
-                                    564 ; Function drawText
-                                    565 ; ---------------------------------
-    00000224                        566 _drawText::
-    00000224 3B               [ 8]  567 	dec	sp
-    00000225 3B               [ 8]  568 	dec	sp
-    00000226 43               [ 4]  569 	ld	b, e
-                                    570 ;src/common.c:197: uint8_t *vramAddress = get_bkg_xy_addr(column, row);
-    00000227 C5               [16]  571 	push	bc
-    00000228 33               [ 8]  572 	inc	sp
-    00000229 F5               [16]  573 	push	af
-    0000022A 33               [ 8]  574 	inc	sp
-    0000022B CDr00r00         [24]  575 	call	_get_bkg_xy_addr
-    0000022E E8 04            [16]  576 	add	sp, #4
-    00000230 D5               [16]  577 	push	de
-                                    578 ;src/common.c:201: while (text[index] != '\0')
-    00000231 01 00 00         [12]  579 	ld	bc, #0x0000
-    00000234                        580 00101$:
-    00000234 F8 04            [12]  581 	ldhl	sp,	#4
-    00000236 2A               [ 8]  582 	ld	a,	(hl+)
-    00000237 66               [ 8]  583 	ld	h, (hl)
-    00000238 6F               [ 4]  584 	ld	l, a
-    00000239 09               [ 8]  585 	add	hl, bc
-    0000023A 5D               [ 4]  586 	ld	e, l
-    0000023B 54               [ 4]  587 	ld	d, h
-    0000023C 1A               [ 8]  588 	ld	a, (de)
-    0000023D B7               [ 4]  589 	or	a, a
-    0000023E 28 14            [12]  590 	jr	Z, 00104$
-                                    591 ;src/common.c:204: char character = text[index];
-                                    592 ;src/common.c:208: uint8_t vramTile = getCharacterVRamTile(character);
-    00000240 C5               [16]  593 	push	bc
-    00000241 CDr39r01         [24]  594 	call	_getCharacterVRamTile
-    00000244 C1               [12]  595 	pop	bc
-                                    596 ;src/common.c:210: set_vram_byte(vramAddress++, vramTile);
-    00000245 D1               [12]  597 	pop	de
-    00000246 D5               [16]  598 	push	de
-    00000247 F8 00            [12]  599 	ldhl	sp,	#0
-    00000249 34               [12]  600 	inc	(hl)
-    0000024A 20 02            [12]  601 	jr	NZ, 00121$
-    0000024C 23               [ 8]  602 	inc	hl
-    0000024D 34               [12]  603 	inc	(hl)
-    0000024E                        604 00121$:
-    0000024E CDr00r00         [24]  605 	call	_set_vram_byte
-                                    606 ;src/common.c:212: index++;
-    00000251 03               [ 8]  607 	inc	bc
-    00000252 18 E0            [12]  608 	jr	00101$
-    00000254                        609 00104$:
-                                    610 ;src/common.c:214: }
-    00000254 33               [ 8]  611 	inc	sp
-    00000255 33               [ 8]  612 	inc	sp
-    00000256 E1               [12]  613 	pop	hl
-    00000257 F1               [12]  614 	pop	af
-    00000258 E9               [ 4]  615 	jp	(hl)
-                                    616 	.area _CODE
-                                    617 	.area _INITIALIZER
-    00000000                        618 __xinit__joypadCurrent:
-    00000000 00                     619 	.db #0x00	; 0
-    00000001                        620 __xinit__frameCounter:
-    00000001 00                     621 	.db #0x00	; 0
-    00000002                        622 __xinit__frameRealValue:
-    00000002 00                     623 	.db #0x00	; 0
-    00000003                        624 __xinit__isIntroSequence:
-    00000003 01                     625 	.db #0x01	; 1
-    00000004                        626 __xinit__increment:
-    00000004 01                     627 	.db #0x01	; 1
-                                    628 	.area _CABS (ABS)
+    000001F6 4F               [ 4]  525 	ld	c, a
+                                    526 ;src/common.c:189: uint8_t column = (20 - (uint8_t)strlen(text)) >> 1;
+    000001F7 D5               [16]  527 	push	de
+    000001F8 D5               [16]  528 	push	de
+    000001F9 CDr00r00         [24]  529 	call	_strlen
+    000001FC E1               [12]  530 	pop	hl
+    000001FD 6B               [ 4]  531 	ld	l, e
+    000001FE D1               [12]  532 	pop	de
+    000001FF 26 00            [ 8]  533 	ld	h, #0x00
+    00000201 3E 14            [ 8]  534 	ld	a, #0x14
+    00000203 95               [ 4]  535 	sub	a, l
+    00000204 6F               [ 4]  536 	ld	l, a
+    00000205 9F               [ 4]  537 	sbc	a, a
+    00000206 94               [ 4]  538 	sub	a, h
+    00000207 47               [ 4]  539 	ld	b, a
+    00000208 CB 28            [ 8]  540 	sra	b
+    0000020A CB 1D            [ 8]  541 	rr	l
+    0000020C 7D               [ 4]  542 	ld	a, l
+                                    543 ;src/common.c:190: drawText(column, row, text);
+    0000020D D5               [16]  544 	push	de
+    0000020E 59               [ 4]  545 	ld	e, c
+    0000020F CDr13r02         [24]  546 	call	_drawText
+                                    547 ;src/common.c:191: }
+    00000212 C9               [16]  548 	ret
+                                    549 ;src/common.c:193: void drawText(uint8_t column, uint8_t row, char *text)
+                                    550 ;	---------------------------------
+                                    551 ; Function drawText
+                                    552 ; ---------------------------------
+    00000213                        553 _drawText::
+    00000213 3B               [ 8]  554 	dec	sp
+    00000214 3B               [ 8]  555 	dec	sp
+    00000215 43               [ 4]  556 	ld	b, e
+                                    557 ;src/common.c:197: uint8_t *vramAddress = get_bkg_xy_addr(column, row);
+    00000216 C5               [16]  558 	push	bc
+    00000217 33               [ 8]  559 	inc	sp
+    00000218 F5               [16]  560 	push	af
+    00000219 33               [ 8]  561 	inc	sp
+    0000021A CDr00r00         [24]  562 	call	_get_bkg_xy_addr
+    0000021D E8 04            [16]  563 	add	sp, #4
+    0000021F D5               [16]  564 	push	de
+                                    565 ;src/common.c:201: while (text[index] != '\0')
+    00000220 01 00 00         [12]  566 	ld	bc, #0x0000
+    00000223                        567 00101$:
+    00000223 F8 04            [12]  568 	ldhl	sp,	#4
+    00000225 2A               [ 8]  569 	ld	a,	(hl+)
+    00000226 66               [ 8]  570 	ld	h, (hl)
+    00000227 6F               [ 4]  571 	ld	l, a
+    00000228 09               [ 8]  572 	add	hl, bc
+    00000229 5D               [ 4]  573 	ld	e, l
+    0000022A 54               [ 4]  574 	ld	d, h
+    0000022B 1A               [ 8]  575 	ld	a, (de)
+    0000022C B7               [ 4]  576 	or	a, a
+    0000022D 28 14            [12]  577 	jr	Z, 00104$
+                                    578 ;src/common.c:204: char character = text[index];
+                                    579 ;src/common.c:208: uint8_t vramTile = getCharacterVRamTile(character);
+    0000022F C5               [16]  580 	push	bc
+    00000230 CDr39r01         [24]  581 	call	_getCharacterVRamTile
+    00000233 C1               [12]  582 	pop	bc
+                                    583 ;src/common.c:210: set_vram_byte(vramAddress++, vramTile);
+    00000234 D1               [12]  584 	pop	de
+    00000235 D5               [16]  585 	push	de
+    00000236 F8 00            [12]  586 	ldhl	sp,	#0
+    00000238 34               [12]  587 	inc	(hl)
+    00000239 20 02            [12]  588 	jr	NZ, 00121$
+    0000023B 23               [ 8]  589 	inc	hl
+    0000023C 34               [12]  590 	inc	(hl)
+    0000023D                        591 00121$:
+    0000023D CDr00r00         [24]  592 	call	_set_vram_byte
+                                    593 ;src/common.c:212: index++;
+    00000240 03               [ 8]  594 	inc	bc
+    00000241 18 E0            [12]  595 	jr	00101$
+    00000243                        596 00104$:
+                                    597 ;src/common.c:214: }
+    00000243 33               [ 8]  598 	inc	sp
+    00000244 33               [ 8]  599 	inc	sp
+    00000245 E1               [12]  600 	pop	hl
+    00000246 F1               [12]  601 	pop	af
+    00000247 E9               [ 4]  602 	jp	(hl)
+                                    603 	.area _CODE
+                                    604 	.area _INITIALIZER
+    00000000                        605 __xinit__joypadCurrent:
+    00000000 00                     606 	.db #0x00	; 0
+    00000001                        607 __xinit__frameCounter:
+    00000001 00                     608 	.db #0x00	; 0
+    00000002                        609 __xinit__frameRealValue:
+    00000002 00                     610 	.db #0x00	; 0
+    00000003                        611 __xinit__isIntroSequence:
+    00000003 01                     612 	.db #0x01	; 1
+    00000004                        613 __xinit__increment:
+    00000004 01                     614 	.db #0x01	; 1
+                                    615 	.area _CABS (ABS)

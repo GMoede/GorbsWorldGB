@@ -9,11 +9,25 @@
 #include "gorb.h"
 #include "common.h"
 #include "Font.h"
+#include "../res/gorbytheme.c"
+#include "hUGEDriver.h"
+
+extern const hUGESong_t gorbytheme;
 
 void setupBackground(void);
 
 void main(void)
 {
+    NR52_REG = 0x80; // Master sound on
+    NR50_REG = 0xFF; // Maximum volume for left/right speakers. 
+    NR51_REG = 0xFF; // Turn on sound fully
+
+    CRITICAL {
+        // Init and use huge drive to play sample song
+        hUGE_init(&gorbytheme);
+        add_VBL(hUGE_dosound);
+    }
+
     DISPLAY_ON;
     SHOW_BKG; //HIDE_BKG;
     SHOW_SPRITES;
@@ -29,7 +43,9 @@ void main(void)
     set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
 
     // We'll pass zero for the final argument, to draw the text instantly
-    drawTextCentered(1, "Press Start");
+    drawTextCentered(15,">Press Start");
+
+    
 
     while (1)
     {
