@@ -4,8 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/gbdk/include/**",
-                "${workspaceFolder}/hugedriver/include/**"
+                "${workspaceFolder}/gbdk/include/**"
             ],
             "defines": [
                 "__PORT_sm83",

@@ -63,40 +63,40 @@
                                      63 ;src/main.c:21: NR52_REG = 0x80; // Master sound on
     00000000 3E 80            [ 8]   64 	ld	a, #0x80
     00000002 E0r00            [12]   65 	ldh	(_NR52_REG + 0), a
-                                     66 ;src/main.c:22: NR50_REG = 0xFF; // Maximum volume for left/right speakers. 
+                                     66 ;src/main.c:22: NR50_REG = 0xFF; // Maximum volume for left/right speakers.
     00000004 3E FF            [ 8]   67 	ld	a, #0xff
     00000006 E0r00            [12]   68 	ldh	(_NR50_REG + 0), a
                                      69 ;src/main.c:23: NR51_REG = 0xFF; // Turn on sound fully
     00000008 3E FF            [ 8]   70 	ld	a, #0xff
     0000000A E0r00            [12]   71 	ldh	(_NR51_REG + 0), a
-                                     72 ;src/main.c:29: }
+                                     72 ;src/main.c:30: }
     0000000C F3               [ 4]   73 	di
-                                     74 ;src/main.c:27: hUGE_init(&gorbytheme);
+                                     74 ;src/main.c:28: hUGE_init(&gorbytheme);
     0000000D 11rDEr10         [12]   75 	ld	de, #_gorbytheme
     00000010 CDr00r00         [24]   76 	call	_hUGE_init
-                                     77 ;src/main.c:28: add_VBL(hUGE_dosound);
+                                     77 ;src/main.c:29: add_VBL(hUGE_dosound);
     00000013 11r00r00         [12]   78 	ld	de, #_hUGE_dosound
     00000016 CDr00r00         [24]   79 	call	_add_VBL
     00000019 FB               [ 4]   80 	ei
-                                     81 ;src/main.c:31: DISPLAY_ON;
+                                     81 ;src/main.c:32: DISPLAY_ON;
     0000001A F0r00            [12]   82 	ldh	a, (_LCDC_REG + 0)
     0000001C F6 80            [ 8]   83 	or	a, #0x80
     0000001E E0r00            [12]   84 	ldh	(_LCDC_REG + 0), a
-                                     85 ;src/main.c:32: SHOW_BKG; //HIDE_BKG;
+                                     85 ;src/main.c:33: SHOW_BKG; // HIDE_BKG;
     00000020 F0r00            [12]   86 	ldh	a, (_LCDC_REG + 0)
     00000022 F6 01            [ 8]   87 	or	a, #0x01
     00000024 E0r00            [12]   88 	ldh	(_LCDC_REG + 0), a
-                                     89 ;src/main.c:33: SHOW_SPRITES;
+                                     89 ;src/main.c:34: SHOW_SPRITES;
     00000026 F0r00            [12]   90 	ldh	a, (_LCDC_REG + 0)
     00000028 F6 02            [ 8]   91 	or	a, #0x02
     0000002A E0r00            [12]   92 	ldh	(_LCDC_REG + 0), a
-                                     93 ;src/main.c:34: SPRITES_8x16;
+                                     93 ;src/main.c:35: SPRITES_8x16;
     0000002C F0r00            [12]   94 	ldh	a, (_LCDC_REG + 0)
     0000002E F6 04            [ 8]   95 	or	a, #0x04
     00000030 E0r00            [12]   96 	ldh	(_LCDC_REG + 0), a
-                                     97 ;src/main.c:36: setupBackground();
+                                     97 ;src/main.c:37: setupBackground();
     00000032 CDr00r11         [24]   98 	call	_setupBackground
-                                     99 ;src/main.c:38: set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
+                                     99 ;src/main.c:39: set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
     00000035 11r00r00         [12]  100 	ld	de, #_WalkingGorb_palettes
     00000038 D5               [16]  101 	push	de
     00000039 AF               [ 4]  102 	xor	a, a
@@ -104,9 +104,9 @@
     0000003B F5               [16]  104 	push	af
     0000003C CDr00r00         [24]  105 	call	_set_sprite_palette
     0000003F E8 04            [16]  106 	add	sp, #4
-                                    107 ;src/main.c:40: setupGorb();
+                                    107 ;src/main.c:41: setupGorb();
     00000041 CDr00r00         [24]  108 	call	_setupGorb
-                                    109 ;src/main.c:43: set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
+                                    109 ;src/main.c:44: set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
                                     110 ;../gbdk/include/gb/gb.h:2146: set_bkg_data(first_tile, nb_tiles, data);
     00000044 11r00r00         [12]  111 	ld	de, #_Font_tiles
     00000047 D5               [16]  112 	push	de
@@ -114,25 +114,25 @@
     0000004B E5               [16]  114 	push	hl
     0000004C CDr00r00         [24]  115 	call	_set_bkg_data
     0000004F E8 04            [16]  116 	add	sp, #4
-                                    117 ;src/main.c:46: drawTextCentered(15,">Press Start");
+                                    117 ;src/main.c:47: drawTextCentered(15, ">Press Start");
     00000051 11rF3r10         [12]  118 	ld	de, #___str_0
     00000054 3E 0F            [ 8]  119 	ld	a, #0x0f
     00000056 CDr00r00         [24]  120 	call	_drawTextCentered
-                                    121 ;src/main.c:50: while (1)
+                                    121 ;src/main.c:49: while (1)
     00000059                        122 00102$:
-                                    123 ;src/main.c:54: joypadCurrent = joypad();
+                                    123 ;src/main.c:53: joypadCurrent = joypad();
     00000059 CDr00r00         [24]  124 	call	_joypad
     0000005C EAr00r00         [16]  125 	ld	(#_joypadCurrent),a
-                                    126 ;src/main.c:56: updateFrameCounter();
+                                    126 ;src/main.c:55: updateFrameCounter();
     0000005F CDr00r00         [24]  127 	call	_updateFrameCounter
-                                    128 ;src/main.c:60: lastSprite += updateGorb();
+                                    128 ;src/main.c:59: lastSprite += updateGorb();
     00000062 CDr00r00         [24]  129 	call	_updateGorb
-                                    130 ;src/main.c:67: hide_sprites_range(lastSprite, 40);
+                                    130 ;src/main.c:66: hide_sprites_range(lastSprite, 40);
     00000065 1E 28            [ 8]  131 	ld	e, #0x28
     00000067 CDr00r00         [24]  132 	call	_hide_sprites_range
-                                    133 ;src/main.c:77: wait_vbl_done();
+                                    133 ;src/main.c:69: wait_vbl_done();
     0000006A CDr00r00         [24]  134 	call	_wait_vbl_done
-                                    135 ;src/main.c:79: }
+                                    135 ;src/main.c:71: }
     0000006D 18 EA            [12]  136 	jr	00102$
     0000006F                        137 _order_cnt:
     0000006F 0E                     138 	.db #0x0e	; 14
@@ -4342,19 +4342,19 @@
     000010F3 3E 50 72 65 73 73 20  4342 	.ascii ">Press Start"
              53 74 61 72 74
     000010FF 00                    4343 	.db 0x00
-                                   4344 ;src/main.c:81: void setupBackground(void)
+                                   4344 ;src/main.c:73: void setupBackground(void)
                                    4345 ;	---------------------------------
                                    4346 ; Function setupBackground
                                    4347 ; ---------------------------------
     00001100                       4348 _setupBackground::
-                                   4349 ;src/main.c:84: set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
+                                   4349 ;src/main.c:76: set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
     00001100 11r00r00         [12] 4350 	ld	de, #_splashscreen3_tiles
     00001103 D5               [16] 4351 	push	de
     00001104 21 00 B3         [12] 4352 	ld	hl, #0xb300
     00001107 E5               [16] 4353 	push	hl
     00001108 CDr00r00         [24] 4354 	call	_set_bkg_data
     0000110B E8 04            [16] 4355 	add	sp, #4
-                                   4356 ;src/main.c:88: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
+                                   4356 ;src/main.c:80: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
     0000110D 11r00r00         [12] 4357 	ld	de, #_splashscreen3_map
     00001110 D5               [16] 4358 	push	de
     00001111 21 14 12         [12] 4359 	ld	hl, #0x1214
@@ -4364,17 +4364,17 @@
     00001117 F5               [16] 4363 	push	af
     00001118 CDr00r00         [24] 4364 	call	_set_bkg_tiles
     0000111B E8 06            [16] 4365 	add	sp, #6
-                                   4366 ;src/main.c:91: set_bkg_palette(0, 8, splashscreen3_palettes);
+                                   4366 ;src/main.c:83: set_bkg_palette(0, 8, splashscreen3_palettes);
     0000111D 11r00r00         [12] 4367 	ld	de, #_splashscreen3_palettes
     00001120 D5               [16] 4368 	push	de
     00001121 21 00 08         [12] 4369 	ld	hl, #0x800
     00001124 E5               [16] 4370 	push	hl
     00001125 CDr00r00         [24] 4371 	call	_set_bkg_palette
     00001128 E8 04            [16] 4372 	add	sp, #4
-                                   4373 ;src/main.c:95: VBK_REG = 1;
+                                   4373 ;src/main.c:87: VBK_REG = 1;
     0000112A 3E 01            [ 8] 4374 	ld	a, #0x01
     0000112C E0r00            [12] 4375 	ldh	(_VBK_REG + 0), a
-                                   4376 ;src/main.c:96: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
+                                   4376 ;src/main.c:88: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
     0000112E 11r00r00         [12] 4377 	ld	de, #_splashscreen3_map_attributes
     00001131 D5               [16] 4378 	push	de
     00001132 21 14 12         [12] 4379 	ld	hl, #0x1214
@@ -4384,10 +4384,10 @@
     00001138 F5               [16] 4383 	push	af
     00001139 CDr00r00         [24] 4384 	call	_set_bkg_tiles
     0000113C E8 06            [16] 4385 	add	sp, #6
-                                   4386 ;src/main.c:99: VBK_REG = 0;
+                                   4386 ;src/main.c:91: VBK_REG = 0;
     0000113E AF               [ 4] 4387 	xor	a, a
     0000113F E0r00            [12] 4388 	ldh	(_VBK_REG + 0), a
-                                   4389 ;src/main.c:100: }
+                                   4389 ;src/main.c:92: }
     00001141 C9               [16] 4390 	ret
                                    4391 	.area _CODE
                                    4392 	.area _INITIALIZER

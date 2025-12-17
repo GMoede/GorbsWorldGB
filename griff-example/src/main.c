@@ -19,17 +19,18 @@ void setupBackground(void);
 void main(void)
 {
     NR52_REG = 0x80; // Master sound on
-    NR50_REG = 0xFF; // Maximum volume for left/right speakers. 
+    NR50_REG = 0xFF; // Maximum volume for left/right speakers.
     NR51_REG = 0xFF; // Turn on sound fully
 
-    CRITICAL {
+    CRITICAL
+    {
         // Init and use huge drive to play sample song
         hUGE_init(&gorbytheme);
         add_VBL(hUGE_dosound);
     }
 
     DISPLAY_ON;
-    SHOW_BKG; //HIDE_BKG;
+    SHOW_BKG; // HIDE_BKG;
     SHOW_SPRITES;
     SPRITES_8x16;
 
@@ -39,13 +40,11 @@ void main(void)
 
     setupGorb();
 
-    //Put font tiles after background tiles
+    // Put font tiles after background tiles
     set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
 
     // We'll pass zero for the final argument, to draw the text instantly
-    drawTextCentered(15,">Press Start");
-
-    
+    drawTextCentered(15, ">Press Start");
 
     while (1)
     {
@@ -66,13 +65,6 @@ void main(void)
         // Without this, extra "leftover" sprites may weidly linger around.
         hide_sprites_range(lastSprite, 40);
 
-        // Position the first sprite at our spriteX and spriteY
-        // All sprites are render 8 pixels to the left of their x position and 16 pixels ABOVE their actual y position
-        // This means an object rendered at 0,0 will not be visible
-        // x+5 and y+12 will center the 8x8 tile at our x and y position
-        // move_sprite(0, spriteX + 4, spriteY + 12);
-        // scroll_bkg(1,5);
-        // scroll_sprite(0, 1, 1);
         // Done processing, yield CPU and wait for start of next frame
         wait_vbl_done();
     }

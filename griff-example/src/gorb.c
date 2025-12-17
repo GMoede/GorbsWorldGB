@@ -20,6 +20,10 @@ uint8_t isIntroSpriteSelected = FALSE;
 // Keep track of which metasprite to use for link
 metasprite_t const *gorbMetasprite;
 
+// Position the first sprite at our spriteX and spriteY
+// All sprites are render 8 pixels to the left of their x position and 16 pixels ABOVE their actual y position
+// This means an object rendered at 0,0 will not be visible
+// x+4 and y+12 will center the 8x8 tile at our x and y position
 void initialAnimation(void)
 {
     set_sprite_data(0, gorbySleeping_TILE_COUNT, gorbySleeping_tiles);
@@ -33,7 +37,7 @@ void initialAnimation(void)
 
 void setupGorb(void)
 {
-    //Put him on the couch
+    // Put him on the couch
     if (isIntroSequence)
     {
         set_sprite_data(0, gorbySleeping_TILE_COUNT, gorbySleeping_tiles);
@@ -62,12 +66,14 @@ void setupGorb(void)
 
 uint8_t updateGorb(void)
 {
-    if(isIntroSequence){
+
+    if (isIntroSequence)
+    {
         gorbMetasprite = gorbySleeping_metasprites[frameRealValue];
         move_metasprite_ex(gorbMetasprite, 0, 0, 0, gorbX >> 4, gorbY >> 4);
     }
 
-     // Save our last direction
+    // Save our last direction
     // So we can keep track of directional changes
     uint8_t gorbLastDirection = gorbDirection;
     uint8_t gorbMoving = FALSE;

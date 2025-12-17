@@ -63,40 +63,40 @@ _main::
 ;src/main.c:21: NR52_REG = 0x80; // Master sound on
 	ld	a, #0x80
 	ldh	(_NR52_REG + 0), a
-;src/main.c:22: NR50_REG = 0xFF; // Maximum volume for left/right speakers. 
+;src/main.c:22: NR50_REG = 0xFF; // Maximum volume for left/right speakers.
 	ld	a, #0xff
 	ldh	(_NR50_REG + 0), a
 ;src/main.c:23: NR51_REG = 0xFF; // Turn on sound fully
 	ld	a, #0xff
 	ldh	(_NR51_REG + 0), a
-;src/main.c:29: }
+;src/main.c:30: }
 	di
-;src/main.c:27: hUGE_init(&gorbytheme);
+;src/main.c:28: hUGE_init(&gorbytheme);
 	ld	de, #_gorbytheme
 	call	_hUGE_init
-;src/main.c:28: add_VBL(hUGE_dosound);
+;src/main.c:29: add_VBL(hUGE_dosound);
 	ld	de, #_hUGE_dosound
 	call	_add_VBL
 	ei
-;src/main.c:31: DISPLAY_ON;
+;src/main.c:32: DISPLAY_ON;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x80
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:32: SHOW_BKG; //HIDE_BKG;
+;src/main.c:33: SHOW_BKG; // HIDE_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:33: SHOW_SPRITES;
+;src/main.c:34: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:34: SPRITES_8x16;
+;src/main.c:35: SPRITES_8x16;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x04
 	ldh	(_LCDC_REG + 0), a
-;src/main.c:36: setupBackground();
+;src/main.c:37: setupBackground();
 	call	_setupBackground
-;src/main.c:38: set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
+;src/main.c:39: set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
 	ld	de, #_WalkingGorb_palettes
 	push	de
 	xor	a, a
@@ -104,9 +104,9 @@ _main::
 	push	af
 	call	_set_sprite_palette
 	add	sp, #4
-;src/main.c:40: setupGorb();
+;src/main.c:41: setupGorb();
 	call	_setupGorb
-;src/main.c:43: set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
+;src/main.c:44: set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
 ;../gbdk/include/gb/gb.h:2146: set_bkg_data(first_tile, nb_tiles, data);
 	ld	de, #_Font_tiles
 	push	de
@@ -114,25 +114,25 @@ _main::
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:46: drawTextCentered(15,">Press Start");
+;src/main.c:47: drawTextCentered(15, ">Press Start");
 	ld	de, #___str_0
 	ld	a, #0x0f
 	call	_drawTextCentered
-;src/main.c:50: while (1)
+;src/main.c:49: while (1)
 00102$:
-;src/main.c:54: joypadCurrent = joypad();
+;src/main.c:53: joypadCurrent = joypad();
 	call	_joypad
 	ld	(#_joypadCurrent),a
-;src/main.c:56: updateFrameCounter();
+;src/main.c:55: updateFrameCounter();
 	call	_updateFrameCounter
-;src/main.c:60: lastSprite += updateGorb();
+;src/main.c:59: lastSprite += updateGorb();
 	call	_updateGorb
-;src/main.c:67: hide_sprites_range(lastSprite, 40);
+;src/main.c:66: hide_sprites_range(lastSprite, 40);
 	ld	e, #0x28
 	call	_hide_sprites_range
-;src/main.c:77: wait_vbl_done();
+;src/main.c:69: wait_vbl_done();
 	call	_wait_vbl_done
-;src/main.c:79: }
+;src/main.c:71: }
 	jr	00102$
 _order_cnt:
 	.db #0x0e	; 14
@@ -4341,19 +4341,19 @@ _gorbytheme:
 ___str_0:
 	.ascii ">Press Start"
 	.db 0x00
-;src/main.c:81: void setupBackground(void)
+;src/main.c:73: void setupBackground(void)
 ;	---------------------------------
 ; Function setupBackground
 ; ---------------------------------
 _setupBackground::
-;src/main.c:84: set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
+;src/main.c:76: set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
 	ld	de, #_splashscreen3_tiles
 	push	de
 	ld	hl, #0xb300
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:88: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
+;src/main.c:80: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
 	ld	de, #_splashscreen3_map
 	push	de
 	ld	hl, #0x1214
@@ -4363,17 +4363,17 @@ _setupBackground::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/main.c:91: set_bkg_palette(0, 8, splashscreen3_palettes);
+;src/main.c:83: set_bkg_palette(0, 8, splashscreen3_palettes);
 	ld	de, #_splashscreen3_palettes
 	push	de
 	ld	hl, #0x800
 	push	hl
 	call	_set_bkg_palette
 	add	sp, #4
-;src/main.c:95: VBK_REG = 1;
+;src/main.c:87: VBK_REG = 1;
 	ld	a, #0x01
 	ldh	(_VBK_REG + 0), a
-;src/main.c:96: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
+;src/main.c:88: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
 	ld	de, #_splashscreen3_map_attributes
 	push	de
 	ld	hl, #0x1214
@@ -4383,10 +4383,10 @@ _setupBackground::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;src/main.c:99: VBK_REG = 0;
+;src/main.c:91: VBK_REG = 0;
 	xor	a, a
 	ldh	(_VBK_REG + 0), a
-;src/main.c:100: }
+;src/main.c:92: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
