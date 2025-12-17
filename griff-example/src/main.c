@@ -29,7 +29,7 @@ void main(void)
     set_native_tile_data(splashscreen3_TILE_COUNT, Font_TILE_COUNT, Font_tiles);
 
     // We'll pass zero for the final argument, to draw the text instantly
-    drawText(1, 1, "Press Start");
+    drawTextCentered(1, "Press Start");
 
     while (1)
     {

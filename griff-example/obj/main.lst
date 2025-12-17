@@ -7,7 +7,7 @@
                                       7 ;--------------------------------------------------------
                                       8 ; Public variables in this module
                                       9 ;--------------------------------------------------------
-                                     10 	.globl _drawText
+                                     10 	.globl _drawTextCentered
                                      11 	.globl _updateFrameCounter
                                      12 	.globl _setupGorb
                                      13 	.globl _updateGorb
@@ -73,7 +73,7 @@
     00000014 F6 04            [ 8]   73 	or	a, #0x04
     00000016 E0r00            [12]   74 	ldh	(_LCDC_REG + 0), a
                                      75 ;src/main.c:22: setupBackground();
-    00000018 CDr63r00         [24]   76 	call	_setupBackground
+    00000018 CDr61r00         [24]   76 	call	_setupBackground
                                      77 ;src/main.c:24: set_sprite_palette(0, WalkingGorb_PALETTE_COUNT, WalkingGorb_palettes);
     0000001B 11r00r00         [12]   78 	ld	de, #_WalkingGorb_palettes
     0000001E D5               [16]   79 	push	de
@@ -92,79 +92,77 @@
     00000031 E5               [16]   92 	push	hl
     00000032 CDr00r00         [24]   93 	call	_set_bkg_data
     00000035 E8 04            [16]   94 	add	sp, #4
-                                     95 ;src/main.c:32: drawText(1, 1, "Press Start");
-    00000037 11r57r00         [12]   96 	ld	de, #___str_0
-    0000003A D5               [16]   97 	push	de
-    0000003B 3E 01            [ 8]   98 	ld	a,#0x01
-    0000003D 5F               [ 4]   99 	ld	e,a
-    0000003E CDr00r00         [24]  100 	call	_drawText
-                                    101 ;src/main.c:34: while (1)
-    00000041                        102 00102$:
-                                    103 ;src/main.c:38: joypadCurrent = joypad();
-    00000041 CDr00r00         [24]  104 	call	_joypad
-    00000044 EAr00r00         [16]  105 	ld	(#_joypadCurrent),a
-                                    106 ;src/main.c:40: updateFrameCounter();
-    00000047 CDr00r00         [24]  107 	call	_updateFrameCounter
-                                    108 ;src/main.c:44: lastSprite += updateGorb();
-    0000004A CDr00r00         [24]  109 	call	_updateGorb
-                                    110 ;src/main.c:51: hide_sprites_range(lastSprite, 40);
-    0000004D 1E 28            [ 8]  111 	ld	e, #0x28
-    0000004F CDr00r00         [24]  112 	call	_hide_sprites_range
-                                    113 ;src/main.c:61: wait_vbl_done();
-    00000052 CDr00r00         [24]  114 	call	_wait_vbl_done
-                                    115 ;src/main.c:63: }
-    00000055 18 EA            [12]  116 	jr	00102$
-    00000057                        117 ___str_0:
-    00000057 50 72 65 73 73 20 53   118 	.ascii "Press Start"
+                                     95 ;src/main.c:32: drawTextCentered(1, "Press Start");
+    00000037 11r55r00         [12]   96 	ld	de, #___str_0
+    0000003A 3E 01            [ 8]   97 	ld	a, #0x01
+    0000003C CDr00r00         [24]   98 	call	_drawTextCentered
+                                     99 ;src/main.c:34: while (1)
+    0000003F                        100 00102$:
+                                    101 ;src/main.c:38: joypadCurrent = joypad();
+    0000003F CDr00r00         [24]  102 	call	_joypad
+    00000042 EAr00r00         [16]  103 	ld	(#_joypadCurrent),a
+                                    104 ;src/main.c:40: updateFrameCounter();
+    00000045 CDr00r00         [24]  105 	call	_updateFrameCounter
+                                    106 ;src/main.c:44: lastSprite += updateGorb();
+    00000048 CDr00r00         [24]  107 	call	_updateGorb
+                                    108 ;src/main.c:51: hide_sprites_range(lastSprite, 40);
+    0000004B 1E 28            [ 8]  109 	ld	e, #0x28
+    0000004D CDr00r00         [24]  110 	call	_hide_sprites_range
+                                    111 ;src/main.c:61: wait_vbl_done();
+    00000050 CDr00r00         [24]  112 	call	_wait_vbl_done
+                                    113 ;src/main.c:63: }
+    00000053 18 EA            [12]  114 	jr	00102$
+    00000055                        115 ___str_0:
+    00000055 50 72 65 73 73 20 53   116 	.ascii "Press Start"
              74 61 72 74
-    00000062 00                     119 	.db 0x00
-                                    120 ;src/main.c:65: void setupBackground(void)
-                                    121 ;	---------------------------------
-                                    122 ; Function setupBackground
-                                    123 ; ---------------------------------
-    00000063                        124 _setupBackground::
-                                    125 ;src/main.c:68: set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
-    00000063 11r00r00         [12]  126 	ld	de, #_splashscreen3_tiles
-    00000066 D5               [16]  127 	push	de
-    00000067 21 00 B3         [12]  128 	ld	hl, #0xb300
-    0000006A E5               [16]  129 	push	hl
-    0000006B CDr00r00         [24]  130 	call	_set_bkg_data
-    0000006E E8 04            [16]  131 	add	sp, #4
-                                    132 ;src/main.c:72: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
-    00000070 11r00r00         [12]  133 	ld	de, #_splashscreen3_map
-    00000073 D5               [16]  134 	push	de
-    00000074 21 14 12         [12]  135 	ld	hl, #0x1214
-    00000077 E5               [16]  136 	push	hl
-    00000078 AF               [ 4]  137 	xor	a, a
-    00000079 0F               [ 4]  138 	rrca
-    0000007A F5               [16]  139 	push	af
-    0000007B CDr00r00         [24]  140 	call	_set_bkg_tiles
-    0000007E E8 06            [16]  141 	add	sp, #6
-                                    142 ;src/main.c:75: set_bkg_palette(0, 8, splashscreen3_palettes);
-    00000080 11r00r00         [12]  143 	ld	de, #_splashscreen3_palettes
-    00000083 D5               [16]  144 	push	de
-    00000084 21 00 08         [12]  145 	ld	hl, #0x800
-    00000087 E5               [16]  146 	push	hl
-    00000088 CDr00r00         [24]  147 	call	_set_bkg_palette
-    0000008B E8 04            [16]  148 	add	sp, #4
-                                    149 ;src/main.c:79: VBK_REG = 1;
-    0000008D 3E 01            [ 8]  150 	ld	a, #0x01
-    0000008F E0r00            [12]  151 	ldh	(_VBK_REG + 0), a
-                                    152 ;src/main.c:80: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
-    00000091 11r00r00         [12]  153 	ld	de, #_splashscreen3_map_attributes
-    00000094 D5               [16]  154 	push	de
-    00000095 21 14 12         [12]  155 	ld	hl, #0x1214
-    00000098 E5               [16]  156 	push	hl
-    00000099 AF               [ 4]  157 	xor	a, a
-    0000009A 0F               [ 4]  158 	rrca
-    0000009B F5               [16]  159 	push	af
-    0000009C CDr00r00         [24]  160 	call	_set_bkg_tiles
-    0000009F E8 06            [16]  161 	add	sp, #6
-                                    162 ;src/main.c:83: VBK_REG = 0;
-    000000A1 AF               [ 4]  163 	xor	a, a
-    000000A2 E0r00            [12]  164 	ldh	(_VBK_REG + 0), a
-                                    165 ;src/main.c:84: }
-    000000A4 C9               [16]  166 	ret
-                                    167 	.area _CODE
-                                    168 	.area _INITIALIZER
-                                    169 	.area _CABS (ABS)
+    00000060 00                     117 	.db 0x00
+                                    118 ;src/main.c:65: void setupBackground(void)
+                                    119 ;	---------------------------------
+                                    120 ; Function setupBackground
+                                    121 ; ---------------------------------
+    00000061                        122 _setupBackground::
+                                    123 ;src/main.c:68: set_bkg_data(0, splashscreen3_TILE_COUNT, splashscreen3_tiles);
+    00000061 11r00r00         [12]  124 	ld	de, #_splashscreen3_tiles
+    00000064 D5               [16]  125 	push	de
+    00000065 21 00 B3         [12]  126 	ld	hl, #0xb300
+    00000068 E5               [16]  127 	push	hl
+    00000069 CDr00r00         [24]  128 	call	_set_bkg_data
+    0000006C E8 04            [16]  129 	add	sp, #4
+                                    130 ;src/main.c:72: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map);
+    0000006E 11r00r00         [12]  131 	ld	de, #_splashscreen3_map
+    00000071 D5               [16]  132 	push	de
+    00000072 21 14 12         [12]  133 	ld	hl, #0x1214
+    00000075 E5               [16]  134 	push	hl
+    00000076 AF               [ 4]  135 	xor	a, a
+    00000077 0F               [ 4]  136 	rrca
+    00000078 F5               [16]  137 	push	af
+    00000079 CDr00r00         [24]  138 	call	_set_bkg_tiles
+    0000007C E8 06            [16]  139 	add	sp, #6
+                                    140 ;src/main.c:75: set_bkg_palette(0, 8, splashscreen3_palettes);
+    0000007E 11r00r00         [12]  141 	ld	de, #_splashscreen3_palettes
+    00000081 D5               [16]  142 	push	de
+    00000082 21 00 08         [12]  143 	ld	hl, #0x800
+    00000085 E5               [16]  144 	push	hl
+    00000086 CDr00r00         [24]  145 	call	_set_bkg_palette
+    00000089 E8 04            [16]  146 	add	sp, #4
+                                    147 ;src/main.c:79: VBK_REG = 1;
+    0000008B 3E 01            [ 8]  148 	ld	a, #0x01
+    0000008D E0r00            [12]  149 	ldh	(_VBK_REG + 0), a
+                                    150 ;src/main.c:80: set_bkg_tiles(0, 0, 20, 18, splashscreen3_map_attributes);
+    0000008F 11r00r00         [12]  151 	ld	de, #_splashscreen3_map_attributes
+    00000092 D5               [16]  152 	push	de
+    00000093 21 14 12         [12]  153 	ld	hl, #0x1214
+    00000096 E5               [16]  154 	push	hl
+    00000097 AF               [ 4]  155 	xor	a, a
+    00000098 0F               [ 4]  156 	rrca
+    00000099 F5               [16]  157 	push	af
+    0000009A CDr00r00         [24]  158 	call	_set_bkg_tiles
+    0000009D E8 06            [16]  159 	add	sp, #6
+                                    160 ;src/main.c:83: VBK_REG = 0;
+    0000009F AF               [ 4]  161 	xor	a, a
+    000000A0 E0r00            [12]  162 	ldh	(_VBK_REG + 0), a
+                                    163 ;src/main.c:84: }
+    000000A2 C9               [16]  164 	ret
+                                    165 	.area _CODE
+                                    166 	.area _INITIALIZER
+                                    167 	.area _CABS (ABS)

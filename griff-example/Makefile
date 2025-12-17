@@ -6,23 +6,16 @@ endif
 
 #LCC is the compiler used to compile and link the project
 #-Wm-yC is used to generate a gameboy color file 
+PROJECTNAME = gorbsworld
 LCC = $(GBDK_HOME)bin/lcc -Wa-l -Wl-m -Wl-j -Wm-yC 
 PNG2ASSET = $(GBDK_HOME)bin/png2asset 
-# Define variables for clarity
-WHISKY_CMD = whisky
-BOTTLE_NAME = MyGBDevBottle  # Replace with your bottle's name
-BGB_PATH_WIN = C:\\bgb\\bgb.exe  # Path to bgb.exe INSIDE the bottle's C: drive
-ROM_PATH_MAC = $(OBJDIR)/$(PROJECTNAME).gbc  # Path to the ROM on your Mac filesystem
-ROM_PATH_WIN = C:\\gorbsworld\\gorbsworld.gbc  # Path to your ROM INSIDE the bottle's C: drive (update if different)
+ROM_PATH_MAC = /Users/griffinmoede/git/GorbsWorldGB/griff-example/$(OBJDIR)/$(PROJECTNAME).gbc  # Path to the ROM on your Mac filesystem
 
 
 # GBDK_DEBUG = ON
 ifdef GBDK_DEBUG
 	LCCFLAGS += -debug -v
 endif
-
-# You can set the name of the .gbc ROM file here
-PROJECTNAME    = gorbsworld
 
 # BINS is the list of output files to be generated
 SRCDIR      = src
@@ -71,10 +64,9 @@ $(BINS):	$(OBJS)
 	$(LCC) $(LCCFLAGS)  -o $(BINS) $(OBJS)
 
 
-# Target to run the game in BGB
+# Run the game in mGBA 
 run:
-	cp $(ROM_PATH_MAC) /Users/griffinmoede/Library/Containers/com.isaacmarovitz.Whisky/Bottles/FC3A5243-0D83-4E4C-9896-5110FBED9A7D/drive_c/gorbsworld/gorbsworld.gbc
-	$(WHISKY_CMD) run --bottle $(BOTTLE_NAME) $(BGB_PATH_WIN)
+	open -a mGBA --args $(ROM_PATH_MAC)
 
 prepare:
 	mkdir -p $(OBJDIR)

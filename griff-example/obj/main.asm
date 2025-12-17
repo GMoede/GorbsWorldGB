@@ -7,7 +7,7 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _drawText
+	.globl _drawTextCentered
 	.globl _updateFrameCounter
 	.globl _setupGorb
 	.globl _updateGorb
@@ -92,12 +92,10 @@ _main::
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;src/main.c:32: drawText(1, 1, "Press Start");
+;src/main.c:32: drawTextCentered(1, "Press Start");
 	ld	de, #___str_0
-	push	de
-	ld	a,#0x01
-	ld	e,a
-	call	_drawText
+	ld	a, #0x01
+	call	_drawTextCentered
 ;src/main.c:34: while (1)
 00102$:
 ;src/main.c:38: joypadCurrent = joypad();

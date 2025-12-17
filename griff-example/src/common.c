@@ -2,6 +2,7 @@
 #include <gb/cgb.h>
 #include <gb/metasprites.h>
 #include <stdint.h>
+#include <string.h>
 #include "common.h"
 #include "../gen/splashscreen3.h"
 // #include "tileset.h"
@@ -181,6 +182,12 @@ uint8_t getCharacterVRamTile(char character)
     }
 
     return vramTile + splashscreen3_TILE_COUNT;
+}
+
+void drawTextCentered(uint8_t row, char *text)
+{
+    uint16_t column = (20 - strlen(text)) / 2;
+    drawText(row, column, text);
 }
 
 void drawText(uint8_t column, uint8_t row, char *text)

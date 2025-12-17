@@ -11,8 +11,8 @@ Symbol Table
     _LCDC_REG                                                       ******** GX
     _VBK_REG                                                        ******** GX
     _WalkingGorb_palettes                                           ******** GX
-  0 ___str_0                                                        00000057 R
-    _drawText                                                       ******** GX
+  0 ___str_0                                                        00000055 R
+    _drawTextCentered                                               ******** GX
     _hide_sprites_range                                             ******** GX
     _joypad                                                         ******** GX
     _joypadCurrent                                                  ******** GX
@@ -21,7 +21,7 @@ Symbol Table
     _set_bkg_palette                                                ******** GX
     _set_bkg_tiles                                                  ******** GX
     _set_sprite_palette                                             ******** GX
-  0 _setupBackground                                                00000063 GR
+  0 _setupBackground                                                00000061 GR
     _setupGorb                                                      ******** GX
     _splashscreen3_map                                              ******** GX
     _splashscreen3_map_attributes                                   ******** GX
@@ -36,7 +36,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       A5   flags    0
+   0 _CODE                                      size       A3   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

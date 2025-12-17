@@ -29,10 +29,10 @@ Area                       Addr        Size        Decimal Bytes (Attributes)
      00000007  l__HEADER |    00000008  l__HEADER |    0000000A  l__INITIA
      0000000A  l__INITIA |    0000000C  l__GSINIT |    0000001F  l__DATA  
      00000030  l__HEADER |    00000060  l__HEADER |    000000AB  l__HEADER
-     0000012B  l__HOME   |    00000200  s__CODE   |    00002000  _rROMB0  
-     000022AF  l__CODE   |    000024AF  s__HOME   |    000025DA  s__BASE  
-     000025DA  s__CODE_0 |    000025DA  s__INITIA |    000025DA  s__LIT   
-     000025E4  s__GSINIT |    000025F0  s__GSFINA |    00003000  _rROMB1  
+     00000139  l__HOME   |    00000200  s__CODE   |    00002000  _rROMB0  
+     000022DB  l__CODE   |    000024DB  s__HOME   |    00002614  s__BASE  
+     00002614  s__CODE_0 |    00002614  s__INITIA |    00002614  s__LIT   
+     0000261E  s__GSINIT |    0000262A  s__GSFINA |    00003000  _rROMB1  
      00004000  _rMBC7_SR |    00004000  _rRAMB    |    00008000  __VRAM   
      00008000  __VRAM800 |    00008800  __VRAM880 |    00009000  __VRAM900
      00009800  __SCRN0   |    00009C00  __SCRN1   |    0000A000  __SRAM   
@@ -77,40 +77,40 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_CODE                  00000200    000022AF =        8879. bytes (REL,CON)
+_CODE                  00000200    000022DB =        8923. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
      00000200  _getPlaye |    000002CF  _fourFram |    00000314  _updateFr
-     00000339  _getChara |    000003F6  _drawText |    0000042B  _initialA
-     00000453  _setupGor |    000004B4  _updateGo |    000006E8  _main    
-     0000074B  _setupBac |    0000078D  _Font_pal |    0000078D  ___func_F
-     000007AD  _Font_til |    00000A8D  _Font_map |    00000AC1  _WalkingG
-     00000AC1  ___func_W |    00000AC9  _WalkingG |    00000CA9  _WalkingG
-     00000CB5  _WalkingG |    00000CC1  _WalkingG |    00000CCD  _WalkingG
-     00000CD9  _WalkingG |    00000CE5  _WalkingG |    00000CF1  _WalkingG
-     00000CFD  _WalkingG |    00000D09  _WalkingG |    00000D15  _WalkingG
-     00000D21  _WalkingG |    00000D35  _WalkingG |    00000D35  ___func_W
-     00000D3D  _WalkingG |    00000FBD  _WalkingG |    00000FC9  _WalkingG
-     00000FD5  _WalkingG |    00000FE1  _WalkingG |    00000FED  _WalkingG
-     00000FF9  _WalkingG |    00001005  _WalkingG |    00001011  _WalkingG
-     0000101D  _WalkingG |    00001029  _WalkingG |    00001035  _WalkingG
-     00001049  _WalkingG |    00001049  ___func_W |    00001051  _WalkingG
-     000012B1  _WalkingG |    000012BD  _WalkingG |    000012C9  _WalkingG
-     000012D5  _WalkingG |    000012E1  _WalkingG |    000012ED  _WalkingG
-     000012F9  _WalkingG |    00001305  _WalkingG |    00001311  _WalkingG
-     0000131D  _WalkingG |    00001329  _WalkingG |    0000133D  ___func_g
-     0000133D  _gorbySle |    00001345  _gorbySle |    00001445  _gorbySle
-     00001451  _gorbySle |    0000145D  _gorbySle |    00001469  _gorbySle
-     00001475  _gorbySle |    00001481  _gorbySle |    0000148B  ___func_s
-     0000148B  _splashsc |    000014CB  _splashsc |    00001FFB  _splashsc
-     00002163  _splashsc |    000022CB  _set_spri |    000022D0  _set_bkg_
-     000022D3  .set_pale |    000022F2  _set_spri |    000022F7  _set_bkg_
-     000022FA  .set_pale |    00002316  _hide_spr |    00002345  _set_vram
-     0000234E  _set_win_ |    00002357  _set_bkg_ |    00002386  ___move_m
-     000023C3  ___move_m |    000023C3  ___move_m |    00002404  ___move_m
-     00002404  ___move_m |    00002445  ___move_m |    00002445  ___move_m
-     00002488  _get_win_ |    00002490  _get_bkg_
+     00000339  _getChara |    000003F6  _drawText |    00000424  _drawText
+     00000459  _initialA |    00000481  _setupGor |    000004E2  _updateGo
+     00000716  _main     |    00000777  _setupBac |    000007B9  _Font_pal
+     000007B9  ___func_F |    000007D9  _Font_til |    00000AB9  _Font_map
+     00000AED  _WalkingG |    00000AED  ___func_W |    00000AF5  _WalkingG
+     00000CD5  _WalkingG |    00000CE1  _WalkingG |    00000CED  _WalkingG
+     00000CF9  _WalkingG |    00000D05  _WalkingG |    00000D11  _WalkingG
+     00000D1D  _WalkingG |    00000D29  _WalkingG |    00000D35  _WalkingG
+     00000D41  _WalkingG |    00000D4D  _WalkingG |    00000D61  _WalkingG
+     00000D61  ___func_W |    00000D69  _WalkingG |    00000FE9  _WalkingG
+     00000FF5  _WalkingG |    00001001  _WalkingG |    0000100D  _WalkingG
+     00001019  _WalkingG |    00001025  _WalkingG |    00001031  _WalkingG
+     0000103D  _WalkingG |    00001049  _WalkingG |    00001055  _WalkingG
+     00001061  _WalkingG |    00001075  _WalkingG |    00001075  ___func_W
+     0000107D  _WalkingG |    000012DD  _WalkingG |    000012E9  _WalkingG
+     000012F5  _WalkingG |    00001301  _WalkingG |    0000130D  _WalkingG
+     00001319  _WalkingG |    00001325  _WalkingG |    00001331  _WalkingG
+     0000133D  _WalkingG |    00001349  _WalkingG |    00001355  _WalkingG
+     00001369  ___func_g |    00001369  _gorbySle |    00001371  _gorbySle
+     00001471  _gorbySle |    0000147D  _gorbySle |    00001489  _gorbySle
+     00001495  _gorbySle |    000014A1  _gorbySle |    000014AD  _gorbySle
+     000014B7  ___func_s |    000014B7  _splashsc |    000014F7  _splashsc
+     00002027  _splashsc |    0000218F  _splashsc |    000022F7  _set_spri
+     000022FC  _set_bkg_ |    000022FF  .set_pale |    0000231E  _set_spri
+     00002323  _set_bkg_ |    00002326  .set_pale |    00002342  _hide_spr
+     00002371  _set_vram |    0000237A  _set_win_ |    00002383  _set_bkg_
+     000023B2  ___move_m |    000023EF  ___move_m |    000023EF  ___move_m
+     00002430  ___move_m |    00002430  ___move_m |    00002471  ___move_m
+     00002471  ___move_m |    000024B4  _get_win_ |    000024BC  _get_bkg_
 ASxxxx Linker V03.00/V05.40 + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -288,22 +288,23 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_HOME                  000024AF    0000012B =         299. bytes (REL,CON)
+_HOME                  000024DB    00000139 =         313. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     000024AF  .memset_s |    000024B8  .memcpy_s |    000024D5  .display_
-     000024D5  _display_ |    000024ED  _set_tile |    000024F2  _set_bkg_
-     000024F2  _set_win_ |    000024FA  _set_spri |    0000252A  .padup   
-     0000252A  _waitpadu |    0000253A  .jpad     |    0000253A  _joypad  
-     00002562  _waitpad  |    00002563  .wait_pad |    0000256A  _set_bkg_
-     0000257E  .set_xy_w |    00002587  .set_xy_b |    00002596  .set_xy_t
+     000024DB  .memset_s |    000024E4  .memcpy_s |    00002501  .display_
+     00002501  _display_ |    00002519  _set_tile |    0000251E  _set_bkg_
+     0000251E  _set_win_ |    00002526  _set_spri |    00002556  .padup   
+     00002556  _waitpadu |    00002566  .jpad     |    00002566  _joypad  
+     0000258E  _waitpad  |    0000258F  .wait_pad |    00002596  _strlen  
+     0000259B  .strlen   |    000025A4  _set_bkg_ |    000025B8  .set_xy_w
+     000025C1  .set_xy_b |    000025D0  .set_xy_t
 ASxxxx Linker V03.00/V05.40 + sdld,  page 23.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_INITIALIZER           000025DA    0000000A =          10. bytes (REL,CON)
+_INITIALIZER           00002614    0000000A =          10. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -312,17 +313,17 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSINIT                000025E4    0000000C =          12. bytes (REL,CON)
+_GSINIT                0000261E    0000000C =          12. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     000025E4  gsinit   
+     0000261E  gsinit   
 ASxxxx Linker V03.00/V05.40 + sdld,  page 25.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSFINAL               000025F0    00000001 =           1. bytes (REL,CON)
+_GSFINAL               0000262A    00000001 =           1. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -389,6 +390,7 @@ Libraries Linked                          [ object file ]
 ../gbdk/lib/gb/gb.lib                     [ metasprites.o ]
 ../gbdk/lib/gb/gb.lib                     [ metasprites_flip.o ]
 ../gbdk/lib/gb/gb.lib                     [ sfr.o ]
+../gbdk/lib/sm83/sm83.lib                 [ strlen.o ]
 ../gbdk/lib/gb/gb.lib                     [ get_addr.o ]
 ../gbdk/lib/gb/gb.lib                     [ set_bk_t.o ]
 ../gbdk/lib/gb/gb.lib                     [ set_xy_t.o ]

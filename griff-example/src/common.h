@@ -8,6 +8,7 @@ void updateFrameCounter(void);
 void fourFrameLaggingAnimation(void);
 uint8_t getCharacterVRamTile(char character);
 void drawText(uint8_t column, uint8_t row, char *text);
+void drawTextCentered(uint8_t row, char *text);
 void main(void);
 
 typedef struct Vector8{
